@@ -1,0 +1,175 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<dom-module id="incomplete-chapter-report">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+       .position
+       {
+          margin-left:11%;
+       }
+       #btn2
+       {
+        background-color: #363636;
+        color: #ffffff; 
+        height: 34px;
+        margin-top: 4%;
+        margin-left: 48%;
+      }
+  paper-dropdown-menu
+    {
+      width: 15%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+    }
+    </style>
+
+    <div>
+      <center>
+        <h3>INCOMPLETE CHAPTER REPORT</h3>
+      </center>
+    </div>
+      <span class="position"> 
+       <paper-dropdown-menu  label="Select the Grade">
+                <paper-menu id="reportgradezzzz" class="dropdown-content"   on-iron-select="fnselectgrade">
+                  <template is="dom-repeat" items="{{chaptergradearr}}">
+                    <paper-item value="{{item.gradeid}}">{{item.gradename}}</paper-item>
+                  </template>    
+                </paper-menu>
+         </paper-dropdown-menu>
+       </span>
+      
+       <span class="position"> 
+         <paper-dropdown-menu  label="Select Subject">
+                <paper-menu id="reportsubjectzzzz" class="dropdown-content"   on-iron-select="fnselectsubject">
+                  <template is="dom-repeat" items="{{chaptersssubjectarr}}">
+                    <paper-item value="{{item.subjectid}}">{{item.subject_name}}</paper-item>
+                  </template>    
+                </paper-menu>
+          </paper-dropdown-menu>
+       </span>
+     
+  <span class="position"> 
+         <paper-dropdown-menu id="term" label="Select Term">
+           <paper-menu id="chaptertermidtttt" class="dropdown-content"   on-iron-select="Fnchaptertermid" attr-for-selected="value" required>
+                <paper-item value="term1">Term1</paper-item>
+                <paper-item value="Term2">Term2</paper-item>
+                <paper-item value="Term3">Term3</paper-item>
+            </paper-menu>
+          </paper-dropdown-menu>
+       </span>
+      <div class="chapterreport" hidden$="{{incompletereport}}">
+       <table id="newreport1" border="1" style="border-collapse: collapse;
+    margin-left: 1%;
+    width: 100%;
+    margin-top: 4%;">
+        <tr style="text-align: left;">
+          <th>SNO</th>       
+          <th>Employee Name</th>
+          <th>Section Name</th>
+          <th>Chapter Name</th>
+          <th>Concept</th>
+          <th>Sub Concept</th>
+          <th>Skill</th>
+          <th>BLD Values</th>
+          <th>Value</th>
+          <th>Teaching Aids</th>
+          <th>Innovation</th>
+          <th>Plan from Date</th>
+          <th>Plan to Date</th>
+          <th>Completed Date</th>
+          <th>Remarks</th>
+          <th>Co-ordinator Remarks</th>
+          <th>Correction Status</th>
+          <th>Enrichment Suggestion</th>
+        </tr>
+        <template  is="dom-repeat" items="{{getreportarr}}" as="view">
+          <tr>
+              <td>{{view.sno}}</td>
+              <td>{{view.emp_name}}</td>
+              <td>{{view.section}}</td>
+              <td>{{view.chapter}}</td>
+              <td>{{view.concept}}</td>
+              <td>{{view.sub_concept_name}}</td>
+              <td>{{view.skill}}</td>
+              <td>{{view.bld_value_name}}</td>
+              <td>{{view.value}}</td>
+              <td style="word-wrap: break-word;">{{view.teaching_aid}}</td>
+              <td style="word-wrap: break-word;">{{view.innovation}}</td>
+              <td>{{view.planned_date_from}}</td>
+              <td>{{view.planned_to_date}}</td>
+              <td>{{view.completion_date}}</td>
+              <td style="word-wrap: break-word;">{{view.remark}}</td>
+              <td style="word-wrap: break-word;">{{view.co_ordinator_remarks}}</td>
+              <td>{{view.correction_status}}</td>
+              <td>{{view.enrichment_sug}}</td>
+          </tr>
+        </template>
+      </table>
+
+          <input type="button" id="btn2" onclick="tableToExcel('newreport1', 'Incomplete Chapter Report')" value="Export to Excel">
+    </div>  
+        <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+  </template>
+
+  <script type="text/javascript">
+    var tableToExcel = (function() 
+    {
+      var uri = 'data:application/vnd.ms-excel;base64,'
+      , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+      , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+      , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+      return function(table, name) {
+      if (!table.nodeType) table = document.getElementById(table)
+      var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+      window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+</script>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'incomplete-chapter-report',
+
+      fnselectgrade:function(e)
+      {
+        this.gradeid=e.target.selectedItem.value;
+        sessionStorage.setItem("grdeidz",this.gradeid);
+        this.gradename=e.target.selectedItem.textContent.trim();
+        this.$.bookservice.fnsetrejectbooksubject(this.gradeid,this.gradename);
+        document.querySelector('#reportsubjectzzzz').selected=-1;
+       document.querySelector('#chaptertermidtttt').selected=-1;
+        this.incompletereport=true;
+      },
+
+      fnselectsubject:function(e)
+      {
+        this.subjectid=e.target.selectedItem.value;
+       sessionStorage.setItem("subjectidz",this.subjectid);
+       this.subjectname=e.target.selectedItem.textContent.trim();
+     document.querySelector('#chaptertermidtttt').selected=-1;
+         this.incompletereport=true;
+      },
+     Fnchaptertermid:function(e){
+        this.termid=e.target.selectedItem.textContent.trim();
+        sessionStorage.setItem("termid",this.termid);
+this.$.bookservice.fngetchaptersubject(this.gradeid,this.subjectid,
+ this.termid);  
+  this.incompletereport=false;
+      },
+     
+      FnRefresh:function()
+      {
+        document.querySelector('#reportgradezzzz').selected=-1;
+        document.querySelector('#reportsubjectzzzz').selected=-1;
+        document.querySelector('#chaptertermidtttt').selected=-1;
+        this.incompletereport=true;
+      }
+    });
+  })();
+  </script>
+</dom-module>

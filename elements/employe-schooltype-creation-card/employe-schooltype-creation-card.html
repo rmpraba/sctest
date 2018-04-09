@@ -1,0 +1,69 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/gold-email-input/gold-email-input.html">
+
+<dom-module id="employe-schooltype-creation-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .sclcheck
+      {
+        @apply(--layout-horizontal);
+        float: left;
+      }
+    </style>
+     <div class="sclcheck">
+     <table>
+         <td colspan="3">
+           <paper-checkbox class="col-md-3" on-change="setempschooltype" id="{{empschooltype}}">{{empschooltypename}}</paper-checkbox>
+         </td>
+     </table>
+    </div>
+  </template>
+  <script>
+  (function() {    
+    'use strict';
+    var empschooltypearr1=[];
+    //var emparr=[];
+    Polymer({
+      is: 'employe-schooltype-creation-card',
+
+        setempschooltype:function(e)
+        {
+          //alert(this.empschooltype);
+            if(document.querySelector('#'+this.empschooltype).checked==true)
+            {
+               var obj={"school_type":""};
+               obj.school_type=this.empschooltype;
+               empschooltypearr1.push(obj);
+              document.querySelector('new-employee-creation-card').passetschooltype(empschooltypearr1);
+             }
+          else if(document.querySelector('#'+this.empschooltype).checked==false)
+          {
+               for(var i=0;i<empschooltypearr1.length;i++)
+               {
+                 if(empschooltypearr1[i].school_type==this.empschooltype)
+                 {
+                    empschooltypearr1.splice(i,1);
+                  }
+               }
+          }
+             
+      },
+     empschooltypesplice:function(e)
+     {
+         for(var i=0;i<empschooltypearr1.length;i++)
+         {
+                var n=empschooltypearr1[i].school_type;
+                document.querySelector('#'+n).checked=false;
+         }
+             var obj={"school_type":""};
+                 obj.school_type=this.empschooltype;
+                 empschooltypearr1.splice(obj);   
+       } 
+
+      });
+  })();
+  </script>
+</dom-module>

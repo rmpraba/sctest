@@ -1,0 +1,300 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="promotedstud-enrichment-comparison">
+  <template>
+    <style>
+      .container{
+        /*width: 20%;*/
+      }
+      .chart{
+        width: 100%;
+        @apply(--layout-horizontal);
+        margin-top: 35%;
+      }
+    </style>
+    <div class="chart">
+    <div class="container" hidden$="{{hideeng}}" style="width: 300;margin-left: 5%;">
+      <div id="pchartContainer1" ></div>
+    </div>
+    <div class="container" hidden$="{{hidemath}}" style="width: 300;margin-left: 30%;">
+      <div id="pchartContainer2" ></div>
+    </div>
+    <div class="container" hidden$="{{hideevs}}" style="width: 300;margin-left: 30%;">
+      <div id="pchartContainer3" ></div>
+    </div>
+    </div>
+  </template>
+  <script type="text/javascript" src="../../scripts/canvasjs.min.js"></script>
+  
+  <script>
+  (function() {
+    'use strict';
+    var engchartarr=[];
+    var mathschartarr=[];
+    var evschartarr=[];
+    Polymer({
+      is: 'promotedstud-enrichment-comparison',
+      ready:function(){
+        this.hideeng=true;
+        this.hidemath=true;
+        this.hideevs=true;
+      },
+      FnComparearr:function(arr){
+       // alert(JSON.stringify(arr));
+       var subject="";
+       if(arr.length>0){      
+       for(var i=0;i<arr.length;i++)
+       {
+        // alert('Iteration'+i);
+        if(arr[i].subject=="English"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       engchartarr.push(obj);
+       }
+       // this.FnEnglishOpenChart();
+       }
+       if(arr[i].subject=="Mathematics"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       mathschartarr.push(obj);
+       }
+       // this.FnMathsOpenChart();
+       }
+       if(arr[i].subject=="EVS"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       evschartarr.push(obj);
+       }
+       // this.FnEvsOpenChart();
+       }
+       // subject=arr[i].subject; 
+       // alert(JSON.stringify(chartarr));      
+       }
+       // alert(JSON.stringify(engchartarr));
+       // alert(JSON.stringify(mathschartarr));
+       // alert(JSON.stringify(evschartarr));
+       // if(subject=="English")
+       if(engchartarr.length>0){
+       this.hideeng=false;
+       this.FnEnglishOpenChart();
+       }
+       else{
+       this.hideeng=true;
+       }
+       // if(subject=="Mathematics")
+       if(mathschartarr.length>0){
+       this.hidemath=false;
+       this.FnMathsOpenChart();
+       }
+       else{
+       this.hidemath=true;
+       }
+       // if(subject=="EVS")
+       if(evschartarr.length>0){
+       this.hideevs=false;
+       this.FnEvsOpenChart();
+       }
+       else{
+       this.hideevs=true;
+       }
+       }
+       
+       
+      },
+    FnEnglishOpenChart:function(){
+    var chart = new CanvasJS.Chart("pchartContainer1",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Promoted)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: engchartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    engchartarr=[];
+    },
+    FnMathsOpenChart:function(){
+    var chart = new CanvasJS.Chart("pchartContainer2",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Promoted)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: mathschartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    mathschartarr=[];
+    },
+    FnEvsOpenChart:function(){
+    var chart = new CanvasJS.Chart("pchartContainer3",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Promoted)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: evschartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    evschartarr=[];
+    }
+    });
+  })();
+  </script>
+</dom-module>

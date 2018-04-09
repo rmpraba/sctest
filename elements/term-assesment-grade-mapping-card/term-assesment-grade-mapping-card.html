@@ -1,0 +1,135 @@
+
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="term-assesment-grade-mapping-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+       #dialogforterm{
+      width: 20%;
+      border-radius: 25px;
+    }
+    #dialogfortermdelete{
+      width: 20%;
+      border-radius: 25px;
+    }
+    </style>
+    <p hidden>{{termid}}</p>
+    <p hidden>{{termname}}</p>
+    <p hidden>{{assesmentname}}</p>
+    <p hidden>{{assesmentid}}</p>
+    <p hidden>{{dbvalue}}</p>
+     <div hidden$="{{hideheadervalue1}}"><p style="{{fonts}}">{{termname}}</p></div>
+     <div hidden$="{{hideheadervalue}}"><p style="{{fonts}}" ><paper-checkbox  checked="{{check}}" id="{{id}}"  on-change="fnchange"></paper-checkbox></p></div>
+  <iron-ajax        
+        id="checktermmappingajax"
+        url="{{checktermmappingurl}}"
+        params="{{checktermmappingparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="checktermmappingResponse"
+        debounce-duration="300">
+      </iron-ajax>
+
+   <paper-dialog id="dialogforterm" modal>
+       <h3 style="color:green"><center>{{termdialogvalues}}</center></h3>
+       <center>
+      <paper-button on-click="fnok" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+        <paper-button on-click="fnclose" style="color:white;background-color:black;margin-top: 15%;">Cancel</paper-button>
+       </center>
+     </paper-dialog>    
+   <paper-dialog id="dialogfortermdelete" modal>
+       <h3 style="color:green"><center>{{deletevalue}}</center></h3>
+       <center>
+      <paper-button on-click="fndialogclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       
+       </center>
+     </paper-dialog>    
+  </template>
+  <script>
+  (function() {  
+    'use strict';
+  var temp=[];
+    Polymer({
+      is: 'term-assesment-grade-mapping-card',
+
+ fnchange:function(e){
+//alert(this.id);
+//alert(this.check);
+//alert(document.querySelector("#"+this.id).checked);
+
+  if(document.querySelector("#"+this.id).checked==true){
+      var obj={};
+          obj.termid=this.termid;
+          obj.termname=this.termname; 
+          obj.assesmentid=this.assesmentid;   
+          obj.assesmentname=this.assesmentname;   
+          obj.gradename=localStorage.getItem("curr_sess_grade");
+          obj.gradeid=localStorage.getItem("curr_sess_gradeid"); 
+          obj.id=this.id;
+           temp.push(obj); 
+      document.querySelector("term-assesment-to-grade-master-card").passarr(temp); 
+   }
+  else if(document.querySelector("#"+this.id).checked==false){
+         for(var i=0;i<temp.length;i++){
+          if(temp[i].id==this.id){
+           temp.splice(i,1);
+          }
+         }
+        if(this.dbvalue==true){
+        this.termdialogvalues="Are u delete  for this term";
+        this.$.dialogforterm.toggle();
+            
+          }
+        }
+   },
+  fnok:function(e){
+        this.$.dialogforterm.toggle();
+        this.checktermmappingurl=sessionStorage.getItem("addrinfo")+"/checktermmapping-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.termid=this.termid;
+        obj.termname=this.termname; 
+        obj.assesmentid=this.assesmentid;   
+        obj.assesmentname=this.assesmentname;   
+        obj.gradename=localStorage.getItem("curr_sess_grade");
+        obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+        this.checktermmappingparam=obj;
+        this.$.checktermmappingajax.generateRequest();
+
+  },
+  fnclose:function(e){
+        this.$.dialogforterm.toggle();
+   document.querySelector("#"+this.id).checked=true;
+  },
+  fndialogclose:function(){
+        this.$.dialogfortermdelete.toggle();
+
+  },
+ checktermmappingResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+        this.deletevalue=res;
+        this.$.dialogfortermdelete.toggle();
+         
+     }
+
+    });
+  })();
+  </script>
+</dom-module>

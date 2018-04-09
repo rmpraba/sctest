@@ -1,0 +1,89 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="subject-report-status-card">
+  <template>
+    <style>
+    
+        :host {
+        display: block;
+      }
+       .viewdata{
+        margin-top: 5%;
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:blue;
+      }
+       .outcard{
+        margin-left: 0%;
+        margin-top: 5%;
+      }
+      table{
+        width: 90%;
+
+        /*border-collapse: collapse;*/
+      }
+      .spinner{
+            margin-left: 50%;            
+           
+            /*color: #0f9d58;*/
+            /*border: none;*/
+          }
+          #spinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }
+      #itemcard:nth-child(odd) {
+        background-color: white;
+       
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      #itemcard{
+      /*margin-left: 0%;*/
+      @apply(--layout-center-justified);
+       width: 85%;
+       }
+        .viewdata{
+        margin-top: 5%;
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:blue;
+      }
+      
+    </style>
+    <div>
+      <center>
+      <h1>{{schoolname}}</h1>
+      <h3>Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+      <!-- <h4>Term: {{termname}}</h4>  -->
+    
+     <div class="spinner"><paper-dialog id="spinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner></paper-dialog></div>  
+      <template is="dom-repeat" items="{{approvalarr}}" as="item">
+      <div id="itemcard">
+          <subject-report-status-item-card fonts="{{item.font}}" academicyear="{{item.academic_year}}"  hiddenview1="{{item.hiddenview}}" termname="{{item.term_name}}" assesmentid="{{item.assesment_id}}" grade="{{item.grade}}" section="{{item.section}}" subject="{{item.subject}}" flag="{{item.flag}}" category="{{item.category}}" langpref="{{item.langpref}}" subjectid="{{item.subjectid}}">
+          </subject-report-status-item-card>
+      </div>
+  </template>  
+  </center>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'subject-report-status-card',
+
+     FnSpinnerrActive:function(flag){
+        if(flag==true)
+        this.$.spinner.opened=true;
+        if(flag==false)
+        this.$.spinner.opened=false;
+      },
+    });
+  })();
+  </script>
+</dom-module>

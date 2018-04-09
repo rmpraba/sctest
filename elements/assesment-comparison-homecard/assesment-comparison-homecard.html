@@ -1,0 +1,250 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../beginner-assesment-service/beginner-assesment-service.html">
+<link rel="import" href="../beginner-assesment-markentrysheet/beginner-assesment-markentrysheet.html">
+<link rel="import" href="../component-service/component-service.html">
+<link rel="import" href="../assesment-sheet-card/assesment-sheet-card.html">
+<dom-module id="assesment-comparison-homecard">
+  <template>
+    <style>
+      :host{
+        display: block;
+      }    
+      .card{
+        @apply(--layout-vertical);
+      }
+      .drop{        
+        @apply(--layout-horizontal);
+        margin-top:2%;
+        margin-left: 15%;
+      }
+      paper-dropdown-menu{
+        width: 15%;
+        margin-left: 3%;
+      }
+      paper-dropdown-menu{
+      width: 15%;
+      margin-left: 3%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+      }
+      /*.chart{
+        @apply(--layout-horizontal);
+        /*@apply(--layout-center);*/
+       /* @apply(--layout-wrap);
+        margin-top: 5%;
+        margin-left: 5%;
+        width: 100%;
+      }*/
+      enrichment-comparision-chart{
+        /*width: 30%;*/
+      }
+          .spinner{
+            margin-left: 50%;            
+          }
+          #spinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }
+    </style>
+    <div class="spinner"><paper-dialog modal id="spinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner></paper-dialog></div>
+    <div class='card'>     
+    <div class='drop'>  
+          <paper-dropdown-menu id="" label="Select School" disabled="{{read}}" required hidden$="{{hideschool}}">
+            <paper-menu id="assescomparebooksissuanceschoolname" class="dropdown-content" on-iron-select="FnSelectSchool" attr-for-selected="value" selected="{{selectschool}}">
+              <template is="dom-repeat" items="{{schoolarr}}">
+                <paper-item value="{{item.id}}">{{item.name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>    
+          <paper-dropdown-menu id="assescomparebooksissuancetypee" label="Select Assesment" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="assescomparebooksissuancetype" on-iron-select="FnSelectAssesment"  attr-for-selected="value" required>  
+              <template is="dom-repeat" items="{{assesmentarr}}">
+                <paper-item value="{{item.assesment_category_id}}">{{item.assesment_category_name}}</paper-item>                            
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="assescomparebooksissuancegradee" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu  class="dropdown-content" id="assescomparebooksissuancegrade" on-iron-select="FnSelectGrade"  attr-for-selected="value" required> 
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="assescomparebooksissuancesectionn" label="Select Section" disabled="{{read}}" required>
+            <paper-menu  class="dropdown-content" id="assescomparebooksissuancesection" on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_id}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="assescomparebooksissuancesubjectt" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="assescomparebooksissuancesubject" on-iron-select="FnSelectSubject"  attr-for-selected="value" required> 
+            <template is="dom-repeat" items="{{subjectarr}}">
+              <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+            </template>
+            </paper-menu>
+          </paper-dropdown-menu>  
+          <paper-dropdown-menu id="assescomparebooksissuancesubcategoryy" label="Select Category" disabled="{{read}}" required hidden>
+            <paper-menu id="assescomparebooksissuancesubcategory"  class="dropdown-content"  on-iron-select="FnSelectCategory"  attr-for-selected="value" required> 
+            <template is="dom-repeat" items="{{categoryarr}}">
+              <paper-item value="{{item.category_id}}">{{item.category_name}}</paper-item>
+            </template>
+            </paper-menu>
+          </paper-dropdown-menu> 
+          <paper-dropdown-menu id="assesacademicyearr" label="Select Academicyear" disabled="{{read}}" required hidden>
+            <paper-menu class="dropdown-content" id="assesacademicyear" on-iron-select="FnSelectAcademicyear"  attr-for-selected="value" required>  
+              <paper-item value="2016-2017">2016-2017</paper-item> 
+              <paper-item value="2017-2018">2017-2018</paper-item> 
+              <!-- <template is="dom-repeat" items="{{assesmentarr}}">
+                <paper-item value="{{item.assesment_category_id}}">{{item.assesment_category_name}}</paper-item>                            
+              </template> -->
+            </paper-menu>
+          </paper-dropdown-menu>   
+          <paper-dropdown-menu id="assescomparebooksissuancetypee1" label="Select Assesment" disabled="{{read}}" required hidden>
+            <paper-menu class="dropdown-content" id="assescomparebooksissuancetype1" on-iron-select="FnSelectAssesment1"  attr-for-selected="value" required>  
+              <template is="dom-repeat" items="{{assesmentarr}}">
+                <paper-item value="{{item.assesment_category_id}}">{{item.assesment_category_name}}</paper-item>                            
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>   
+     </div>
+    </div>
+    <div class="chart1" hidden$="{{hideenrichmentexcel}}">
+    <enrichment-excel-report></enrichment-excel-report>
+    </div>
+    
+    <enrichment-report-service id="enrichmentreportservice"></enrichment-report-service>
+    <beginner-assesment-service id="bassesmentservice"></beginner-assesment-service>
+
+
+  </template>
+  <script>
+  (function() {
+    'use strict'; 
+    var gradename="",gradeid="",sectionname="",sectionid="",subjectid="",subjectname="",assesment="",categoryname="",categoryid="",academicyear="";   
+    Polymer({
+      is: 'assesment-comparison-homecard',
+      ready:function(){
+      this.hidecard=true;  
+      this.flag=0;    
+      this.hideenrichmentexcel=true;   
+      },
+      FnSpinnerActive:function(flag){
+        if(flag==true)
+        this.$.spinner.opened=true;
+        if(flag==false)
+        this.$.spinner.opened=false;
+      },
+      // attached:function(){
+      //   if(sessionStorage.getItem("curr_sess_loggedroleid")=="management")
+      //     this.hideschool=false;
+      //   else
+      //     this.hideschool=true;
+      // },
+      FnSelectSchool:function(e){
+        document.querySelector("#assescomparebooksissuancetype").selected=-1;
+        document.querySelector("#assescomparebooksissuancegrade").selected=-1;
+        document.querySelector("#assescomparebooksissuancesection").selected=-1;
+        document.querySelector("#assescomparebooksissuancesubject").selected=-1; 
+        var schoolid = e.target.selectedItem.value.trim();
+        sessionStorage.setItem("curr_sess_loggedschoolid",schoolid);
+        this.$.bassesmentservice.callGradeService();
+      },
+      FnSelectAssesment:function(e){
+        assesment=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_assesment",assesment);
+        if(this.flag==1)
+        {
+            // document.querySelector("#assescomparebooksissuancetype").selected=-1;
+        this.arr=[];
+        this.hideenrichmentexcel=true;
+        document.querySelector("#assescomparebooksissuancegrade").selected=-1;
+        document.querySelector("#assescomparebooksissuancesection").selected=-1;
+        document.querySelector("#assescomparebooksissuancesubject").selected=-1;
+        }
+      },
+      FnSelectAssesment1:function(e){
+        assesment=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_assesment",assesment);
+      },
+      FnSelectAcademicyear:function(e){
+        academicyear=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_academicyear",academicyear);
+      },
+      FnSelectGrade:function(e){
+        gradename = e.target.selectedItem.textContent.trim();
+        gradeid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_gradename",gradename);
+        localStorage.setItem("curr_sess_grade",gradename);
+        localStorage.setItem("curr_sess_gradeid",gradeid);
+        this.$.bassesmentservice.callSectionService(gradename);
+        if(this.flag==1)
+        {
+        // document.querySelector("#assescomparebooksissuancetype").selected=-1;
+        // document.querySelector("#assescomparebooksissuancegrade").selected=-1;
+        this.arr=[];
+        this.hideenrichmentexcel=true;
+        document.querySelector("#assescomparebooksissuancesection").selected=-1;
+        document.querySelector("#assescomparebooksissuancesubject").selected=-1;
+        }
+      },
+      FnSelectSection:function(e){
+        sectionname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_sectionname",sectionname);
+        sectionid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_sectionid",sectionid);
+        this.$.enrichmentreportservice.callFetchEnrichmentStudentCategorySubjectwise();
+        if(this.flag==1)
+        {
+            // document.querySelector("#assescomparebooksissuancetype").selected=-1;
+        // document.querySelector("#assescomparebooksissuancegrade").selected=-1;
+        // document.querySelector("#assescomparebooksissuancesection").selected=-1;
+        this.arr=[];
+        this.hideenrichmentexcel=true;
+        document.querySelector("#assescomparebooksissuancesubject").selected=-1;
+        }
+      },
+      FnSelectSubject:function(e){
+        this.flag=1;
+        this.hideenrichmentexcel=true;
+        subjectname = e.target.selectedItem.textContent.trim();
+        subjectid = e.target.selectedItem.value.trim();    
+        localStorage.setItem("curr_sess_subjectname",subjectname);
+        localStorage.setItem("curr_sess_subjectid",subjectid);
+        this.$.enrichmentreportservice.callenrichmentexcelService();
+        this.FnSpinnerActive(true);
+        // this.$.enrichmentservice.FnFetchSubjectCategoryForIssue(subjectid);
+      },
+      FnShowList:function(){
+        this.hideenrichmentexcel=false;
+      },
+      FnRefresh:function(){
+        document.querySelector("#assescomparebooksissuanceschoolname").selected=-1;
+        document.querySelector("#assescomparebooksissuancetype").selected=-1;
+        document.querySelector("#assescomparebooksissuancegrade").selected=-1;
+        document.querySelector("#assescomparebooksissuancesection").selected=-1;
+        document.querySelector("#assescomparebooksissuancesubject").selected=-1;     
+        gradename="";
+        gradeid="";
+        sectionname="";
+        sectionid="";
+        assesment="";
+        subjectname="";
+        subjectid="";
+        academicyear="";
+        this.hidecard=true; 
+        this.hideenrichmentexcel=true; 
+        // this.hidenewenrichmentchart=true; 
+        // this.hidepromotedenrichmentchart=true; 
+      }
+    });      
+  })();
+  </script>
+</dom-module>

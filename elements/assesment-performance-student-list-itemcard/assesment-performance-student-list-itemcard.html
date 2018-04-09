@@ -1,0 +1,42 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-student-list-itemcard">
+  <template>
+    <style>
+      .indrop{
+        @apply(--layout-horizontal);
+        margin-top: 2%;
+        margin-left: 3%;
+        width: 100%;
+        color: #8A0969;
+      }
+      my-greeting{
+        margin-top: 2%;
+      }      
+    </style>
+    
+    <div class="indrop">
+    <template is="dom-repeat" items="{{levelarr}}">
+    <my-greeting diff="{{item.diff}}" levelicon="{{item.levelicon}}" levelcolor="{{item.levelcolor}}" levelcount="{{item.levelcount}}"
+    subleveldiff="{{item.subleveldiff}}" sublevelicon="{{item.sublevelicon}}" sublevelcolor="{{item.sublevelcolor}}" sublevelcount="{{item.sublevelcount}}" levelvisible="{{item.levelvisible}}" sublevelvisible="{{item.sublevelvisible}}"></my-greeting>
+    &nbsp;&nbsp;<h5>{{item.assesment_id}}-{{item.level}}({{item.category}})</h5>
+    
+    </template>
+    </div>
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-student-list-itemcard',
+      // isLevelEqualTo:function(level,string){
+      //   alert(level+"  "+string+level==string);
+      //   return level==string;        
+      // },
+      // isLevelSubEqualTo:function(){
+      // }
+    });
+  })();
+  </script>
+</dom-module>

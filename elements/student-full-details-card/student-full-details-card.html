@@ -1,0 +1,98 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-full-details-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+         margin-top: 5%;{
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:blue;
+      }
+       .outcard{
+        margin-left: 0%;
+        margin-top: 5%;
+      }
+      
+      .spinner{
+            margin-left: 50%;            
+           
+            /*color: #0f9d58;*/
+            /*border: none;*/
+          }
+          #spinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }
+      #itemcard:nth-child(odd) {
+        background-color: white;
+       
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      #itemcard{
+        margin-left: 6%;
+        width: 80%;
+      }
+      .Mark{
+        
+        @apply(--layout-horizontal);
+        
+      }
+     .tb1{
+        width: 45%;
+     margin-left:20%;
+      }
+
+    </style>
+    <div>
+    <center>
+       
+      <h1>{{schoolname}}</h1>
+      <h3>Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+      <h4>Assesment: {{assesmentname}}  &nbsp;&nbsp;&nbsp; Grade: {{grade}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section: {{section}} &nbsp;&nbsp; Subject: {{subject}}</h4> 
+   
+    
+     <div class="spinner"><paper-dialog id="spinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner></paper-dialog></div>
+    
+     <template is="dom-repeat" items="{{studentarr}}" as="item">
+   
+      <div id="itemcard">
+         <student-full-details-item-card fonts="{{item.font}}" studenthiddenview1="{{item.studenthiddenview1}}"  studenthiddenview2="{{item.studenthiddenview2}}" grade="{{grade}}" section="{{section}}"  flag="{{item.flag}}" studentid="{{item.id}}" studentname="{{item.student_name}}" subject={{subject}} subjectcategory="{{subjectcategory}}" Comments="{{item.comment}}" assesmentid="{{assesmentid}}"></student-full-details-item-card>
+      </div>
+  </template>
+  </center>  
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'student-full-details-card',
+
+     FnSpinnerrActive:function(flag){
+        if(flag==true)
+        this.$.spinner.opened=true;
+        if(flag==false)
+        this.$.spinner.opened=false;
+      },
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,80 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="approvelstatus-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td{
+        width: 41%;        
+      } 
+      .card{
+        @apply(--layout-horizontal);
+        margin-top: 0.5%;
+        width: 100%;
+      } 
+      p{
+        width: 20%;
+        margin-left: 2%;
+      } 
+      paper-button{
+        text-transform: none;
+        height: 25px;
+      }
+      .viewdata{
+        margin-top: 5%;
+        cursor: pointer;
+        color:blue;
+      }
+    </style>
+    <div hidden>{{category}}</div>
+        <div class="card" style="{{color}}">
+          <p class='p1' style="{{font}}">{{academicyear}}</p>
+          <p class='p2' style="{{font}}">{{termname}}</p>          
+          <p class='p4' style="{{font}}">{{grade}}</p>
+          <p class='p5' style="{{font}}">{{section}}</p>
+          <p class='p6' style="{{font}}">{{subject}}</p>
+          <p class='p3' style="{{font}}">{{assesmentid}}</p>
+          <p class='p6' style="{{font}}">{{flag}}</p>
+          <p class='p7' ><ahref hidden$="{{hideflag}}" class="viewdata" on-click="FnRemove"><u>Revert</u></ahref></p>
+        </div>
+        <term-assesment-service id="assesmentservice"></term-assesment-service>        
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'approvelstatus-item-card',
+      FnRemove:function()      
+      {
+        if(this.flag=="Approved"){
+        if(this.grade=="Grade-1"||this.grade=="Grade-2"||this.grade=="Grade-3"||this.grade=="Grade-4")
+        {
+          if(this.category=="category1"){
+          document.querySelector('approvalstatus-card').FnSpinnerrActive();
+          this.$.assesmentservice.FnFetchAuditLevel(this.academicyear,this.termname,this.assesmentid,this.grade,this.section,this.subject,this.flag);
+          }
+          else{
+          document.querySelector('approvalstatus-card').FnSpinnerrActive();
+          this.$.assesmentservice.FnUpdateReversalFlag(this.academicyear,this.termname,this.assesmentid,this.grade,this.section,this.subject,this.flag); 
+          }
+        }          
+        if(this.grade=="Grade-5"||this.grade=="Grade-6"||this.grade=="Grade-7"||this.grade=="Grade-8"||this.grade=="Grade-9"||this.grade=="Grade-10")
+        {
+          document.querySelector('approvalstatus-card').FnSpinnerrActive();
+          this.$.assesmentservice.fnfaassesmenttermmarks(this.grade,this.section,this.termname,this.assesmentid,this.subject,this.flag);
+        }
+      }
+      else{
+        this.$.assesmentservice.revertsubmittedmarkService(localStorage.getItem("curr_sess_academicyear"),this.termname,this.assesmentid,this.grade,this.section,this.subject,"1");
+      }
+      }
+    });
+  })();
+  </script>
+</dom-module>

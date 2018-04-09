@@ -1,0 +1,102 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
+<link rel="import" href="..\..\bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="dynamic-coscholastic-markentry-itemcard">
+  <template>
+    <style>
+      table{
+        border-collapse: collapse;
+        table-layout: fixed;
+        /*width: 100%;*/
+      }
+      td{
+        height: 10px;
+      }
+      paper-input{
+      height: 20px;
+      margin-top: -2%;
+      vertical-align: top;
+      }
+    </style>
+    <div hidden>{{temp}}</div>
+    <div class="card">
+        <paper-input hidden value="{{studentid}}"></paper-input>
+        <table border="1" width="{{tabwidth}}">
+        <tr>  
+        <th width="3%" valign="top"><p>{{serialno}}</p></th>      
+        <th width="7%" valign="top"><p>{{studentid}}</p></th>     
+        <th width="12%" valign="top"><p>{{studentname}}</p></th>
+        <template is="dom-repeat" items="{{category}}">
+          <td valign="top" colspan="{{item.categorycnt}}" width="{{item.width}}">
+          <coscholastic-markentry-card id="sdmei" categorycnt="{{item.categorycnt}}" grade="{{grade}}" studentid="{{item.studentid}}" studentname="{{item.studentname}}" classid="{{item.classid}}" assesmenttype="{{item.assesmenttype}}" gradeid="{{item.gradeid}}" gradename="{{item.gradename}}" subjectid="{{item.subjectid}}" subjectname="{{item.subjectname}}" categoryid="{{item.categoryid}}" categoryname="{{item.categoryname}}" subcategoryid="{{item.subcategoryid}}" subcategoryname="{{item.subcategoryname}}" weight="{{item.weight}}" hideinput="{{item.hiddeninput}}" hidelabel="{{item.hiddenlabel}}" score="{{item.score}}" seq="{{item.seq}}"></conscholastic-markentry-card>
+          </td>
+        </template>
+        <td width="3%"><paper-icon-button hidden$="{{hiddenoutinput}}" icon="save" on-click="FnSave"></paper-icon-button></td>
+        </tr>
+        </table>
+    </div>
+    <subject-dynamic-service id='subjectservice'></subject-dynamic-service>
+    <term-assesment-service id="assesmentservice"></term-assesment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var scorearr=[];
+    Polymer({
+      is: 'dynamic-coscholastic-markentry-itemcard',
+      ready:function(){
+        scorearr=this.temp;
+      },
+      attached:function(){
+        scorearr=[];
+      },
+      FnSetInfoArray:function(arr){
+        scorearr=arr;
+      },
+      FnSave:function(){
+     localStorage.setItem("curr_sess_template_tef","coinactive"); 
+        if(scorearr.length>0){
+          if(localStorage.getItem("curr_sess_single_studetmap")=="inmapactive")
+          {
+            if(localStorage.getItem('curr_sess_loggedassesmenttype')=="Term"||localStorage.getItem('curr_sess_loggedassesmenttype')=="Approval"){
+            document.querySelector('coscholastic-assesment-card').FnToggleSpinner(true);
+            document.querySelector('coscholastic-assesment-card').spinnermsg="Please wait...saving";
+            }
+            else if(localStorage.getItem('curr_sess_loggedassesmenttype')=="singlestudentinfo"){
+            document.querySelector('single-student-mark-entery-card').FnToggleSpinner(true);
+            document.querySelector('single-student-mark-entery-card').spinnermsg='Please wait...saving';
+            }
+          }
+        for(var i=0;i<scorearr.length;i++){
+          var t=1;
+          for(var j=0;j<scorearr.length;j++){
+            if(scorearr[i].studentid==scorearr[j].studentid){
+              scorearr[i].categorycnt=t;
+              t++;
+            }
+          }
+        }
+        for(var i=0;i<scorearr.length;i++){
+          if(scorearr[i].studentid==this.studentid){
+   
+            var temp=[];
+            temp.push(scorearr[i]);
+    this.$.assesmentservice.callinsertassesmentmarkService(scorearr[i].studentid,scorearr[i].studentname,scorearr[i].categoryname,scorearr[i].subcategoryname,scorearr[i].value,scorearr[i].seq,scorearr[i].categorycnt,scorearr[i].classid);
+          }
+        }
+        }
+        else{
+          alert("Please enter the marks!!");
+        }
+       },
+     FnRefresh:function(){
+         scorearr=[];
+         alert('coming in itemcard!!');
+       }   
+    });
+  })();
+  </script>
+</dom-module>
+  

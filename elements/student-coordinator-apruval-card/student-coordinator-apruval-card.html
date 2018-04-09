@@ -1,0 +1,83 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-coordinator-apruval-card">
+  <template>
+    <style>
+ /*    :host {
+        display: block;
+      }
+       .viewdata{
+        margin-top: 5%;
+        cursor: pointer;
+        color:blue;
+      }
+       .outcard{
+        margin-left: 0%;
+        margin-top: 5%;
+      }    
+      .spinner{
+            margin-left: 50%;            
+          }
+          #spinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }*/
+      #itemcard:nth-child(odd) {
+        background-color: white;
+       
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      /*#itemcard{
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        width: 83%;
+       }*/
+        /*.Mark{
+        
+        @apply(--layout-horizontal);
+        
+      }
+     .tb1{
+       width: 18.4%;
+     margin-left:5%;
+      }*/
+      .container{
+        @apply(--layout-vertical);        
+        width: 100%;
+      }
+      .innercard{
+       @apply(--layout-center-justified); 
+       width: 80%;
+      }
+    </style>
+    <div class="container">
+     <center>
+     <div>
+       <h1>{{schoolname}}</h1>
+       <h3>Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+     </div>
+     
+     <div class="innercard"> 
+     <template is="dom-repeat" items="{{approvalarr}}" as="item">
+     <div id="itemcard">
+     <student-coordinator-apruval-item-card fonts="{{item.font}}" comments="{{item.comments}}" academicyear="{{item.academic_year}}" studentid="{{item.student_id}}"  studentname="{{item.student_name}}" termid="{{item.term_id}}" subjectcategory="{{item.subject_category}}" assesmentid="{{item.assesment_id}}" grade="{{item.grade}}" section="{{item.section}}" subject="{{item.subject}}" flag="{{item.flag}}" studenthiddenviews1="{{item.studenthiddenviews}}">
+     </student-coordinator-apruval-item-card>
+     </div>
+    </template>
+    </div>
+    </center>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'student-coordinator-apruval-card',    
+    });
+  })();
+  </script>
+</dom-module>

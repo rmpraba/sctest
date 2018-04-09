@@ -1,0 +1,226 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../beginner-assesment-service/beginner-assesment-service.html">
+<link rel="import" href="../beginner-assesment-markentrysheet/beginner-assesment-markentrysheet.html">
+<link rel="import" href="../component-service/component-service.html">
+<link rel="import" href="../assesment-sheet-card/assesment-sheet-card.html">
+<dom-module id="enrichment-booksmapping-card">
+  <template>
+    <style>
+      :host{
+        display: block;
+      }    
+      .card{
+        @apply(--layout-vertical);
+      }
+      .drop{        
+        @apply(--layout-horizontal);
+        margin-top:2%;
+        margin-left: 10%;
+      }
+      paper-dropdown-menu{
+        width: 15%;
+        margin-left: 3%;
+      }
+      paper-dropdown-menu{
+      width: 15%;
+      margin-left: 3%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+      }
+      .innercard{
+        @apply(--layout-horizontal);
+        width: 100%;
+      }
+      .enrichmentstudentlist{
+        width: 25%;
+      }
+      .enrichmentstudentlevellist{
+        width: 75%;
+      }
+    </style>
+    <div class='card'>     
+    <div class='drop'>      
+          <paper-dropdown-menu id="enrichmentbookmappingtype" label="Select Assesment" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="enrichmentbookmappingtypee" on-iron-select="FnSelectAssesment"  attr-for-selected="value" required>  
+              <template is="dom-repeat" items="{{assesmentarr}}">
+                <paper-item value="{{item.assesment_category_id}}">{{item.assesment_category_name}}</paper-item>                            
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="enrichmentbookmappinggrade" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu  class="dropdown-content" id="enrichmentbookmappinggradee" on-iron-select="FnSelectGrade"  attr-for-selected="value" required> 
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="enrichmentbookmappingsection" label="Select Section" disabled="{{read}}" required>
+            <paper-menu  class="dropdown-content" id="enrichmentbookmappingsectionn" on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_id}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="enrichmentbookmappingsubject" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="enrichmentbookmappingsubjectt" on-iron-select="FnSelectSubject"  attr-for-selected="value" required> 
+            <template is="dom-repeat" items="{{subjectarr}}">
+              <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+            </template>
+            </paper-menu>
+          </paper-dropdown-menu>  
+          <paper-dropdown-menu id="enrichmentbookmappingcategory"  label="Select Category" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="enrichmentbookmappingcategoryy" on-iron-select="FnSelectCategory"  attr-for-selected="value" required> 
+            <template is="dom-repeat" items="{{categoryarr}}">
+              <paper-item value="{{item.category_id}}">{{item.category_name}}</paper-item>
+            </template>
+            </paper-menu>
+          </paper-dropdown-menu>      
+     </div>
+     <hr>
+     <div class="innercard">
+     <div class="enrichmentstudentlist" hidden$="{{hidecard}}">
+     <enrichment-bookissue-card levelarr="{{levelarr}}"></enrichment-bookissue-card>
+     </div>
+     <div class="enrichmentstudentlevellist" hidden$="{{hidestudlistcard}}">
+     <enrichment-studentlevel-card studlevelarr="{{studlevelarr}}" booklevelarr="{{booklevelarr}}"></enrichment-studentlevel-card>
+     </div>
+     </div>  
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+    <beginner-assesment-service id="bassesmentservice"></beginner-assesment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict'; 
+    var gradename="",gradeid="",sectionname="",sectionid="",subjectid="",subjectname="",assesment="",categoryname="",categoryid="";   
+    Polymer({
+      is: 'enrichment-booksmapping-card',
+      ready:function(){
+      this.hidecard=true;        
+      this.hidestudlistcard=true; 
+      this.flag=0;
+      },
+      callService:function(){
+        this.$.bassesmentservice.callAssesmentService("Enrichment");
+        this.$.bassesmentservice.callGradeService();
+        this.$.enrichmentservice.subjectforenrichmentService();
+      },
+      FnSelectAssesment:function(e){
+          assesment=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_assesmentname",assesment);
+        if(this.flag==1){
+          this.hidecard=true;        
+          this.hidestudlistcard=true; 
+          this.$.enrichmentservice.FnFetchStudentCategoryForIssue(assesment,gradeid,sectionid,subjectid,categoryid);
+           document.querySelector("#enrichmentbookmappinggradee").selected=-1;
+        document.querySelector("#enrichmentbookmappingsectionn").selected=-1;
+        document.querySelector("#enrichmentbookmappingcategoryy").selected=-1;
+        document.querySelector("#enrichmentbookmappingsubjectt").selected=-1;  
+    
+        }
+      },
+      FnSelectSubject:function(e){
+        subjectname = e.target.selectedItem.textContent.trim();
+        subjectid = e.target.selectedItem.value.trim();    
+        localStorage.setItem("curr_sess_subjectname",subjectname);
+        localStorage.setItem("curr_sess_subjectid",subjectid);
+        this.$.enrichmentservice.FnFetchSubjectCategoryForIssue(subjectid);
+        if(this.flag==1){
+          this.hidecard=true;        
+          this.hidestudlistcard=true; 
+          this.$.enrichmentservice.FnFetchStudentCategoryForIssue(assesment,gradeid,sectionid,subjectid,categoryid);
+        }
+          document.querySelector("#enrichmentbookmappingcategoryy").selected=-1;
+      
+
+      },
+      FnSelectGrade:function(e){
+        gradename = e.target.selectedItem.textContent.trim();
+        gradeid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_gradename",gradename);
+        localStorage.setItem("curr_sess_grade",gradename);
+        localStorage.setItem("curr_sess_gradeid",gradeid);
+        this.$.bassesmentservice.callSectionService(gradename);
+        if(this.flag==1){
+          this.hidecard=true;        
+          this.hidestudlistcard=true; 
+          this.$.enrichmentservice.FnFetchStudentCategoryForIssue(assesment,gradeid,sectionid,subjectid,categoryid);
+        }
+        document.querySelector("#enrichmentbookmappingsectionn").selected=-1;
+        document.querySelector("#enrichmentbookmappingcategoryy").selected=-1;
+        document.querySelector("#enrichmentbookmappingsubjectt").selected=-1;  
+    
+      },
+
+      FnSelectSection:function(e){
+        sectionname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_sectionname",sectionname);
+        sectionid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_sectionid",sectionid);
+        if(this.flag==1)
+        {
+          this.hidecard=true;        
+          this.hidestudlistcard=true; 
+          this.$.enrichmentservice.FnFetchStudentCategoryForIssue(assesment,gradeid,sectionid,subjectid,categoryid);
+        }
+        document.querySelector("#enrichmentbookmappingcategoryy").selected=-1;
+        document.querySelector("#enrichmentbookmappingsubjectt").selected=-1;  
+    
+      },
+      FnSelectCategory:function(e)
+      {
+        if(this.flag==1){
+          this.hidecard=true;        
+          this.hidestudlistcard=true; 
+        }
+        categoryname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_categoryname",categoryname);
+        categoryid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_categoryid",categoryid);
+        this.flag=1;
+        this.$.enrichmentservice.FnFetchStudentCategoryForIssue(assesment,gradeid,sectionid,subjectid,categoryid);
+      },
+      FnShowList:function(){
+        this.hidecard=false;
+      },
+      FnShowStudList:function(){
+        this.hidestudlistcard=false;
+      },
+      FnRefresh:function(){
+        document.querySelector("#enrichmentbookmappingtypee").selected=-1;
+        document.querySelector("#enrichmentbookmappinggradee").selected=-1;
+        document.querySelector("#enrichmentbookmappingsectionn").selected=-1;
+        document.querySelector("#enrichmentbookmappingcategoryy").selected=-1;
+        document.querySelector("#enrichmentbookmappingsubjectt").selected=-1;        
+        gradename="";
+        gradeid="";
+        sectionname="";
+        sectionid="";
+        subjectid="";
+        subjectname="";
+        assesment="";
+        categoryname="";
+        categoryid="";
+        this.hidecard=true;
+        this.hidestudlistcard=true; 
+        this.studlevelarr="";
+       },
+      FnTempRefresh:function(){
+        this.hidestudlistcard=true;
+        this.studlevelarr="";
+       },
+      FnSetStudents:function(stud){
+        document.querySelector('enrichment-studentlevel-card').FnSetBooks(stud);
+      },
+      FnSetBooks:function(book){
+        document.querySelector('enrichment-studentlevel-card').FnSetBooks(book);
+      }
+    });      
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,89 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="term-creation-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+       }
+       .card  
+      {
+        @apply(--layout-center);
+        @apply(--layout-horizontal);
+        border-bottom: 1px solid #dedede;
+        width: 200%;        
+      }
+       paper-item,paper-input
+      {
+        width:40%;
+        margin-left: 2%;
+      }
+      paper-icon-button
+      {
+        width:5%;
+      }
+      .itemcard
+      {
+      @apply(--layout-horizontal); 
+      }
+
+      paper-button
+      {
+        @apply(--layout-right);
+        background-color: #363636;
+        color: #ffffff;
+        margin-top: 5%;
+
+       }
+    </style>
+    <div  class='itemcard' hidden$="{{hideitemcard}}">
+         <paper-item hidden$="{{termid}}"></paper-item>
+         <paper-item hidden$="{{hideschooltypenameitem}}" style="text-transform:uppercase">{{termname}}</paper-item>
+        <paper-input value="{{termname}}" hidden$="{{hideschooltypenameinput}}"></paper-input>
+         <paper-icon-button  id="btn1" icon="icons:create" on-click='FnEdit' hidden$="{{hideschooltypenameitem}}"></paper-icon-button>
+        <paper-tooltip for="btn1">Edit</paper-tooltip>
+        <paper-icon-button id="btn2" icon="icons:save" on-click='FnSave' hidden$="{{hideschooltypenameinput}}"></paper-icon-button>
+        <paper-tooltip for="btn2">Save</paper-tooltip>
+        <paper-icon-button id="btn3" icon="icons:close" on-click='FnDelete' ></paper-icon-button>
+        <paper-tooltip for="btn3" >Delete</paper-tooltip>
+   </div>
+       
+    <master-term-mapping-ui-service id="mastertermservice"></master-term-mapping-ui-service>
+   
+
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'term-creation-item-card',
+
+     ready:function()
+      {
+        this.hideschooltypenameinput=true;
+        this.hideschooltypenameitem=false;
+      },
+       FnEdit:function()
+      {
+        this.hideschooltypenameinput=false;       
+        this.hideschooltypenameitem=true;
+
+      },
+      FnSave:function()
+      {
+     var termname=this.termname.toLowerCase();
+     this.$.mastertermservice.fnupdatepasstermvalue(this.termid,termname); 
+     this.hideschooltypenameinput=true;
+     this.hideschooltypenameitem=false;
+      },
+      FnDelete:function(e){
+           var termname=this.termname.toLowerCase();
+          this.$.mastertermservice.fndeletepasstermvalue(this.termid,termname); 
+
+      },
+    });
+  })();
+  </script>
+</dom-module>

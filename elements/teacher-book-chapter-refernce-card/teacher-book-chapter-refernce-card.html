@@ -1,0 +1,264 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-textarea.html">
+
+
+<dom-module id="teacher-book-chapter-refernce-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      } 
+     
+       .report1
+        {
+          table-layout: fixed;
+          border-collapse: collapse;
+          width:50%;
+          margin-left: 28%;
+          margin-top: 5%;
+        }
+
+      #newcardzzzzz
+       {
+           margin-top: 4%;
+        margin-left: 13%;
+         width:74%;
+        min-height: 512px; 
+        border: solid 1px #555; 
+        background-color: white; 
+        box-shadow: inset 10px -10px 25px #77539e(0,0,0,0.6); -moz-box-shadow: inset 10px -10px 25px rgba(0,0,0,0.6); -webkit-box-shadow: inset 10px -10px 25px rgba(146, 93, 93, 0.6); -o-box-shadow: inset 10px -10px 25px rgba(0,0,0,0.6)
+       }
+      
+        #itemcarddialog
+       {
+         /* width: 81%;
+          height: 129px;*/
+          min-width: 81%;
+          height: 144px;
+          text-align: center;
+         display: inline-block;
+          @apply(--layout-center);
+          border-radius: 2px;
+          box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+          padding:5px;
+       }
+
+        .hs-inner
+       {
+         /*padding: 30px 20px 10px 377px;*/
+        @apply(--layout-horizontal);
+       }
+       .hs-inner p
+       {
+          font-size: 18px;
+          line-height: 24px;
+          text-align: justify;
+          position: relative;
+          padding: 11px 0px;
+          text-shadow: 1px 0px 1px rgba(255, 255, 255, 0.8);
+       }
+       .hs-inner
+       {
+          width: 961px;
+          height: 388px;
+          margin-top: -8%;
+        overflow-x: hidden;
+        overflow-y: visible;
+       }
+        
+       
+       .hs-inner p:first-letter
+        {
+            font-size: 28px;
+        }
+
+        img
+        {
+              margin-top: -12%;
+              height: 122px;
+              width: 960px;
+        }
+
+        paper-fab{
+          background-color: #ff0080;
+          color: white;
+          bottom: 116px;
+          left: 92%;
+        }
+        table
+        {
+              width: 90%;
+              margin-left: 2em;
+        }
+
+         #newconceptttt
+        {
+          border-radius: 10px;
+          width: 350px;
+          height: 200px;
+        }
+
+
+    </style> 
+ 
+
+      <!--     
+      <paper-icon-button icon="arrow-back" on-click="passset"></paper-icon-button>
+      <center><h2>{{capthead}}</h2></center>
+
+    <table  border="1" class="report1" id="reporttabzzzzz">
+        <tr>
+          <th>planning date</th>
+          <th>Concept Name </th>
+          <th>Period No</th>
+          <th>Save</th>
+          </tr>
+          <template is="dom-repeat" items="{{conceptarr}}" as="view">
+           <tr>
+               <aproval-book-value-item-card hidecheck="{{view.hidecheck}}" hidecheck1="{{view.hidecheck1}}" concept="{{view.concept}}" conceptid="{{view.concept_id}}" capterid="{{view.capter_id}}" planneddate="{{view.planned_date}}" period="{{view.period}}"> </aproval-book-value-item-card>
+                      
+           </tr>
+           </template>
+     </table>
+    </div>  -->
+
+    <div>
+      <center><h3>CONCEPT CREATION</h3></center>
+    </div>
+
+    <paper-card id="newcardzzzzz">
+        <div style="padding-top: 12%;height: 9%;">
+            <!-- <paper-icon-button icon="arrow-back" on-click="passset" 
+            style="position: absolute;margin-top: -12%;margin-left: 2%;color: black;">
+          </paper-icon-button> -->
+
+            <img src="../../images/book5.jpg">
+            <center style="position: absolute;margin-top: -14%;margin-left: 39%;
+            color: #1d1d1f;">
+                <h2 style="color:black;margin-top: 2em;margin-left: -1em;"><b>{{capthead}}</b></h2>
+            </center>
+            <paper-fab  icon="add" mini on-click="fnset"></paper-fab>
+            <paper-button  style="bottom: 155px;left: 79%; color:white;background-color: #ff0066" id="chapedit" on-click="Fnsubchapteredit">SubConcept</paper-button>
+        </div>
+
+        <div class="hs-inner" hidden$="{{subconceptid1}}">
+          <table>
+             <template is="dom-repeat" items="{{conceptarr}}" as="view">
+                <tr>
+                  <template is="dom-repeat" items="{{view}}" as="v">
+                    <td>
+                      <div id="itemcarddialog">  
+                        <p>
+                          <aproval-book-value-item-card concept="{{v.concept}}" conceptid="{{v.concept_id}}" capterid="{{v.capter_id}}"></aproval-book-value-item-card>
+                        </p>    
+                      </div>    
+                    </td>
+                  </template>
+                </tr>
+              </template>
+          </table>  
+        </div> 
+      <div class="hs-inner" hidden$="{{subconceptid}}">
+          <table>
+             <template is="dom-repeat" items="{{conceptarr}}" as="view">
+                <tr>
+                  <template is="dom-repeat" items="{{view}}" as="v">
+                    <td>
+                      <div id="itemcarddialog">  
+                        <p>
+                          <sub-concept-value-edit-card concept="{{v.concept}}" conceptid="{{v.concept_id}}" capterid="{{v.capter_id}}"></sub-concept-value-edit-card>
+                        </p>    
+                      </div>    
+                    </td>
+                  </template>
+                </tr>
+              </template>
+          </table>  
+        </div> 
+       
+    </paper-card>
+
+
+        <paper-dialog id="newconceptttt" modal>
+          <div>
+              <paper-textarea id="textarea" label="Enter Concept" value="{{conceptz}}" style="position: relative; margin-top:14%;width: 77%;">
+              </paper-textarea>
+          </div>
+          <div>    
+            <paper-icon-button icon="save" suffix on-click="fnsetconcept" style="float: right;margin-top:-17%;margin-left: -1em; ">
+            </paper-icon-button>
+          </div>
+          <div>  
+              <paper-icon-button icon="close" suffix on-click="Fnclose" style="float: right;position: fixed;margin-left: 20.5%;margin-top: -9%;"></paper-icon-button>
+          </div>    
+        </paper-dialog>
+
+  <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var conceptid;
+    var skll2=[];
+    var val1=[];
+    var editconceptarr=[];
+    Polymer({  
+      is: 'teacher-book-chapter-refernce-card',
+
+    ready:function(){
+      this.subconceptid=true;
+      this.subconceptid1=false;
+
+    },
+    Fnsubchapteredit:function(e){
+         this.subconceptid=false;
+        this.subconceptid1=true;
+    },
+
+   /* passset:function(e)
+    {
+      //alert('1');
+        document.querySelector('app-card').setPage('homepage','');
+        document.querySelector('home-page').setPage('teacher-book-refernce-card','');
+    
+    },*/
+    fnset:function(e)
+    {
+        this.subconceptid=true;
+        this.subconceptid1=false;
+      this.$.bookservice.conceptseq();   
+      this.$.newconceptttt.toggle();
+    },
+   
+   Fnclose:function()
+   {
+     this.$.newconceptttt.close();
+   },
+
+     fnsetconcept:function(e)
+    {
+
+      if(this.conceptz=="")
+      {
+        alert("Please Enter Concept");
+      }
+      else
+      {
+      //  alert(this.captheadid+ " "+this.conceptz+" "+conceptid);
+        this.$.bookservice.fnsendconcept(this.captheadid,this.conceptz);
+        this.conceptz="";
+        this.$.newconceptttt.toggle();
+      }
+      
+    },
+
+
+
+    });
+  })();
+  </script>
+</dom-module>

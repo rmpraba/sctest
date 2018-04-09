@@ -1,0 +1,92 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/value-card/value-card.html">
+
+<dom-module id="skill-dialog-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .skillcard
+      {
+        @apply(--layout-horizontal);
+      }
+    </style>
+
+    <div class="skillcard">
+        <paper-input value={{skillid}} hidden></paper-input>
+        <paper-input value={{skillname}} hidden></paper-input>
+        <paper-input value={{conceptid}} hidden></paper-input>
+        <paper-input value={{capterid}} hidden></paper-input>
+    <paper-checkbox on-change="fnsezzt1" id={{id}} checked="{{check}}" >{{skillname}}</paper-checkbox></div>
+  
+  </template>
+  <script>
+  (function() {
+    'use strict';
+ var skillarrr=[];
+  var temparr1=[];
+ 
+    Polymer({
+      is: 'skill-dialog-card',
+ready:function(e){
+
+},
+  fnsezzt1:function(e){  
+      document.querySelector('aproval-book-innovatiosn-item-card').fnsett();
+          if(document.querySelector('#'+this.id).checked==true){
+        var obj={};
+        obj.id=this.id;
+        obj.rowid=this.rowid;
+        obj.skillid=this.skillid;
+        obj.skillname=this.skillname;
+        if(skillarrr.length==0)
+        skillarrr.push(obj);
+        else{
+          var f=0;
+          for(var i=0;i<skillarrr.length;i++){
+            if(skillarrr[i].id==this.id&&skillarrr[i].skillid==this.skillid&&skillarrr[i].rowid==this.rowid){
+            f=1;
+            }
+          }
+          if(f==0)
+            skillarrr.push(obj);
+        }
+      }
+      if(document.querySelector('#'+this.id).checked==false){
+          for(var i=0;i<skillarrr.length;i++){
+            if(skillarrr[i].id==this.id&&skillarrr[i].skillid==this.skillid&&skillarrr[i].rowid==this.rowid){
+            skillarrr.splice(i,1);
+            }
+          }
+      }
+ document.querySelector('aproval-book-innovatiosn-item-card').fnpassskillarr(skillarrr);
+     
+       },
+       fnclean1:function(e){
+         var obj={};
+         skillarrr.splice(obj);
+         temparr1.splice(obj);
+       },
+
+       FnRefreshhhh:function(e)
+       {
+        if(skillarrr!=0)
+        {
+          for(var k=0;k<skillarrr.length;k++)
+          {
+            var skld=skillarrr[k].id;
+            document.querySelector('#'+skld).checked=false;
+            skillarrr.splice(k,1);
+          }
+        }
+       },
+       dbarrvalue:function(e){
+       
+    skillarrr=e;
+       },
+   }); 
+  })();
+  </script>
+</dom-module>

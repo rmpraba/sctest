@@ -1,0 +1,140 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="dashboard-gradewise-analysis-homecard">
+  <template>
+    <style>
+     .innercard{
+      width: 50%;
+     } 
+     paper-dropdown-menu{
+      width: 27%;
+      margin-left: 2%;
+     }
+    </style>
+    <div>
+      <paper-dropdown-menu id="ggradewiseanalysisschooltype" label="Select Type" disabled="{{read}}" required>
+        <paper-menu id="gradewiseanalysisschooltype" class="dropdown-content"  on-iron-select="FnSelectType"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{typearr}}">
+          <paper-item value="{{item.school_type_id}}">{{item.school_type_name}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+      <paper-dropdown-menu id="ggradewiseanalysisterm" label="Select Term" disabled="{{read}}" required>
+        <paper-menu id="gradewiseanalysisterm" class="dropdown-content"  on-iron-select="FnSelectTerm"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{termarr}}">
+          <paper-item value="{{item.term_id}}">{{item.term_name}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+      <paper-dropdown-menu id="ggradewiseanalysissubject" label="Select Subject" disabled="{{read}}" required>
+        <paper-menu id="gradewiseanalysissubject" class="dropdown-content"  on-iron-select="FnSelectSubject"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{subjectarr}}">
+          <paper-item value="{{item.subject_name}}">{{item.subject_name}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+    </div>
+    <div class="innercard">
+      <div id="gradewisechartContainer" style="height: 250; width: 250;"></div>
+    </div>
+    <dashboard-analysis-service id="dashboardservice"></dashboard-analysis-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'dashboard-gradewise-analysis-homecard',
+      FnToggleChart:function(arr){
+        // alert(JSON.stringify(arr));
+        var overall=[];        
+        for(var i=0;i<arr.length;i++){
+          var data=[];
+          for(var j=0;j<arr[i].info.length;j++){
+          var obj={};
+          obj.y=arr[i].info[j].count;
+          obj.label=arr[i].info[j].grade;
+          data.push(obj);
+          }
+          if(i!=0)
+          overall.push({type: "column",name: arr[i].term_cat_grade,axisYType: "secondary",showInLegend: true,dataPoints: data });
+          else
+          overall.push({type: "column",name: arr[i].term_cat_grade,showInLegend: true,dataPoints: data });  
+        }
+        // alert(JSON.stringify(overall));
+        this.FnShowChart(overall);
+      },
+      FnSelectType:function(e){
+        document.querySelector('#gradewiseanalysisterm').selected=-1;
+        document.querySelector('#gradewiseanalysissubject').selected=-1;
+        this.schooltypename = e.target.selectedItem.textContent.trim();
+        this.schooltype = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_schooltype",this.schooltype);
+        this.$.dashboardservice.fetchdashboardterm(this.schooltypename);
+      },
+      FnSelectTerm:function(e){
+        document.querySelector('#gradewiseanalysissubject').selected=-1;
+        this.termname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_termname",this.termname);
+        this.$.dashboardservice.fetchdashboardsubject(this.schooltypename,this.termname); 
+      },
+      FnSelectSubject:function(e){
+        this.subjectname = e.target.selectedItem.textContent.trim();
+        this.subjectid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_subjectname",this.subjectname);
+        localStorage.setItem("curr_sess_subjectid",this.subjectid);
+        if(this.schooltype=="primary")
+        this.$.dashboardservice.fetchgradewisedashboardinfo(localStorage.getItem("curr_sess_zone"),localStorage.getItem("curr_sess_branchid"),this.schooltype,this.termname,this.subjectname);
+        else
+        this.$.dashboardservice.fetchgradewisedashboardinfo1(localStorage.getItem("curr_sess_zone"),localStorage.getItem("curr_sess_branchid"),this.schooltype,this.termname,this.subjectname);
+      },
+      FnShowChart:function(data){
+      var chart = new CanvasJS.Chart("gradewisechartContainer", {
+      animationEnabled: true,
+      title:{
+        text: "Gradewise Performance Chart"
+      },  
+      width:500,
+      height:250,
+      axisY: {
+        title: "No of Students",
+        titleFontColor: "#4F81BC",
+        lineColor: "#4F81BC",
+        labelFontColor: "#4F81BC",
+        tickColor: "#4F81BC"
+      },
+      axisY2: {
+        // title: "Millions of Barrels/day",
+        titleFontColor: "#C0504E",
+        lineColor: "#C0504E",
+        labelFontColor: "#C0504E",
+        tickColor: "#C0504E"
+      },  
+      toolTip: {
+        shared: true
+      },
+      legend: {
+        cursor:"pointer",
+        itemclick: toggleDataSeries
+      },
+      data: data
+    });
+    chart.render();
+    function toggleDataSeries(e) {
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      }
+      else {
+        e.dataSeries.visible = true;
+      }
+      chart.render();
+    }
+    },
+    FnRefresh:function(){
+      document.querySelector('#gradewiseanalysisschooltype').selected=-1;
+      document.querySelector('#gradewiseanalysisterm').selected=-1;
+      document.querySelector('#gradewiseanalysissubject').selected=-1;
+    }
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,501 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-term-comparison-report-service">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div> 
+    <iron-ajax
+        method="post"
+        id="gradeajax"
+        url="{{gradeurl}}"
+        params="{{gradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="gradeResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="sectionajax"
+        url="{{sectionurl}}"
+        params="{{sectionparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="sectionResponse"
+        debounce-duration="300"
+    > 
+    <iron-ajax
+        method="post"
+        id="ReportCardandEnrichmentsubjectvalueajax"
+        url="{{ReportCardandEnrichmentsubjectvalueurl}}"
+        params="{{ReportCardandEnrichmentsubjectvalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="ReportCardandEnrichmentsubjectvalueResponse"
+        debounce-duration="300"
+       >
+
+      <iron-ajax
+        method="post"
+        id="ReportCardandEnrichmentcategoryvalue1ajax"
+        url="{{ReportCardandEnrichmentcategoryvalue1url}}"
+        params="{{ReportCardandEnrichmentcategoryvalue1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="ReportCardandEnrichmentcategoryvalue1Response"
+        debounce-duration="300"
+        >
+      <iron-ajax
+        method="post"
+        id="comparedistinsionandsourceajax"
+        url="{{comparedistinsionandsourceurl}}"
+        params="{{comparedistinsionandsourceparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="comparedistinsionandsourceResponse"
+        debounce-duration="300"
+        >  <iron-ajax
+        method="post"
+        id="comparedistinsionandsource1ajax"
+        url="{{comparedistinsionandsource1url}}"
+        params="{{comparedistinsionandsource1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="comparedistinsionandsource1Response"
+        debounce-duration="300"
+        >  <iron-ajax
+        method="post"
+        id="CompareservicesourcegraphinEnrichmentajax"
+        url="{{CompareservicesourcegraphinEnrichmenturl}}"
+        params="{{CompareservicesourcegraphinEnrichmentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="CompareservicesourcegraphinEnrichmentResponse"
+        debounce-duration="300"
+        >
+         <iron-ajax
+        method="post"
+        id="CompareservicesourcegraphinReportCardajax"
+        url="{{CompareservicesourcegraphinReportCardurl}}"
+        params="{{CompareservicesourcegraphinReportCardparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="CompareservicesourcegraphinReportCardResponse"
+        debounce-duration="300"
+        >  <iron-ajax
+        method="post"
+        id="CompareservicesourcegraphinReportCard1ajax"
+        url="{{CompareservicesourcegraphinReportCard1url}}"
+        params="{{CompareservicesourcegraphinReportCard1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="CompareservicesourcegraphinReportCard1Response"
+        debounce-duration="300"
+        >  <iron-ajax
+        method="post"
+        id="CompareservicesourcegraphinEnrichment1ajax"
+        url="{{CompareservicesourcegraphinEnrichment1url}}"
+        params="{{CompareservicesourcegraphinEnrichment1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="CompareservicesourcegraphinEnrichment1Response"
+        debounce-duration="300"
+        ><iron-ajax
+        method="post"
+        id="compareservicegrademasterajax"
+        url="{{compareservicegrademasterurl}}"
+        params="{{compareservicegrademasterparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="compareservicegrademasterResponse"
+        debounce-duration="300"
+        >
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'student-term-comparison-report-service',
+      compareservicegrademaster:function(){
+          this.compareservicegrademasterurl=sessionStorage.getItem("addrinfo")+"/compareservicegrademaster-service";
+           this.$.compareservicegrademasterajax.generateRequest();
+         },
+         compareservicegrademasterResponse:function(e){
+        this.enricharr=e.detail.response.returnval;
+        this.reportcardarr=e.detail.response.reportcardarr;
+          },
+      CompareservicesourcegraphinEnrichment:function(gradename,section,subject,sourcevalue){
+    this.CompareservicesourcegraphinEnrichmenturl=sessionStorage.getItem("addrinfo")+"/CompareservicesourcegraphinEnrichment-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.assesment=sourcevalue;
+         obj.grade=gradename;
+         obj.subject=subject;
+         obj.section=section;
+         this.CompareservicesourcegraphinEnrichmentparam=obj;
+         this.$.CompareservicesourcegraphinEnrichmentajax.generateRequest();
+         },
+         
+
+     CompareservicesourcegraphinEnrichmentResponse:function(e){
+        this.total=e.detail.response.returnval;
+        this.subject=e.detail.response.subject;
+    if(e.detail.response.returnval=="invalid"){
+          alert("Pls check the Enrichment mark.....!");
+         }
+     else{ 
+        var totalarr=[];
+        var temp=[];
+        var subject="";
+           for(var i=0;i<this.total.length;i++){
+          subject=this.total[i].subject_name;
+          for(var j=0;j<this.subject.length;j++){
+          if(this.total[i].subject_name.toLowerCase()==this.subject[j].subject_name.toLowerCase()){
+            temp.push(this.total[i]);
+            this.total.splice(i,1);
+            i--;
+            break;
+           }
+          }
+          totalarr.push({'subject':subject,'subarr':temp});
+          temp=[];
+         }
+ document.querySelector('student-term-comparison-report').FnComparearr(totalarr);
+}
+       },
+  CompareservicesourcegraphinEnrichment1:function(gradename,section,subject,sourcevalue,category){
+    this.CompareservicesourcegraphinEnrichment1url=sessionStorage.getItem("addrinfo")+"/CompareservicesourcegraphinEnrichment1-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.assesment=sourcevalue;
+         obj.grade=gradename;
+         obj.subject=subject;
+         obj.section=section;
+         obj.category=category;
+         this.CompareservicesourcegraphinEnrichment1param=obj;
+          this.$.CompareservicesourcegraphinEnrichment1ajax.generateRequest();
+         },
+     CompareservicesourcegraphinEnrichment1Response:function(e){
+        this.total=e.detail.response.returnval;
+        this.subject=e.detail.response.subject;
+ if(e.detail.response.returnval=="invalid"){
+          alert("Pls check the Enrichment mark.....!");
+         }
+       else{ 
+        var totalarr=[];
+        var temp=[];
+        var subject="";
+            for(var i=0;i<this.total.length;i++){
+          subject=localStorage.getItem("curr_sess_subject");
+          for(var j=0;j<this.subject.length;j++){
+          if(this.total[i].subject_name.toLowerCase()==this.subject[j].subject_name.toLowerCase()){
+            temp.push(this.total[i]);
+            this.total.splice(i,1);
+            i--;
+            break;
+           }
+          }
+          totalarr.push({'subject':subject,'subarr':temp});
+          temp=[];
+         }
+  document.querySelector('student-term-comparison-report').FnComparearr(totalarr);
+}
+       },
+     CompareservicesourcegraphinReportCard:function(gradename,section,subject,sourcevalue){
+    this.CompareservicesourcegraphinReportCardurl=sessionStorage.getItem("addrinfo")+"/CompareservicesourcegraphinReportCard-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.assesment=sourcevalue;
+         obj.grade=gradename;
+         obj.subject=localStorage.getItem("curr_sess_subject");
+         obj.section=section;
+         this.CompareservicesourcegraphinReportCardparam=obj;
+        this.$.CompareservicesourcegraphinReportCardajax.generateRequest();
+         },
+CompareservicesourcegraphinReportCardResponse:function(e){
+
+        var total=e.detail.response.returnval;
+        this.subject=e.detail.response.subject;
+        var graderate=e.detail.response.graderatarr;
+      
+   if(total=="invalid"){
+  alert("Pls check the term mark.....!");
+   }
+   else{
+         var totalarr=[];
+         var temp=[];
+         var subject="";
+         var temp1=[];
+ for(var i=0;i<total.length;i++){
+        for(var j=0;j<graderate.length;j++){
+            var ccc=total[i].score.toFixed(1);
+                ccc.replace(/[^\w\s]/gi, '');
+                ccc.trim();
+  if(graderate[j].higher_limit>=ccc && graderate[j].lower_limit<=ccc){
+               total[i].grade=graderate[j].grade;
+               temp1.push(total[i]);
+                }
+              else{
+               }
+              } 
+             }
+             
+
+   var temparr=[];
+  for(var j=0;j<graderate.length;j++){
+                   var c=0;
+                   var flage=0;
+                  for(var i=0;i<temp1.length;i++){
+                      flage=1;
+                if((graderate[j].grade)==(temp1[i].grade)){
+                       
+                               c++;
+                         
+                         }
+                        }
+                     var obj={};
+                      obj.subject_name=localStorage.getItem("curr_sess_subject");
+                      obj.grade=graderate[j].grade;
+                      obj.score=c;
+                      temparr.push(obj); 
+                       c=0; 
+                   }
+  
+    for(var i=0;i<temparr.length;i++){
+          subject=temparr[i].subject_name;
+          for(var j=0;j<this.subject.length;j++){
+        if(temparr[i].subject_name.toLowerCase()==this.subject[j].subject_name.toLowerCase()){
+            temp.push(temparr[i]);
+            temparr.splice(i,1);
+            i--;
+            break;
+           }
+          }
+          totalarr.push({'subject':subject,'subarr':temp});
+          temp=[];
+         }
+  document.querySelector('student-term-comparison-report').FnComparearr(totalarr);
+}
+       },
+
+  CompareservicesourcegraphinReportCard1:function(gradename,section,subject,sourcevalue,category){
+    this.CompareservicesourcegraphinReportCard1url=sessionStorage.getItem("addrinfo")+"/CompareservicesourcegraphinReportCard1-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.assesment=sourcevalue;
+         obj.grade=gradename;
+         obj.subject=localStorage.getItem("curr_sess_subject");
+         obj.section=section;
+         obj.category=category;
+         this.CompareservicesourcegraphinReportCard1param=obj;
+         this.$.CompareservicesourcegraphinReportCard1ajax.generateRequest();
+         },
+CompareservicesourcegraphinReportCard1Response:function(e){
+           this.subject=e.detail.response.subject;
+      if(e.detail.response.returnval=="invalid"){
+          alert("Pls check the term mark.....!");
+         }
+       else{      
+        if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+           this.total=e.detail.response.returnval;
+
+
+    
+        var totalarr=[];
+        var temp=[];
+        var subject="";
+            for(var i=0;i<this.total.length;i++){
+           subject=localStorage.getItem("curr_sess_subject");
+          for(var j=0;j<this.subject.length;j++){
+          if(this.total[i].subject_name.toLowerCase()==this.subject[j].subject_name.toLowerCase()){
+            temp.push(this.total[i]);
+            this.total.splice(i,1);
+            i--;
+            break;
+             }
+            }
+          totalarr.push({'subject':subject,'subarr':temp});
+          temp=[];
+          }
+   document.querySelector('student-term-comparison-report').FnComparearr(totalarr);
+       }
+      else{
+
+   var total1=e.detail.response.returnval;
+
+ var totalarr=[];
+         var temp=[];
+         var subject="";
+         var temp1=[];
+ for(var i=0;i<total1.length;i++){
+        for(var j=0;j<this.reportcardarr.length;j++){
+            var ccc=total1[i].score.toFixed(1);
+                ccc.replace(/[^\w\s]/gi, '');
+                ccc.trim();
+      if(this.reportcardarr[j].higher_limit>=ccc && this.reportcardarr[j].lower_limit<=ccc){
+               total1[i].grade=this.reportcardarr[j].grade;
+               temp1.push(total1[i]);
+                }
+             
+              } 
+             }
+
+     var temparr=[];
+    for(var j=0;j<this.reportcardarr.length;j++){
+                   var c=0;
+                   var flage=0;
+                  for(var i=0;i<temp1.length;i++){
+                      flage=1;
+                if((this.reportcardarr[j].grade)==(temp1[i].grade)){
+                       
+                               c++;
+                         
+                         }   
+                        }
+                     var obj={};
+                      obj.subject_name=localStorage.getItem("curr_sess_category");
+                      obj.grade=this.reportcardarr[j].grade;
+                      obj.score=c;
+                      temparr.push(obj); 
+                       c=0; 
+                  }
+  
+    for(var i=0;i<temparr.length;i++){
+          subject=temparr[i].subject_name;
+          for(var j=0;j<this.subject.length;j++){
+     if(temparr[i].subject_name.toLowerCase()==this.subject[j].subject_name.toLowerCase()){
+            temp.push(temparr[i]);
+            temparr.splice(i,1);
+            i--;
+            break;
+           }
+          }
+          totalarr.push({'subject':subject,'subarr':temp});
+          temp=[];
+         }
+document.querySelector('student-term-comparison-report').FnComparearr(totalarr);
+       }
+     }
+    },
+
+     callGradeService:function(){
+         this.gradeurl=sessionStorage.getItem("addrinfo")+"/grade-service";
+         var obj={"schoolid":"","loggedid":"","roleid":"","term":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+         obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.term=localStorage.getItem('curr_sess_termname');
+         this.gradeparam=obj;
+         this.$.gradeajax.generateRequest();
+         
+      },
+      gradeResponse:function(e){
+         document.querySelector('student-term-comparison-report').gradearr=e.detail.response.returnval;
+        
+       },
+       comparedistinsionandsource:function(){
+       
+         var obj={"schoolid":"","loggedid":"","roleid":"","term":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+         obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.term=localStorage.getItem('curr_sess_termname');
+         this.comparedistinsionandsourceurl=sessionStorage.getItem("addrinfo")+"/term-service";
+         this.comparedistinsionandsourceparam=obj;
+         this.$.comparedistinsionandsourceajax.generateRequest();
+      
+      },
+   comparedistinsionandsourceResponse:function(e){
+         document.querySelector('student-term-comparison-report').termarr=e.detail.response.returnval;
+        
+       },
+       comparedistinsionandsource1:function(gradename,com,subjectname){
+      
+         var obj={"schoolid":"","loggedid":"","roleid":"","term":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+         obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+         obj.gradename=gradename;
+         obj.subjectname=subjectname;
+         this.comparedistinsionandsource1url=sessionStorage.getItem("addrinfo")+"/enrichassesment-service";
+         this.comparedistinsionandsource1param=obj;
+         this.$.comparedistinsionandsource1ajax.generateRequest();
+      },
+    comparedistinsionandsource1Response:function(e){
+ document.querySelector('student-term-comparison-report').termarr=e.detail.response.returnval;
+        
+       },
+       callSectionService:function(gradename){        
+         this.sectionurl=sessionStorage.getItem("addrinfo")+"/section-service";
+         var obj={"schoolid":"","loggedid":"","gradename":"","roleid":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+         obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.gradename=gradename;
+         this.sectionparam= obj;
+         this.$.sectionajax.generateRequest();
+      },
+      sectionResponse:function(e){        
+         document.querySelector('student-term-comparison-report').sectionarr=e.detail.response.returnval;
+      
+      },
+      ReportCardandEnrichmentsubjectvalue:function(gradename,comparisonvalue){
+        this.ReportCardandEnrichmentsubjectvalueurl=sessionStorage.getItem("addrinfo")+"/ReportCardsubjectvalue-service";
+         var obj={"schoolid":"","loggedid":"","gradename":"","roleid":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+         obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.gradename=gradename;
+         obj.comparisonvalue=comparisonvalue;
+         this.ReportCardandEnrichmentsubjectvalueparam=obj;
+         this.$.ReportCardandEnrichmentsubjectvalueajax.generateRequest(); 
+       },
+    ReportCardandEnrichmentsubjectvalueResponse:function(e){        
+      document.querySelector('student-term-comparison-report').subjectarr=e.detail.response.returnval;
+      },
+
+      ReportCardandEnrichmentcategoryvalue:function(gradename,comparisonvalue,subjectname){
+      this.ReportCardandEnrichmentcategoryvalue1url=sessionStorage.getItem("addrinfo")+"/ReportCardandEnrichmentcategoryvalue-service";
+         var obj={"schoolid":"","loggedid":"","gradename":"","roleid":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+         obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.gradename=gradename;
+         obj.comparisonvalue=comparisonvalue;
+         obj.subjectname=subjectname;
+         this.ReportCardandEnrichmentcategoryvalue1param=obj;
+        this.$.ReportCardandEnrichmentcategoryvalue1ajax.generateRequest();
+         },
+    ReportCardandEnrichmentcategoryvalue1Response:function(e){ 
+       document.querySelector('student-term-comparison-report').categoryarr=e.detail.response.returnval;
+      },
+    });
+  })();
+  </script>
+</dom-module>

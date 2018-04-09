@@ -1,0 +1,26 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-level-itemcard">
+  <template>
+    <style></style>
+    <div>
+      <div class="collapseoutdrop">
+      <template is="dom-repeat" items="{{levelarr}}">
+      <!-- <h3>Category : {{item.category}}</h3>    -->
+      <div class="collapseindrop">        
+        <assesment-performance-level-progress-card category="{{item.category}}" count="{{item.count}}" widthh="{{item.width}}" colorcode="#900C3F"></assesment-performance-level-progress-card>
+      </div>
+      </template>
+      </div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-level-itemcard',
+    });
+  })();
+  </script>
+</dom-module>

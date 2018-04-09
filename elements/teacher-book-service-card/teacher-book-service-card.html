@@ -1,0 +1,3568 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="teacher-book-service-card">
+  <template>   
+      <iron-ajax
+        method="post"
+        id="bookrefsectionajax"
+        url="{{bookrefsectionurl}}"   
+        params="{{bookrefsectionparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="bookrefsectionResponse"
+         debounce-duration="300">
+      </iron-ajax> 
+
+      <iron-ajax
+        method="post"
+        id="getcaptervalueajax"
+        url="{{getcaptervalueurl}}"
+        params="{{getcaptervalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getcaptervalueResponse"
+        debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax  
+        method="post"
+        id="fnsetcaptureajax"
+        url="{{fnsetcaptureurl}}"
+        params="{{fnsetcaptureparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetcaptureResponse"
+        debounce-duration="300">
+        </iron-ajax> 
+
+         <iron-ajax
+        method="post"
+        id="conceptseqajax"
+        url="{{conceptsequrl}}"
+        params="{{conceptseqparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="conceptseqResponse"
+        debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax
+        method="post"
+        id="fngetconceptvalueajax"
+        url="{{fngetconceptvalueurl}}"
+        params="{{fngetconceptvalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetconceptvalueResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+      <iron-ajax
+        method="post"
+        id="fnsendconceptajax"
+        url="{{fnsendconcepturl}}"
+        params="{{fnsendconceptparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsendconceptResponse"
+        debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax
+        method="post"
+        id="deleteconceptzzzzajax"
+        url="{{deleteconceptzzzzurl}}"
+        params="{{deleteconceptzzzzparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="deleteconceptzzzzResponse"
+        debounce-duration="300">
+      </iron-ajax>
+
+      <iron-ajax
+        method="post"
+        id="conceptdeletzzzzajax"   
+        url="{{conceptdeletzzzzurl}}"
+        params="{{conceptdeletzzzzparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="conceptdeletzzzzResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+
+      <iron-ajax
+        method="post"
+        id="conceptdeletajax"
+        url="{{conceptdeleturl}}"
+        params="{{conceptdeletparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="conceptdeletResponse"
+        debounce-duration="300">
+    </iron-ajax> 
+    <iron-ajax
+        method="post"
+        id="fnbookupdatevalueajax"
+        url="{{fnbookupdatevalueurl}}"
+        params="{{fnbookupdatevalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnbookupdatevalueResponse"
+        debounce-duration="300">
+    </iron-ajax>
+    <iron-ajax
+        method="post"
+        id="teacherbookref1ajax"
+        url="{{teacherbookref1url}}"
+        params="{{teacherbookref1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="teacherbookref1Response"
+        debounce-duration="300">
+    </iron-ajax> 
+
+    <iron-ajax
+        method="post"
+        id="capterseqajax"
+        url="{{captersequrl}}"
+        params="{{capterseqparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="capterseqResponse"
+        debounce-duration="300">
+    </iron-ajax> 
+
+    <iron-ajax
+        method="post"
+        id="chapupdateajax"
+        url="{{chapupdateurl}}"
+        params="{{chapupdateparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="chapupdateResponse"
+        debounce-duration="300"/>  
+
+        <iron-ajax
+        method="post"
+        id="buffsetajax"
+        url="{{buffseturl}}"
+        params="{{buffsetparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="buffsetResponse"
+        debounce-duration="300" />
+
+          <iron-ajax
+        method="post"
+        id="buffset1ajax"
+        url="{{buffset1url}}"
+        params="{{buffset1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="buffset1Response"
+        debounce-duration="300" />
+
+         <iron-ajax
+        method="post"
+        id="fetchconceptajax"
+        url="{{fetchconcepturl}}"
+        params="{{fetchconceptparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchconceptResponse"
+        debounce-duration="300" />
+
+        <iron-ajax
+        method="post"
+        id="subflagseqeajax"
+        url="{{subflagseqeurl}}"
+        params="{{subflagseqeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="subflagseqeResponse"
+        debounce-duration="300" />
+
+        <iron-ajax
+        method="post"
+        id="bookapprvvalsubjectajax"
+        url="{{bookapprvvalsubjecturl}}"
+        params="{{bookapprvvalsubjectparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="bookapprvvalsubjectResponse"
+        debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax
+        method="post"
+        id="fnsetcoskillajax"
+        url="{{fnsetcoskillurl}}"
+        params="{{fnsetcoskillparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetcoskillResponse"
+        debounce-duration="300" />
+
+         <iron-ajax
+        method="post"
+        id="fnbookeditskillajax"
+        url="{{fnbookeditskillurl}}"
+        params="{{fnbookeditskillparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnbookeditskillResponse"
+        debounce-duration="300" />
+
+
+        <iron-ajax
+        method="post"
+        id="buffdelajax"
+        url="{{buffdelurl}}"
+        params="{{buffdelparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="buffdelResponse"
+        debounce-duration="300" />
+         <iron-ajax
+        method="post"
+        id="buffdel1ajax"
+        url="{{buffdel1url}}"
+        params="{{buffdel1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="buffdel1Response"
+        debounce-duration="300" />
+
+        <iron-ajax
+        method="post"
+        id="fngetclassbooksectionvalueajax"
+        url="{{fngetclassbooksectionvalueurl}}"
+        params="{{fngetclassbooksectionvalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetclassbooksectionvalueResponse"
+        debounce-duration="300">
+        </iron-ajax> 
+
+        <iron-ajax
+        method="post"
+        id="fngetclassbooksubjectvalueajax"
+        url="{{fngetclassbooksubjectvalueurl}}"
+        params="{{fngetclassbooksubjectvalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetclassbooksubjectvalueResponse"
+        debounce-duration="300">
+        </iron-ajax> 
+        
+        <iron-ajax
+        method="post"
+        id="fngetclassbookchaptervalueajax"
+        url="{{fngetclassbookchaptervalueurl}}"
+        params="{{fngetclassbookchaptervalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetclassbookchaptervalueResponse"
+        debounce-duration="300">
+        </iron-ajax> 
+
+        <iron-ajax
+        method="post"
+        id="fngetclassbookchapterconceptajax"
+        url="{{fngetclassbookchapterconcepturl}}"
+        params="{{fngetclassbookchapterconceptparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetclassbookchapterconceptResponse"
+        debounce-duration="300">
+        </iron-ajax> 
+
+        <iron-ajax
+        method="post"
+        id="updateapprovalstatusofchapterconceptajax"
+        url="{{updateapprovalstatusofchapterconcepturl}}"
+        params="{{updateapprovalstatusofchapterconceptparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="updateapprovalstatusofchapterconceptResponse"
+        debounce-duration="300">
+        </iron-ajax> 
+
+        <iron-ajax
+        method="post"
+        id="fetchalreadyapprovedchapterconceptajax"
+        url="{{fetchalreadyapprovedchapterconcepturl}}"
+        params="{{fetchalreadyapprovedchapterconceptparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchalreadyapprovedchapterconceptResponse"
+        debounce-duration="300">
+        </iron-ajax> 
+
+    <iron-ajax
+        method="post"
+        id="fetchclassconcept11ajax"
+        url="{{fetchclassconcept11url}}"
+        params="{{fetchclassconcept11param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchclassconcept11Response"
+        debounce-duration="300"/>
+
+        <iron-ajax
+        method="post"
+        id="chapterstatusajax"
+        url="{{chapterstatusurl}}"
+        params="{{chapterstatusparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="chapterstatusResponse"
+        debounce-duration="300"/>
+
+       <iron-ajax
+        method="post"
+        id="getappovedcoordinatorajax"
+        url="{{getappovedcoordinatorurl}}"
+        params="{{getappovedcoordinatorparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getappovedcoordinatorResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+
+        <iron-ajax
+        method="post"
+        id="fnbookplangradeajax"
+        url="{{fnbookplangradeurl}}"
+        params="{{fnbookplangradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnbookplangradeResponse"
+        debounce-duration="300">
+
+        <iron-ajax
+        method="post"
+        id="fnbookplansubjectajax"
+        url="{{fnbookplansubjecturl}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnbookplansubjectResponse"
+        debounce-duration="300">
+
+         <iron-ajax
+        method="post"
+        id="masterzskillajax"
+        url="{{masterzskillurl}}"
+        params="{{masterzskillparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="masterzskillResponse"
+        debounce-duration="300">
+
+        <iron-ajax
+        method="post"
+        id="fetchchapterajax"
+        url="{{fetchchapterurl}}"
+        params="{{fetchchapterparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchchapterResponse"
+        debounce-duration="300" />
+
+
+        <iron-ajax
+        method="post"
+        id="fetchclassconceptajax"
+        url="{{fetchclassconcepturl}}"
+        params="{{fetchclassconceptparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchclassconceptResponse"
+        debounce-duration="300" />
+        <!-- <iron-ajax
+        method="post"
+        id="fetchclassconcept1ajax"
+        url="{{fetchclassconcept1url}}"
+        params="{{fetchclassconcept1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchclassconcept1Response"
+        debounce-duration="300" />-->
+      <iron-ajax
+        method="post"
+        id="fnfinalbookajax"
+        url="{{fnfinalbookurl}}"
+        params="{{fnfinalbookparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnfinalbookResponse"
+        debounce-duration="300" />
+     <iron-ajax
+        method="post"
+        id="fnfinalbook1ajax"
+        url="{{fnfinalbook1url}}"
+        params="{{fnfinalbook1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnfinalbook1Response"
+        debounce-duration="300" />
+
+
+        <iron-ajax
+        method="post"
+        id="fnsetrejectbookgradeajax"
+        url="{{fnsetrejectbookgradeurl}}"
+        params="{{fnsetrejectbookgradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetrejectbookgradeResponse"
+        debounce-duration="300"/>
+       <iron-ajax
+        method="post"
+        id="fnsetrejectbookgrade1ajax"
+        url="{{fnsetrejectbookgrade1url}}"
+        params="{{fnsetrejectbookgrade1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetrejectbookgrade1Response"
+        debounce-duration="300"/>
+        <iron-ajax
+        method="post"
+        id="fnsetrejectbooksubjectajax"
+        url="{{fnsetrejectbooksubjecturl}}"
+        params="{{fnsetrejectbooksubjectparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetrejectbooksubjectResponse"
+        debounce-duration="300"/>
+        <iron-ajax
+        method="post"
+        id="fnsetrejectbooksubject1ajax"
+        url="{{fnsetrejectbooksubject1url}}"
+        params="{{fnsetrejectbooksubject1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetrejectbooksubject1Response"
+        debounce-duration="300"/>
+
+        
+          <iron-ajax
+        method="post"
+        id="fngetrejectsectionajax"
+        url="{{fngetrejectsectionurl}}"
+        params="{{fngetrejectsectionparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetrejectsectionResponse"
+        debounce-duration="300"/>
+
+      <iron-ajax
+        method="post"
+        id="gradegetajax"
+        url="{{gradegeturl}}"
+        params="{{gradegetparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="gradegetResponse"
+        debounce-duration="300"/>
+
+      <iron-ajax
+        method="post"
+        id="fngetreportajax"
+        url="{{fngetreporturl}}"
+        params="{{fngetreportparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetreportResponse"
+        debounce-duration="300"/>
+        
+        <iron-ajax
+        method="post"
+        id="fnsetcoskillvalueajax"
+        url="{{fnsetcoskillvalueurl}}"
+        params="{{fnsetcoskillvalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetcoskillvalueResponse"
+        debounce-duration="300" />
+
+<iron-ajax
+        method="post"
+        id="fnbooksubconcepteditajax"
+        url="{{fnbooksubconceptediturl}}"
+        params="{{fnbooksubconcepteditparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnbooksubconcepteditResponse"
+        debounce-duration="300" />
+
+<iron-ajax
+        method="post"
+        id="fnsubconceptvalueajax"
+        url="{{fnsubconceptvalueurl}}"
+        params="{{fnsubconceptvalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsubconceptvalueResponse"
+        debounce-duration="300" />
+        <iron-ajax
+        method="post"
+        id="conceptsubseqajax"
+        url="{{conceptsubsequrl}}"
+        params="{{conceptsubseqparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="conceptsubseqResponse"
+        debounce-duration="300" />
+        <iron-ajax
+        method="post"
+        id="fnsetcoskill11ajax"
+        url="{{fnsetcoskill11url}}"
+        params="{{fnsetcoskill11param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetcoskill11Response"
+        debounce-duration="300" />
+        <iron-ajax
+        method="post"
+        id="fnsetcoskill12ajax"
+        url="{{fnsetcoskill12url}}"
+        params="{{fnsetcoskill12param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetcoskill12Response"
+        debounce-duration="300" />
+        <iron-ajax
+        method="post"
+        id="fnsetcoskill13ajax"
+        url="{{fnsetcoskill13url}}"
+        params="{{fnsetcoskill13param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetcoskill13Response"
+        debounce-duration="300" />
+        <iron-ajax
+        method="post"
+        id="fnfinalbookskillajax"
+        url="{{fnfinalbookskillurl}}"
+        params="{{fnfinalbookskillparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnfinalbookskillResponse"
+        debounce-duration="300" />
+        <iron-ajax
+        method="post"
+        id="fnfinalbookvalueajax"
+        url="{{fnfinalbookvalueurl}}"
+        params="{{fnfinalbookvalueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnfinalbookvalueResponse"
+          debounce-duration="300" />
+ 
+
+
+        <iron-ajax
+
+        method="post"
+        id="fnmasterplaninsertajax"
+        url="{{fnmasterplaninserturl}}"
+        params="{{fnmasterplaninsertparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnmasterplaninsertResponse"
+        debounce-duration="300" />
+      <iron-ajax
+        method="post"
+        id="fnsubconceptsaveajax"
+        url="{{fnsubconceptsaveurl}}"
+        params="{{fnsubconceptsaveparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsubconceptsaveResponse"
+        debounce-duration="300"/>
+      <iron-ajax
+        method="post"
+        id="fnfetchcprgradeajax"
+        url="{{fnfetchcprgradeurl}}"
+        params="{{fnfetchcprgradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnfetchcprgradeResponse"
+        debounce-duration="300"/>
+      <iron-ajax
+        method="post"
+        id="fnfetchcprsubjectajax"
+        url="{{fnfetchcprsubjecturl}}"
+        params="{{fnfetchcprsubjectparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnfetchcprsubjectResponse"
+        debounce-duration="300"/>
+        <iron-ajax
+        method="post"
+        id="fngetevalutionsectionajax"
+        url="{{fngetevalutionsectionurl}}"
+        params="{{fngetevalutionsectionparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetevalutionsectionResponse"
+        debounce-duration="300"/>        
+
+        <iron-ajax
+        method="post"
+        id="fninnovategradeajax"
+        url="{{fninnovategradeurl}}"
+        params="{{fninnovategradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fninnovategradeResponse"
+        debounce-duration="300"/>
+
+        
+        <iron-ajax
+        method="post"
+        id="fnselectinnovatesubjectajax"
+        url="{{fnselectinnovatesubjecturl}}"
+        params="{{fnselectinnovatesubjectparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnselectinnovatesubjectResponse"
+        debounce-duration="300"/>
+
+        
+        <iron-ajax
+        method="post"
+        id="fngetchapterinnvtajax"
+        url="{{fngetchapterinnvturl}}"
+        params="{{fngetchapterinnvtparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetchapterinnvtResponse"
+        debounce-duration="300"/>
+
+        <iron-ajax
+        method="post"
+        id="getinnovationdetajax"
+        url="{{getinnovationdeturl}}"
+        params="{{getinnovationdetparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getinnovationdetResponse"
+        debounce-duration="300"/>
+
+    
+        <iron-ajax
+        method="post"
+        id="bookrefsubjectajax"
+        url="{{bookrefsubjecturl}}"
+        params="{{bookrefsubjectparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="bookrefsubjectResponse"
+        debounce-duration="300"/>
+        <iron-ajax
+        method="post"
+        id="fnmasterplandisplyinsertajax"
+        url="{{fnmasterplandisplyinserturl}}"
+        params="{{fnmasterplandisplyinsertparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnmasterplandisplyinsertResponse"
+        debounce-duration="300"/>
+          
+          <iron-ajax
+        method="post"
+        id="fnmasterplaneditajax"
+        url="{{fnmasterplanediturl}}"
+        params="{{fnmasterplaneditparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnmasterplaneditResponse"
+        debounce-duration="300"/>
+        <iron-ajax
+        method="post"
+        id="fnmasterplandisplyeditajax"
+        url="{{fnmasterplandisplyediturl}}"
+        params="{{fnmasterplandisplyeditparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnmasterplandisplyeditResponse"
+        debounce-duration="300"/>
+        <iron-ajax
+        method="post"
+        id="deletecuriculamajax"
+        url="{{deletecuriculamurl}}"
+        params="{{deletecuriculamparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="deletecuriculamResponse"
+        debounce-duration="300"/>
+      
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+      var masskill=[];
+      var bufferperiod=bufferperiod;
+      var subflagseqid;
+      var c1=0,c2=0;
+      var gloconarr=[];
+      var glovaluearr=[];
+      var gloskarr=[];
+      var glosubarr=[];
+      var globldvaluearr=[];
+    Polymer({   
+      is: 'teacher-book-service-card',
+      fnfetchcprgrade:function(){
+      this.fnfetchcprgradeurl=sessionStorage.getItem("addrinfo")+"/grade1-service";
+      var obj={"school_id":"","capterid":"","conceptid":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+      obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+      obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+      obj.term=localStorage.getItem('curr_sess_termname');
+        
+      this.fnfetchcprgradeparam=obj;
+      this.$.fnfetchcprgradeajax.generateRequest();
+      },
+      fnfetchcprgradeResponse:function(e){
+   document.querySelector('curriculam-report').gradearr=e.detail.response.returnval;
+      },
+     fnfetchcprsubject:function(gradename){
+      this.fnfetchcprsubjecturl=sessionStorage.getItem("addrinfo")+"/subject1-service";
+      var obj={"school_id":"","capterid":"","conceptid":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+      obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+      obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+      obj.gradename=gradename; 
+      obj.subjectcategory="category1";
+      this.fnfetchcprsubjectparam=obj;
+      this.$.fnfetchcprsubjectajax.generateRequest();
+      },
+      fnfetchcprsubjectResponse:function(e){
+        document.querySelector('curriculam-report').subjectarr=e.detail.response.returnval;
+      },
+ fnmasterplaninsert:function(conarr,valuearr,skarr,subarr,period,innovation,remark,rowid,teachingaid,bldvaluearr,sno){
+  if(subarr.length!=0){
+      
+       var overall=[];
+        for(var i=0;i<subarr.length;i++){
+        var valueid="";
+        var valuename="";
+        for(var j=0;j<valuearr.length;j++){
+            if(subarr[i].rowid==valuearr[j].rowid)
+            {
+                if(valueid=="")
+                valueid=valuearr[j].valueid;
+                else
+                valueid=valueid+","+valuearr[j].valueid;
+                if(valuename=="")
+                valuename=valuearr[j].valuename;
+                else
+                valuename=valuename+","+valuearr[j].valuename;
+            }
+        }
+        subarr[i].valueid=valueid;
+        subarr[i].valuename=valuename;
+        }
+        for(var i=0;i<subarr.length;i++){
+        var skillid="";
+        var skillname="";
+        for(var j=0;j<skarr.length;j++){
+            if(subarr[i].rowid==skarr[j].rowid)
+            {
+                if(skillid=="")
+                skillid=skarr[j].skillid;
+                else
+                skillid=skillid+","+skarr[j].skillid;
+                if(skillname=="")
+                skillname=skarr[j].skillname;
+                else
+                skillname=skillname+","+skarr[j].skillname;
+            }
+        }
+        subarr[i].skillid=skillid;
+        subarr[i].skillname=skillname;
+        }
+          for(var i=0;i<subarr.length;i++){
+        var bldvalueid="";
+        var bldvaluename="";
+        for(var j=0;j<bldvaluearr.length;j++){
+            if(subarr[i].rowid==bldvaluearr[j].rowid)
+            {
+                if(bldvalueid=="")
+                bldvalueid=bldvaluearr[j].bldvalueid;
+                else
+                bldvalueid=bldvalueid+","+bldvaluearr[j].bldvalueid;
+                if(bldvaluename=="")
+                bldvaluename=bldvaluearr[j].bldvaluename;
+                else
+              bldvaluename=bldvaluename+","+bldvaluearr[j].bldvaluename;
+            }
+        }
+        subarr[i].bldvalueid=bldvalueid;
+        subarr[i].bldvaluename=bldvaluename;
+        }
+        c1=subarr.length;
+        for(var i=0;i<subarr.length;i++){
+        this.fnmasterplaninserturl=sessionStorage.getItem("addrinfo")+"/fnmasterplaninsert-service";
+        var obj={};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+        obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+        obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+        obj.rowid=subarr[i].rowid;
+        obj.conceptid=subarr[i].conceptid;
+        obj.conceptname=subarr[i].concept;
+        obj.subconceptid=subarr[i].subconceptid;
+        obj.subconceptname=subarr[i].subconceptname;
+        obj.period=period;
+        obj.sno=sno;
+        obj.plannedfromdate=localStorage.getItem("localsess_from_service");
+        obj.plannedtodate=localStorage.getItem("localsess_last_service");
+        obj.skill=subarr[i].skillname;
+        obj.value=subarr[i].valuename;
+        obj.bldvalue=subarr[i].bldvaluename;
+        obj.skillid=subarr[i].skillid;
+        obj.valueid=subarr[i].valueid;
+        obj.bldvalueid=subarr[i].bldvalueid;
+        obj.innovation=innovation;
+        obj.teachingaid=teachingaid;
+        obj.remarks=remark;
+        obj.termid=sessionStorage.getItem("termid"); 
+        this.fnmasterplaninsertparam=obj;
+        this.$.fnmasterplaninsertajax.generateRequest();      
+        }
+       }
+       else{
+    
+      for(var i=0;i<conarr.length;i++){
+        var valueid="";
+        var valuename="";
+        for(var j=0;j<valuearr.length;j++){
+            if(conarr[i].rowid==valuearr[j].rowid)
+            {
+                if(valueid=="")
+                valueid=valuearr[j].valueid;
+                else
+                valueid=valueid+","+valuearr[j].valueid;
+                if(valuename=="")
+                valuename=valuearr[j].valuename;
+                else
+                valuename=valuename+","+valuearr[j].valuename;
+            }
+        }
+        conarr[i].valueid=valueid;
+        conarr[i].valuename=valuename;
+        }
+        for(var i=0;i<conarr.length;i++){
+        var skillid="";
+        var skillname="";
+        for(var j=0;j<skarr.length;j++){
+            if(conarr[i].rowid==skarr[j].rowid)
+            {
+                if(skillid=="")
+                skillid=skarr[j].skillid;
+                else
+                skillid=skillid+","+skarr[j].skillid;
+                if(skillname=="")
+                skillname=skarr[j].skillname;
+                else
+                skillname=skillname+","+skarr[j].skillname;
+            }
+        }
+        conarr[i].skillid=skillid;
+        conarr[i].skillname=skillname;
+        }
+          for(var i=0;i<conarr.length;i++){
+        var bldvalueid="";
+        var bldvaluename="";
+        for(var j=0;j<bldvaluearr.length;j++){
+            if(conarr[i].rowid==bldvaluearr[j].rowid)
+            {
+                if(bldvalueid=="")
+                bldvalueid=bldvaluearr[j].bldvalueid;
+                else
+                bldvalueid=bldvalueid+","+bldvaluearr[j].bldvalueid;
+                if(bldvaluename=="")
+                bldvaluename=bldvaluearr[j].bldvaluename;
+                else
+                bldvaluename=bldvaluename+","+bldvaluearr[j].bldvaluename;
+            }
+        }
+        conarr[i].bldvalueid=bldvalueid;
+        conarr[i].bldvaluename=bldvaluename;
+        }
+        c1=conarr.length;
+        for(var i=0;i<conarr.length;i++){
+        this.fnmasterplaninserturl=sessionStorage.getItem("addrinfo")+"/fnmasterplaninsert-service";
+        var obj={};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+        obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+        obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+        obj.rowid=conarr[i].rowid;
+        obj.conceptid=conarr[i].conceptid;
+        obj.conceptname=conarr[i].conceptname;
+        obj.subconceptid="";
+        obj.subconceptname="";
+         obj.period=period;
+         obj.sno=sno;
+       obj.plannedfromdate=localStorage.getItem("localsess_from_service");
+        obj.plannedtodate=localStorage.getItem("localsess_last_service");
+        obj.skill=conarr[i].skillname;
+        obj.skillid=conarr[i].skillid;
+        obj.valueid=conarr[i].valueid;
+        obj.bldvalueid=conarr[i].bldvalueid;
+        obj.value=conarr[i].valuename;
+        obj.bldvalue=conarr[i].bldvaluename;
+        obj.innovation=innovation; 
+        obj.teachingaid=teachingaid;
+        obj.remarks=remark;
+        obj.termid=sessionStorage.getItem("termid"); 
+        this.fnmasterplaninsertparam=obj;
+        this.$.fnmasterplaninsertajax.generateRequest();      
+        }
+       }
+      },
+
+
+      fnmasterplaninsertResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+        c2++;
+        if(c1==c2)
+        {
+        //alert('Inserted');
+            
+            c1=0;c2=0;
+        }
+        else if(res=='Not Inserted!')
+        {
+    document.uerySelector('aproval-book-innovatiosn-item-card').failureopen();
+        }
+      },
+ fnmasterplanedit:function(conarr,valuearr,skarr,subarr,period,innovation,remark,rowid,teachingaid,bldvaluearr,sno)
+ {
+
+     
+      this.deletecuriculamurl=sessionStorage.getItem("addrinfo")+"/deletecuriculam-service";
+      var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+         obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+         obj.gradename=localStorage.getItem("curr_sess_gradename");
+         obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+         obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+         obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+         obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+         obj.rowid=rowid;
+         this.deletecuriculamparam=obj;
+         this.$.deletecuriculamajax.generateRequest();
+   
+      gloconarr=conarr;
+      glovaluearr=valuearr;
+      glosubarr=subarr;
+      globldvaluearr=bldvaluearr;
+      gloskarr=skarr;
+      this.gloperiod=period;
+      this.gloinnovation=innovation;
+      this.gloremark=remark;
+      this.gloperiod=period;
+      this.gloteachingaid=teachingaid;
+      this.glorowid=rowid;
+      this.glosno=sno;
+
+
+ 
+/*alert("gloable--------------------------");
+       alert(JSON.stringify(gloconarr));
+        alert(JSON.stringify(glovaluearr));
+        alert(JSON.stringify(gloskarr));
+        alert(JSON.stringify(glosubarr));
+        alert(JSON.stringify(globldvaluearr));*/
+    },
+      deletecuriculamResponse:function(e){
+        // alert(JSON.stringify(e.detail.response.returnval));
+      if(e.detail.response.returnval=="Deleted!"){
+      var conarr1=[];
+      var valuearr1=[];
+      var skarr1=[];
+      var subarr1=[];
+      var bldvaluearr1=[];
+ 
+      /*  alert(JSON.stringify(gloconarr));
+        alert(JSON.stringify(glovaluearr));
+        alert(JSON.stringify(gloskarr));
+        alert(JSON.stringify(glosubarr));
+        alert(JSON.stringify(globldvaluearr));
+*/
+      conarr1=gloconarr;
+      valuearr1=glovaluearr;
+      skarr1=gloskarr;
+      subarr1=glosubarr;
+      bldvaluearr1=globldvaluearr;
+
+       var  period=this.gloperiod;
+      var innovation=this.gloinnovation;
+      var remark=this.gloremark;
+      var period=this.gloperiod;
+      var teachingaid=this.gloteachingaid;
+      var rowid=this.glorowid;
+      var sno=this.glosno;
+       
+
+if(subarr1.length!=0){
+        var overall=[];
+        for(var i=0;i<subarr1.length;i++){
+        var valueid="";
+        var valuename="";
+        for(var j=0;j<valuearr1.length;j++){
+            if(subarr1[i].rowid==valuearr1[j].rowid)
+            {
+                if(valueid=="")
+                valueid=valuearr1[j].valueid;
+                else
+                valueid=valueid+","+valuearr1[j].valueid;
+                if(valuename=="")
+                valuename=valuearr1[j].valuename;
+                else
+                valuename=valuename+","+valuearr1[j].valuename;
+            }
+        }
+        subarr1[i].valueid=valueid;
+        subarr1[i].valuename=valuename;
+        }
+        for(var i=0;i<subarr1.length;i++){
+        var skillid="";
+        var skillname="";
+        for(var j=0;j<skarr1.length;j++){
+            if(subarr1[i].rowid==skarr1[j].rowid)
+            {
+                if(skillid=="")
+                skillid=skarr1[j].skillid;
+                else
+                skillid=skillid+","+skarr1[j].skillid;
+                if(skillname=="")
+                skillname=skarr1[j].skillname;
+                else
+                skillname=skillname+","+skarr1[j].skillname;
+            }
+        }
+        subarr1[i].skillid=skillid;
+        subarr1[i].skillname=skillname;
+        }
+          for(var i=0;i<subarr1.length;i++){
+        var bldvalueid="";
+        var bldvaluename="";
+        for(var j=0;j<bldvaluearr1.length;j++){
+            if(subarr1[i].rowid==bldvaluearr1[j].rowid)
+            {
+                if(bldvalueid=="")
+                bldvalueid=bldvaluearr1[j].bldvalueid;
+                else
+                bldvalueid=bldvalueid+","+bldvaluearr1[j].bldvalueid;
+                if(bldvaluename=="")
+                bldvaluename=bldvaluearr1[j].bldvaluename;
+                else
+              bldvaluename=bldvaluename+","+bldvaluearr1[j].bldvaluename;
+            }
+        }
+        subarr1[i].bldvalueid=bldvalueid;
+        subarr1[i].bldvaluename=bldvaluename;
+        }
+        c1=subarr1.length;
+        for(var i=0;i<subarr1.length;i++){
+        this.fnmasterplanediturl=sessionStorage.getItem("addrinfo")+"/fnmasterplanedit-service";
+        var obj={};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+        obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+        obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+        obj.rowid=subarr1[i].rowid;
+        obj.conceptid=subarr1[i].conceptid;
+        obj.conceptname=subarr1[i].concept;
+        obj.subconceptid=subarr1[i].subconceptid;
+        obj.subconceptname=subarr1[i].subconceptname;
+        obj.period=period;
+        obj.sno=sno;
+        obj.plannedfromdate=localStorage.getItem("localsess_from_service");
+        obj.plannedtodate=localStorage.getItem("localsess_last_service");
+        obj.skill=subarr1[i].skillname;
+        obj.value=subarr1[i].valuename;
+        obj.bldvalue=subarr1[i].bldvaluename;
+        obj.skillid=subarr1[i].skillid;
+        obj.valueid=subarr1[i].valueid;
+        obj.bldvalueid=subarr1[i].bldvalueid;
+        obj.innovation=innovation;
+        obj.teachingaid=teachingaid;
+        obj.remarks=remark;
+        obj.termid=sessionStorage.getItem("termid"); 
+     //  alert(JSON.stringify(obj));
+        this.fnmasterplaneditparam=obj;
+       this.$.fnmasterplaneditajax.generateRequest();      
+        }
+       }
+       else{
+
+        for(var i=0;i<conarr1.length;i++){
+        var valueid="";
+        var valuename="";
+        for(var j=0;j<valuearr1.length;j++){
+            if(conarr1[i].rowid==valuearr1[j].rowid)
+            {
+                if(valueid=="")
+                valueid=valuearr1[j].valueid;
+                else
+                valueid=valueid+","+valuearr1[j].valueid;
+                if(valuename=="")
+                valuename=valuearr1[j].valuename;
+                else
+                valuename=valuename+","+valuearr1[j].valuename;
+            }
+        }
+        conarr1[i].valueid=valueid;
+        conarr1[i].valuename=valuename;
+        }
+        for(var i=0;i<conarr1.length;i++){
+        var skillid="";
+        var skillname="";
+        for(var j=0;j<skarr1.length;j++){
+            if(conarr1[i].rowid==skarr1[j].rowid)
+            {
+                if(skillid=="")
+                skillid=skarr1[j].skillid;
+                else
+                skillid=skillid+","+skarr1[j].skillid;
+                if(skillname=="")
+                skillname=skarr1[j].skillname;
+                else
+                skillname=skillname+","+skarr1[j].skillname;
+            }
+        }
+        conarr1[i].skillid=skillid;
+        conarr1[i].skillname=skillname;
+        }
+          for(var i=0;i<conarr1.length;i++){
+        var bldvalueid="";
+        var bldvaluename="";
+        for(var j=0;j<bldvaluearr1.length;j++){
+            if(conarr1[i].rowid==bldvaluearr1[j].rowid)
+            {
+                if(bldvalueid=="")
+                bldvalueid=bldvaluearr1[j].bldvalueid;
+                else
+                bldvalueid=bldvalueid+","+bldvaluearr1[j].bldvalueid;
+                if(bldvaluename=="")
+                bldvaluename=bldvaluearr1[j].bldvaluename;
+                else
+                bldvaluename=bldvaluename+","+bldvaluearr1[j].bldvaluename;
+            }
+        }
+        conarr1[i].bldvalueid=bldvalueid;
+        conarr1[i].bldvaluename=bldvaluename;
+        }
+        c1=conarr1.length;
+        for(var i=0;i<conarr1.length;i++){
+    this.fnmasterplanediturl=sessionStorage.getItem("addrinfo")+"/fnmasterplanedit-service";
+        var obj={};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+        obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+        obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+        obj.rowid=conarr1[i].rowid;
+        obj.conceptid=conarr1[i].conceptid;
+        obj.conceptname=conarr1[i].conceptname;
+        obj.subconceptid="";
+        obj.subconceptname="";
+        obj.period=period;
+        obj.sno=sno;
+       obj.plannedfromdate=localStorage.getItem("localsess_from_service");
+        obj.plannedtodate=localStorage.getItem("localsess_last_service");
+        obj.skill=conarr1[i].skillname;
+        obj.skillid=conarr1[i].skillid;
+        obj.valueid=conarr1[i].valueid;
+        obj.bldvalueid=conarr1[i].bldvalueid;
+        obj.value=conarr1[i].valuename;
+        obj.bldvalue=conarr1[i].bldvaluename;
+        obj.innovation=innovation; 
+        obj.teachingaid=teachingaid;
+        obj.remarks=remark;
+        obj.termid=sessionStorage.getItem("termid"); 
+        this.fnmasterplaneditparam=obj;
+       // alert(JSON.stringify(obj));
+        this.$.fnmasterplaneditajax.generateRequest();      
+        }}}
+  
+
+
+    },
+      fnmasterplaneditResponse:function(e){
+       c2++;
+  // alert(c1+" "+c2);    
+     if(c1==c2){
+         this.conceptseq(); 
+    this.FnFetchConceptService();
+
+     c1=0;c2=0;
+      gloconarr=[];
+      glovaluearr=[];
+      glosubarr=[];
+      globldvaluearr=[];
+      gloskarr=[];
+      this.gloperiod="";
+      this.gloinnovation="";
+      this.gloremark="";
+      this.gloperiod="";
+      this.gloteachingaid="";
+      this.glorowid="";
+      this.glosno="";
+ document.querySelector('aproval-book-innovatiosn-item-card').saveopendialog();
+   
+      
+     }
+      },
+      fnmasterplandisplyinsert:function(conarr,valuearr,skarr,subarr,period,innovation,remark,rowid,teachingaid,bldvaluearr,sno){
+        var valueid="";
+        var valuename="";
+         for(var j=0;j<valuearr.length;j++){
+              if(valueid=="")
+                valueid=valuearr[j].valueid;
+                else
+                valueid=valueid+","+valuearr[j].valueid;
+                if(valuename=="")
+                valuename=valuearr[j].valuename;
+                else
+                valuename=valuename+","+valuearr[j].valuename;
+
+          this.vaufid=valueid;
+          this.vaufname=valuename;
+         }
+        var conceptid="";
+        var conceptname="";
+        for(var j=0;j<conarr.length;j++){
+            
+                if(conceptid=="")
+                conceptid=conarr[j].conceptid;
+                else
+                conceptid=conceptid+","+conarr[j].conceptid;
+                if(conceptname=="")
+                conceptname=conarr[j].conceptname;
+                else
+                conceptname=conceptname+","+conarr[j].conceptname;
+
+          this.conceptfid=conceptid;
+          this.conceptfname=conceptname;
+         }
+          var subconceptid="";
+          var subconceptname="";
+      for(var j=0;j<subarr.length;j++){
+          if(subconceptid=="")
+                subconceptid=subarr[j].subconceptid;
+                else
+                subconceptid=subconceptid+","+subarr[j].subconceptid;
+                if(subconceptname=="")
+                subconceptname=subarr[j].subconceptname;
+             else
+           subconceptname=subconceptname+","+subarr[j].subconceptname;
+          this.subconcepfid=subconceptid;
+          this.subconcepfname=subconceptname;
+         }
+        var skillid="";
+        var skillname="";
+        for(var j=0;j<skarr.length;j++){
+             if(skillid=="")
+                skillid=skarr[j].skillid;
+                else
+                skillid=skillid+","+skarr[j].skillid;
+                if(skillname=="")
+                skillname=skarr[j].skillname;
+                else
+                skillname=skillname+","+skarr[j].skillname;
+         this.skillfid=skillid;
+         this.skillfname=skillname;
+        }
+        var bldvalueid="";
+        var bldvaluename="";
+        for(var j=0;j<bldvaluearr.length;j++){
+           if(bldvalueid=="")
+                bldvalueid=bldvaluearr[j].bldvalueid;
+                else
+                bldvalueid=bldvalueid+","+bldvaluearr[j].bldvalueid;
+                if(bldvaluename=="")
+                bldvaluename=bldvaluearr[j].bldvaluename;
+                else
+              bldvaluename=bldvaluename+","+bldvaluearr[j].bldvaluename;
+           this.bldfvalueid=bldvalueid;
+           this.bldfvaluename=bldvaluename;
+          }
+    //alert(this.bldfvaluename+"--"+this.skillfname+"--"+this.subconcepfname+"--"+this.vaufname+"--"+this.conceptfname);
+ this.fnmasterplandisplyinserturl=sessionStorage.getItem("addrinfo")+"/fnmasterplandisplyinsert-service";
+      var obj={};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+        obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+        obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+        obj.rowid=rowid;
+        obj.conceptid=this.conceptfid;
+        obj.conceptname=this.conceptfname;
+          if(subarr.length==0){
+           obj.subconceptid="";
+           obj.subconceptname="";
+            }
+          else{
+        obj.subconceptid=this.subconcepfid;
+        obj.subconceptname=this.subconcepfname;
+          }
+        obj.period=period;
+        obj.sno=sno;
+        obj.plannedfromdate=localStorage.getItem("localsess_from_service");
+        obj.plannedtodate=localStorage.getItem("localsess_last_service");
+        obj.skill=this.skillfname;
+        obj.value=this.vaufname;
+        obj.bldvalue=this.bldfvaluename;
+        obj.skillid=this.skillfid;
+        obj.valueid=this.vaufid;
+        obj.bldvalueid=this.bldfvalueid;
+        obj.innovation=innovation;
+        obj.teachingaid=teachingaid;
+        obj.remarks=remark;
+        obj.termid=sessionStorage.getItem("termid"); 
+        this.fnmasterplandisplyinsertparam=obj;
+        this.$.fnmasterplandisplyinsertajax.generateRequest(); 
+             
+       },
+ fnmasterplandisplyedit:function(conarr,valuearr,skarr,subarr,period,innovation,remark,rowid,teachingaid,bldvaluearr,sno){
+        var valueid="";
+        var valuename="";
+         for(var j=0;j<valuearr.length;j++){
+              if(valueid=="")
+                valueid=valuearr[j].valueid;
+                else
+                valueid=valueid+","+valuearr[j].valueid;
+                if(valuename=="")
+                valuename=valuearr[j].valuename;
+                else
+                valuename=valuename+","+valuearr[j].valuename;
+
+          this.vaufid=valueid;
+          this.vaufname=valuename;
+         }
+        var conceptid="";
+        var conceptname="";
+        for(var j=0;j<conarr.length;j++){
+            
+                if(conceptid=="")
+                conceptid=conarr[j].conceptid;
+                else
+                conceptid=conceptid+","+conarr[j].conceptid;
+                if(conceptname=="")
+                conceptname=conarr[j].conceptname;
+                else
+                conceptname=conceptname+","+conarr[j].conceptname;
+
+          this.conceptfid=conceptid;
+          this.conceptfname=conceptname;
+         }
+          var subconceptid="";
+          var subconceptname="";
+      for(var j=0;j<subarr.length;j++){
+          if(subconceptid=="")
+                subconceptid=subarr[j].subconceptid;
+                else
+                subconceptid=subconceptid+","+subarr[j].subconceptid;
+                if(subconceptname=="")
+                subconceptname=subarr[j].subconceptname;
+             else
+           subconceptname=subconceptname+","+subarr[j].subconceptname;
+          this.subconcepfid=subconceptid;
+          this.subconcepfname=subconceptname;
+         }
+        var skillid="";
+        var skillname="";
+        for(var j=0;j<skarr.length;j++){
+             if(skillid=="")
+                skillid=skarr[j].skillid;
+                else
+                skillid=skillid+","+skarr[j].skillid;
+                if(skillname=="")
+                skillname=skarr[j].skillname;
+                else
+                skillname=skillname+","+skarr[j].skillname;
+         this.skillfid=skillid;
+         this.skillfname=skillname;
+        }
+        var bldvalueid="";
+        var bldvaluename="";
+        for(var j=0;j<bldvaluearr.length;j++){
+           if(bldvalueid=="")
+                bldvalueid=bldvaluearr[j].bldvalueid;
+                else
+                bldvalueid=bldvalueid+","+bldvaluearr[j].bldvalueid;
+                if(bldvaluename=="")
+                bldvaluename=bldvaluearr[j].bldvaluename;
+                else
+              bldvaluename=bldvaluename+","+bldvaluearr[j].bldvaluename;
+           this.bldfvalueid=bldvalueid;
+           this.bldfvaluename=bldvaluename;
+          }
+    //alert(this.bldfvaluename+"--"+this.skillfname+"--"+this.subconcepfname+"--"+this.vaufname+"--"+this.conceptfname);
+      
+ this.fnmasterplandisplyediturl=sessionStorage.getItem("addrinfo")+"/fnmasterplandisplyedit-service";
+      var obj={};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+        obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+        obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+        obj.rowid=rowid;
+        obj.conceptid=this.conceptfid;
+        obj.conceptname=this.conceptfname;
+          if(subarr.length==0){
+           obj.subconceptid="";
+           obj.subconceptname="";
+            }
+          else{
+        obj.subconceptid=this.subconcepfid;
+        obj.subconceptname=this.subconcepfname;
+          }
+        obj.period=period;
+        obj.sno=sno;
+        obj.plannedfromdate=localStorage.getItem("localsess_from_service");
+        obj.plannedtodate=localStorage.getItem("localsess_last_service");
+        obj.skill=this.skillfname;
+        obj.value=this.vaufname;
+        obj.bldvalue=this.bldfvaluename;
+        obj.skillid=this.skillfid;
+        obj.valueid=this.vaufid;
+        obj.bldvalueid=this.bldfvalueid;
+        obj.innovation=innovation;
+        obj.teachingaid=teachingaid;
+        obj.remarks=remark;
+        obj.termid=sessionStorage.getItem("termid"); 
+        this.fnmasterplandisplyeditparam=obj;
+        this.$.fnmasterplandisplyeditajax.generateRequest(); 
+         },
+       fnmasterplandisplyeditResponse:function(e){
+//document.querySelector('aproval-book-innovatiosn-item-card').saveopendialog();
+           
+       },
+       fnmasterplandisplyinsertResponse:function(e){
+ //alert(JSON.stringify(e.detail.response.returnval));
+   var res=e.detail.response.returnval
+   this.conceptseq(); 
+  this.FnFetchConceptService();
+ 
+document.querySelector('aproval-book-innovatiosn-item-card').saveopendialog();
+  
+       },
+      conceptsubseq:function(){
+ 
+this.conceptsubsequrl=sessionStorage.getItem("addrinfo")+"/fetchsubjectseq-service";
+       this.$.conceptsubseqajax.generateRequest();
+      },
+conceptsubseqResponse:function(e){
+    var arr= e.detail.response.returnval;
+       var val1=arr[0].subconcept_prefix+arr[0].subconcept_sequence;
+document.querySelector('sub-concept-value-card').fnsetsubset(arr[0].subconcept_prefix+arr[0].subconcept_sequence);
+},    
+ fnbooksubconceptedit:function(capterid,conceptid){
+this.fnbooksubconceptediturl=sessionStorage.getItem("addrinfo")+"/fnbooksubconceptedit-service";
+       var obj={"school_id":"","capterid":"","conceptid":"","academic_year":""};
+      obj.capterid=localStorage.getItem("curr_sess_capters");
+      obj.conceptid=localStorage.getItem("curr_sess_conceptid");
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.fnbooksubconcepteditparam=obj;
+     this.$.fnbooksubconcepteditajax.generateRequest();
+      }, 
+fnbooksubconcepteditResponse:function(e){
+ //alert(JSON.stringify(e.detail.response.returnval));
+   var res=e.detail.response.returnval
+    var temp=[];
+         var overall=[];
+       //var temp1=[];
+        for(var l=0;l<res.length;l++){
+        temp.push(res[l]);
+         if(l!=0&&l%3==0){
+            overall.push(temp);
+            temp=[];
+         }
+        }
+ overall.push(temp);
+ document.querySelector('sub-concept-value-card').subconceptarr=overall;      
+},
+
+ fnsubconceptvalue:function(subid,SubConcept,setcptid,setconid){
+           this.fnsubconceptvalueurl=sessionStorage.getItem("addrinfo")+"/fnsubconceptvalue-service";
+      var obj={};
+      obj.subid=subid;
+      obj.SubConcept=SubConcept;
+      obj.setcptid=setcptid;
+      obj.setconid=setconid;
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.fnsubconceptvalueparam=obj;
+     //alert(JSON.stringify(obj))
+      this.$.fnsubconceptvalueajax.generateRequest();
+      },
+ fnsubconceptvalueResponse:function(e){
+    var res=e.detail.response.returnval;
+     if(res=='Inserted')
+     {
+        alert('Inserted');
+        this.conceptsubseq();
+       this.fnbooksubconceptedit();  
+      }
+  },
+      bookrefsection:function(gradeid,gradename){
+           this.bookrefsectionurl=sessionStorage.getItem("addrinfo")+"/bookrefsection-service";
+      var obj={"school_id":"","gradeid":"","gradename":"","academic_year":""};
+      obj.gradeid=gradeid;
+      obj.gradename=gradename;
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.bookrefsectionparam=obj;
+     // alert(JSON.stringify(obj))
+      this.$.bookrefsectionajax.generateRequest();
+      },
+      bookrefsectionResponse:function(e){
+    
+
+      document.querySelector('teacher-book-refernce-card').subjectarr=e.detail.response.subjectarr;
+        document.querySelector('teacher-book-refernce-card').sectionarr=e.detail.response.sectionarr;
+        document.querySelector('teacher-book-approve-card').sectionarr=e.detail.response.sectionarr;
+        
+  },
+
+  bookrefsubject:function(gradeid,gradename)
+  {
+    //alert(2);
+    this.bookrefsubjecturl=sessionStorage.getItem("addrinfo")+"/bookrefsubject-service";
+      var obj={"school_id":"","gradeid":"","gradename":"","academic_year":""};
+      obj.gradeid=gradeid;
+      obj.gradename=gradename;
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.bookrefsubjectparam=obj;
+     // alert(JSON.stringify(obj))
+      this.$.bookrefsubjectajax.generateRequest();
+  },
+
+  bookrefsubjectResponse:function(e)
+  {
+    var res=e.detail.response.returnval;
+    //alert(JSON.stringify(res));
+    document.querySelector('teacher-book-approve-card').subjectarrrr=res;
+
+  },
+
+    getcaptervalue:function(e)
+      {
+     this.getcaptervalueurl=sessionStorage.getItem("addrinfo")+"/getcaptervalue-service";
+var obj={"school_id":"","academic_year":"","grade_id":"","subject_id":""};
+      obj.grade_id=sessionStorage.getItem("grdeidz");
+      obj.subject_id=sessionStorage.getItem("subjectidz");
+      obj.section_id=sessionStorage.getItem("sectoinidz");
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj.termid=sessionStorage.getItem("termid"); 
+      this.getcaptervalueparam=obj;
+      this.$.getcaptervalueajax.generateRequest();
+    
+      },
+      getcaptervalueResponse:function(e){
+      var res=e.detail.response.returnval;
+    //alert(JSON.stringify(res));
+ 
+         var temp=[];
+         var overall=[];
+       //  var temp1=[];
+        for(var l=0;l<res.length;l++){
+        temp.push(res[l]);
+         if(l!=0&&l%3==0){
+            overall.push(temp);
+            temp=[];
+         }
+        }
+        overall.push(temp);
+    document.querySelector('teacher-book-refernce-card').capterarr=overall;
+       },
+
+        fnsetcapture:function(gradeid,subjectid,captername,capterid,period,bufferperiodz,termid)
+        {
+            this.fnsetcaptureurl=sessionStorage.getItem("addrinfo")+"/bookrefsectioncapter-service";
+             var obj={"school_id":"","gradeid":"","subjectid":"","academic_year":"","capter_id":"","capter":"","sectionid":""};  
+              obj.gradeid=gradeid;
+              obj.subjectid=subjectid;
+              obj.capter_id=capterid;
+              obj.capter=captername;
+              obj.period=period;
+              obj.termid=termid;
+
+              obj.buffer_period=bufferperiodz;
+              obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+              obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+              //alert(JSON.stringify(obj));
+               this.fnsetcaptureparam=obj;
+               this.$.fnsetcaptureajax.generateRequest();     
+      },
+
+      fnsetcaptureResponse:function(e){
+       var res=e.detail.response.returnval;
+        //alert(JSON.stringify(res));
+        alert('Inserted');
+          this.capterseq();
+          this.getcaptervalue();   
+      },
+
+       conceptseq:function()
+      {     
+          // alert('1');
+        this.conceptsequrl=sessionStorage.getItem("addrinfo")+"/fetchsubjectseq-service";
+        this.$.conceptseqajax.generateRequest();
+      },
+      
+      conceptseqResponse:function(e)
+      {
+
+       var arr= e.detail.response.returnval;
+       var val1=arr[0].concept_prefix+arr[0].concept_sequence;
+       localStorage.setItem("curr_sess_conceptid",val1);
+       
+      },
+
+
+      fngetconceptvalue:function()
+      {
+        this.fngetconceptvalueurl=sessionStorage.getItem("addrinfo")+"/fngetconceptvalue-service";
+            var obj={"capter_id":""};
+                obj.capter_id=localStorage.getItem("curr_sess_capters");
+                this.fngetconceptvalueparam=obj;
+            //  alert(JSON.stringify(obj));
+             this.$.fngetconceptvalueajax.generateRequest();
+      },
+   fngetconceptvalueResponse:function(e)
+       {            
+          var res=e.detail.response.conceptarr;
+          var res1=e.detail.response.chapterarr;
+
+         var temp1=[];
+         var overallzz=[];
+        for(var l=0;l<res.length;l++)
+        {
+            temp1.push(res[l]);
+            if(l!=0&&l%3==0)
+            {
+                overallzz.push(temp1);
+                temp1=[];
+            }
+        }
+        overallzz.push(temp1);
+
+
+     document.querySelector('teacher-book-chapter-refernce-card').conceptarr=overallzz;
+
+      },
+
+        fnsendconcept:function(captheadid,conceptz)
+        {
+           this.fnsendconcepturl=sessionStorage.getItem("addrinfo")+"/fnsendconcept-service";
+            var obj={"capter_id":"","concept":"","concept_id":""};
+            obj.capter_id=captheadid;
+            obj.concept=conceptz;
+            obj.concept_id=localStorage.getItem("curr_sess_conceptid");
+              obj.grade_id=sessionStorage.getItem("grdeidz");
+              obj.subject_id=sessionStorage.getItem("subjectidz");
+              obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+              obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+              
+            obj.flag='active';
+            this.fnsendconceptparam=obj;
+          //  alert(JSON.stringify(obj));
+            this.$.fnsendconceptajax.generateRequest();
+      },
+
+      fnsendconceptResponse:function(e)
+      {
+
+         var res=e.detail.response.returnval;
+        // alert(JSON.stringify(res));
+            if(res=="Inserted")
+            {
+              alert('Inserted');
+              this.conceptseq(); 
+              this.fngetconceptvalue();
+            }
+            /*else if(res=='Already Exit')
+            {
+              alert('Already Exit');
+            }
+            */
+      },
+
+      deleteconcept:function(capterid)
+     {
+      //alert(capterid);
+
+        this.conceptdeleturl=sessionStorage.getItem("addrinfo")+"/fnconceptdelet-service";
+        var obj={"conceptid":"","capterid":""};
+            obj.conceptid=localStorage.getItem("curr_sess_conceptid");
+            obj.capterid=capterid;
+          this.conceptdeletparam=obj;
+          //alert(JSON.stringify(obj));
+          this.$.conceptdeletajax.generateRequest();
+
+
+      this.conceptdeletzzzzurl=sessionStorage.getItem("addrinfo")+"/fndeleteconcept2-service";
+       var obj={"school_id":"","academic_year":"","grade_id":"","subject_id":"","conceptid":"","capterid":""};
+        obj.grade_id=sessionStorage.getItem("grdeidz");
+        obj.subject_id=sessionStorage.getItem("subjectidz");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.conceptid=localStorage.getItem("curr_sess_conceptid");
+        obj.capterid=capterid;
+        this.conceptdeletzzzzparam=obj;
+       //alert(JSON.stringify(obj));
+        this.$.conceptdeletzzzzajax.generateRequest();
+
+
+      this.deleteconceptzzzzurl=sessionStorage.getItem("addrinfo")+"/fndeleteconceptzzzz-service";
+        var obj={"school_id":"","academic_year":"","grade_id":"","subject_id":"","conceptid":"","capterid":""};
+            obj.grade_id=sessionStorage.getItem("grdeidz");
+            obj.subject_id=sessionStorage.getItem("subjectidz");
+            obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.conceptid=localStorage.getItem("curr_sess_conceptid");
+            obj.capterid=capterid;
+            this.deleteconceptzzzzparam=obj;
+          // alert(JSON.stringify(obj));
+            this.$.deleteconceptzzzzajax.generateRequest();
+
+     },
+
+     deleteconceptzzzzResponse:function(e)
+     {
+        var res=e.detail.response.returnval;
+       // alert(JSON.stringify(res));
+     },
+
+     conceptdeletzzzzResponse:function(e)
+     {
+        var res=e.detail.response.returnval;
+        //alert(JSON.stringify(res));
+     },
+     conceptdeletResponse:function(e)
+     {
+         var res=e.detail.response.returnval;
+        //alert(JSON.stringify(res));   
+     },
+
+     fnbookupdatevalue:function(capterid,concept,conceptid)
+      {
+      this.fnbookupdatevalueurl=sessionStorage.getItem("addrinfo")+"/fnbookupdatevalue-service";
+            var obj={"capter_id":"","concept":"","concept_id":""};
+              
+              obj.capter_id=localStorage.getItem("curr_sess_capters");
+              obj.concept=concept;
+              obj.concept_id=conceptid;
+              obj.subflag='active';
+              this.fnbookupdatevalueparam=obj;
+             // alert(JSON.stringify(obj));
+              this.$.fnbookupdatevalueajax.generateRequest();
+      },
+      fnbookupdatevalueResponse:function(e)
+      {
+           var res=e.detail.response.returnval;
+            //alert(JSON.stringify(res));
+            if(res=='Updated')
+            {
+                alert('Updated');
+                //this.conceptseq(); 
+                this.fngetconceptvalue();
+            }    
+      },
+
+
+
+      teacherbookref1:function(e)
+      {
+          this.teacherbookref1url=sessionStorage.getItem("addrinfo")+"/fnschoolgradeset-service";
+          // alert(JSON.stringify(obj));
+           this.$.teacherbookref1ajax.generateRequest();
+      },
+      teacherbookref1Response:function(e)
+      {
+          var res=e.detail.response.returnval;
+          document.querySelector('teacher-book-refernce-card').empschoolnamesarr=res;
+      },
+
+       capterseq:function()
+      {     
+          // alert('1');
+     
+        this.captersequrl=sessionStorage.getItem("addrinfo")+"/fetchsubjectseq-service";
+        this.$.capterseqajax.generateRequest();
+      },
+
+      capterseqResponse:function(e)
+      {
+
+       var arr= e.detail.response.returnval;
+        document.querySelector('teacher-book-refernce-card').capterid=arr[0].chapter_prefix+arr[0].chapter_sequence;
+       
+      },
+
+      chapupdateservice:function(chaptername,chapterid)
+     {
+      this.chapupdateurl=sessionStorage.getItem("addrinfo")+"/fnchapterupdatezzz-service";
+                var obj={"chaptername":"","chapterid":"","school_id":"","gradeid":"","subjectid":"","academic_year":""}
+                    obj.chaptername=chaptername;
+                    obj.chapterid=chapterid;
+                    obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+                    obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+                    obj.subjectid=sessionStorage.getItem("subjectidz");
+                    obj.gradeid=sessionStorage.getItem("grdeidz");
+                   obj.termid=sessionStorage.getItem("termid"); 
+                  this.chapupdateparam=obj;
+                  // alert(JSON.stringify(obj));
+                  this.$.chapupdateajax.generateRequest();  
+     },
+     chapupdateResponse:function(e)
+     {
+        var res=e.detail.response.returnval;
+       // alert(JSON.stringify(res));
+
+        if(res=='Updated')
+        {
+            alert('Updated');
+            this.getcaptervalue();
+        }
+     },
+
+
+     buffset:function(bufferperiodzz,pafter){
+        bufferperiod=bufferperiodzz;
+      this.periodafter=pafter;
+      this.buffseturl=sessionStorage.getItem("addrinfo")+"/buffset-service";
+      var obj={};
+      obj.capter_id=localStorage.getItem("curr_sess_capters");
+     obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+          obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.termid=sessionStorage.getItem("termid"); 
+     
+      this.buffsetparam=obj;
+      this.$.buffsetajax.generateRequest();
+     },
+     buffsetResponse:function(e){
+      var res=e.detail.response.returnval;
+      var bufperiod=parseInt(res[0].buffer_period)+parseInt(bufferperiod);
+       this.buffset1url=sessionStorage.getItem("addrinfo")+"/buffset1-service";
+      var obj={};
+      obj.bufperiod=bufperiod;
+      obj.capter_id=localStorage.getItem("curr_sess_capters");
+      this.buffset1param=obj;
+      this.$.buffset1ajax.generateRequest();
+     },  
+
+
+      buffset1Response:function(e)
+      {
+       var res=e.detail.response.returnval;
+       //alert(JSON.stringify(res));
+      if(res=="Updated"){
+               this.conceptseq(); 
+              this.FnFetchConceptService();
+         }
+
+      },
+FnFetchConceptService:function(gradeid,subjectid,chapterid)
+        {  
+   this.fetchconcepturl=sessionStorage.getItem("addrinfo")+"/fetchconcept-service";
+    var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+         obj.chapterid=localStorage.getItem("curr_sess_capters");
+        obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.termid=sessionStorage.getItem("termid"); 
+        obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+        obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+       
+        this.fetchconceptparam=obj;
+        //alert(JSON.stringify(obj));
+        this.$.fetchconceptajax.generateRequest();
+    },
+ fetchconceptResponse:function(e)
+    {
+      
+ var res1=e.detail.response.chapterarr;
+ var temp1=e.detail.response.dbarr;
+ var res2=[];
+ var r=parseInt(res1[0].buffer_period)+parseInt(res1[0].period)-parseInt(temp1.length);
+    for(var i=0;i<temp1.length;i++){
+                      var obj={};
+                      obj.concept_id=temp1[i].concept_id;
+                      obj.concept_name=temp1[i].concept_name;
+                      obj.sub_concept_id=temp1[i].sub_concept_id;
+                    obj.sub_concept_name=temp1[i].sub_concept_name;
+                      obj.period=temp1[i].period;  
+                      obj.innovation=temp1[i].innovation;  
+                      obj.remarks=temp1[i].remarks;  
+                      obj.planned_date_from=temp1[i].planned_date_from; 
+                      obj.skill=temp1[i].skill;
+                           
+                      obj.value=temp1[i].value;
+                      obj.rowidz=temp1[i].row_id;
+                      obj.teaching_aid=temp1[i].teaching_aid;
+                      obj.planned_to_date=temp1[i].planned_to_date;
+                      obj.bld_value_name=temp1[i].bld_value_name;
+                      var id_date=temp1[i].planned_date_from;
+                       id_date=id_date.replace(/[^\w\s]/gi, '');
+                       obj.id_date=id_date;
+                       obj.hidecheck=false; 
+                       obj.hidecheck1=true; 
+                       obj.hidecheck11=true; 
+                       res2.push(obj);     
+                      }
+      var flag=0;
+
+if(parseInt(this.periodafter)!=-1&&parseInt(this.periodafter)>0&&this.periodafter!=""){
+            flag=1;
+            var len=res2.length;
+           
+           var temp=[];
+            for(var i=0;i<res2.length;i++){
+                if((i+1)==parseInt(this.periodafter)){
+                     temp.push(res2[i]);
+                   for(var k=0;k<bufferperiod;k++){
+                   var obj={};
+                   obj.concept_id="";  
+                   obj.concept_name="";   
+                   obj.capter_id=""; 
+                   obj.innovation="";  
+                   obj.remarks="";  
+                   obj.planned_date_from="empty" ;
+                   obj.planned_to_date="" ;
+                   obj.rowidz="";
+
+              
+                   obj.teaching_aid="";
+                   obj.hidecheck=true; 
+                   obj.hidecheck1=false; 
+                   obj.hidecheck11=false;
+                   obj.rowid=parseInt(res2.length)+1+k;
+                   temp.push(obj); 
+                       }
+                     
+                  
+                }
+                else{
+                    temp.push(res2[i]);
+                }
+            }
+          }
+        //alert(JSON.stringify(res2));
+             
+            if(flag==0){
+                  for(var k=0;k<r;k++){
+                   var obj={};
+                   obj.concept_id="";  
+                   obj.concept_name="";   
+                   obj.capter_id=""; 
+                   obj.innovation="";  
+                   obj.remarks="";  
+                   obj.planned_date_from="empty" ;
+                   obj.planned_to_date="" ;
+                   obj.rowidz="";
+                   obj.teaching_aid="";
+                    if(k==0)
+                        obj.hidecheck1=false; 
+                     else
+                        obj.hidecheck1=true; 
+
+                     obj.hidecheck=true; 
+                     obj.hidecheck11=false; 
+                   res2.push(obj);
+              }
+            for(var i=0;i<res2.length;i++){
+            res2[i].rowid=i+1;
+          } 
+              for(var i=0;i<res2.length;i++){
+            res2[i].sno=i+1;
+            }
+ document.querySelector('teacher-book-approve-card').overallarr1=res2;
+           
+          }                
+          else {
+               for(var k=0;k<r;k++){
+              
+               var obj={};
+                   obj.concept_id="";  
+                   obj.concept="";   
+                   obj.capter_id=""; 
+                   obj.innovation="";  
+                   obj.remark="";  
+                   obj.planning_date="empty" ;
+                   obj.planned_to_date="" ;
+                   obj.rowidz="";
+                   obj.teachingaid="";
+                   if(k==0)
+                        obj.hidecheck1=false; 
+                     else
+                        obj.hidecheck1=true; 
+
+                   obj.hidecheck=true; 
+                   obj.hidecheck11=false;
+                   obj.rowid=parseInt(temp.length)+1+k;
+                   temp.push(obj);
+                } 
+             for(var i=0;i<temp.length;i++){
+            temp[i].sno=i+1;
+          }
+    document.querySelector('teacher-book-approve-card').overallarr1=temp;
+              res2=[];
+              temp=[];
+              this.periodafter="";
+
+            }      
+       },
+
+
+
+    subflagseqe:function()
+      {     
+         this.subflagseqeurl=sessionStorage.getItem("addrinfo")+"/fetchsubjectseq-service";
+         var obj={};
+         obj.capter_id=localStorage.getItem("curr_sess_capters");
+         obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+         this.subflagseqeparam=obj;
+         this.$.subflagseqeajax.generateRequest();
+      },
+
+      subflagseqeResponse:function(e)
+      {
+    var arr= e.detail.response.returnval;
+       //alert(JSON.stringify(arr));
+     subflagseqid=arr[0].sub+arr[0].sub_seq;
+      },
+
+
+      bookapprvvalsubject:function(gradeid,section){
+           this.bookapprvvalsubjecturl=sessionStorage.getItem("addrinfo")+"/bookapprvvalsubject-service";
+       var obj={"school_id":"","gradeid":"","section":"","academic_year":""};
+      obj.gradeid=gradeid;
+      obj.section=section;
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.bookapprvvalsubjectparam=obj;
+      this.$.bookapprvvalsubjectajax.generateRequest();
+      },
+     bookapprvvalsubjectResponse:function(e){
+              var res=e.detail.response.returnval;
+           // alert(JSON.stringify(res));
+       document.querySelector('teacher-book-approve-card').subjectarr=e.detail.response.returnval;
+  
+   },
+
+fnsetcoskill:function(arr,period,innovation,remark,rowid,teachingaid,sno)
+{
+        //alert(period);
+       for(var i=0;i<arr.length;i++){
+   this.fnsetcoskillurl=sessionStorage.getItem("addrinfo")+"/fnsetcoskill-service";
+       var obj={};
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+        obj.termid=sessionStorage.getItem("termid"); 
+        obj.concept_id=arr[i].conceptid;
+        obj.concept_name=arr[i].conceptname;
+        obj.capter_id=localStorage.getItem("curr_sess_capters");
+        obj.planned_date=localStorage.getItem("localsess_from_service");
+        obj.planned_to=localStorage.getItem("localsess_last_service");
+        obj.sno=sno;
+        obj.period=period;
+        obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.innovation=innovation;
+        obj.remark=remark;
+        obj.teachingaid=teachingaid;
+        // obj.Correction=Correction;
+        
+        obj.rowid=rowid+localStorage.getItem("curr_sess_capters");
+        obj.flag="active";
+        obj.conc_date=arr[i].conceptid+localStorage.getItem("localsess_from_service")
+        this.fnsetcoskillparam=obj;
+        // alert(JSON.stringify(obj));
+        this.$.fnsetcoskillajax.generateRequest();
+       }
+   },
+
+
+fnsetcoskillvalue:function(valuearr,period,rowid,sno)
+   {
+ 
+ for(var i=0;i<valuearr.length;i++){
+      this.fnsetcoskillvalueurl=sessionStorage.getItem("addrinfo")+"/fnsetbookvale-service";
+       var obj={};
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+        obj.termid=sessionStorage.getItem("termid"); 
+        obj.capter_id=localStorage.getItem("curr_sess_capters");
+        obj.value_id=valuearr[i].valueid;
+        obj.value_name=valuearr[i].valuename;
+        obj.planned_date=localStorage.getItem("localsess_from_service");
+        obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.rowid=rowid+localStorage.getItem("curr_sess_capters");
+        obj.period=period;
+        obj.flag="active";
+        obj.sno=sno;
+        obj.conc_date=valuearr[i].valueid+localStorage.getItem("localsess_from_service")
+        this.fnsetcoskillvalueparam=obj;
+        this.$.fnsetcoskillvalueajax.generateRequest();
+        }
+      },
+   fnsetcoskillvalueResponse:function(e){
+        var res=e.detail.response.returnval;
+         //alert(JSON.stringify(res));
+
+       },
+fnsetcoskill11:function(skarr,period,rowid,sno)
+{
+ 
+    for(var i=0;i<skarr.length;i++){
+      this.fnsetcoskill11url=sessionStorage.getItem("addrinfo")+"/fnsetcoskill11-service";
+       var obj={};
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+        obj.termid=sessionStorage.getItem("termid"); 
+        obj.capter_id=localStorage.getItem("curr_sess_capters");
+        obj.skill_id=skarr[i].skillid;
+        obj.skill_name=skarr[i].skillname;
+        obj.planned_date=localStorage.getItem("localsess_from_service");
+        obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.rowid=rowid+localStorage.getItem("curr_sess_capters");
+        obj.period=period;
+        obj.sno=sno;
+        obj.flag="active";
+        obj.conc_date=skarr[i].skillid+localStorage.getItem("localsess_from_service")
+        this.fnsetcoskill11param=obj;
+        this.$.fnsetcoskill11ajax.generateRequest();
+      
+        }
+      },
+   fnsetcoskill11Response:function(e){
+        var res=e.detail.response.returnval;
+         //alert(JSON.stringify(res));
+       },
+       fnsetcoskill12:function(skarr,period,rowid,sno)
+{
+ 
+    for(var i=0;i<skarr.length;i++){
+      this.fnsetcoskill12url=sessionStorage.getItem("addrinfo")+"/fnsetcoskill12-service";
+       var obj={};
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+        obj.termid=sessionStorage.getItem("termid"); 
+         obj.capter_id=localStorage.getItem("curr_sess_capters");
+        obj.sub_concept_id=skarr[i].subconceptid;
+        obj.sub_concept_name=skarr[i].subconceptname;
+        obj.planned_date=localStorage.getItem("localsess_from_service");
+        obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.rowid=rowid+localStorage.getItem("curr_sess_capters");
+        obj.period=period;
+         obj.sno=sno;
+        obj.flag="active";
+        obj.conc_date=skarr[i].subconceptid+localStorage.getItem("localsess_from_service")
+        this.fnsetcoskill12param=obj;
+        this.$.fnsetcoskill12ajax.generateRequest();
+
+        }
+      },
+   fnsetcoskill12Response:function(e){
+        var res=e.detail.response.returnval;
+         //alert(JSON.stringify(res));
+       },
+  fnsetcoskillResponse:function(e)
+      {
+       var res=e.detail.response.returnval;
+       //alert(JSON.stringify(res));
+       
+       // alert('Inserted');
+           
+       //        this.conceptseq(); 
+       //        this.FnFetchConceptService();
+        },
+fnsetcoskill13:function(skarr,period,rowid,sno)
+{
+ 
+    for(var i=0;i<skarr.length;i++){
+      this.fnsetcoskill13url=sessionStorage.getItem("addrinfo")+"/fnsetcoskill13-service";
+       var obj={};
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+        obj.termid=sessionStorage.getItem("termid"); 
+         obj.capter_id=localStorage.getItem("curr_sess_capters");
+        obj.bld_value_id=skarr[i].bldvalueid;
+        obj.bld_value_name=skarr[i].bldvaluename;
+        obj.planned_date=localStorage.getItem("localsess_from_service");
+        obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.rowid=rowid+localStorage.getItem("curr_sess_capters");
+        obj.period=period;
+        obj.sno=sno;
+        obj.flag="active";
+        obj.conc_date=skarr[i].bldvalueid+localStorage.getItem("localsess_from_service")
+        this.fnsetcoskill13param=obj;
+        this.$.fnsetcoskill13ajax.generateRequest();
+
+        }
+      },
+ fnsetcoskill13Response:function(e){
+ var res=e.detail.response.returnval;
+ },
+    fnbookeditskill:function(period,innovation,remark,planneddate,rowidz,teachingaid){
+  
+    this.fnbookeditskillurl=sessionStorage.getItem("addrinfo")+"/fnbookeditskill-service";
+     var obj={};
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj.capter_id=localStorage.getItem("curr_sess_capters");
+      obj.period=period;
+      obj.innovation=innovation;
+      obj.remark=remark;
+      obj.planned_date=planneddate;
+      obj.rowidz=rowidz;
+      obj.teachingaid=teachingaid;
+      obj.termid=sessionStorage.getItem("termid"); 
+      this.fnbookeditskillparam=obj;
+      this.$.fnbookeditskillajax.generateRequest();   
+    },
+      fnbookeditskillResponse:function(e)
+      {
+            var res=e.detail.response.returnval;
+            alert('Updated');
+           // alert(JSON.stringify(res));
+               this.conceptseq(); 
+              this.FnFetchConceptService();
+    
+      },
+
+         buffdel:function(e){
+   // alert("1");
+    
+    this.buffdelurl=sessionStorage.getItem("addrinfo")+"/buffset-service";
+    var obj={};
+    obj.capter_id=localStorage.getItem("curr_sess_capters");
+     obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+          obj.subjectid=sessionStorage.getItem("subjectidz");
+        obj.gradeid=sessionStorage.getItem("grdeidz");
+        obj.termid=sessionStorage.getItem("termid"); 
+    this.buffdelparam=obj;
+   this.$.buffdelajax.generateRequest();
+   },
+ buffdelResponse:function(e){
+     var res=e.detail.response.returnval;
+     var delperiod=parseInt(res[0].period)-1;
+    // alert(delperiod);
+     this.buffdel1url=sessionStorage.getItem("addrinfo")+"/buffdel-service";
+      var obj={};
+      obj.delperiod=delperiod;
+      obj.capter_id=localStorage.getItem("curr_sess_capters");
+      this.buffdel1param=obj;
+          // alert(JSON.stringify(obj));
+
+      this.$.buffdel1ajax.generateRequest();
+   },
+
+    buffdelResponse:function(e){
+   
+   },
+
+   fngetclassbooksectionvalue:function(gradeid){
+
+          this.fngetclassbooksectionvalueurl=sessionStorage.getItem("addrinfo")+"/fngetclassbooksectionvalue-service";
+             var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.empid=sessionStorage.getItem("curr_sess_loggedid");
+           //obj.subjectid=subjectid;
+           obj.gradeid=gradeid;
+           this.fngetclassbooksectionvalueparam=obj;
+          //alert(JSON.stringify(obj));
+           this.$.fngetclassbooksectionvalueajax.generateRequest();
+        },
+
+
+         fngetclassbooksectionvalueResponse:function(e)
+         {
+            var res1=e.detail.response.sectionarr;
+            document.querySelector('curriculum-plan-conceptapproval-card').sectionarr=res1;    
+        },
+          fngetclassbooksubjectvalue:function(gradeid,sectionid){
+           this.fngetclassbooksubjectvalueurl=sessionStorage.getItem("addrinfo")+"/fngetclassbooksubjectvalue-service";
+           // alert(JSON.stringify('coming'));
+           var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+
+           obj.empid=sessionStorage.getItem("curr_sess_loggedid");
+           obj.chapterid=localStorage.getItem("curr_sess_chapterid"); 
+           obj.subjectid=localStorage.getItem("curr_sess_subjectid"); 
+           obj.gradeid=gradeid; 
+           obj.sectionid=sectionid; 
+           this.fngetclassbooksubjectvalueparam=obj;
+           //alert(JSON.stringify(obj));
+           this.$.fngetclassbooksubjectvalueajax.generateRequest();
+       
+          },
+          fngetclassbooksubjectvalueResponse:function(e)
+          {
+            var res=e.detail.response.subjectarr;
+   document.querySelector('curriculum-plan-conceptapproval-card').subjectarr=res;
+          },
+          fngetclassbookchaptervalue:function(gradeid,sectionid,subjectid){
+          this.fngetclassbookchaptervalueurl=sessionStorage.getItem("addrinfo")+"/fngetclassbookchaptervalue-service";
+             var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.empid=sessionStorage.getItem("curr_sess_loggedid");
+           obj.sectionid=sectionid;
+           obj.gradeid=gradeid;
+           obj.subjectid=subjectid;
+           obj.termid=sessionStorage.getItem("termid"); 
+
+           this.fngetclassbookchaptervalueparam=obj;
+           this.$.fngetclassbookchaptervalueajax.generateRequest();
+          },
+          fngetclassbookchaptervalueResponse:function(e)
+          {
+            var res=e.detail.response.chapterarr;
+            // alert(JSON.stringify(res));
+            document.querySelector('curriculum-plan-conceptapproval-card').chapterarr=res;
+          },
+          fngetclassbookchapterconceptvalue:function(){
+          this.fngetclassbookchapterconcepturl=sessionStorage.getItem("addrinfo")+"/fngetclassbookchapterconcept-service";
+             var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.empid=sessionStorage.getItem("curr_sess_loggedid");
+           obj.sectionid=localStorage.getItem("curr_sess_sectionid");
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+           obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+           obj.termid=sessionStorage.getItem("termid"); 
+
+           this.fngetclassbookchapterconceptparam=obj;
+           this.$.fngetclassbookchapterconceptajax.generateRequest();
+          },
+          fngetclassbookchapterconceptResponse:function(e)
+          {
+            var res=e.detail.response.chapterarr;
+            var temp=[];
+            for(var i=0;i<res.length;i++){
+            res[i].sno=i+1;
+            res[i].hidetitleflag=true;
+            res[i].hideflag=false;
+            temp.push(res[i]);
+            }
+        // alert(JSON.stringify(this.approvedarr));
+            for(var i=0;i<temp.length;i++){
+                for(var j=0;j<this.approvedarr.length;j++){
+                    if(temp[i].concept_id==this.approvedarr[j].concept_id&&temp[i].sub_concept_id==this.approvedarr[j].sub_concept_id&&temp[i].row_id==this.approvedarr[j].row_id){
+                        temp[i].completion_status=this.approvedarr[j].completion_status;
+                         temp[i].completion_date=this.approvedarr[j].completion_date;
+                         temp[i].enrichment_sug=this.approvedarr[j].enrichment_sug;
+                         temp[i].correction_status=this.approvedarr[j].correction_status;
+                         temp[i].bld_value_name=this.approvedarr[j].bld_value_name;
+                        temp[i].teaching_aid=this.approvedarr[j].teaching_aid;
+                        temp[i].lr_rectification=this.approvedarr[j].lr_rectification;
+                        temp[i].co_ordinator_remarks=this.approvedarr[j].co_ordinator_remarks;
+                        temp[i].hidetitleflag=false;
+                        temp[i].hideflag=true;
+                    }
+                }
+            }
+            document.querySelector('curriculum-plan-conceptapproval-card').name=sessionStorage.getItem("curr_sess_loggeduname");
+            document.querySelector('curriculum-plan-conceptapproval-card').hideapprovalcard=false;
+            document.querySelector('curriculum-plan-conceptapproval-card').approvearr=temp;
+          },
+          updateapprovalstatusofchapterconcept:function(o){
+           this.updateapprovalstatusofchapterconcepturl=sessionStorage.getItem("addrinfo")+"/updateapprovalstatusofchapterconcept-service";
+             var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.empid=sessionStorage.getItem("curr_sess_loggedid");
+           obj.empname=sessionStorage.getItem("curr_sess_loggeduname");
+           obj.sectionid=localStorage.getItem("curr_sess_sectionid");
+           obj.sectionname=localStorage.getItem("curr_sess_sectionname");
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_gradename");
+           obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+           obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+           obj.chapterid=localStorage.getItem("curr_sess_chapterid");
+           obj.chaptername=localStorage.getItem("curr_sess_chaptername");
+           obj.completion_date=localStorage.getItem("localsess_comp_service");
+          obj.termid=sessionStorage.getItem("termid"); 
+
+           obj.rowid=o.rowid;
+           obj.conceptid=o.conceptid;           
+           obj.conceptname=o.conceptname;
+           obj.subconceptid=o.subconceptid;
+           obj.subconceptname=o.subconceptname;
+           obj.period=o.period;
+           obj.fromdate=o.fromdate;
+           obj.todate=o.todate;
+           obj.skill=o.skill;
+           obj.value=o.value;
+           obj.innovation=o.innovation;
+           obj.lrrectification=o.lrrectification;
+           obj.remarks=o.remarks;
+           obj.enrichmentsuggest=o.enrichmentsuggest;  
+           obj.correctionstatus=o.correctionstatus;
+           obj.completionstatus=o.completionstatus;
+           obj.enrichmentsuggest=o.enrichmentsuggest;
+           obj.completiondate=localStorage.getItem("localsess_comp_service");
+           obj.bldvalues=o.bldvalues;
+           obj.teachingaid=o.teachingaid;
+           obj.coremark=o.coremark;
+           this.updateapprovalstatusofchapterconceptparam=obj;
+           //alert(JSON.stringify(obj));
+           this.$.updateapprovalstatusofchapterconceptajax.generateRequest();
+          },
+          updateapprovalstatusofchapterconceptResponse:function(e)
+          {
+            //alert(e.detail.response.returnval);
+            if(e.detail.response.returnval=='Updated')
+            {
+                document.querySelector('curriculum-plan-conceptapproval-itemcard').saopen2dialog();
+                 this.fetchalreadyapprovedchapterconcept();
+            }
+            else
+            {
+                document.querySelector('curriculum-plan-conceptapproval-itemcard').failureopen2();
+            }
+           
+          },
+          fetchalreadyapprovedchapterconcept:function(){
+            this.fetchalreadyapprovedchapterconcepturl=sessionStorage.getItem("addrinfo")+"/fetchalreadyapprovedchapterconcept-service";
+            var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+            obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+            obj.empid=sessionStorage.getItem("curr_sess_loggedid");
+            obj.chapterid=localStorage.getItem("curr_sess_chapterid"); 
+            obj.subjectid=localStorage.getItem("curr_sess_subjectid"); 
+            obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+            obj.sectionid=localStorage.getItem("curr_sess_sectionid");
+            obj.termid=sessionStorage.getItem("termid"); 
+           
+
+            this.fetchalreadyapprovedchapterconceptparam=obj;
+            this.$.fetchalreadyapprovedchapterconceptajax.generateRequest();
+          },
+          fetchalreadyapprovedchapterconceptResponse:function(e){
+            this.approvedarr=e.detail.response.approvedarr;
+            //alert(1);
+            //alert(JSON.stringify(this.approvedarr));
+            this.fngetclassbookchapterconceptvalue();
+          },
+          FnFetchClassConceptService:function(gradeid,subjectid,chapterid,sectoinidz){
+            this.fetchclassconcepturl=sessionStorage.getItem("addrinfo")+"/fetchclassconcept-service";
+            var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+            obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+            obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+            obj.chapterid=localStorage.getItem("curr_sess_capters"); 
+            obj.subjectid=sessionStorage.getItem("subjectidz"); 
+            obj.gradeid=sessionStorage.getItem("grdeidz");
+            obj.sectoinid=sessionStorage.getItem("sectionidz");
+            this.fetchclassconceptparam=obj;
+            this.$.fetchclassconceptajax.generateRequest();
+          },
+
+        fetchclassconceptResponse:function(e)
+        {
+           var res=e.detail.response.conceptarr;
+           var res1=e.detail.response.emparr;
+           var res2=e.detail.response.dbarr;
+           var res3=e.detail.response.valuearr;
+           var res4=e.detail.response.skillarr;
+           var res5=e.detail.response.dbvaluearr;
+           var res6=e.detail.response.dbskillarr;
+          var setattr=[];
+   /*   alert(JSON.stringify(res));
+      alert(JSON.stringify(res1));
+      alert(JSON.stringify(res2));
+      alert(JSON.stringify(res3));
+      alert(JSON.stringify(res4));
+      alert(JSON.stringify(res5));
+      alert(JSON.stringify(res6));
+*/
+    var overall3=[];
+    var a3=[]; 
+  for(var k=0;k<res5.length;k++)
+           {       
+        var nameobj={};
+             nameobj.planning_date=res5[k].planning_date; 
+             nameobj.rowidz=res5[k].rowid; 
+             nameobj.valuuid=res5[k].conc_date; 
+             nameobj.suid=res5[k].suid; 
+        var obj={"valueid":"","valuename":""};
+            obj.valueid=res5[k].value_id;
+            obj.valuename=res5[k].value_name;
+            a3.push(obj);
+           
+           for(var l=k+1;l<res5.length;l++)
+            {
+             if(res5[k].rowid==res5[l].rowid)
+                 {
+             if(res5[k].suid==res5[l].suid)
+                {
+             var obj1={"valueid":"","valuename":""}
+                 obj1.valueid=res5[l].value_id;
+                 obj1.valuename=res5[l].value_name;
+                 a3.push(obj1);
+                 res5.splice(l,1);
+                 l--;
+               }}}
+                nameobj.mainarr=a3;
+                overall3.push(nameobj);
+                a3=[];
+                 }
+ 
+      //alert(JSON.stringify(overall3));
+      var a4=[];
+      var overall4=[];
+
+          var b=[];
+        var subarr=[];            
+            for(var k=0;k<res4.length;k++)
+            {
+            for(var k=0;k<res6.length;k++)
+           {       
+           var nameobj={};
+             nameobj.planning_date=res6[k].planning_date; 
+             nameobj.rowidz=res6[k].rowid; 
+             nameobj.skiluid=res6[k].conc_date; 
+              nameobj.suid=res6[k].suid; 
+       var obj={"skillid":"","skillname":""};
+            obj.skillid=res6[k].skill_id;
+            obj.skillname=res6[k].skill_name;
+            a4.push(obj);
+           
+           for(var l=k+1;l<res6.length;l++)
+            {
+             if(res6[k].rowid==res6[l].rowid)
+             {
+             if(res6[k].suid==res6[l].suid)
+                {
+             var obj1={"skillid":"","skillname":""}
+                 obj1.skillid=res6[l].skill_id;
+                 obj1.skillname=res6[l].skill_name;
+                 a4.push(obj1);
+                res6.splice(l,1);
+                 l--;
+               }}}
+                nameobj.skillarr=a4;
+                overall4.push(nameobj);
+                a2=[];
+                 }}
+       //alert(JSON.stringify(overall4));
+/*var temp4=[];
+
+for(var l=0;l<res2.length;l++){
+  
+
+      for(var r=0;r<overall1.length;r++){
+        for(var n=0;n<res.length;n++){   
+        if(res[n].rowid==overall1[r].rowidz){
+           if(res[n].planning_date==overall1[r].planning_date){
+
+  
+             var nameobj={};
+             nameobj.planning_date=res[n].planning_date; 
+             nameobj.period=res[n].period; 
+             nameobj.concept_id=res[n].concept_id; 
+             nameobj.conceptname=res[n].conceptname; 
+             nameobj.innovation=res[n].innovation; 
+             nameobj.remark=res[n].remark; 
+             nameobj.rowidz=res[n].rowid; 
+             nameobj.lrrectife=res[n].lrrectife;
+             nameobj.Correction=res[n].Correction;
+             nameobj.subuid=res[n].subuid;
+             nameobj.conuid=res[n].conuid;
+             nameobj.sub_concept_id=res[n].sub_concept_id;
+             nameobj.sub_concept_name=res[n].sub_concept_name;
+             nameobj.mainarr=overall1[r].mainarr;
+             nameobj.valuuid=overall1[r].valuuid;
+             temp2.push(nameobj);
+             res.splice(n,1);
+             }}}}
+       
+        }
+
+
+
+
+
+ for(var l=0;l<temp2.length;l++){
+       for(var r=0;r<overall2.length;r++){
+        for(var n=0;n<temp2.length;n++){   
+          if(temp2[n].rowidz==overall2[r].rowidz){
+              if(temp2[n].planning_date==overall2[r].planning_date){
+             var nameobj={};
+             nameobj.planning_date=temp2[n].planning_date; 
+             nameobj.period=temp2[n].period; 
+             nameobj.innovation=temp2[n].innovation;
+              nameobj.concept_id=temp2[n].concept_id; 
+             nameobj.conceptname=temp2[n].conceptname; 
+             nameobj.remark=temp2[n].remark; 
+             nameobj.rowidz=temp2[n].rowidz; 
+             nameobj.lrrectife=temp2[n].lrrectife;
+             nameobj.Correction=temp2[n].Correction;
+             nameobj.sub_concept_id=temp2[n].sub_concept_id;
+             nameobj.sub_concept_name=temp2[n].sub_concept_name;
+             nameobj.mainarr=temp2[n].mainarr;
+             nameobj.valuuid=temp2[n].valuuid;
+             nameobj.skiluid=overall2[r].skiluid;
+             nameobj.subuid=temp2[n].subuid;
+             nameobj.conuid=temp2[n].conuid;
+             nameobj.skillarr=overall2[r].skillarr;
+             temp1.push(nameobj);
+             temp2.splice(n,1);
+             }}}}
+       
+           }*/
+
+          var a1=[];
+           var overall1=[];
+
+           for(var k=0;k<res3.length;k++)
+           {       
+           var nameobj={};
+             nameobj.planning_date=res3[k].planning_date; 
+             nameobj.rowidz=res3[k].rowid; 
+             nameobj.valuuid=res3[k].conc_date; 
+         var obj={"valueid":"","valuename":""};
+            obj.valueid=res3[k].value_id;
+            obj.valuename=res3[k].value_name;
+            a1.push(obj);
+           
+           for(var l=k+1;l<res3.length;l++)
+            {
+             if(res3[k].rowid==res3[l].rowid)
+                 {
+             if(res3[k].planning_date==res3[l].planning_date)
+                {
+             var obj1={"valueid":"","valuename":""}
+                 obj1.valueid=res3[l].value_id;
+                 obj1.valuename=res3[l].value_name;
+                 a1.push(obj1);
+                res3.splice(l,1);
+                 l--;
+               }}}
+                nameobj.mainarr=a1;
+                overall1.push(nameobj);
+                a1=[];
+                 }
+
+
+      var a2=[];
+      var overall2=[];
+
+        for(var k=0;k<res4.length;k++)
+           {       
+           var nameobj={};
+             nameobj.planning_date=res4[k].planning_date; 
+             nameobj.rowidz=res4[k].rowid; 
+             nameobj.skiluid=res4[k].conc_date; 
+       var obj={"skillid":"","skillname":""};
+            obj.skillid=res4[k].skill_id;
+            obj.skillname=res4[k].skill_name;
+            a2.push(obj);
+           
+           for(var l=k+1;l<res4.length;l++)
+            {
+             if(res4[k].rowid==res4[l].rowid)
+                 {
+             if(res4[k].planning_date==res4[l].planning_date)
+                {
+             var obj1={"skillid":"","skillname":""}
+                 obj1.skillid=res4[l].skill_id;
+                 obj1.skillname=res4[l].skill_name;
+                 a2.push(obj1);
+                res4.splice(l,1);
+                 l--;
+               }}}
+                nameobj.skillarr=a2;
+                overall2.push(nameobj);
+                a2=[];
+                 }
+
+     var temp2=[];
+   for(var l=0;l<res.length;l++){
+  
+
+      for(var r=0;r<overall1.length;r++){
+        for(var n=0;n<res.length;n++){   
+        if(res[n].rowid==overall1[r].rowidz){
+           if(res[n].planning_date==overall1[r].planning_date){
+
+  
+             var nameobj={};
+             nameobj.planning_date=res[n].planning_date; 
+             nameobj.period=res[n].period; 
+             nameobj.concept_id=res[n].concept_id; 
+             nameobj.conceptname=res[n].conceptname; 
+             nameobj.innovation=res[n].innovation; 
+             nameobj.remark=res[n].remark; 
+             nameobj.rowidz=res[n].rowid; 
+             nameobj.lrrectife=res[n].lrrectife;
+             nameobj.Correction=res[n].Correction;
+             nameobj.subuid=res[n].subuid;
+             nameobj.conuid=res[n].conuid;
+             nameobj.sub_concept_id=res[n].sub_concept_id;
+             nameobj.sub_concept_name=res[n].sub_concept_name;
+             nameobj.mainarr=overall1[r].mainarr;
+             nameobj.valuuid=overall1[r].valuuid;
+             temp2.push(nameobj);
+             res.splice(n,1);
+             }}}}
+       
+        }
+    for(var r=0;r<overall1.length;r++){
+        for(var n=0;n<res.length;n++){   
+
+        if(res[n].rowid==overall1[r].rowidz){
+           if(res[n].planning_date==overall1[r].planning_date){
+
+             var nameobj={};
+             nameobj.planning_date=res[n].planning_date; 
+             nameobj.period=res[n].period; 
+             nameobj.concept_id=res[n].concept_id; 
+             nameobj.conceptname=res[n].conceptname; 
+             nameobj.innovation=res[n].innovation; 
+             nameobj.remark=res[n].remark; 
+             nameobj.rowidz=res[n].rowid; 
+             nameobj.lrrectife=res[n].lrrectife;
+             nameobj.Correction=res[n].Correction;
+             nameobj.subuid=res[n].subuid;
+             nameobj.conuid=res[n].conuid;
+             nameobj.sub_concept_id=res[n].sub_concept_id;
+             nameobj.sub_concept_name=res[n].sub_concept_name;
+             nameobj.mainarr=overall1[r].mainarr;
+             nameobj.valuuid=overall1[r].valuuid;
+             temp2.push(nameobj);
+            res.splice(n,1);
+             }}}}
+          
+
+  
+
+     
+       // alert(JSON.stringify(temp2)); 
+      //alert(JSON.stringify(res)); 
+
+  for(var l=0;l<temp2.length;l++){
+
+ 
+       for(var r=0;r<overall2.length;r++){
+        for(var n=0;n<temp2.length;n++){   
+          if(temp2[n].rowidz==overall2[r].rowidz){
+              if(temp2[n].planning_date==overall2[r].planning_date){
+             var nameobj={};
+             nameobj.planning_date=temp2[n].planning_date; 
+             nameobj.period=temp2[n].period; 
+             nameobj.innovation=temp2[n].innovation;
+              nameobj.concept_id=temp2[n].concept_id; 
+             nameobj.conceptname=temp2[n].conceptname; 
+             nameobj.remark=temp2[n].remark; 
+             nameobj.rowidz=temp2[n].rowidz; 
+             nameobj.lrrectife=temp2[n].lrrectife;
+             nameobj.Correction=temp2[n].Correction;
+             nameobj.sub_concept_id=temp2[n].sub_concept_id;
+             nameobj.sub_concept_name=temp2[n].sub_concept_name;
+             nameobj.mainarr=temp2[n].mainarr;
+             nameobj.valuuid=temp2[n].valuuid;
+             nameobj.skiluid=overall2[r].skiluid;
+             nameobj.subuid=temp2[n].subuid;
+             nameobj.conuid=temp2[n].conuid;
+             nameobj.skillarr=overall2[r].skillarr;
+             temp1.push(nameobj);
+             temp2.splice(n,1);
+             }}}}
+
+           }
+         
+           //alert(JSON.stringify(temp2));
+for(var r=0;r<overall2.length;r++){
+        for(var n=0;n<temp2.length;n++){   
+          if(temp2[n].rowidz==overall2[r].rowidz){
+              if(temp2[n].planning_date==overall2[r].planning_date){
+             var nameobj={};
+             nameobj.planning_date=temp2[n].planning_date; 
+             nameobj.period=temp2[n].period; 
+             nameobj.innovation=temp2[n].innovation;
+              nameobj.concept_id=temp2[n].concept_id; 
+             nameobj.conceptname=temp2[n].conceptname; 
+             nameobj.remark=temp2[n].remark; 
+             nameobj.rowidz=temp2[n].rowidz; 
+             nameobj.lrrectife=temp2[n].lrrectife;
+             nameobj.Correction=temp2[n].Correction;
+             nameobj.sub_concept_id=temp2[n].sub_concept_id;
+             nameobj.sub_concept_name=temp2[n].sub_concept_name;
+             nameobj.mainarr=temp2[n].mainarr;
+             nameobj.valuuid=temp2[n].valuuid;
+             nameobj.skiluid=overall2[r].skiluid;
+             nameobj.subuid=temp2[n].subuid;
+             nameobj.conuid=temp2[n].conuid;
+             nameobj.skillarr=overall2[r].skillarr;
+             temp1.push(nameobj);
+             temp2.splice(n,1);
+             }}}}
+       
+
+           for(var i=0;i<temp1.length;i++){
+                    var obj={};
+                      obj.planned_date=temp1[i].planning_date;
+                      obj.innovation=temp1[i].innovation;
+                      obj.conceptid=temp1[i].concept_id;
+                      obj.conceptname=temp1[i].conceptname;
+                      var id_date=temp1[i].planning_date;
+                      id_date=id_date.replace(/[^\w\s]/gi, '');
+                      obj.id_date=id_date;
+                      obj.remark=temp1[i].remark;
+                      obj.period=temp1[i].period;
+                      obj.mainarr=temp1[i].mainarr;
+                      obj.skillarr=temp1[i].skillarr;
+                      obj.rowidz=temp1[i].rowidz;
+                      obj.lrrectife=temp1[i].lrrectife;
+                      obj.Correction=temp1[i].Correction;
+                      obj.sub_concept_id=temp1[i].sub_concept_id;
+                      obj.sub_concept_name=temp1[i].sub_concept_name;
+                      obj.valuuid=temp1[i].valuuid;
+                      obj.skiluid=temp1[i].skiluid;
+                      obj.subuid=temp1[i].subuid;
+                      obj.conuid=temp1[i].conuid;
+                      obj.grade_id=sessionStorage.getItem("grdeidz");
+                    obj.subject_id=sessionStorage.getItem("subjectidz");
+                      obj.rowid=i+1;
+                      obj.hidecheck=false; 
+                      setattr.push(obj);
+                      }
+// alert(JSON.stringify(setattr));
+ document.querySelector('class-teacher-book-approve-card').mainarr1=setattr; 
+ document.querySelector('class-teacher-book-approve-card').empid=res1[0].empid; 
+ document.querySelector('class-teacher-book-approve-card').empname=res1[0].empname; 
+        },
+
+ 
+        FnFetchClassConceptService11:function(gradeid,subjectid,chapterid,sectoinidz)
+        {
+            //alert(2);
+       this.fetchclassconcept11url=sessionStorage.getItem("addrinfo")+"/fetchclassconcept11-service";
+     var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+    obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+    obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+     obj.chapterid=localStorage.getItem("curr_sess_capters"); 
+     obj.subjectid=sessionStorage.getItem("subjectidz"); 
+           obj.gradeid=sessionStorage.getItem("grdeidz");
+           obj.sectoinidz=sessionStorage.getItem("sectionidz");
+               obj.termid=sessionStorage.getItem("termid"); 
+               this.fetchclassconcept11param=obj;
+           this.$.fetchclassconcept11ajax.generateRequest();
+        },
+        fetchclassconcept11Response:function(e)
+        {
+          var res2=e.detail.response.returnval;
+          //alert(2);
+          //alert(JSON.stringify(res2));
+       
+        var setattr=[];
+               var a=[];
+            var overall=[];
+           for(var k=0;k<res2.length;k++)
+           {     
+                  var nameobj={};
+                      nameobj.conceptid=res2[k].concept_id;
+                      nameobj.conceptname=res2[k].concept_name;
+                      nameobj.subconceptid=res2[k].sub_concept_id;
+                      nameobj.subconceptname=res2[k].sub_concept_name;
+                      nameobj.skill=res2[k].skill;
+                      nameobj.value=res2[k].value;
+                       nameobj.period=res2[k].period;
+                      nameobj.completiondate=res2[k].completion_date;
+                      nameobj.innovation=res2[k].innovation;
+                      nameobj.lr_rectifitcation=res2[k].lr_rectifitcation;
+                      nameobj.remarks=res2[k].remarks;
+                      nameobj.correction_status=res2[k].correction_status;
+                      nameobj.completion_status=res2[k].completion_status;
+                      nameobj.section_id=res2[k].section_id;
+                      nameobj.planned_date_from=res2[k].planned_date_from;
+                      nameobj.planned_to_date=res2[k].planned_to_date;
+                      nameobj.co_ordinator_remarks=res2[k].co_ordinator_remarks;
+                       nameobj.rowid=k+1;
+                      nameobj.hidecheck=true; 
+                      nameobj.grade_id=sessionStorage.getItem("grdeidz");
+                      nameobj.subject_id=sessionStorage.getItem("subjectidz");
+
+                    setattr.push(nameobj);
+                 }
+                      // alert(JSON.stringify(setattr));
+  
+   document.querySelector('class-teacher-book-rejection-item-card').mainnarr=setattr; 
+  document.querySelector('class-teacher-book-rejection-item-card').empid=res2[0].empid; 
+ document.querySelector('class-teacher-book-rejection-item-card').empname=res2[0].empname;
+        },
+
+   fnfinalbook:function(costatus,empid,innovation,enrichmentsuggest,period,planneddate,concept,conceptid,remark,rowidz,subconceptname,subconceptid,subuid,conuid,Correction,lrrectife)
+   {
+
+         this.fnfinalbookurl=sessionStorage.getItem("addrinfo")+"/fnfinalbook-service";
+     var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+
+
+           obj.chapterid=localStorage.getItem("curr_sess_capters");
+           obj.subjectid=sessionStorage.getItem("subjectidz");
+           obj.gradeid=sessionStorage.getItem("grdeidz");
+           obj.sectionid=sessionStorage.getItem("sectionidz");
+           obj.completion_date=localStorage.getItem("localsess_from_service");
+           obj.empid=empid;
+           obj.status=costatus;
+           obj.Correction=Correction;
+           obj.lrrectife=lrrectife;
+           obj.innovation=innovation;
+           obj.enrichmentsuggest=enrichmentsuggest;
+           obj.planneddate=planneddate;
+           obj.period=period;
+           obj.concept=concept;
+           obj.conceptid=conceptid;
+           obj.remark=remark;
+           obj.rowidz=rowidz;
+           obj.subconceptname=subconceptname;
+           obj.subconceptid=subconceptid;
+           obj.subuid=subuid;
+           obj.conuid=conuid;
+          
+           this.fnfinalbookparam=obj;
+           this.$.fnfinalbookajax.generateRequest();
+      
+           
+         },
+
+          fnfinalbookResponse:function(e)
+          {
+            var res=e.detail.response.returnval;
+            alert('Inserted');
+            this.FnFetchClassConceptService();
+          },
+
+ fnfinalbookskill:function(skillarr,costatus,empid,period,planneddate,skiluid,rowidz,subuid){
+
+     for(var i=0;i<skillarr.length;i++){
+
+             this.fnfinalbookskillurl=sessionStorage.getItem("addrinfo")+"/fnfinalbookskill-service";
+        var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.chapterid=localStorage.getItem("curr_sess_capters");
+           obj.subjectid=sessionStorage.getItem("subjectidz");
+           obj.gradeid=sessionStorage.getItem("grdeidz");
+           obj.sectionid=sessionStorage.getItem("sectionidz");
+           obj.completion_date=localStorage.getItem("localsess_from_service");
+           obj.empid=empid;
+           obj.status=costatus;
+           obj.planneddate=planneddate;
+           obj.rowidz=rowidz;
+           obj.skiluid=skiluid;
+           obj.period=period;
+           obj.skillid=skillarr[i].skillid;
+           obj.skillname=skillarr[i].skillname;
+           obj.subuid=subuid;
+           this.fnfinalbookskillparam=obj;
+           this.$.fnfinalbookskillajax.generateRequest();
+           //alert(JSON.stringify(obj));
+       }
+         },
+          fnfinalbookskillResponse:function(e)
+          {
+            var res=e.detail.response.returnval;
+         
+
+            
+          },
+
+
+
+ fnfinalbookvalue:function(mainarr,costatus,empid,period,planneddate,valuuid,rowidz,subuid){
+
+   for(var i=0;i<mainarr.length;i++){ 
+  this.fnfinalbookvalueurl=sessionStorage.getItem("addrinfo")+"/fnfinalbookvalue-service";
+     var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.chapterid=localStorage.getItem("curr_sess_capters");
+           obj.subjectid=sessionStorage.getItem("subjectidz");
+           obj.gradeid=sessionStorage.getItem("grdeidz");
+           obj.sectionid=sessionStorage.getItem("sectionidz");
+           obj.completion_date=localStorage.getItem("localsess_from_service");
+           obj.empid=empid;
+           obj.status=costatus;
+           obj.valueid=mainarr[i].valueid;
+           obj.valuename=mainarr[i].valuename;
+           obj.planneddate=planneddate;
+           obj.period=period;
+           obj.rowidz=rowidz;
+           obj.valuuid=valuuid;
+           obj.subuid=subuid;
+           this.fnfinalbookvalueparam=obj;
+           this.$.fnfinalbookvalueajax.generateRequest();
+           
+        }
+         },
+fnfinalbookvalueResponse:function(e)
+           {
+            var res=e.detail.response.returnval;
+        
+          },
+ chaptcompletionstatus:function()
+          {
+
+            this.chapterstatusurl=sessionStorage.getItem("addrinfo")+"/chapterstatus-service";
+
+            var obj={"schoolid":"","academic_year":"","roleid":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+            obj.empid=sessionStorage.getItem("curr_sess_loggedid");
+            this.chapterstatusparam=obj;
+            this.$.chapterstatusajax.generateRequest();
+          },
+         chapterstatusResponse:function(e)
+         {
+            var res=e.detail.response.returnval;
+          //   alert(JSON.stringify(res));
+            if(res.length>0){
+     document.querySelector('class-teacher-book-reject-card').fullstatusarr=res;
+        }else{
+            res="";
+          //  alert(res);
+      document.querySelector('class-teacher-book-reject-card').fullstatusarr=res;
+
+            }
+         },
+ getappovedcoordinator:function(e){
+          this.getappovedcoordinatorurl=sessionStorage.getItem("addrinfo")+"/getappovedcoordinator-service";
+            var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+           this.getappovedcoordinatorparam=obj;
+          // alert(JSON.stringify(obj));
+           this.$.getappovedcoordinatorajax.generateRequest();
+      
+       },
+
+       getappovedcoordinatorResponse:function(e){
+           var res=e.detail.response.returnval;
+           document.querySelector('teacher-book-approve-card').gradearr=res;
+         },
+
+
+          masterzskill:function(e)
+          {
+            this.masterzskillurl=sessionStorage.getItem("addrinfo")+"/masterbookz-service";  
+            this.$.masterzskillajax.generateRequest();
+         },
+         masterzskillResponse:function(e){
+         var res=e.detail.response.returnval;
+             masskill=res;
+         document.querySelector('teacher-book-approveal-concept-item-card').masskill=masskill;
+         },
+
+
+          fnbookplangrade:function(e){
+       // alert('1');  
+          this.fnbookplangradeurl=sessionStorage.getItem("addrinfo")+"/fnbookplangrade-service";
+            var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+           this.fnbookplangradeparam=obj;
+           //alert(JSON.stringify(obj));
+           this.$.fnbookplangradeajax.generateRequest();
+       },
+       fnbookplangradeResponse:function(e){
+       var res=e.detail.response.returnval;
+       // document.querySelector('class-teacher-book-approve-card').gradearr=res;
+       document.querySelector('curriculum-plan-conceptapproval-card').gradearr=res;
+     },
+
+
+     fnbookplansubject:function(e){
+         this.fnbookplansubjecturl=sessionStorage.getItem("addrinfo")+"/fnbookplansubject-service";
+           this.$.fnbookplansubjectajax.generateRequest();
+       },
+
+       fnbookplansubjectResponse:function(e){
+     var res=e.detail.response.returnval;
+      // document.querySelector('class-teacher-book-approve-card').subjectarr=res;
+      document.querySelector('curriculum-plan-conceptapproval-card').subjectarr=res;
+
+     },
+FnFetchChapterService:function(gradeid,subjectid,termid)
+      {
+ this.fetchchapterurl=sessionStorage.getItem("addrinfo")+"/fetchchapterinnovate-service";
+    var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+     obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+     obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+     obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+     obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+     obj.subjectid=subjectid;
+     obj.gradeid=gradeid;
+     obj.termid=termid;
+     this.fetchchapterparam=obj;
+     this.$.fetchchapterajax.generateRequest();
+        },
+fetchchapterResponse:function(e){
+   document.querySelector('teacher-book-approve-card').chapterarr=e.detail.response.returnval;
+        },
+
+          fnfinalreaprovebook:function(empid,skill,innovation,enrichmentsug,period,planneddate,conceptname,conceptid,remark,sectionid,subjectid,subconceptid,value,correctionstatus,completionstatus,rowidz,coremark)
+          {
+             this.fnfinalbook1url=sessionStorage.getItem("addrinfo")+"/fnfinalbook1-service";
+              var obj={};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.chapterid=localStorage.getItem("curr_sess_capters");
+               obj.subjectid=sessionStorage.getItem("subjectidz");
+               obj.gradeid=sessionStorage.getItem("grdeidz");
+               obj.sectionid=sessionStorage.getItem("sectionidz");
+               obj.completion_date=localStorage.getItem("localsess_comp_service");
+               obj.termid=sessionStorage.getItem("termid"); 
+               obj.planneddate=planneddate;
+               obj.empid=empid;
+               obj.skill=skill;  
+               obj.innovation=innovation;
+               obj.enrichmentsug=enrichmentsug;
+               obj.period=period;
+               obj.conceptname=conceptname;
+               obj.conceptid=conceptid;
+               obj.subconceptid=subconceptid;
+               obj.remark=remark;
+               obj.completion='yes';
+               obj.rowidz=rowidz;
+               obj.correctionstatus=correctionstatus;
+               obj.coremark=coremark;
+              this.fnfinalbook1param=obj;
+                //alert("1");
+                //alert(JSON.stringify(obj));
+              this.$.fnfinalbook1ajax.generateRequest();
+        },
+        fnfinalbook1Response:function(e)
+        {
+            var res=e.detail.response.returnval;
+            //alert('Inserted');
+            // alert(JSON.stringify(res));
+           
+             if(e.detail.response.returnval=='Updated')
+            {
+                document.querySelector('class-teacher-book-rejection-card').rsvopndialg();
+                 this.FnFetchClassConceptService11();
+            }
+            else{
+                document.querySelector('class-teacher-book-rejection-card').rsfaildialog();
+            }
+        },
+
+        fnsetrejectbookgrade:function(e)
+        {
+          this.fnsetrejectbookgradeurl=sessionStorage.getItem("addrinfo")+"/fnbookplangrade-service";
+            var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+           this.fnsetrejectbookgradeparam=obj;
+           //alert(JSON.stringify(obj));
+           this.$.fnsetrejectbookgradeajax.generateRequest();
+        },
+    
+        fnsetrejectbookgradeResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+          //alert(JSON.stringify(res));
+          document.querySelector('incomplete-chapter-report').chaptergradearr=res;
+          document.querySelector('curriculam-report').reportgradearr=res;
+        },
+
+            fnsetrejectbookgrade1:function(e)
+        {
+          this.fnsetrejectbookgrade1url=sessionStorage.getItem("addrinfo")+"/fnbookplangrade-service";
+            var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+           this.fnsetrejectbookgrade1param=obj;
+           //alert(JSON.stringify(obj));
+           this.$.fnsetrejectbookgrade1ajax.generateRequest();
+        },
+    
+        fnsetrejectbookgrade1Response:function(e)
+        {
+          var res=e.detail.response.returnval;
+          //alert(JSON.stringify(res));
+   document.querySelector('evaluation-report-card').chaptergradearr=res;
+  
+        },
+        fngetchaptersubject:function(gradeid,subjectid,termid)
+        {
+ this.fngetrejectsectionurl=sessionStorage.getItem("addrinfo")+"/fngetconceptreport-service";
+    var obj={};
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+           obj.subjectid=subjectid;
+           obj.gradeid=gradeid;
+           obj.termid=termid;
+           this.fngetrejectsectionparam=obj;
+          // alert(JSON.stringify(obj));
+           this.$.fngetrejectsectionajax.generateRequest();
+        },
+        fngetrejectsectionResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+           
+
+          var temparr=[];
+          for(var i=0;i<res.length;i++)
+          {
+            var obj={};
+
+                obj.emp_name=res[i].emp_name;
+                obj.emp_id=res[i].emp_id;
+                obj.chapter=res[i].chapter_name;
+                obj.section=res[i].section_name;
+                obj.concept=res[i].concept_name;
+                obj.sub_concept_id=res[i].sub_concept_id;
+                obj.sub_concept_id=res[i].sub_concept_id;
+                obj.sub_concept_name=res[i].sub_concept_name;
+                obj.skill=res[i].skill;
+                obj.value=res[i].value;
+                obj.innovation=res[i].innovation;
+                obj.planned_date_from=res[i].planned_date_from;
+                obj.planned_to_date=res[i].planned_to_date;
+                obj.completion_date=res[i].completion_date;
+                obj.correction_status=res[i].correction_status;
+                obj.remark=res[i].remarks;
+                obj.enrichment_sug=res[i].enrichment_sug;
+                obj.bld_value_name=res[i].bld_value_name;
+                obj.teaching_aid=res[i].teaching_aid;
+                obj.co_ordinator_remarks=res[i].co_ordinator_remarks;
+                var a=i+1;
+                obj.sno=a;
+                temparr.push(obj);
+            }
+document.querySelector('incomplete-chapter-report').getreportarr=temparr;
+
+        },
+           fngetevalutionsection:function(gradeid,subjectid,termid)
+        {
+
+  this.fngetevalutionsectionurl=sessionStorage.getItem("addrinfo")+"/fngetconceptreport1-service";
+             var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.fromdate=localStorage.getItem("localsess_fromreport_service");
+           obj.todate=localStorage.getItem("localsess_toreport_service");
+
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+           obj.subjectid=subjectid;
+           obj.gradeid=gradeid;
+           obj.termid=termid;
+           
+           this.fngetevalutionsectionparam=obj;
+          // alert(JSON.stringify(obj));
+           this.$.fngetevalutionsectionajax.generateRequest();
+        },
+        fngetevalutionsectionResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+         
+           var temparr=[];
+          for(var i=0;i<res.length;i++)
+          {
+            var obj={};
+ 
+                obj.emp_name=res[i].emp_name;
+                obj.emp_id=res[i].emp_id;
+                obj.chapter=res[i].chapter_name;
+                obj.section=res[i].section_name;
+                obj.concept=res[i].concept_name;
+                obj.sub_concept_id=res[i].sub_concept_id;
+                obj.sub_concept_id=res[i].sub_concept_id;
+                obj.sub_concept_name=res[i].sub_concept_name;
+                obj.skill=res[i].skill;
+                obj.value=res[i].value;
+                obj.innovation=res[i].innovation;
+                obj.planned_date_from=res[i].planned_date_from;
+                obj.planned_to_date=res[i].planned_to_date;
+                obj.completion_date=res[i].completion_date;
+                obj.correction_status=res[i].correction_status;
+                obj.remark=res[i].remarks;
+                obj.enrichment_sug=res[i].enrichment_sug;
+                obj.bld_value_name=res[i].bld_value_name;
+                obj.teaching_aid=res[i].teaching_aid;
+                obj.co_ordinator_remarks=res[i].co_ordinator_remarks;
+                obj.completion_status=res[i].completion_status;
+                var a=i+1;
+                obj.sno=a;
+                temparr.push(obj);
+            }
+      document.querySelector('evaluation-report-card').getreportarr=temparr;
+
+        },
+     
+         fnsetrejectbooksubject:function(gradeid,gradename)
+         {
+            this.fnsetrejectbooksubjecturl=sessionStorage.getItem("addrinfo")+"/bookrefsubject-service";
+
+             var obj={"school_id":"","gradeid":"","gradename":"","academic_year":""};
+              obj.gradeid=gradeid;
+              obj.gradename=gradename;
+              obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+              obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+              this.fnsetrejectbooksubjectparam=obj;
+            this.$.fnsetrejectbooksubjectajax.generateRequest();
+        },
+        fnsetrejectbooksubjectResponse:function(e)
+        {
+            var res=e.detail.response.returnval;
+            document.querySelector('incomplete-chapter-report').chaptersssubjectarr=res;
+        },
+        
+        fnsetrejectbooksubject1:function(gradeid,gradename)
+         {
+            this.fnsetrejectbooksubject1url=sessionStorage.getItem("addrinfo")+"/bookrefsubject-service";
+
+             var obj={"school_id":"","gradeid":"","gradename":"","academic_year":""};
+              obj.gradeid=gradeid;
+              obj.gradename=gradename;
+              obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+              obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+              this.fnsetrejectbooksubject1param=obj;
+            this.$.fnsetrejectbooksubject1ajax.generateRequest();
+        },
+        fnsetrejectbooksubject1Response:function(e)
+        {
+            var res=e.detail.response.returnval;
+            document.querySelector('evaluation-report-card').chapterevlsubjectarr=res;
+        },
+    getcurriculamdetails:function(gradeid,subjectid)
+        {
+           this.fngetreporturl=sessionStorage.getItem("addrinfo")+"/fngetcurriculam-service";
+           var obj={};
+       obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+    obj.fromdate=localStorage.getItem("localsess_fromreport_service");
+obj.todate=localStorage.getItem("localsess_toreport_service");
+obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+           obj.gradeid=gradeid;
+           obj.subjectid=subjectid;
+           this.fngetreportparam=obj;
+           this.$.fngetreportajax.generateRequest();
+        },
+
+        fngetreportResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+          var chapterarr=[];
+
+          for(var i=0;i<res.length;i++){
+            res[i].sno=i+1;
+          }
+
+          document.querySelector('curriculam-report').fullreport=false;
+          document.querySelector('curriculam-report').fullreportarr=res;      
+        },
+        fnsubconceptsave:function(conceptid,subconceptid,subconceptname,capterid)
+        {
+            this.fnsubconceptsaveurl=sessionStorage.getItem("addrinfo")+"/fnsubconceptsave-service";
+            var obj={"capterid":"","subconceptname":"","concept_id":"","sub_concept_id":""};
+              obj.capterid=capterid;
+              obj.concept_id=conceptid;
+              obj.subconceptname=subconceptname;
+              obj.sub_concept_id=subconceptid;
+              this.fnsubconceptsaveparam=obj;
+            //alert(JSON.stringify(obj));
+              this.$.fnsubconceptsaveajax.generateRequest();
+      },
+      fnsubconceptsaveResponse:function(e)
+      {
+           var res=e.detail.response.returnval;
+            //alert(JSON.stringify(res));
+            if(res=='Updated')
+            {
+                alert('Updated');
+                //this.conceptseq(); 
+                this.fnbooksubconceptedit(); 
+            }    
+      },
+
+      fninnovategrade:function()
+      {
+        this.fninnovategradeurl=sessionStorage.getItem("addrinfo")+"/fninnovategrade-service";
+            var obj={"schoolid":"","academic_year":"","roleid":"","emp_id":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+           obj.emp_id=sessionStorage.getItem("curr_sess_loggedid");
+           this.fninnovategradeparam=obj;
+           //alert(JSON.stringify(obj));
+           this.$.fninnovategradeajax.generateRequest();
+      },
+      fninnovategradeResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+        document.querySelector('innovation-report').innovationgradearr=res;
+              },
+fnselectinnovatesubject:function(gradeid,gradename)
+         {
+
+    this.fnselectinnovatesubjecturl=sessionStorage.getItem("addrinfo")+"/   innovatechapsubject-service";
+             var obj={"school_id":"","gradeid":"","gradename":"","academic_year":""};
+
+              obj.gradeid=gradeid;
+              obj.gradename=gradename;
+              obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+              obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+              this.fnselectinnovatesubjectparam=obj;
+              //alert(JSON.stringify(obj));
+            this.$.fnselectinnovatesubjectajax.generateRequest();
+        },
+         fnselectinnovatesubjectResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+          //alert(JSON.stringify(res));
+          document.querySelector('innovation-report').innovationsubjectarr=res;
+        },
+        fngetchapterinnvt:function(gradeid,subjectid,termid)
+        {
+            this.fngetchapterinnvturl=sessionStorage.getItem("addrinfo")+"/fetchchapterinnovate-service";
+            var obj={"schoolid":"","academic_year":""};
+             obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+             obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+             obj.subjectid=subjectid;
+             obj.gradeid=gradeid;
+             obj.termid=termid;
+             this.fngetchapterinnvtparam=obj;
+             this.$.fngetchapterinnvtajax.generateRequest();
+        },
+        fngetchapterinnvtResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+           //alert(JSON.stringify(res));
+          document.querySelector('innovation-report').innovatechapterarr=res;  
+        },
+        getinnovationdetails:function(gradeid,subjectid,termid,capterid)
+        {
+            this.getinnovationdeturl=sessionStorage.getItem("addrinfo")+"/fngetchapterinnvt-service";
+            var obj={"schoolid":"","academic_year":""};
+             obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+             obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+             obj.subjectid=subjectid;
+             obj.gradeid=gradeid;
+             obj.termid=termid;
+             obj.capterid=capterid;
+             this.getinnovationdetparam=obj;
+             //alert(JSON.stringify(obj));
+             this.$.getinnovationdetajax.generateRequest();
+        },
+
+        getinnovationdetResponse:function(e)
+        {
+            var res=e.detail.response.returnval;
+            //alert(JSON.stringify(res));
+            var temparr2=[];
+            for(var i=0;i<res.length;i++)
+            {
+                if(res[i].innovation==""||res[i].innovation==null)
+                {
+                    var obj={}
+                    obj.emp_name=res[i].emp_name;
+                    obj.section_name=res[i].section_name;
+                    obj.concept_name=res[i].concept_name;
+                    obj.sub_concept_name=res[i].sub_concept_name;
+                    obj.period=res[i].period;
+                    obj.planned_date_from=res[i].planned_date_from;
+                    obj.planned_to_date=res[i].planned_to_date;
+                    obj.skill=res[i].skill;
+                    obj.value=res[i].value;
+                    obj.lr_rectification=res[i].lr_rectification;
+                    obj.remarks=res[i].remarks;
+                    obj.completion_status=res[i].completion_status;
+                    obj.correction_status=res[i].correction_status;
+                    obj.teaching_aid=res[i].teaching_aid;
+                    obj.bld_value_name=res[i].bld_value_name;
+                    obj.enrichment_sug=res[i].enrichment_sug;
+                    obj.completion_date=res[i].completion_date;
+                    obj.co_ordinator_remarks=res[i].co_ordinator_remarks;
+                    var n=i+1;
+                    obj.snum=n;
+                    //alert(JSON.stringify(obj));
+                    temparr2.push(obj);
+                }
+                
+            }
+            //alert(JSON.stringify(temparr2));
+            
+            document.querySelector('innovation-report').innovatearr=temparr2;
+        }
+    });
+  })();
+  </script>
+</dom-module>

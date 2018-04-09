@@ -1,0 +1,39 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-bookissue-card">
+  <template>
+    <style>
+      .card{
+        @apply(--layout-vertical);
+        /*@apply(--layout-center-justified);*/
+        /*width: 25%;*/
+        margin-left: 10%;
+        margin-top: 20%
+      }
+      enrichment-bookissue-itemcard{
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+        /*width: 200%;*/
+        /*margin-left: 3%;*/
+        margin-top: 5%;
+        height: 40%;
+      }
+    </style>
+    <div class="card">
+      <template is="dom-repeat" items="{{levelarr}}">
+        <enrichment-bookissue-itemcard grade="{{item.grade}}" category="{{item.category}}"></enrichment-bookissue-itemcard>
+        <hr>
+      </template>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'enrichment-bookissue-card',
+
+    });
+  })();
+  </script>
+</dom-module>

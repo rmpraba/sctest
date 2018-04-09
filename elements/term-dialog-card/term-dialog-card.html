@@ -1,0 +1,49 @@
+<link rel="import" href="../term-creation-card/term-creation-card.html">
+<link rel="import" href="../assesment-creation-card/assesment-creation-card.html">
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="term-dialog-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+       #termdialogid{
+      width: 20%;
+      border-radius: 25px;
+    }
+     
+    </style>
+  <div> 
+    <paper-dialog id="termdialogid">
+       <h3 style="color:#0E6251;"><center>{{getindialogvalu}}</center></h3>
+       <center>
+         <paper-button on-click="failureclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>  
+  </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'term-dialog-card',
+
+    Termdialog:function(argvalue)
+     {
+     // alert(argvalue);
+       this.getindialogvalu=argvalue;
+       this.$.termdialogid.toggle();
+     },
+     failureclose:function()
+      {
+      this.$.termdialogid.close();
+        this.getindialogvalu="";
+      },
+
+   
+    });
+  })();
+  </script>
+</dom-module>

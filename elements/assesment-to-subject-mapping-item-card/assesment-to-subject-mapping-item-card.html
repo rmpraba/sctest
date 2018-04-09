@@ -1,0 +1,80 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<dom-module id="assesment-to-subject-mapping-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-checkbox.paper-checkbox-0
+      { 
+      
+         font-family: 'Roboto', 'Noto', sans-serif;
+         -webkit-font-smoothing: antialiased;
+         padding-top:1%;
+
+     }
+     .paperbox{
+        --paper-checkbox-size: 20px;
+     }
+    </style>
+     <div>
+          <p hidden>{{schooltypename}}</p>
+          <p hidden>{{schooltypeid}}</p>
+          <paper-checkbox id="{{id}}" class="paperbox"  checked="{{check}}" on-change="fnchange">{{schooltypename}}</paper-checkbox>
+    </div>
+    <master-term-mapping-ui-service id="masteruiservice"></master-term-mapping-ui-service>
+    </template>
+  <script>
+  (function() {
+    'use strict';
+   var scholtypearr=[];
+    Polymer({
+      is: 'assesment-to-subject-mapping-item-card',
+      fnchange:function(e){
+document.querySelector('assesment-to-subject-mapping-card').hideassmentinfogradeid3=true;
+var c=[];
+document.querySelector('assesment-to-subject-mapping-card').assesmentarr=c;
+document.querySelector('assesment-to-subject-mapping-card').hideassmentinfosubid1=true;
+
+       if(scholtypearr!=0){
+      document.querySelector("assesment-to-subject-grade-card").fnrefresh();
+
+       var c=[];
+      document.querySelector('assesment-to-subject-mapping-card').subjectarr=c;
+      document.querySelector('assesment-to-subject-mapping-card').fnset();
+       }
+  if(document.querySelector('#'+this.id).checked==true){
+        localStorage.setItem("curr_sess_schooltype",this.schooltypeid);  
+           this.$.masteruiservice.fngetassesment(this.schooltypeid,this.schooltypename);
+            var obj={};
+                obj.id=this.id;
+                scholtypearr.push(obj);
+           for(var i=0;i<scholtypearr.length;i++){
+              if(scholtypearr[i].id!=this.id){
+                var c=scholtypearr[i].id;
+                document.querySelector('#'+c).checked=false;
+              }
+          }
+      document.querySelector('assesment-to-subject-mapping-card').clear();
+       }
+      else if(document.querySelector('#'+this.id).checked==false){
+
+for(var i=0;i<scholtypearr.length;i++){
+       if(scholtypearr[i].id!=this.id){
+     scholtypearr.splice(i,1)
+       }}
+
+
+       }
+      },
+      ref:function(){
+         for(var i=0;i<scholtypearr.length;i++){
+             var c=scholtypearr[i].id;
+                document.querySelector('#'+c).checked=false;
+              }
+       },
+    });
+  })();
+  </script>
+</dom-module>

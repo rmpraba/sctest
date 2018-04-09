@@ -1,0 +1,39 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-item-expandcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .indrop{
+        @apply(--layout-vertical);
+      }
+      assesment-performance-item-card{
+        width: 300px;
+        margin-top: 2%;
+        /*margin-bottom: 1%;*/
+      }
+      .incard{
+        @apply(--layout-horizontal);
+      }
+      paper-button{
+        text-align: right;
+      }
+    </style>
+    <div class="indrop">
+        <h4>Subject Name: {{subject}}</h4>  
+        <assesment-performance-item-card categoryarr="{{categoryarr}}"></assesment-performance-item-card>        
+    </div>
+    <performance-report-service id="performancereportservice"></performance-report-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-item-expandcard',
+    });
+  })();
+  </script>
+</dom-module>

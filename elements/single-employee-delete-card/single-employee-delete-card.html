@@ -1,0 +1,75 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="single-employee-delete-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      } 
+       .card
+      {
+        @apply(--layout-horizontal);
+      }
+      p
+      {
+        width: 20%;
+      }
+    </style>
+  <div class="card">
+  
+          <p hidden>{{classid}}</p>
+          <p hidden>{{gradeid}}</p>
+          <p hidden>{{subjectid}}</p>
+          <p hidden>{{empidz}}</p>
+
+          <p>{{gradename}}</p>
+          <p style="margin-left: 19%;">{{subjectname}}</p>
+          <p style="margin-left: 18%;">{{sectionname}}</p>
+          <p style="margin-left: 18%;"><paper-icon-button icon="delete" on-click="fndeletion"></paper-icon-button></p>
+  </div>
+  </div>
+     <iron-ajax
+        method="post"
+        id="fnsetsingledeleteemployeeajax"
+        url="{{fnsetsingledeleteemployeeurl}}"
+        params="{{fnsetsingledeleteemployeeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetsingledeleteemployeeResponse"
+        debounce-duration="300">
+      </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'single-employee-delete-card',
+
+    fndeletion:function(e){
+//alert(this.classid+this.subjectid+this.empidz+this.gradeid);
+      this.fnsetsingledeleteemployeeurl=sessionStorage.getItem("addrinfo")+"/fnsetsingledeleteemployee-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj.gradeid=this.gradeid;
+      obj.subjectid=this.subjectid;
+      obj.empidz=this.empidz;
+      obj.classid=this.classid;
+     // alert(JSON.stringify(obj)); 
+      this.fnsetsingledeleteemployeeparam=obj;
+      this.$.fnsetsingledeleteemployeeajax.generateRequest();
+     
+     },
+    fnsetsingledeleteemployeeResponse:function(e){
+       var res=e.detail.response.returnval;
+       //alert(JSON.stringify(res));
+    document.querySelector('single-staff-mapping-card').fnsetvaluez();
+
+    }
+    });
+  })();
+  </script>
+</dom-module>

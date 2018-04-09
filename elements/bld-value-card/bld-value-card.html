@@ -1,0 +1,92 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/value-card/value-card.html">
+
+<dom-module id="bld-value-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .skillcard
+      {
+        @apply(--layout-horizontal);
+      }
+    </style>
+
+    <div class="skillcard">
+        <paper-input value={{bldvalueid}} hidden></paper-input>
+        <paper-input value={{bldvaluename}} hidden></paper-input>
+       
+    <paper-checkbox on-change="fnsezzt1" id={{id}} checked="{{check}}">{{bldvaluename}}</paper-checkbox></div>
+  
+  </template>
+  <script>
+  (function() {
+    'use strict';
+ var bldarrr=[];
+ var temparr1=[];
+ 
+    Polymer({
+      is: 'bld-value-card',
+
+  fnsezzt1:function(e){  
+   //alert(this.id);
+   //alert(document.querySelector('#'+this.id).checked);
+
+document.querySelector('aproval-book-innovatiosn-item-card').bldedit();
+
+      if(document.querySelector('#'+this.id).checked==true){
+        var obj={};
+        obj.id=this.id;
+        obj.rowid=this.rowid;
+        obj.bldvalueid=this.bldvalueid;
+        obj.bldvaluename=this.bldvaluename;
+        if(bldarrr.length==0)
+        bldarrr.push(obj);
+        else{
+          var f=0;
+          for(var i=0;i<bldarrr.length;i++){
+   if(bldarrr[i].id==this.id&&bldarrr[i].bldvalueid==this.bldvalueid&&bldarrr[i].rowid==this.rowid){
+            f=1;
+            }
+          }
+          if(f==0)
+            bldarrr.push(obj);
+        }
+      }
+      if(document.querySelector('#'+this.id).checked==false){
+          for(var i=0;i<bldarrr.length;i++){
+   if(bldarrr[i].id==this.id&&bldarrr[i].bldvalueid==this.bldvalueid&&bldarrr[i].rowid==this.rowid){
+            bldarrr.splice(i,1);
+            }
+          }
+      }
+ document.querySelector('aproval-book-innovatiosn-item-card').fnpassbld(bldarrr);
+     
+       },
+       fnclean1:function(e){
+         var obj={};
+         bldarrr.splice(obj);
+         temparr1.splice(obj);
+       },
+
+       fnRefreshjjjzzz:function(e)
+       {
+        if(bldarrr!=0)
+        {
+          for(var k=0;k<bldarrr.length;k++)
+          {
+            var skld=bldarrr[k].id;
+            document.querySelector('#'+skld).checked=false;
+            bldarrr.splice(k,1);
+          }
+        }
+       },
+       bldvalu:function(e){
+      bldarrr=e;
+       },
+   }); 
+  })();
+  </script>
+</dom-module>

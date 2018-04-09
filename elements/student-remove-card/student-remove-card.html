@@ -1,0 +1,344 @@
+
+ <link rel="import" href="../student-information-card/student-information-card.html">  
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-remove-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+       } 
+   .horizontalframe
+      {
+         @apply(--layout-horizontal);
+         display: flex;
+         margin-left: 14%;
+      }
+      .horizontalframe .field paper-input
+       {
+         width: 90%;
+       }
+       #studinfo
+       {
+          width: 40%;
+          height: 250px;
+          text-align: center;
+          border:2px solid black;
+
+         /*display: inline-block;
+          @apply(--layout-center);
+          border-radius: 2px;
+          box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+          padding:5px;*/
+
+          margin-left: 28%;
+          margin-top: 5%;
+       }
+       /*#studrmv
+       {
+        width: 50%;
+        border:2px solid black;
+       }*/
+    </style>
+      <div class="student" id="studrmv" hidden$="{{hideonestudentinfo}}">
+            <paper-input label="Enter Student Name" is="" value="{{value}}" on-keydown="FnSearchstudname"></paper-input>
+              <paper-listbox class="dropdown-content" id="studentslist" on-iron-select="FnSelectstudenq">
+                <template is="dom-repeat" items="{{itemArray}}" as="item">
+                  <paper-item value="{{item.itemid}}">{{item.itemdes}}</paper-item>
+                </template>
+              </paper-listbox>
+     </div>
+   
+    <div class="student" id="studrmv" hidden$="{{hidetwostudentinfo}}">
+            <paper-input label="Enter Student Name" is="" value="{{value}}" on-keydown="FnSearchstudname1"></paper-input>
+   <paper-listbox class="dropdown-content" id="{{studentslist}}" on-iron-select="FnSelectstudenq1">
+                <template is="dom-repeat" items="{{itemArray}}" as="item">
+                  <paper-item value="{{item.itemid}}">{{item.itemdes}}</paper-item>
+                </template>
+              </paper-listbox>
+          </div>
+
+          <div class="removecls" id="studinfo" hidden$="{{hideremovecls}}">
+            <div class="horizontalframe">
+              <div class="field">
+                <paper-input readonly value="{{studid}}"></paper-input>
+              </div>
+              <div class="field">
+       <paper-input readonly value="{{grade}}" on-change="fngetterm"></paper-input>
+                <paper-item hidden>{{gradeid}}</paper-item>
+              </div>
+            </div>
+
+            <div class="horizontalframe">
+              <div class="field">
+                <paper-input readonly value="{{section}}"></paper-input>
+                <paper-item hidden>{{classid}}</paper-item>
+              </div>
+
+              <div class="field">
+                <paper-dropdown-menu id="term" label="Select Term">
+                  <paper-menu id="studtermremvid" class="dropdown-content"   on-iron-select="fntermstud" attr-for-selected="value" required>
+                  <template is="dom-repeat" items="{{termarr}}" as="item">
+                  <paper-item value="{{item.term_name}}">{{item.term_name}}</paper-item>
+                  </template>
+                  </paper-menu>
+              </paper-dropdown-menu>
+              </div>
+            </div>
+
+            <div class="horizontalframe" style="margin-top: 5%;margin-left: 40%">
+              <span>
+                <paper-button id="btn" on-click="fnstuddelete" style="color:white;background-color:black;">Delete</paper-button>
+              </span>
+
+            </div>
+          </div>
+  <paper-dialog id="emplyspinisz" modal>
+  <paper-spinner id="empspinneridz"></paper-spinner>
+  </paper-dialog>
+  <student-add-service id="studservice"></student-add-service>
+  <term-assesment-service id="assesmentservice"></term-assesment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var studentnamearr=[];
+    Polymer({
+      is: 'student-remove-card',
+    ready:function()
+      {
+        this.hideremovecls=true;
+      },
+ getstudentdet:function(arr)
+     {
+        studentnamearr=arr;
+     },
+   FnfullRefresh:function(e){
+   this.hideonestudentinfo=false;
+   this.hidetwostudentinfo=true;
+    },
+ FnSearchstudname:function(e)
+     {
+  if(e.keyCode==13|| e.keyCode==40)
+            this.querySelector('#studentslist').focus();
+      var arr=[];
+          arr.push({"itemdes":"-----Select-----"});
+          this.querySelector('#studentslist').style.visibility='visible';
+          if(e.keyCode==8){
+            this.itemflag="true";
+            this.itemval="";
+            //alert('yes');
+            var len=(this.value).length;
+            if(len<=1){
+              this.querySelector('#studentslist').style.visibility='hidden';
+              this.itemArray="";
+              this.itemval="";
+            }
+            if(len>1){   
+       this.querySelector('#studentslist').style.visibility='visible';
+              var backsubval=(((this.value).substring(0,(len-1))).trim()).toUpperCase();
+              for(var i=0;i<studentnamearr.length;i++)
+              {
+                var subval=((studentnamearr[i].student_name).trim()).substring(0,backsubval.length);
+                if((subval).toUpperCase()==(backsubval).toUpperCase())
+                {
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                }
+              }
+              this.itemArray=arr;
+            }
+          }
+          if(e.keyCode!=8&& e.keyCode!=16&& e.keyCode!=13 && e.keyCode!=38&&e.keyCode!=40&&e.keyCode!=37&&e.keyCode!=39){
+            if(this.itemflag=="true") {
+              this.itemval = (this.value).toUpperCase()+String.fromCharCode((e.keyCode)).toUpperCase();
+              this.itemflag="false";
+            }
+            else
+            this.itemval = this.value +String.fromCharCode((e.keyCode));
+            if(this.itemval.length>0)
+            {
+              for(var i=0;i<studentnamearr.length;i++){
+                var subval=((studentnamearr[i].student_name).trim()).substring(0,this.itemval.length);
+                if((subval).toUpperCase()==(this.itemval).toUpperCase()){
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                }
+              }
+              if(arr.length>0)
+                this.itemArray=arr;
+              else {
+                var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                this.itemArray=arr;
+              }
+            } }
+          
+         
+        },
+
+ FnSearchstudname1:function(e)
+     {
+         
+       if(e.keyCode==13|| e.keyCode==40)
+            this.querySelector('#'+this.studentslist).focus();
+          var arr=[];
+          arr.push({"itemdes":"-----Select-----"});
+          this.querySelector('#'+this.studentslist).style.visibility='visible';
+          if(e.keyCode==8){
+            this.itemflag="true";
+            this.itemval="";
+            //alert('yes');
+            var len=(this.value).length;
+            if(len<=1){
+      this.querySelector('#'+this.studentslist).style.visibility='hidden';
+      this.itemArray="";
+      this.itemval="";
+            }
+            if(len>1){   
+      this.querySelector('#'+this.studentslist).style.visibility='visible';
+              var backsubval=(((this.value).substring(0,(len-1))).trim()).toUpperCase();
+              for(var i=0;i<studentnamearr.length;i++)
+              {
+              var subval=((studentnamearr[i].student_name).trim()).substring(0,backsubval.length);
+                if((subval).toUpperCase()==(backsubval).toUpperCase())
+                {
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                }
+              }
+              this.itemArray=arr;
+            }
+          }
+          if(e.keyCode!=8&& e.keyCode!=16&& e.keyCode!=13 && e.keyCode!=38&&e.keyCode!=40&&e.keyCode!=37&&e.keyCode!=39){
+            if(this.itemflag=="true") {
+              this.itemval = (this.value).toUpperCase()+String.fromCharCode((e.keyCode)).toUpperCase();
+              this.itemflag="false";
+            }
+            else
+            this.itemval = this.value +String.fromCharCode((e.keyCode));
+            if(this.itemval.length>0)
+            {
+              for(var i=0;i<studentnamearr.length;i++){
+                var subval=((studentnamearr[i].student_name).trim()).substring(0,this.itemval.length);
+                if((subval).toUpperCase()==(this.itemval).toUpperCase()){
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                }
+              }
+              if(arr.length>0)
+                this.itemArray=arr;
+              else {
+                var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                this.itemArray=arr;
+              }
+            } }
+          
+         
+        },
+
+        FnSelectstudenq:function(e)
+        {
+          this.querySelector('#studentslist').style.visibility='hidden';
+          this.value=e.target.selectedItem.textContent.trim();
+          this.studentid=e.target.selectedItem.value;
+           //alert(this.value+this.studentid);
+          this.itemArray=[];
+         document.querySelector('#studentslist').selected=-1;
+          this.$.studservice.prestudentremovedet(this.studentid);
+          this.studid=this.studentid;
+          this.hideremovecls=false;
+        },
+        FnSelectstudenq1:function(e)
+        {
+          this.querySelector('#'+this.studentslist).style.visibility='hidden';
+          this.value=e.target.selectedItem.textContent.trim();
+          this.studentid=e.target.selectedItem.value;
+           //alert(this.value+this.studentid);
+          this.itemArray=[];
+         document.querySelector('#'+this.studentslist).selected=-1;
+          this.$.studservice.prestudentremovedet(this.studentid);
+            // this.$.studservice.getalltermmarks(this.studentid);
+            this.$.assesmentservice.callTermService("Term");
+          this.studid=this.studentid;
+          this.hideremovecls=false;
+        },
+        fngetterm:function(e){
+        this.$.studservice.getalltermmarks(this.studentid,this.gradeid);
+       
+        },
+        fntermstud:function(e)
+        {
+          this.tremname=e.target.selectedItem.textContent.trim();
+        },
+
+        fnstuddelete:function()
+        {
+         if(this.grade=="" || this.studid==""|| this.section=="" ||this.tremname==""){
+          alert("Please Select the student");
+         }
+         else{
+
+            if(this.grade=="Nursery" ||this.grade=="Junior KG" || this.grade=="Senior KG" || this.grade=="Grade-1" || this.grade=="Grade-2" ||this.grade=="Grade-3" || this.grade=="Grade-4" ){
+         this.$.studservice.deletestudentinfo(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname,this.value);
+       // this.$.studservice.deletestudtermmarks(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname);
+       //    this.$.studservice.flagupdatestud(this.studentid,this.grade);
+       //    this.$.studservice.fetchstudentinfo();
+
+          this.fnrefremve();
+          this.openspinr();
+         }
+         else{
+          this.$.studservice.deletestudentinfo(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname,this.value,0);
+          // this.$.studservice.deletestudtermmarks1(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname);
+          //  this.$.studservice.flagupdatestud(this.studentid,this.grade,this.value);
+          // this.$.studservice.fetchstudentinfo();
+
+          this.fnrefremve();
+          this.openspinr();
+        }}},
+        recall:function(e){
+         this.$.studservice.fetchstudentinfo();
+         this.$.studservice.fetchstudentremove();
+         this.clsspiner();
+        },
+    fnrefremve:function()
+    {
+        this.value="";
+        this.studid="";
+        this.gradeid="";
+        this.section="";
+        this.grade="";
+        this.tremname="";
+        document.querySelector('#studentslist').selected=-1;
+        document.querySelector('#studtermremvid').selected=-1;
+        this.hideremovecls=true;
+    },
+     clsspiner:function()
+      {
+          this.$.empspinneridz.active=false;
+          document.querySelector('#emplyspinisz').close();
+      },
+      openspinr:function()
+      {
+          document.querySelector('#emplyspinisz').open();
+          this.$.empspinneridz.active=true;
+      }
+
+    });
+  })();
+  </script>
+</dom-module>

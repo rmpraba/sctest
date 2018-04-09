@@ -1,0 +1,53 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-bookactivity-mapcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>
+      <paper-checkbox id="{{bookid}}" value="" on-change="FnSelect">{{bookname}}</paper-checkbox>
+      <br>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var arr=[];
+    Polymer({
+      is: 'enrichment-bookactivity-mapcard',
+      FnSelect:function(e){
+        if(document.querySelector('#'+this.bookid).checked==true){
+          if(arr.length==0){
+            arr.push({'bookid':this.bookid,'bookname':this.bookname});
+          }
+          else{
+            var t=0;
+            for(var i=0;i<arr.length;i++){
+              if(arr[i].bookid==this.bookid){
+                t=1;
+                arr.splice(i,1);
+                i--;
+              }
+            }
+            if(t==0)
+              arr.push({'bookid':this.bookid,'bookname':this.bookname});
+          }
+        }
+        else{
+          for(var i=0;i<arr.length;i++){
+              if(arr[i].bookid==this.bookid){
+                arr.splice(i,1);
+                i--;
+              }
+          }
+        }
+        document.querySelector('enrichment-assignment-card').FnSetSelectedBooks(arr);
+      }
+    });
+  })();
+  </script>
+</dom-module>

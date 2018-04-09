@@ -1,0 +1,161 @@
+
+   
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="skill-capturing-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }  
+       table
+      {   table-layout: fixed;
+          width: 1314px;;    
+          border-collapse: collapse;
+          margin-left: -1%;
+          margin-top: 0%;
+        }
+
+    </style>
+
+      <paper-input value={{captheadid}} hidden></paper-input>
+      <paper-input value={{conceptid}} hidden></paper-input>
+
+      <paper-input value={{subflag}} hidden></paper-input>
+      <table border="1">
+        <!-- <tr style="border-bottom: 1px solid #ccc; line-height: 1.8em;border-color:#6699ff"> -->
+        <tr>
+
+      <paper-input value={{skiluid}} hidden></paper-input>
+      <paper-input value={{subuid}} hidden></paper-input>
+      <paper-input value={{conuid}} hidden></paper-input>
+      <paper-input value={{valuuid}} hidden></paper-input>
+      <paper-input value={{subconceptid}} hidden></paper-input>
+
+      <table border="0">
+        <tr style="border-bottom: 1px solid #ccc; line-height: 1.8em;border-color:#6699ff">
+
+              <td hidden>{{empid}}</td>
+              <td style="width: 9.7%;">{{concept}}</td>
+              <td style="width: 7.8%;">{{subconceptname}}</td>
+              <td style="width: 4.46%;">{{period}}</td>
+              <td style="width: 7.6%;">
+              <template is="dom-repeat" items="{{skillarr}}" as="sr">
+               {{sr.skillname}},
+              </template>
+              </td>
+              <td style="width: 7.6%;">
+                <template is="dom-repeat" items="{{mainarr}}" as="st">
+                  {{st.valuename}},
+                </template>
+              </td>
+              <td style="padding-left: 2%;width: 7.6%;">{{innovation}}</td> 
+              <td style="width: 7.6%;">{{planneddate}}</td>
+              <td style="width: 7.6%;">
+                <div>{{completiondate}}</div>
+                  <complection-date-picker-card hidden$="{{hidecheck}}"></complection-date-picker-card>
+             </td>
+
+              <td style="width: 7.6%;">{{remark}}</td>
+              <td style="width: 7.6%;">{{lrrectife}}</td>
+              <td style="width: 7.6%;">{{Correction}}</td>
+              <td style="width: 7.6%;">
+
+              <div>{{enrichmentsug}}</div>
+               <paper-input value={{enrichmentsuggest}} hidden$="{{hidecheck}}"></paper-input>
+              </td>
+              <td style="padding-left: 2%;">
+                   <div>{{completion}}</div>
+                  <div hidden$="{{hidecheck}}" >
+                        <paper-checkbox  id={{id}} on-change="fnsetyes" checked>Yes</paper-checkbox></br>
+                     <paper-checkbox id={{idz}} on-change="fnsetno">No</paper-checkbox>
+                    
+                  </div>
+              </td>
+              <td style="width: 2.8%">
+               <div hidden$="{{hidecheck}}"><paper-icon-button  on-click="fnaroveset" icon="save"></paper-icon-button>
+               </div>
+              </td>
+        </tr>
+      </table>
+     <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+
+  </template>
+  <script>
+  (function(){
+    'use strict';
+var skillid;
+var val=[];
+var costatus;
+
+    Polymer({
+      is: 'skill-capturing-card',
+  
+    fnaroveset:function(e)
+    {
+     //  alert("1")
+    
+           if(costatus==""||costatus==null)
+           {
+                  costatus='yes';
+             /* alert(this.empid+" "+this.skill+" "+this.innovation+" "+this.enrichmentsuggest+" "+this.period+" "+this.planneddate+" "+this.concept+" "+this.conceptid+" "+this.remark+" "+this.mainarr); */
+     alert(this.Correction);
+
+      
+      this.$.bookservice.fnfinalbookskill(this.skillarr,costatus,this.empid,this.period,this.planneddate,this.skiluid,this.rowidz,this.subuid);
+      this.$.bookservice.fnfinalbookvalue(this.mainarr,costatus,this.empid,this.period,this.planneddate,this.valuuid,this.rowidz,this.subuid);
+   this.$.bookservice.fnfinalbook(costatus,this.empid,this.innovation,this.enrichmentsuggest,this.period,this.planneddate,this.concept,this.conceptid,this.remark,this.rowidz,this.subconceptname,this.subconceptid,this.subuid,this.conuid,this.Correction,this.lrrectife);
+    document.querySelector('aproval-save-and-edit-book-card').splices();
+                      costatus="";
+                  costatus=null;
+           }
+           else
+           {
+            /*   alert(this.empid+" "+this.skill+" "+this.innovation+" "+this.enrichmentsuggest+" "+this.period+" "+this.planneddate+" "+this.concept+" "+this.conceptid+" "+this.remark+" "+this.mainarr);
+*/
+      alert(this.Correction);       
+      this.$.bookservice.fnfinalbookskill(this.skillarr,costatus,this.empid,this.period,this.planneddate,this.skiluid,this.rowidz,this.subuid);
+      this.$.bookservice.fnfinalbookvalue(this.mainarr,costatus,this.empid,this.period,this.planneddate,this.valuuid,this.rowidz,this.subuid);
+    this.$.bookservice.fnfinalbook(costatus,this.empid,this.innovation,this.enrichmentsuggest,this.period,this.planneddate,this.concept,this.conceptid,this.remark,this.rowidz,this.subconceptname,this.subconceptid,this.subuid,this.conuid,this.Correction,this.lrrectife);
+    document.querySelector('aproval-save-and-edit-book-card').splices();
+                      costatus="";
+                  
+                costatus="";
+                costatus=null;
+            }
+
+
+               costatus="";
+               costatus=null;
+               //id.checked=false;
+               //idz.checked=false;
+      },
+    fnsetyes:function(e){
+     // alert(this.id);
+      //alert(document.querySelector('#'+this.id).checked);
+ if(document.querySelector('#'+this.id).checked==true){
+             costatus='Yes';
+     document.querySelector('#'+this.idz).checked=false;
+      
+           }
+    },
+    fnsetno:function(e)
+    {
+      // alert(this.id);
+
+      if(document.querySelector('#'+this.idz).checked==true)
+      {
+                   costatus='No';
+           document.querySelector('#'+this.id).checked=false;
+            
+      }
+  
+    },
+
+   
+
+    
+ });
+  })();
+  </script>
+</dom-module>

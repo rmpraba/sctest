@@ -1,0 +1,355 @@
+
+  
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<dom-module id="single-staff-mapping-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+        
+      
+   .content{
+     border:2px solid black;  width: 100%;
+     height:50%;
+    }  
+    .newcontent
+    {
+      @apply(--layout-horizontal);
+      border: 0px solid black;
+      width: 70%;
+      height: 356px;
+      margin-left: 14%;
+      margin-top: -1%;
+    }
+    .new{
+      border: 0px solid black;
+      width: 90%;
+      height: 199px;
+      margin-left: 13%;
+      margin-top: 3%;
+    }
+    .newwww
+    {
+      border: 0px solid black;
+      width: 90%;
+      height: 199px;
+      margin-left: 4%;
+      margin-top: 3%;
+    }
+    .subcard
+    {
+      @apply(--layout-vertical);
+      width: 28%;
+      height: 68%;
+      margin-left: -15%;
+      margin-top: 8%;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+     .grdcard
+    {
+       @apply(--layout-vertical);
+      width: 11%;
+      height: 36%;
+      margin-left: 10%;
+      margin-top: 8%;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      
+    }
+    .sectcard
+    {
+       @apply(--layout-vertical);
+       width: 14%;
+      height: 35%;
+      margin-left: 26%;
+      margin-top: 8% !important;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+    #itemcard:nth-child(odd) {
+        background-color: white;
+       
+      }
+      #itemcard:nth-child(even) {
+        background-color:  #d1d1e0;
+      }
+      #itemcard{
+        margin-left: 7%;
+        width: 93%;
+      }
+      .fulldiv
+      {
+         @apply(--layout-vertical);
+         border: 2px solid #48b8f5;
+         width: 70%;
+        height: 691px;
+        margin-left: 16%;
+        margin-top: 4%;
+      }
+      .tabldivr
+      {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        width: 85%;
+        height: 79%;
+      }
+  .colapsinfo{
+      margin-left: 25%;
+
+  }
+    </style>
+    <div>
+      <center>
+        <h3>SINGLE EMPLOYEE MAPPING</h3>
+      </center>
+    </div>
+    <div>  
+    <div class="student" id="studrmv">
+            <paper-input label="Enter Employee Name" is="" value="{{value}}" on-keydown="FnSearchstudname"></paper-input>
+              <paper-listbox class="dropdown-content" id="employeelistid" on-iron-select="FnSelectstudenq">
+                <template is="dom-repeat" items="{{itemArray}}" as="item">
+                 <paper-item value="{{item.itemid}}">{{item.itemdes}}</paper-item>
+                </template>
+              </paper-listbox>
+
+    </div>
+
+   <span  class="colapsinfo" >
+       <button  id="empmapzzz" style="color:white;background-color:black;width: 13%;border-radius: 27%;" on-click="fnemployee"> Employee Mapping</button>
+  </span>
+   <span  class="colapsinfo" >
+      <button id="empldeltt"  style="color:white;background-color:black;width: 13%;border-radius: 27%;" on-click="fnemployeedeletion"> Employee Deletion</button>
+   </span>
+
+  <iron-collapse horizontal id="singleemployeeid">
+  <div class="fulldiv" hidden$="{{hidefulldivvv}}">
+    <div class="new">
+      <center style="margin-left: -22%;"><h3>previously Mapped Details</h3></center>
+      <table border="0" style="width: 70%;">
+
+       <tr>
+          <th>Grade</th>
+          <th>Subject</th>
+          <th>Section</th>
+       </tr>
+     </table> 
+        <div class="tabldivr">  
+         <template is="dom-repeat" items="{{dbarr}}" as="item">
+           <div id="itemcard"><single-employee-bind-card gradename="{{item.gradename}}" subjectname="{{item.subjectname}}" sectionname="{{item.section_id}}"></single-employee-bind-card>
+           </div>
+         </template>
+        </div> 
+    </div>
+
+     <center style="margin-top: 8%;"><h3>New Mapping Details</h3></center>
+
+    <div class="newcontent">
+      <h3 style="margin-left:3%">Subject Name</h3>
+        <div class="subcard">
+          <template is="dom-repeat" items="{{subjectarr}}" as="item">
+            <single-employee-subject-card subjectname="{{item.subject_name}}" subjectid="{{item.subject_id}}" empid="{{empid}}">
+            </single-employee-subject-card>
+          </template>  
+        </div> 
+      <div  style="margin-top: -7%;">
+        <h3 style="margin-left: 10%;margin-top: 4.7%;position: absolute;">Grade Name</h3>
+          <div class="grdcard" style="position: absolute;">
+            <template is="dom-repeat" items="{{gradearr}}" as="item">
+            <single-employee-grade-card gradename="{{item.grade_name}}" gradeid="{{item.grade_id}}" check="{{item.check}}" empid="{{empid}}">
+             </single-employee-grade-card>
+            </template>
+          </div>
+      </div>
+   
+      <div style="margin-top: -7%;">
+        <h3 style="margin-left: 27%;margin-top: 4.8%;position: absolute;">Section Name</h3> 
+        <div class="sectcard" style="position: absolute;">
+          <template is="dom-repeat" items="{{sectionarr}}" as="item">
+            <single-employee-section-card sectionid="{{item.section_id}}"  classid="{{item.class_id}}" gradeid="{{item.grade_id}}" check="{{item.check}}" empid="{{empid}}"></single-employee-section-card>
+          </template>
+        </div> 
+     </div>
+  </div>
+
+          <div>
+            <center><paper-button style="background-color:black;color:white;margin-top: -3% !important;margin-left: 0%;position: absolute;" on-click="fnsubmit">Submit</paper-button></center>
+          </div>
+
+    </div>
+</iron-collapse>
+</div>
+<iron-collapse horizontal id="singleemployeedeletionid">
+
+     <div class="newwww" hidden$="{{hidenewwwdelt}}">
+       <!-- <h3>Delete Information</h3> -->
+    <table border="0" style="width: 81%;">
+       <tr>
+          <th>Grade</th>
+          <th>Subject</th>
+          <th>Section</th>
+          <th></th>
+       </tr>
+     </table>   
+         <template is="dom-repeat" items="{{dbarr}}" as="item">
+         
+           <div id="itemcard">
+           <single-employee-delete-card gradename="{{item.gradename}}" gradeid="{{item.gradeid}}" subjectid="{{item.subjectid}}" subjectname="{{item.subjectname}}" sectionname="{{item.section_id}}"  classid="{{item.class_id}}" empidz="{{item.id}}">
+           </single-employee-delete-card>
+           </div>
+         </template>
+  </div>  
+</iron-collapse>
+  <student-add-service id="studservice"></student-add-service>
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+  var studentnamearr=[];
+  var finallarr=[];
+    Polymer({
+      is: 'single-staff-mapping-card',
+       getstudentdet:function(arr)
+     {
+        studentnamearr=arr;
+     },
+   fnfinalvalue:function(arr){
+      finallarr=arr;
+   },
+   fnsubmit:function(e){
+    this.subjectids=sessionStorage.getItem("curr_sess_loggedsubjectid");
+     this.$.studservice.fnsinglegrademapping(this.empid,finallarr,this.subjectids);
+     document.querySelector('single-employee-grade-card').fnclear();
+     document.querySelector('single-employee-section-card').clear();
+     document.querySelector('single-employee-subject-card').fnclean();
+    },
+
+      fnemployee:function(e){
+     this.$.singleemployeeid.opened=true;
+     this.$.singleemployeedeletionid.opened=false;
+     this.hidefulldivvv=false;
+     this.hidenewwwdelt=true;
+     },
+     fnemployeedeletion:function(e){
+        
+         this.$.singleemployeeid.opened=false;
+         this.$.singleemployeedeletionid.opened=true;
+         this.hidefulldivvv=true;   
+         this.hidenewwwdelt=false;   
+     },
+  FnSelectstudenq:function(e)
+        {
+          this.querySelector('#employeelistid').style.visibility='hidden';
+          this.value=e.target.selectedItem.textContent.trim();
+          this.empid=e.target.selectedItem.value;
+
+            this.$.empmapzzz.hidden=false;
+            this.$.empldeltt.hidden=false;          
+            this.hidefulldivvv=true;
+            this.hidenewwwdelt=true;
+           //alert(this.value+this.studentid);
+          this.itemArray=[];
+          document.querySelector('#employeelistid').selected=-1;
+          this.$.studservice.fnsetsingleemployee(this.empid);
+          this.empinforefresh();
+          //alert(this.empid);
+          //this.empid=this.studentid;        
+        },
+        fnsetvaluez:function(e){
+      this.$.studservice.fnsetsingleemployee(this.empid);
+        },
+      FnSearchstudname:function(e)
+       {
+      if(e.keyCode==13|| e.keyCode==40)
+            this.querySelector('#employeelistid').focus();
+          var arr=[];
+          arr.push({"itemdes":"-----Select-----"});
+          this.querySelector('#employeelistid').style.visibility='visible';
+          if(e.keyCode==8){
+            this.itemflag="true";
+            this.itemval="";
+            //alert('yes');
+            var len=(this.value).length;
+            if(len<=1){
+              this.querySelector('#employeelistid').style.visibility='hidden';
+              this.itemArray="";
+              this.itemval="";
+            }
+            if(len>1){   
+      this.querySelector('#employeelistid').style.visibility='visible';
+              var backsubval=(((this.value).substring(0,(len-1))).trim()).toUpperCase();
+              for(var i=0;i<studentnamearr.length;i++)
+              {
+                var subval=((studentnamearr[i].emp_name).trim()).substring(0,backsubval.length);
+                if((subval).toUpperCase()==(backsubval).toUpperCase())
+                {
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].emp_name;
+                  obj.itemid=studentnamearr[i].emp_id;
+                  arr.push(obj);
+                }
+              }
+              this.itemArray=arr;
+            }
+          }
+          if(e.keyCode!=8&& e.keyCode!=16&& e.keyCode!=13 && e.keyCode!=38&&e.keyCode!=40&&e.keyCode!=37&&e.keyCode!=39){
+            if(this.itemflag=="true") {
+              this.itemval = (this.value).toUpperCase()+String.fromCharCode((e.keyCode)).toUpperCase();
+              this.itemflag="false";
+            }
+            else
+            this.itemval = this.value +String.fromCharCode((e.keyCode));
+            if(this.itemval.length>0)
+            {
+              for(var i=0;i<studentnamearr.length;i++){
+                var subval=((studentnamearr[i].emp_name).trim()).substring(0,this.itemval.length);
+                if((subval).toUpperCase()==(this.itemval).toUpperCase()){
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].emp_name;
+                  obj.itemid=studentnamearr[i].emp_id;
+                  arr.push(obj);
+                }
+              }
+              if(arr.length>0)
+                this.itemArray=arr;
+              else {
+                var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].emp_name;
+                  obj.itemid=studentnamearr[i].emp_id;
+                  arr.push(obj);
+                  this.itemArray=arr;
+              }
+            } }
+             this.sectionarr="";
+            //this.gradearr="";
+
+             this.$.empmapzzz.hidden=true;
+            this.$.empldeltt.hidden=true;    
+            this.$.singleemployeeid.opened=false;
+            this.$.singleemployeedeletionid.opened=false;
+
+            document.querySelector('single-employee-grade-card').fnclear();
+            document.querySelector('single-employee-subject-card').fnclean();
+            //document.querySelector('single-employee-section-card').clear();
+           
+          },
+
+          empinforefresh:function()
+          {          
+            this.$.singleemployeeid.opened=false;
+            this.$.singleemployeedeletionid.opened=false;
+            this.hidefulldivvv=true;
+            this.hidenewwwdelt=true;
+          },
+          newempreffff:function()
+          {
+            this.$.empmapzzz.hidden=true;
+            this.$.empldeltt.hidden=true;
+             this.value="";
+          }
+    });
+  })();
+  </script>
+</dom-module>

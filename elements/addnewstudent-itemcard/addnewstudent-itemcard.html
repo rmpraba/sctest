@@ -1,0 +1,44 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="addnewstudent-itemcard">
+  <template>
+    <style>
+      .container{
+        width: 8%;
+        padding: 1%;
+      }
+      .card{
+        box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+        text-align: center;
+      }
+      b{
+        font-family: Arial, Helvetica, sans-serif;
+        color: #27408B;
+      }
+    </style>
+    <div  on-click="FnClickStudent" class="card">
+    <div>
+    <img src="../../images/studenttosubject.jpg" height="90px" width="80px" >
+    <br>
+    <div width="80px"><span><b>{{id}}</b></span></div>
+    <br>
+    <div width="80px"><b>{{name}}</b></div>
+    <div width="80px"><b>{{grade}} - {{section}}</b></div>
+    </div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'addnewstudent-itemcard',
+      FnClickStudent:function(){
+        // document.querySelector('home-page').setPage('enrichment-individual-assignment');
+        // document.querySelector('enrichment-individual-assignment').hidecard=false;
+        // document.querySelector('enrichment-individual-assignment').FnSetStudInfo(this.studentid,this.studentname);
+      }
+    });
+  })();
+  </script>
+</dom-module>

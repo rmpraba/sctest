@@ -1,0 +1,313 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="approvalstatus-card">
+  <template>
+    <style> 
+
+
+  :host {
+        display: block;
+      }
+       paper-dropdown-menu{
+      width: 24%;
+    margin-left: 7%;
+    text-align: center;
+    }
+    paper-dropdown-menu{
+   width: 24%;
+    margin-left: 7%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+    }
+
+            #dialogfilterid{
+        border-radius: 25px;
+          width: 40%;
+       }
+    .filterid{
+       text-align: right;
+       margin-top: -5%;
+          }
+    .card{
+        @apply(--layout-vertical);
+    }
+
+    .drop{        
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        /*margin-top: 5%;*/
+        margin-left: 5%;
+        border-bottom: 1px solid #dedede; 
+     }
+   #apprualdialogfilterid{
+      border-radius:10px;
+          width: 35%;
+      },
+
+      :host {
+        display: block;
+      }
+       .viewdata{
+        margin-top: 5%;
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:blue;
+      }
+       .outcard{
+        margin-left: 0%;
+        margin-top: 5%;
+      }
+      table{
+        width: 90%;
+
+        /*border-collapse: collapse;*/
+      }
+      .spinner{
+            margin-left: 50%;            
+           
+            /*color: #0f9d58;*/
+            /*border: none;*/
+          }
+          #spinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }
+      #itemcard:nth-child(odd) {
+        /*background-color: white;*/
+        background-color: #f1f1f1;
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      #itemcard{
+        margin-left: 6%;
+        width: 83%;
+      }
+    #approvalstatusdialog{
+      width: 20%;
+      border-radius: 25px;
+    }
+    #dynamicapprovestatusspinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+     }
+     h4{
+      color: #061E98;
+     }
+    </style>
+    <div class="spinner"><paper-dialog modal id="dynamicapprovestatusspinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+    <paper-spinner active></paper-spinner>
+    <h4>{{spinnermsg}}</h4></paper-dialog></div>
+     <div>
+     <center><h1>{{schoolname}}</h1>
+     <div id="hidetop">
+      <h3>Continuous Comprehensive Evaluation</h3>  
+      </div>
+      </center>
+
+   <div class="filterid">
+       <paper-dropdown-menu id="grade" label="Select Filter" style="width: 15%;" >
+         <paper-menu  id="approvefilter3" class="dropdown-content"  on-iron-select="FnSelectFilter"  attr-for-selected="value" required>     
+           <paper-item value="Filter By Grade">Filter By Grade</paper-item>
+           <paper-item value="Filter By Section">Filter By Section</paper-item>
+           <paper-item value="Filter By Subject">Filter By Subject</paper-item>
+           <paper-item value="All">All</paper-item>
+        </paper-menu>
+      </paper-dropdown-menu>  
+     </div>
+   </center>
+  <paper-dialog id="apprualdialogfilterid" modal>
+ 
+ <div class='card'>
+     <div class='drop'>
+   
+
+     <paper-dropdown-menu id="approvefiltergrade" label="Select Grade"  >
+            <paper-menu  id="approvegradenam3" class="dropdown-content"  on-iron-select="FnSelectGrade1"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{gradearr}}">
+               <paper-item value="{{item.grade_name}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+     </paper-dropdown-menu>
+
+        <paper-dropdown-menu id="approvefiltersection" label="Select Section" >
+            <paper-menu id="approvesectionnm3" class="dropdown-content"  on-iron-select="FnSelectSection1"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+               <paper-item value="{{item.section_name}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+        </paper-dropdown-menu>
+
+         <paper-dropdown-menu id="approvefiltersubject" label="Select Subject">
+            <paper-menu id="approvesubjectnam3" class="dropdown-content"  on-iron-select="FnSelectSubject1"  attr-for-selected="value" required>   
+              <template is="dom-repeat" items="{{subjectarr}}">
+                <paper-item value="{{item.subject_name}}">{{item.subject_name}}</paper-item>
+              </template>
+            </paper-menu>
+         </paper-dropdown-menu>   
+            <paper-icon-button  style="margin-left: 3%;" icon="close" suffix on-click="Fncloseconcpt" ></paper-icon-button>
+      </div>
+    </div> 
+     <center><paper-button style='color:white;background-color: black;' on-click="fnsub">Submit</paper-button></center>
+ </paper-dialog>
+
+       <div class="outcard">
+       <!-- <table id="Mark">
+       <tr>
+       <th id="tb1">Academic Year</th>
+       <th id="tb1">Term</th>
+       <th id="tb1">Assesment</th>
+       <th id="tb1">Grade</th>
+       <th id="tb1">Section</th>
+       <th id="tb1">Subject</th>
+       <th id="tb1">Status</th>
+       <th id="tb1">Revert</th>
+       </tr>
+       </table> -->
+     
+  <template is="dom-repeat" items="{{approvalarr}}" as="item">
+    <div id="itemcard">
+      <approvelstatus-item-card academicyear="{{item.academic_year}}" termname="{{item.term_name}}" assesmentid="{{item.assesment_name}}" grade="{{item.grade_name}}" section="{{item.section}}" subject="{{item.subject_name}}" flag="{{item.flag}}"
+      hideflag="{{item.hideflag}}" font="{{item.font}}" color="{{item.color}}" category="{{item.subject_category}}"></approvelstatus-item-card>
+    </div>
+  </template>     
+ </div>
+     <term-assesment-service id="assesmentservice"></term-assesment-service>
+     <scorecard-service id="scorecardservice"></scorecard-service>
+ </div>
+  <paper-dialog id="approvalstatusdialog" modal>
+    <h3 style="color:green"><center>{{dialogmsg}}</center></h3>
+    <center>
+    <paper-button on-click="FnClose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+    </center>
+  </paper-dialog>
+ </template>
+  <script>
+  (function() {
+    'use strict';
+    var gradename,section,subject,filtervalue;
+
+    Polymer({
+      is: 'approvalstatus-card',
+       ready:function(e){
+         localStorage.setItem("curr_sess_filterid","fillterinactive");
+       },
+       FnCallService:function(){
+        this.$.assesmentservice.FnFetchApprovalStatus();
+        this.$.dynamicapprovestatusspinner.toggle();
+        this.spinnermsg="Please wait...Loading";
+       },
+       FnToggleDialog:function(message){
+        this.dialogmsg=message;
+        this.$.approvalstatusdialog.toggle();
+       },
+       FnClose:function(){
+        this.$.approvalstatusdialog.toggle();
+        this.FnCallService();
+       },
+      FnSpinnerrActive:function(){
+      this.spinnermsg="Please wait...";
+      this.$.dynamicapprovestatusspinner.toggle();
+      },
+      FnRefresh:function(){
+        this.approvalarr="";
+        document.querySelector('#approvegradenam3').selected=-1;
+        document.querySelector('#approvefilter3').selected=-1;
+        document.querySelector('#approvesectionnm3').selected=-1;
+        document.querySelector('#approvesubjectnam3').selected=-1;
+        localStorage.setItem("curr_sess_filterid","fillterinactive");
+      },
+      setDefaultHeaders:function()
+      {
+          this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+          this.academicyear=localStorage.getItem("curr_sess_academicyear");
+      },
+      FnSelectGrade1:function(e){
+        gradename = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_grade1",gradename);
+       if(filtervalue=="Filter By Grade")
+       {
+         this.$.assesmentservice.AppruvalFnfiltervalues();
+       }
+        this.$.scorecardservice.callSectionService(gradename);
+         document.querySelector('#approvesectionnm3').selected=-1;
+         document.querySelector('#approvesubjectnam3').selected=-1;
+      },
+     FnSelectSection1:function(e){
+       section = e.target.selectedItem.textContent.trim();
+         localStorage.setItem("curr_sess_section1",section);
+        this.$.scorecardservice.callSubjectService(gradename,section);   
+         if(filtervalue=="Filter By Section")
+         {
+          this.$.assesmentservice.AppruvalFnfiltervalues();
+         } 
+         document.querySelector('#approvesubjectnam3').selected=-1;         
+      },
+       FnSelectSubject1:function(e){
+        this.flag=1;
+        subject = e.target.selectedItem.textContent.trim();
+         localStorage.setItem("curr_sess_subject1",subject); 
+       //  alert('1');
+      if(filtervalue=="Filter By Subject")
+        {
+           this.$.assesmentservice.AppruvalFnfiltervalues();           
+         } 
+       },
+       fnsub:function(e){
+       this.$.apprualdialogfilterid.close();
+       },
+    FnSelectFilter:function(e){
+      filtervalue = e.target.selectedItem.textContent.trim();
+         localStorage.setItem("curr_sess_filter",filtervalue); 
+          if(filtervalue=="Filter By Grade"){
+         this.$.apprualdialogfilterid.toggle();
+
+              this.$.approvefiltergrade.hidden=false;
+              this.$.approvefiltersection.hidden=true;
+              this.$.approvefiltersubject.hidden=true;
+             localStorage.setItem("curr_sess_filterid","fillteractive");
+         
+           }
+
+          if(filtervalue=="Filter By Section"){
+       this.$.apprualdialogfilterid.toggle();
+
+              this.$.approvefiltergrade.hidden=false;
+              this.$.approvefiltersection.hidden=false;
+              this.$.approvefiltersubject.hidden=true;
+             localStorage.setItem("curr_sess_filterid","fillteractive");
+            }
+          if(filtervalue=="Filter By Subject"){
+              this.$.apprualdialogfilterid.toggle();
+              this.$.approvefiltergrade.hidden=false;
+              this.$.approvefiltersection.hidden=false;
+              this.$.approvefiltersubject.hidden=false;
+             localStorage.setItem("curr_sess_filterid","fillteractive");
+          }
+          if(filtervalue=="All"){
+              // this.$.assesmentservice.FnFetchApprovalStatus();
+              this.FnCallService();
+          }
+        document.querySelector('#approvegradenam3').selected=-1;
+        document.querySelector('#approvesectionnm3').selected=-1;
+        document.querySelector('#approvesubjectnam3').selected=-1;
+        },
+      Fncloseconcpt:function(){
+       this.$.apprualdialogfilterid.close();
+        document.querySelector('#approvegradenam3').selected=-1;
+        document.querySelector('#approvefilter3').selected=-1;
+        document.querySelector('#approvesectionnm3').selected=-1;
+        document.querySelector('#approvesubjectnam3').selected=-1;
+      },
+      FnRefreshFilter:function(){
+        document.querySelector('#approvefilter3').selected=-1;
+      }  
+    });
+  })();
+  </script>
+</dom-module>

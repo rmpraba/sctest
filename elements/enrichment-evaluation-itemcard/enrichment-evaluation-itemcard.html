@@ -1,0 +1,144 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-evaluation-itemcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .button{
+            width: 10%;
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            text-transform: none;
+      }
+      #btn2{
+            width: 10%;
+            background: #252626;
+            color: white;
+            margin-top: 5%;
+            height: 35px;
+            border-radius: 2px;
+            font-family: Calibri;
+            font-size: 17px;
+            margin-left: 150%;
+      }
+      .card{
+        @apply(--layout-horizontal);
+        padding-top: 3%;
+        width: 60%;
+        box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #27408B;
+        padding-bottom: 3%;
+      }
+      .info{
+        @apply(--layout-vertical);
+        margin-left:10%;
+      }
+      .btn{
+            background: #252626;
+            color: white;
+            margin-top: 5%;
+            height: 35px;
+            border-radius: 2px;
+            font-family: Calibri;
+            font-size: 17px;
+            text-transform: none;
+      }
+      paper-dialog{
+        width: 40%;
+        height: 55%;
+        background-color: whitesmoke;
+        box-shadow: 2px 2px 10px grey;
+      }
+    </style>
+    <div>
+      <p hidden>{{studentid}}-{{studentname}}</p>
+      <div>
+        <div class="card" style="text-align: margin-top: 10px;"><b hidden style="margin-top: 10px;">Subject: {{subject}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Category: {{category}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: {{bookname}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Issued Date: {{issueddate}}</b>
+        <div><img src="../../images/book.png" height="100px" width="90px"></div>
+        <div class="info">
+        <b>Subject: {{subject}}</b>
+        <b>Category: {{category}}</b>
+        <b>Name: {{bookname}}</b>
+        <b>Issued Date: {{issueddate}}</b>
+        <paper-button on-click="FnEvaluate" class="button" id="btn2">Evaluate</paper-button>
+        </div>
+        </div>
+      </div>
+      <paper-dialog id="collapseparameter" modal>
+      <div>
+      <template is="dom-repeat" items="{{parameterarr}}">
+        <enrichment-evaluation-parametercard id="{{item.parameter_id}}" name="{{item.parameter_name}}"></enrichment-evaluation-parametercard>
+        <br>
+      </template>
+      <br>
+      <paper-button on-click="FnDone" class="btn">Done</paper-button>
+      <paper-button on-click="FnClose" class="btn">Close</paper-button>
+      </div>
+      </paper-dialog>
+    </div>
+    <enrichment-service id='enrichmentservice'></enrichment-service>
+    <iron-ajax
+        method="post"
+        id="fetchevaluationparametersajax"
+        url="{{fetchevaluationparametersurl}}"
+        params="{{fetchevaluationparametersparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchevaluationparametersResponse"
+        debounce-duration="300"
+    >
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var parameterarr=[];
+    Polymer({
+      is: 'enrichment-evaluation-itemcard',
+      FnEvaluate:function(){
+        // this.$.enrichmentservice.FnFetchevaluationParameters(this.bookid);
+        localStorage.setItem("curr_sess_studentid",this.studentid);
+        localStorage.setItem("curr_sess_studentname",this.studentname);
+        localStorage.setItem("curr_sess_bookid",this.bookid);
+        localStorage.setItem("curr_sess_bookname",this.bookname);
+        this.fetchevaluationparametersurl=sessionStorage.getItem("addrinfo")+"/fetchevaluationparameters-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.bookid=this.bookid;
+         this.fetchevaluationparametersparam= obj;
+         this.$.fetchevaluationparametersajax.generateRequest();
+      },
+      fetchevaluationparametersResponse:function(e){
+         // alert(JSON.stringify(e.detail.response.returnval));
+        var arr=e.detail.response.returnval;
+        this.parameterarr=arr;
+        document.querySelector('#collapseparameter').toggle();
+      },
+      FnSetParameter:function(arr){
+        parameterarr=arr;
+      },
+      FnDone:function(e){
+        for(var i=0;i<parameterarr.length;i++){
+          parameterarr[i].studentid=this.studentid;
+          parameterarr[i].studentname=this.studentname;
+          parameterarr[i].subject=this.subject;
+          parameterarr[i].category=this.category;
+          parameterarr[i].bookid=this.bookid;
+          parameterarr[i].bookname=this.bookname;
+        }
+        // alert(JSON.stringify(parameterarr));
+        this.$.enrichmentservice.FnUpdateAssesmentStatus(parameterarr);
+        document.querySelector('#collapseparameter').toggle();
+      },
+      FnClose:function(){
+        document.querySelector('#collapseparameter').toggle();
+      }
+    });
+  })();
+  </script>
+</dom-module>

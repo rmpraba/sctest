@@ -1,0 +1,856 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-term-comparison-report">
+  <template>
+    <style>
+     :host {
+        display: block;
+      }
+      .card{
+      width: 100%;        
+      @apply(--layout-vertical);
+      }
+     .inner
+          {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+            @apply(--layout-wrap);
+          }
+      .list{
+      margin-left: 10%;
+      margin-top: 5%;
+      }
+       paper-dropdown-menu{
+        --paper-input-container-label: { color: red };
+      text-align:center;
+      }
+    .fildid{
+      margin-left: 5%;  
+      width: 15%;
+    
+      }
+    </style>
+    
+     <div class="card">
+          <div class="inner">
+          
+   <div class="fildid">
+          <paper-dropdown-menu id="grade" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="comparergradeid"  on-iron-select="FnSelectGrade"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_name}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+   </div>
+<div class="fildid">
+          <paper-dropdown-menu id="section" label="Select Section" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="comparersectionid"  on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_name}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+</div>
+<div class="fildid">
+          <paper-dropdown-menu   id="Type" label="Select Comparison Type" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="comparerenandrdid"  on-iron-select="FnSelectComparison"  attr-for-selected="value" required> 
+            <paper-item value="ReportCard">Report Card</paper-item>
+             <paper-item value="Category">Enrichment</paper-item>
+           </paper-menu>
+          </paper-dropdown-menu>
+</div>
+<div class="fildid">
+           <paper-dropdown-menu  id="Type" label="Select category wise" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="comparesubandcatid"  on-iron-select="FnSelectcategory"  attr-for-selected="value" required> 
+             <paper-item value="Subjectwise">Subjectwise</paper-item>
+             <paper-item value="Categorywise">Categorywise</paper-item>
+           </paper-menu>
+          </paper-dropdown-menu>
+</div>
+<div class="fildid">
+            <paper-dropdown-menu id="section" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="comparersubjectid"  on-iron-select="FnSelectsubject1"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{subjectarr}}">
+                <paper-item value="{{item.subject_name}}">{{item.subject_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+ </div>
+ <div class="fildid">  
+           <paper-dropdown-menu id="categorycomparsionid" label="Select Category" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="comparercategoryid"  on-iron-select="FnSelectCategorywise"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{categoryarr}}">
+                <paper-item value="{{item.category_name}}">{{item.category_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+        </div>        
+          </div>
+          </div>
+
+          <div  style="width: 50%;margin-left: 10%;margin-top:2%;">
+          <center>
+         
+         <div style="margin-top: 3%;">
+        <paper-dropdown-menu  label="Source" disabled="{{read}}" >
+            <paper-menu class="dropdown-content" id="comparersourceid" on-iron-select="FnSelectsource"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{termarr}}">
+                <paper-item value="{{item.term_id}}">{{item.term_id}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          </div>
+          <div style="margin-left: 72%;margin-top: -9%;">
+           <paper-dropdown-menu  label=" Destination" >
+            <paper-menu class="dropdown-content"  id="comparerdestinationid"  on-iron-select="FnSelectDestination"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{termarr}}">
+                <paper-item value="{{item.term_id}}">{{item.term_id}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+        </div>
+          </center>
+ <div class="container" hidden$="{{hideeng}}" style="width: 300;margin-left: 5%;">
+      <div id="chartContainer11" ></div>      
+</div> 
+ <div class="container" hidden$="{{hidemath}}" style="width: 300;margin-left: 5%;">
+      <div id="chartContainer22" ></div>
+</div>
+ <div class="container" hidden$="{{hideevs}}" style="width: 300;margin-left: 5%;">
+      <div id="chartContainer33" ></div>
+ </div>
+  <div class="container" hidden$="{{hideeng}}" style="width: 300;margin-left: 73%;">
+      <div id="chartContainer111" ></div>      
+</div> 
+ <div class="container" hidden$="{{hidemath}}" style="width: 300;margin-left: 73%;">
+      <div id="chartContainer222" ></div>
+</div>
+ <div class="container" hidden$="{{hideevs}}" style="width: 300;margin-left: 73%;">
+      <div id="chartContainer333" ></div>
+ </div>
+ <div class="container" hidden$="{{hidrport}}" style="width: 300;margin-left: 5%;">
+      <div id="chartContainerrport" ></div>
+ </div>  
+<div class="container" hidden$="{{hidrport}}" style="width: 300;margin-left: 73%;">
+<div id="chartContainerrport1" ></div>
+</div> 
+  </div>
+  <student-term-comparison-report-service id="compareservice"></student-term-comparison-report-service>
+  </template>
+   <script type="text/javascript" src="../../scripts/canvasjs.min.js"></script>
+  <script>
+
+  (function() {
+    'use strict';
+   var gradename,section;
+    var engchartarr=[];
+    var mathschartarr=[];
+    var evschartarr=[];
+    var reportcardarr=[];
+    Polymer({
+      is: 'student-term-comparison-report',
+    ready:function(e){
+         this.$.categorycomparsionid.hidden=true;
+         this.hideeng=true;
+         this.hidemath=true;
+         this.hideevs=true;
+         this.hidrport=true;
+       },
+
+      FnSelectGrade:function(e){        
+        gradename = e.target.selectedItem.textContent.trim();       
+        localStorage.setItem("curr_sess_grade",gradename);
+        this.$.compareservice.callSectionService(gradename);
+        document.querySelector('#comparersectionid').selected=-1;
+        document.querySelector('#comparerenandrdid').selected=-1;
+        document.querySelector('#comparesubandcatid').selected=-1;
+        document.querySelector('#comparersubjectid').selected=-1;
+        document.querySelector('#comparercategoryid').selected=-1;
+        document.querySelector('#comparersourceid').selected=-1;
+        document.querySelector('#comparerdestinationid').selected=-1;
+
+    },
+    FnRefresh(){
+        document.querySelector('#comparergradeid').selected=-1;
+        document.querySelector('#comparersectionid').selected=-1;
+        document.querySelector('#comparerenandrdid').selected=-1;
+        document.querySelector('#comparesubandcatid').selected=-1;
+        document.querySelector('#comparersubjectid').selected=-1;
+        document.querySelector('#comparercategoryid').selected=-1;
+        document.querySelector('#comparersourceid').selected=-1;
+        document.querySelector('#comparerdestinationid').selected=-1;
+         this.$.categorycomparsionid.hidden=true;
+         this.hideeng=true;
+         this.hidemath=true;
+         this.hideevs=true;
+         this.hidrport=true;
+    },
+       FnSelectSection:function(e){
+        section = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_section",section); 
+        document.querySelector('#comparerenandrdid').selected=-1;
+        document.querySelector('#comparesubandcatid').selected=-1;
+        document.querySelector('#comparersubjectid').selected=-1;
+        document.querySelector('#comparercategoryid').selected=-1;
+        document.querySelector('#comparersourceid').selected=-1;
+        document.querySelector('#comparerdestinationid').selected=-1;
+
+
+
+               
+        },
+       FnSelectComparison:function(e){
+      this.comparisonvalue=e.target.selectedItem.textContent.trim();
+         localStorage.setItem('curr_sess_Comparisonvalue',this.comparisonvalue);
+         document.querySelector('#comparesubandcatid').selected=-1;
+        document.querySelector('#comparersubjectid').selected=-1;
+        document.querySelector('#comparercategoryid').selected=-1;
+        document.querySelector('#comparersourceid').selected=-1;
+        document.querySelector('#comparerdestinationid').selected=-1;
+
+
+
+
+        },
+      FnSelectcategory:function(e){
+       
+           this.categoryvalue=e.target.selectedItem.textContent.trim();
+               this.$.compareservice.ReportCardandEnrichmentsubjectvalue(gradename,this.comparisonvalue);
+       
+         if(this.categoryvalue=="Subjectwise"){
+          this.$.categorycomparsionid.hidden=true;
+
+         }
+       else if(this.categoryvalue=="Categorywise"){
+      
+         this.$.categorycomparsionid.hidden=false;
+         }
+
+        document.querySelector('#comparersubjectid').selected=-1;
+        document.querySelector('#comparercategoryid').selected=-1;
+        document.querySelector('#comparersourceid').selected=-1;
+        document.querySelector('#comparerdestinationid').selected=-1;
+
+
+
+
+     },
+     FnSelectCategorywise:function(e) {
+           this.category=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_category",this.category);                
+         
+         document.querySelector('#comparersourceid').selected=-1;
+        document.querySelector('#comparerdestinationid').selected=-1;
+
+
+
+
+       // body...
+     }, 
+     FnSelectsubject1:function(e){
+           this.subjectname=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_subject",this.subjectname);                
+        this.$.compareservice.ReportCardandEnrichmentcategoryvalue(gradename,this.comparisonvalue,this.subjectname);
+      if(this.comparisonvalue=="Report Card"){
+   this.$.compareservice.comparedistinsionandsource(gradename,this.comparisonvalue); 
+        } 
+  else if(this.comparisonvalue=="Enrichment"){
+   this.$. compareservice.comparedistinsionandsource1(gradename,this.comparisonvalue,this.subjectname); 
+          }
+         document.querySelector('#comparercategoryid').selected=-1;
+        document.querySelector('#comparersourceid').selected=-1;
+        document.querySelector('#comparerdestinationid').selected=-1;
+
+
+     this.$.compareservice.compareservicegrademaster();
+
+        },  
+ FnSelectsource:function(e){
+  this.sourcevalue=e.target.selectedItem.textContent.trim(); 
+if(this.sourcevalue==this.destinationtermvalue){
+alert("Both Are Same Value.....!");
+ document.querySelector('#comparerdestinationid').selected=-1;
+         this.hideeng=true;
+         this.hidemath=true;
+         this.hideevs=true;
+         this.hidrport=true;
+         this.sourcevalue="";
+
+}
+else{
+     if(this.categoryvalue=="Subjectwise"){
+        
+         if(this.comparisonvalue=="Enrichment"){
+          localStorage.setItem('curr_sess_comparetermvalue',"EnrichmentSource");
+        this.$.compareservice.CompareservicesourcegraphinEnrichment(gradename,section,this.subjectname,this.sourcevalue); 
+       }
+        else if(this.comparisonvalue=="Report Card"){
+          localStorage.setItem('curr_sess_comparetermvalue',"ReportCardSource");
+       this.$.compareservice.CompareservicesourcegraphinReportCard(gradename,section,this.subjectname,this.sourcevalue); 
+         }
+
+         }
+       else if(this.categoryvalue=="Categorywise"){
+      
+        if(this.comparisonvalue=="Enrichment"){
+          localStorage.setItem('curr_sess_comparetermvalue',"EnrichmentSource");
+       this.$.compareservice.CompareservicesourcegraphinEnrichment1(gradename,section,this.subjectname,this.sourcevalue,this.category); 
+        }
+        else if(this.comparisonvalue=="Report Card"){
+          localStorage.setItem('curr_sess_comparetermvalue',"ReportCardSource");
+        this.$.compareservice.CompareservicesourcegraphinReportCard1(gradename,section,this.subjectname,this.sourcevalue,this.category); 
+         }
+       }
+    }
+         document.querySelector('#comparerdestinationid').selected=-1;
+
+     },
+      FnSelectDestination:function(e){
+        this.destinationtermvalue=e.target.selectedItem.textContent.trim();
+        if(this.sourcevalue==this.destinationtermvalue){
+           alert("Both Are Same Value.....!");
+        document.querySelector('#comparersourceid').selected=-1;
+          this.hideeng=true;
+         this.hidemath=true;
+         this.hideevs=true;
+         this.hidrport=true;
+         this.destinationtermvalue="";
+         }
+      else
+          {
+          if(this.categoryvalue=="Subjectwise"){
+       
+        if(this.comparisonvalue=="Enrichment"){
+     localStorage.setItem('curr_sess_comparetermvalue',"EnrichmentDestination");
+         this.$.compareservice.CompareservicesourcegraphinEnrichment(gradename,section,this.subjectname,this.destinationtermvalue); 
+       }
+     else if(this.comparisonvalue=="Report Card"){
+       localStorage.setItem('curr_sess_comparetermvalue',"ReportCardDestination");
+            this.$.compareservice.CompareservicesourcegraphinReportCard(gradename,section,this.subjectname,this.destinationtermvalue); 
+       }
+
+         }
+       else if(this.categoryvalue=="Categorywise"){
+      
+       
+ if(this.comparisonvalue=="Enrichment"){
+     localStorage.setItem('curr_sess_comparetermvalue',"EnrichmentDestination");
+         this.$.compareservice.CompareservicesourcegraphinEnrichment1(gradename,section,this.subjectname,this.destinationtermvalue,this.category); 
+     }
+     else if(this.comparisonvalue=="Report Card"){
+       localStorage.setItem('curr_sess_comparetermvalue',"ReportCardDestination");
+            this.$.compareservice.CompareservicesourcegraphinReportCard1(gradename,section,this.subjectname,this.destinationtermvalue,this.category); 
+       }
+       
+         }
+       }
+       },
+  
+   FnComparearr:function(arr){
+      // alert(JSON.stringify(arr));
+       var subject="";
+       if(arr.length>0){      
+       for(var i=0;i<arr.length;i++)
+       {
+if(this.comparisonvalue=="Report Card"){
+    for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name="("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= "("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       reportcardarr.push(obj);
+       }
+      }
+ else  if(this.comparisonvalue=="Enrichment"){   
+        // alert('Iteration'+i);
+        if(arr[i].subject=="English"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       engchartarr.push(obj);
+       }
+       // this.FnEnglishOpenChart();
+       }
+       if(arr[i].subject=="Mathematics"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       mathschartarr.push(obj);
+       }
+       // this.FnMathsOpenChart();
+       }
+       if(arr[i].subject=="EVS"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       evschartarr.push(obj);
+       }
+       // this.FnEvsOpenChart();
+       }
+       // subject=arr[i].subject; 
+       // alert(JSON.stringify(chartarr));      
+       }
+     }
+      
+    
+       // if(subject=="English")
+       if(engchartarr.length>0){
+        
+       this.hideeng=false;
+    if(localStorage.getItem('curr_sess_comparetermvalue')=="EnrichmentSource")
+       this.FnEnglishOpenChart();
+    if(localStorage.getItem('curr_sess_comparetermvalue')=="EnrichmentDestination")
+       this.FnEnglishOpenChart1();
+     
+      
+       }
+       else{
+       this.hideeng=true;
+       }
+       // if(subject=="Mathematics")
+       if(mathschartarr.length>0){
+       this.hidemath=false;
+      
+     if(localStorage.getItem('curr_sess_comparetermvalue')=="EnrichmentSource")
+       this.FnMathsOpenChart();
+      if(localStorage.getItem('curr_sess_comparetermvalue')=="EnrichmentDestination")
+       this.FnMathsOpenChart1();
+      
+       }
+       else{
+       this.hidemath=true;
+       }
+       // if(subject=="EVS")
+       if(evschartarr.length>0){
+       this.hideevs=false;
+     if(localStorage.getItem('curr_sess_comparetermvalue')=="EnrichmentSource")
+       this.FnEvsOpenChart();
+      if(localStorage.getItem('curr_sess_comparetermvalue')=="EnrichmentDestination")
+       this.FnEvsOpenChart1();
+       }
+
+      if(reportcardarr.length>0){
+       this.hidrport=false;
+      if(localStorage.getItem('curr_sess_comparetermvalue')=="ReportCardSource")
+       this.FnRportOpenChart();
+     if(localStorage.getItem('curr_sess_comparetermvalue')=="ReportCardDestination")
+       this.FnRportOpenChart1();
+       }
+       else{
+       this.hidrport=true;
+       }
+       }     
+      },
+       FnRportOpenChart:function(){
+      var chart = new CanvasJS.Chart("chartContainerrport",
+       {
+       theme: "theme3",
+       animationEnabled: true,
+       title:{
+        text: "Report Card Comparision(Overall)",
+        fontSize: 20
+       },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: reportcardarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+             // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    reportcardarr=[];
+    },
+    FnRportOpenChart1:function(){
+      var chart = new CanvasJS.Chart("chartContainerrport1",
+       {
+       theme: "theme3",
+       animationEnabled: true,
+       title:{
+        text: "Report Card Comparision(Overall)",
+        fontSize: 20
+       },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: reportcardarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+             // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    reportcardarr=[];
+    },
+    FnEnglishOpenChart:function(){
+      var chart = new CanvasJS.Chart("chartContainer11",
+       {
+       theme: "theme3",
+       animationEnabled: true,
+       title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+       },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: engchartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+             // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    engchartarr=[];
+    },
+    FnMathsOpenChart:function(){
+    var chart = new CanvasJS.Chart("chartContainer22",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: mathschartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+     mathschartarr=[];
+    },
+    FnEvsOpenChart:function(){
+    var chart = new CanvasJS.Chart("chartContainer33",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: evschartarr,
+
+      legend:{
+            cursor:"pointer",
+         itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+   evschartarr=[];
+    },
+
+
+
+
+
+ FnEnglishOpenChart1:function(){
+      var chart = new CanvasJS.Chart("chartContainer111",
+       {
+       theme: "theme3",
+       animationEnabled: true,
+       title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+       },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: engchartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+             // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    engchartarr=[];
+    },
+    FnMathsOpenChart1:function(){
+    var chart = new CanvasJS.Chart("chartContainer222",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: mathschartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+     mathschartarr=[];
+    },
+    FnEvsOpenChart1:function(){
+    var chart = new CanvasJS.Chart("chartContainer333",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: evschartarr,
+
+      legend:{
+            cursor:"pointer",
+         itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+   evschartarr=[];
+    },
+
+
+
+
+
+   });
+  })();
+  </script>
+</dom-module>

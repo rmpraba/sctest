@@ -1,0 +1,89 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-to-subject-grade-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+        paper-checkbox.blue {
+    --paper-checkbox-checked-color: var(--paper-blue-500);
+    --paper-checkbox-checked-ink-color: var(--paper-blue-500);
+    --paper-checkbox-unchecked-color: var(--paper-blue-900);
+    --paper-checkbox-unchecked-ink-color: var(--paper-blue-900);
+    --paper-checkbox-label-color: var(--paper-blue-500);
+    --paper-checkbox-label-checked-color: var(--paper-blue-900);
+    --paper-checkbox-size: 20px;
+  }
+    </style>
+    <div>
+
+
+
+    
+    <p hidden>{{gradeid}}</p>
+    <p hidden>{{gradename}}</p>
+    <p hidden>{{schooltype}}</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<paper-checkbox id="{{id}}" class="blue" on-change="fnchange">{{gradename}}</paper-checkbox></p>
+    </div>
+    <master-term-mapping-ui-service id="masteruiservice"></master-term-mapping-ui-service>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+  var temp=[];
+    Polymer({
+      is: 'assesment-to-subject-grade-card',
+   fnchange:function(e){
+    document.querySelector('assesment-to-subject-mapping-card').hideassmentinfogradeid3=true;
+var c=[];
+document.querySelector('assesment-to-subject-mapping-card').assesmentarr=c;
+document.querySelector('assesment-to-subject-mapping-card').hideassmentinfosubid1=true;
+
+     if(temp.length!=0){
+       var c=[];
+document.querySelector('assesment-to-subject-mapping-card').subjectarr=c;
+document.querySelector('assesment-to-subject-mapping-card').fnset();
+document.querySelector('assesment-to-subject-mapping-card').hideassmentinfoid=true;
+
+       }
+ document.querySelector('assesment-to-subject-mapping-card').hideassmentinfoid=true;
+ document.querySelector('assesment-to-subject-mapping-card').hideassmentinfogradeid3=true;
+
+     if(document.querySelector("#"+this.id).checked==true){
+       var obj={};
+           obj.id=this.id;
+           temp.push(obj);
+           localStorage.setItem("curr_sess_grade",this.gradename);
+           localStorage.setItem("curr_sess_gradeid",this.gradeid); 
+         
+           this.$.masteruiservice.Fngetassesmentandgrade3();    
+        for(var i=0;i<temp.length;i++)
+        {  
+         if(temp[i].id!=this.id)
+         {
+             var stype=temp[i].id;  
+             document.querySelector('#'+stype).checked=false;
+             temp.splice(i,1);
+          }}}
+       else if(document.querySelector('#'+this.id).checked==false){
+       for(var i=0;i<temp.length;i++){
+          if(temp[i].id==this.id){
+            temp.splice(i,1);
+          }}}
+    },
+fnrefresh:function(e){
+for(var i=0;i<temp.length;i++){
+    var stype=temp[i].id;  
+    document.querySelector('#'+stype).checked=false;
+ document.querySelector('assesment-to-subject-mapping-card').hideassmentinfoid=true;
+   }
+  temp=[];
+}
+    });
+  })();
+  </script>
+</dom-module>

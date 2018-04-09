@@ -1,0 +1,239 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
+<link rel="import" href="../scorecard-service/scorecard-service.html">
+<link rel="import" href="../onetofour-scorecard-service/onetofour-scorecard-service.html">
+<link rel="import" href="../report-service/report-service.html">
+<link rel="import" href="../term-assesment-service/term-assesment-service.html">
+
+<dom-module id="student-list-itemcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td{  
+        width: 41%;        
+      } 
+      .card{
+        @apply(--layout-horizontal);
+        width: 100%;
+      } 
+      p{
+        width: 20%;
+        margin-left: 5%;
+      } 
+      paper-button{
+        text-transform: none;
+        height: 25px;
+      } 
+      .viewdata{
+        margin-top: 5%;
+        cursor: pointer;
+        /*color:blue;*/
+      }
+    </style>
+    <div class='card' disabled$="{{editable}}">
+      <p style="{{font}}">{{studentid}}</p>
+      <p style="{{font}}">{{studentname}}</p>        
+      <p style="{{font}};{{color}}"><ahref hidden$="{{viewlabel}}" class="viewdata" on-click="FnView">{{view}}</ahref></p>
+      <p hidden$="{{verifylabel}}" style="{{font}}">{{verification}}</p>
+      <p  hidden$="{{verifyicon}}" ><paper-icon-button id="verifybtn" disabled$="{{disable}}" style="{{font}};{{color}}" icon="icons:{{icon}}" on-click="Fnverified"></paper-icon-button></p>
+      <paper-tooltip for="verifybtn">{{verifytext}}</paper-tooltip>
+      <!-- <p hidden$="{{verifiedicon}}"><paper-icon-button icon="icons:done-all"></paper-icon-button></p> -->
+      <p hidden$="{{undolabel}}" style="{{font}}">{{undo}}</p>
+      <p  hidden$="{{verifyicon}}" ><paper-icon-button id="undobtn" disabled$="{{disableundo}}" style="{{font}};{{color}}" icon="icons:undo" on-click="Fnundovalue"></paper-icon-button></p>
+      <paper-tooltip for="undobtn">Undo</paper-tooltip>
+      <!-- <p hidden$="{{verifyvalue1}}"><paper-button  id="tb3" on-click="FnView">View</paper-button></p> -->
+      <!-- <p style="{{fontss}}" hidden$="{{verifyvalueid1}}">{{verifyids}}</p> -->      
+      <!-- <p style="{{fontss}}"  hidden$="{{verifyvalue1}}"><paper-button  id="tb3" style="{{fontsvalue}}" 
+        disabled$="{{verifyvalues}}" on-click="Fnverified">{{verifyvalueids}}</paper-button></p> -->
+      <!-- <p><paper-icon-button hidden$="{{verifyvalueid1}}" icon="icons:check" disabled$="{{verifyvalues}}" on-click="Fnverified"></paper-icon-button></p> -->
+      <!-- <p style="{{fontss}}" hidden$="{{verifyvalue1}}"><paper-icon-button icon="icons:done-all" disabled$="{{verifyvalues}}"></paper-icon-button></p> -->
+      <!-- <p style="{{fontss}}" hidden$="{{verifyvalueid1}}" style="{{fontss}}">{{undoid}}</p> -->
+      <!-- <p style="{{fontss}}" hidden$="{{verifyvalue1}}"><paper-icon-button icon="icons:undo" hidden$="{{hiddenundoids}}" on-click="Fnundovalue"></paper-icon-button></p> -->
+      <!-- <p style="{{fontss}}" hidden$="{{verifyvalue1}}"><paper-button  id="tb3" hidden$="{{hiddenundoids}}"  on-click="Fnundovalue" style="color: blue">{{undo}}</paper-button></p> -->
+       </div>
+      <term-assesment-service id='assesmentservice'></term-assesment-service>
+      <onetofour-scorecard-service id="otfscorecardservice"></onetofour-scorecard-service>  
+      <scorecard-service id="scorecardservice"></scorecard-service>
+      <report-service id="reportservice"></report-service>
+      <reprotcard-newformat-service id="newformatservice"></reprotcard-newformat-service>
+        
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'student-list-itemcard', 
+     Fnverified:function(e){
+         localStorage.setItem('curr_sess_verify','verifyid');         
+         document.querySelector('cce-generate-score-card').FnToggleSpinner(true);
+         this.$.newformatservice.passstudentverifyvalues(this.studentid,this.studentname); this.fngetViewvalues();
+         },
+       
+    Fnundovalue:function(e){
+      this.$.newformatservice.undotudentverifyvaluess(this.studentid,this.studentname);   
+          },     
+       FnView:function(){
+         localStorage.setItem('curr_sess_verify','unverifyid');    
+           this.fngetViewvalues();
+       },
+      fngetViewvalues:function(e){
+     localStorage.setItem("curr_sess_viewstudid",this.studentid);
+     if(localStorage.getItem('curr_sess_loggedassesmenttype')=="Scorecard"){
+        if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+        this.$.otfscorecardservice.callfetchhealthattendanceinfoService(this.studentid);
+        this.$.otfscorecardservice.callFetchstudentinfoService(this.studentid);
+    
+        this.$.otfscorecardservice.callFetchsubjectinfoService(this.studentid);
+        this.$.otfscorecardservice.callfetchscholasticmarkService(this.studentid);
+        this.$.otfscorecardservice.fetchoveralltermwisegradeService(this.studentid);
+       if(localStorage.getItem('curr_sess_verify')=='unverifyid')    
+          {
+document.querySelector('app-card').setPage('homepage','');
+document.querySelector('home-page').setPage('cce-onetofour-score-card',''); 
+  document.querySelector('cce-onetofour-score-card').setDefaultHeaders();
+         }
+       else{
+       //alert("1");
+        //   this.$.otfscorecardservice.mailReportcardService1();
+         }
+
+        }
+        else
+        {   
+        if(localStorage.getItem('curr_sess_academicyear')=='2016-2017')
+        {
+        this.$.scorecardservice.callFetchstudentinfoService(this.studentid);
+        this.$.scorecardservice.callFetchsubjectinfoService(this.studentid);
+        this.$.otfscorecardservice.callfetchhealthattendanceinfoService(this.studentid);
+        this.$.scorecardservice.callFetchmarkService(this.studentid); 
+        this.$.scorecardservice.callfetchcoscholasticmetricsService(this.studentid);  
+        this.$.scorecardservice.callfetchcoscholasticinfoService(this.studentid);
+        document.querySelector('app-card').setPage('homepage','');
+        document.querySelector('home-page').setPage('ccefivetotenscorecard',''); 
+        document.querySelector('cce-fivetoten-score-card').callImage();
+        }
+        else{
+        if(localStorage.getItem("curr_sess_grade")=="Grade-10"||localStorage.getItem("curr_sess_grade")=="Grade-9"){
+          // this.$.newformatservice.fetchstudinfofornewformatService(this.studentid);
+          // this.$.newformatservice.fetchnewformatremark1(this.studentid);
+          // this.$.newformatservice.fetchnewformatcoscholasticsubjects1(this.studentid);
+          // this.$.newformatservice.fetchnewformatscholasticsubjects1(this.studentid);
+        // alert('in');
+          this.$.newformatservice.fetchstudinfofornewformatService(this.studentid);
+          this.$.newformatservice.fetchnewformatremark1(this.studentid);
+          // alert("display term"+localStorage.getItem("curr_sess_termname"));
+          if(localStorage.getItem("curr_sess_grade")=="Grade-10"&&localStorage.getItem("curr_sess_termname").toLowerCase()=="annual"){
+            // alert('in');
+          this.$.newformatservice.fetchnewformatcoscholasticsubjects2(this.studentid);
+          this.$.newformatservice.fetchnewformatscholasticsubjects2(this.studentid);
+          // document.querySelector('app-card').setPage('homepage','');
+          // document.querySelector('home-page').setPage('newformat-reportcard-nineten','');
+          // document.querySelector('newformat-reportcard-nineten').FnSetHeaders();
+          }
+          else if(localStorage.getItem("curr_sess_termname").toLowerCase()=="annual"&&localStorage.getItem("curr_sess_grade")=="Grade-9"){
+            // alert('in in');
+          this.$.newformatservice.fetchnewformatcoscholasticsubjects3(this.studentid);
+          this.$.newformatservice.fetchnewformatscholasticsubjects3(this.studentid);
+          // document.querySelector('app-card').setPage('homepage','');
+          // document.querySelector('home-page').setPage('newformat-reportcard-ninth','');
+          // document.querySelector('newformat-reportcard-ninth').FnSetHeaders();
+          }
+          else{
+          this.$.newformatservice.fetchnewformatcoscholasticsubjects1(this.studentid);
+          this.$.newformatservice.fetchnewformatscholasticsubjects1(this.studentid);
+          // document.querySelector('app-card').setPage('homepage','');
+          // document.querySelector('home-page').setPage('newformat-reportcard-nineten','');
+          // document.querySelector('newformat-reportcard-nineten').FnSetHeaders();
+         }
+        if(localStorage.getItem('curr_sess_verify')=='unverifyid')   
+        {
+        document.querySelector('app-card').setPage('homepage','');
+        if(localStorage.getItem("curr_sess_termname").toLowerCase()=="annual"&&localStorage.getItem("curr_sess_grade")=="Grade-9"){
+        document.querySelector('home-page').setPage('newformat-reportcard-ninth','');
+        }
+        else
+        document.querySelector('home-page').setPage('newformat-reportcard-nineten','');
+        }
+        else{
+          if(localStorage.getItem("curr_sess_termname").toLowerCase()=="annual"&&localStorage.getItem("curr_sess_grade")=="Grade-9"){
+            document.querySelector('newformat-reportcard-ninth').fnpdfconvection();
+          }
+          else
+          document.querySelector('newformat-reportcard-nineten').fnpdfconvection();
+        }
+        }
+        else{
+        this.$.newformatservice.fetchstudinfofornewformatService(this.studentid);
+        this.$.newformatservice.fetchnewformatscholasticsubjects(this.studentid);
+        this.$.newformatservice.fetchnewformatcoscholasticsubjects(this.studentid);
+        this.$.newformatservice.fetchnewformatremark(this.studentid);
+    if(localStorage.getItem('curr_sess_verify')=='unverifyid') 
+        {
+        document.querySelector('app-card').setPage('homepage','');
+        document.querySelector('home-page').setPage('reprotcard-newformat-threetoeight','');
+      
+       }
+     else{
+        document.querySelector('reprotcard-newformat-threetoeight').fnpdfconvection();
+        }
+        }
+        } 
+        }
+      }
+      if(localStorage.getItem('curr_sess_loggedassesmenttype')=="Analysis"){
+        this.$.reportservice.callfetchmarkforreportService(this.studentid);
+        document.querySelector('app-card').setPage('homepage','');
+        document.querySelector('home-page').setPage('languageenrichment','');
+      }
+      if(localStorage.getItem('curr_sess_loggedassesmenttype')=="Comparisonreport"){ 
+        if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4")
+        {
+        this.$.otfscorecardservice.callFetchstudentinfoService(this.studentid);
+        this.$.otfscorecardservice.callfetchhealthattendanceinfoService(this.studentid);
+        this.$.otfscorecardservice.callFetchsubjectinfoService(this.studentid);
+        this.$.otfscorecardservice.callfetchscholasticmarkService(this.studentid);
+        this.$.otfscorecardservice.fetchoveralltermwisegradeService(this.studentid); 
+        this.$.otfscorecardservice.FnFetchHealthinfo(this.studentid); 
+        this.$.otfscorecardservice.FnFetchArtinfo(this.studentid);
+        this.$.otfscorecardservice.FnFetchPhysicalinfo(this.studentid);      
+        document.querySelector('app-card').setPage('homepage','');
+        document.querySelector('home-page').setPage('comparisonreport','');
+        document.querySelector('comparisonreport-card').setStudentId(this.studentid);
+      }
+      else
+      {
+        this.$.otfscorecardservice.callfetchhealthattendanceinfoService(this.studentid);
+        this.$.scorecardservice.callFetchstudentinfoService(this.studentid);
+        this.$.scorecardservice.callFetchsubjectinfoService(this.studentid);
+        this.$.scorecardservice.callFetchmarkService(this.studentid); 
+        this.$.scorecardservice.callfetchcoscholasticmetricsService(this.studentid);  
+        this.$.scorecardservice.callfetchcoscholasticinfoService(this.studentid);
+        this.$.otfscorecardservice.FnFetchfaHealthinfo(this.studentid); 
+        this.$.otfscorecardservice.FnFetchArtinfo(this.studentid);
+        this.$.otfscorecardservice.FnFetchPhysicalinfo(this.studentid); 
+        // this.$.scorecardservice.callFetchmarkService(this.studentid);
+        document.querySelector('app-card').setPage('homepage','');
+        document.querySelector('home-page').setPage('fivetotencomparisonreport',''); 
+        // document.querySelector('fivetotencomparisonreport-card').setStudentId(this.studentid);
+      }
+      }
+       if(localStorage.getItem('curr_sess_loggedassesmenttype')=="Editinfo"){ 
+       this.$.assesmentservice.callstudentinfo(this.studentid); 
+       this.$.assesmentservice.callstudentparentinfo(this.studentid);            
+       document.querySelector('app-card').setPage('homepage','');
+       document.querySelector('home-page').setPage('studentinfoedit','');
+       document.querySelector('studentinfoedit-card').FnSetStudentId(this.studentid);       
+      }
+
+       },
+    });
+  })();
+  </script>
+</dom-module>

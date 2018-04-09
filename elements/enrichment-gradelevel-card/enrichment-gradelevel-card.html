@@ -1,0 +1,54 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-gradelevel-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>
+      <paper-checkbox value="{{grade}}" id="enrichmentgradelevel{{ratingid}}" on-change="FnSelectGrade">{{grade}}</paper-checkbox>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var gradelevel=[];
+    Polymer({
+      is: 'enrichment-gradelevel-card',
+      ready:function(){
+        gradelevel=[];
+      },
+      FnSelectGrade:function(e){
+        if(document.querySelector('#enrichmentgradelevel'+this.ratingid).checked==true)
+        {
+          if(gradelevel.length==0)
+          gradelevel.push(this.grade);
+          else{
+            var f=0;
+            for(var i=0;i<gradelevel.length;i++){
+              if(gradelevel[i]==this.grade){
+                f=1;
+                gradelevel.splice(i,1);
+              }
+            }
+            if(f==0)
+              gradelevel.push(this.grade);
+          }
+        }
+        if(document.querySelector('#enrichmentgradelevel'+this.ratingid).checked==false)
+        {
+          for(var i=0;i<gradelevel.length;i++){
+              if(gradelevel[i]==this.grade){
+                gradelevel.splice(i,1);
+              }
+            }
+        }
+        document.querySelector('books-creation-card').FnSetGradeLevel(gradelevel);
+      }
+    });
+  })();
+  </script>
+</dom-module>

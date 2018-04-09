@@ -1,0 +1,87 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="subject-report-status-item-card">
+  <template>
+    <style>
+   :host {
+        display: block;
+      }
+      table{
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td{
+        width: 41%;        
+      } 
+      .card{
+        @apply(--layout-horizontal);
+      } 
+      p{
+        width: 30%;
+        margin-left: 10%;
+      } 
+      paper-button{
+        text-transform: none;
+        height: 25px;
+      }
+       .viewdata{
+        margin-top: 5%;
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:blue;
+      }
+    </style>
+        <div hidden>{{category}}{{langpref}}{{subjectid}}</div>
+        <div class="card">
+          <p class='p1' style="margin-left: 0%;{{fonts}}">{{academicyear}}</p>
+          <p class='p2' style="margin-left: 5%;{{fonts}}">{{termname}}</p>
+          <p class='p3' style="margin-left: 5%;{{fonts}}">{{assesmentid}}</p>
+          <p class='p4' style="margin-left: 5%;{{fonts}}">{{grade}}</p>
+          <p class='p5' style="margin-left: 5%;{{fonts}}">{{section}}</p>
+          <p class='p6' style="margin-left: 5%;{{fonts}}">{{subject}}</p>
+          <p class='p6' style="margin-left: 5%;{{fonts}}">{{flag}}</p>
+          <p class='p7' style="margin-left: 5%;{{fonts}}" ><ahref  hidden$="{{hiddenview1}}" class="viewdata" on-click="Fnview"><u>View to Change</u></ahref></p>
+        </div>
+        <single-student-markentry-service id="singleservice"></single-student-markentry-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';    
+
+    Polymer({
+      is: 'subject-report-status-item-card',
+    Fnview:function(e){
+
+  localStorage.setItem("curr_sess_subject",this.subject);
+  localStorage.setItem("curr_sess_subjectcategory",this.category);
+  localStorage.setItem("curr_sess_assesmentname",this.assesmentid);
+  localStorage.setItem("curr_sess_termname",this.termname);
+  localStorage.setItem("curr_sess_grade",this.grade);
+  localStorage.setItem("curr_sess_section",this.section);
+  this.$.singleservice.fnupdatestudentinfo(this.termname,this.assesmentid,this.grade,this.section,this.subject,this.category,this.langpref,this.subjectid);
+  document.querySelector('student-full-details-card').schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+  document.querySelector('student-full-details-card').academicyear=localStorage.getItem("curr_sess_academicyear");
+  document.querySelector('student-full-details-card').section=this.section;
+  document.querySelector('student-full-details-card').subject=this.subject;
+  document.querySelector('student-full-details-card').grade=this.grade;
+  document.querySelector('student-full-details-card').assesmentname=this.assesmentid;
+  document.querySelector('student-full-details-card').FnSpinnerrActive(true);
+      }
+      // fnrestview:function(){
+      //   this.$.singleservice.fnupdatestudentinfo(this.termname,this.assesmentid,this.grade,this.section,this.subject);
+    
+      //  }
+    });
+  })();
+  </script>
+</dom-module>

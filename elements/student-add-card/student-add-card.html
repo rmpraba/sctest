@@ -1,0 +1,468 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../demosumbit-card/demosumbit-card.html">
+
+<dom-module id="student-add-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .horizontalframe 
+      {
+         @apply(--layout-horizontal);
+         display: flex;
+         margin-left: 12%;
+         width: 80%;
+      }
+       .horizontalframe1
+      {
+         @apply(--layout-horizontal);
+         display: flex;
+        width: 83.3%;
+         background-color:#dedede;
+      }
+      paper-input, gold-email-input
+      {
+        width: 80%;
+      /*  --paper-input-container-label: { color: red };*/
+          text-align:center;
+      }
+       paper-dropdown-menu
+       { 
+       width: 80%;
+        /*--paper-input-container-label: { color: red };*/
+       }
+       .horizontalframe .fields paper-input
+       {
+         width: 80%;
+       }
+       .horizontalframe1 .fields paper-input
+       {
+        background-color:#dedede;
+         width: 80%;
+       }
+
+      #newstud
+    {
+        margin-top: 5%;
+        margin-left: 20%;
+        border:2px solid black;
+        width: 65%;
+        
+    }
+    .lbl
+    {
+          @apply(--layout-horizontal);
+          margin-top: 12%;
+    }
+    .tlab
+    {
+      @apply(--layout-horizontal);
+          margin-top: 12%;
+    }
+
+    </style>
+    <div id="newstud">
+      <div>
+        <h2><center>Student Details</center></h2>
+      </div>
+
+      <div class="fullhorizontal" style="width: 120%;">
+      <div class="horizontalframe">
+    <div class="fields" >
+      <paper-dropdown-menu id="admnyr" label="Select Acadamic year">
+            <paper-menu id="{{studadyear}}" class="dropdown-content"   on-iron-select="Fnadminyr" attr-for-selected="value" required>
+                <paper-item value="2016-2017">AY-2016-2017</paper-item>
+                <paper-item value="2017-2018">AY-2017-2018</paper-item>
+                <paper-item value="2018-2019">AY-2018-2019</paper-item>
+                <paper-item value="2019-2020">AY-2019-2020</paper-item>
+            </paper-menu>
+      </paper-dropdown-menu>
+    </div>
+
+
+         <div class="fields" style="margin-left: 3%" >
+         <paper-input label="Enrollment Number" value="{{enroll}}"></paper-input>
+        </div>
+
+        <div class="fields" style="margin-left: 5%;">
+          <paper-dropdown-menu  label="Select Grade">
+            <paper-menu id="{{grdstudad}}" class="dropdown-content"   on-iron-select="FnStosGrade">
+              <template is="dom-repeat" items="{{studentgradearrr}}">
+              <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>    
+            </paper-menu>
+          </paper-dropdown-menu>
+        </div>
+      </div>  
+
+      <div class="horizontalframe1">
+
+        <div class="fields" style="margin-left:15%;">
+          <paper-input label="First Name" allowed-pattern="[a-zA-Z ]" value="{{fname}}"></paper-input>
+        </div>
+     
+        <div class="fields"  style="margin-left:5%;">
+          <paper-input label="Middle Name"  allowed-pattern="[a-zA-Z ]" value="{{midname}}"></paper-input>
+        </div>
+        <div class="fields" style="margin-left:8%;">
+          <paper-input label="Last Name" allowed-pattern="[a-zA-Z ]" value="{{lsname}}"></paper-input>
+        </div>
+        
+      </div>
+
+      <div class="horizontalframe">
+        <div class="fields" >
+                  <div class="lbl">
+            <label>Gender</label>
+          </div>
+          <div class="gender" style="margin-top: 7%;">
+             <div hidden$="{{hideonegender}}">
+              <span><paper-checkbox id="male"  class="checkbox" on-change="fnmale">Boy</paper-checkbox></span>
+            <span><paper-checkbox  id="female" class="checkbox" on-change="fnfemale">Girl</paper-checkbox></span>
+             </div>
+             <div  hidden$="{{hidetwogender}}">
+               <span><paper-checkbox id="{{male11}}"  class="checkbox" on-change="fnmale1">Boy</paper-checkbox></span>
+            <span><paper-checkbox  id="{{female11}}" class="checkbox" on-change="fnfemale1">Girl</paper-checkbox></span>
+           </div>
+         </div>
+        </div>
+        <div class="fields" style="margin-left:16%;">
+            <student-dob-date-picker showdate="{{showdate}}"></student-dob-date-picker>
+        </div>
+        <div class="fields" style="margin-left:8%;">
+           <paper-input readonly label="Age(In Years)" value="{{ageofyr}}"></paper-input>
+        </div>
+      </div>
+     </div> 
+
+        <div>
+          <h2><center>Parent/Guardian Details</center></h2>
+        </div>
+
+      <div class="fullhorizontal" style="width: 120%;">  
+      <div class="horizontalframe">
+        <div class="fields">
+          <paper-input label="Father's Name" id="dadname"  allowed-pattern="[a-zA-Z ]" value="{{fathername}}"></paper-input>
+        </div>
+        <div class="fields" style="margin-left: 8%;">
+          <paper-input label="Mother's Name" id="momname"  allowed-pattern="[a-zA-Z ]" value="{{mothername}}"></paper-input>
+        </div>
+         <div class="fields" style="margin-left: 5%;">
+          <paper-input id="fmobile"  label="Father Mobile Number" allowed-pattern="[0-9]" maxlength="10" value="{{fathermob}}"></paper-input>
+        </div>
+      </div>
+       
+      <div class="horizontalframe1">
+        
+        <div class="fields" style="margin-left: 15%;">
+          <paper-input id="mtmobile"  label="Mother Mobile Number" allowed-pattern="[0-9]" maxlength="10" value="{{mothermob}}"></paper-input>
+        </div>
+        <div class="fields" style="margin-left: 8%;">
+          <gold-email-input id="email" label="Father Email" value="{{fatheremail}}"></gold-email-input>
+        </div>
+        <div class="fields" style="margin-left: 5%;">
+          <gold-email-input id="email" error-message="needs email ID!" label="Mother Email" value="{{motheremail}}"></gold-email-input>
+        </div>
+      </div>
+
+     
+      <div class="horizontalframe">
+        <div class="fields">
+          <paper-input id="addr1" label="Address1" value="{{address1}}"></paper-input>
+        </div>
+        <div class="fields" style="margin-left: 8%;">
+          <paper-input id="addr2"  label="Address2" value="{{address2}}"></paper-input>
+        </div>
+        <div class="fields" style="margin-left: 5%;">
+          <paper-input id="addr3" label="Address3" value="{{address3}}"></paper-input>
+        </div>
+      </div>
+
+      <div class="horizontalframe1">
+       
+        <div class="fields" style="margin-left:14%;">
+          <paper-input id="fcity" label="City"  allowed-pattern="[a-zA-Z]" value="{{city}}"></paper-input>
+        </div>
+        <div class="fields" style="margin-left:8%;">
+          <paper-input id="fpin" label="Pincode" allowed-pattern="[0-9]" maxlength="6" value="{{pincode}}"></paper-input>
+        </div>
+        <div class="fields" style="margin-left:7%;">
+          <div class="tlab">
+            <label>Transport Availability</label>            
+          </div>
+        
+          <div class="transport" style="margin-top: 15%;">
+          <div hidden$="{{hideonegender}}">
+            <span><paper-checkbox id="tyes" checked on-change="transyes">Yes</paper-checkbox></span>
+            <span><paper-checkbox  id="tno" on-change="transno">No</paper-checkbox></span>
+         </div>
+          <div hidden$="{{hidetwogender}}">
+            <span><paper-checkbox id="{{taransyesz}}" checked on-change="transyes1">Yes</paper-checkbox></span>
+            <span><paper-checkbox  id="{{transnoz}}" on-change="transno1">No</paper-checkbox></span>
+        </div>       
+        </div>
+        </div>
+      </div>
+     </div> 
+
+      <div>
+        <paper-button style="color:white;background-color:black;margin-left:43%;margin-top:  4%;" on-click="fnsubmit">Submit</paper-button>
+      </div>
+    </div>
+      <student-add-service id="studservice"></student-add-service> 
+      <demosumbit-card id="mydialog"></demosumbit-card>  
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var gender;
+    var transport;
+    var dobdate;
+    Polymer({
+      is: 'student-add-card',
+
+     FnStosGrade:function(e)
+     {
+       this.gradeid=e.target.selectedItem.value;
+       this.gradename=e.target.selectedItem.textContent.trim();
+     },
+     Fnadminyr:function(e)
+     {
+      this.academicyear=e.target.selectedItem.textContent.trim(); 
+       },
+    Fnacayr:function(e)
+     {
+     // alert(this.admissionyear);
+      this.admissionyear=e.target.selectedItem.textContent.trim(); 
+     },
+     fnmale1:function()
+     {
+      //alert(this.male11);
+//alert(document.querySelector('#'+this.male11).checked);
+      if(document.querySelector('#'+this.male11).checked==true)
+        {
+  document.querySelector('#'+this.female11).checked=false;
+       
+
+         gender="Male";
+         //alert(gender);
+        }
+      },
+      fnfemale1:function()
+      {
+    //alert(this.female11);
+//alert(document.querySelector('#'+this.female11).checked);
+
+if(document.querySelector('#'+this.female11).checked==true)
+        {
+  document.querySelector('#'+this.male11).checked=false;
+   gender="Female";
+         //alert(gender);
+        }
+      },
+
+
+
+       fnmale:function()
+     {
+     
+    if(document.querySelector("#male").checked==true)
+        {
+      document.querySelector("#female").checked=false;
+         //alert(document.querySelector("#female").checked);
+
+         gender="Male";
+         //alert(gender);
+        }
+      },
+      fnfemale:function()
+      {
+      
+    if(document.querySelector("#female").checked==true)
+        {
+
+         document.querySelector("#male").checked=false;
+    //  alert(document.querySelector("#male").checked);
+
+         gender="Female";
+         //alert(gender);
+        }
+      },
+      transyes1:function()
+      {
+  if(document.querySelector('#'+this.taransyesz).checked==true)
+        {
+          transport="Yes";
+          document.querySelector('#'+this.transnoz).checked=false;
+        }
+        if(document.querySelector('#'+this.taransyesz).checked==false)
+          transport="";
+      },
+      transno1:function()
+      {
+ if(document.querySelector('#'+this.transnoz).checked==true)
+        {
+          transport="No";
+  document.querySelector('#'+this.taransyesz).checked=false;
+        }
+if(document.querySelector('#'+this.transnoz).checked==false)
+          transport="";
+      },
+ transyes:function()
+      {
+        if(document.querySelector('#tyes').checked==true)
+        {
+          transport="Yes";
+          document.querySelector('#tno').checked=false;
+        }
+        if(document.querySelector('#tyes').checked==false)
+          transport="";
+      },
+      transno:function()
+      {
+
+        if(document.querySelector('#tno').checked==true)
+        {
+          transport="No";
+          document.querySelector('#tyes').checked=false;
+        }
+        if(document.querySelector('#tno').checked==false)
+          transport="";
+      },
+
+      fnsubmit:function()
+      {
+        
+        if(gender==""||gender==null)
+        {
+
+            alert("Please Select gender");
+        }
+          else if (this.enroll=="" || this.fname=="" || this.gradeid=="" || this.academicyear=="")
+          {
+            alert("Please enter all the fields");
+
+          }
+
+
+          else if(this.ageofyr=="" || this.showdate=="")
+          {
+            alert("Please Select Date of birth");
+          }
+
+          else if(this.fathername=="" && this.mothername=="")
+          {
+            alert("Please Enter Father or Mother Name");
+          }
+          else if(this.fatheremail=="" && this.motheremail=="")
+          {
+            alert("Please Enter Father or Mother Email id");
+          }
+          else if(this.fathermob=="" && this.mothermob=="")
+          {
+            alert("Please Enter Father or Mother Mobile number");
+          }
+           else
+           {
+
+              if(transport==""||transport==null)
+              {
+                transport='Yes';
+                //alert(transport);
+                this.$.studservice.fnstudentadd(this.enroll,this.fname,this.midname,this.lsname,this.showdate,this.ageofyr,this.fathername,this.mothername,this.gradename,this.academicyear,gender,transport);
+                this.$.studservice.fnparentadd(this.enroll,this.fathername,this.fatheremail,this.fathermob,this.address1,this.address2,this.address3,this.city,this.pincode,this.motheremail,this.mothername);
+                transport="";
+                   this.$.studservice.fetchstudentinfo();
+                   this.$.studservice.fetchstudentremove();
+
+          this.showdate=moment(new Date()).format('L');
+          localStorage.setItem("localsess_birth_date",this.showdate);
+
+          document.querySelector('#'+this.studadyear).selected=-1;
+          document.querySelector('#'+this.grdstudad).selected=-1;
+                 this.FnfullzRefresh();
+              }
+              else
+              {
+                this.$.studservice.fnstudentadd(this.enroll,this.fname,this.midname,this.lsname,this.showdate,this.ageofyr,this.fathername,this.mothername,this.gradename,this.academicyear,gender,this.transport);
+                this.$.studservice.fnparentadd(this.enroll,this.fathername,this.fatheremail,this.fathermob,this.address1,this.address2,this.address3,this.city,this.pincode,this.motheremail,this.mothername);
+                transport="";
+                this.$.studservice.fetchstudentinfo();
+                this.$.studservice.fetchstudentremove();
+
+            this.showdate=moment(new Date()).format('L');
+            localStorage.setItem("localsess_birth_date",this.showdate);  
+
+            document.querySelector('#'+this.studadyear).selected=-1;
+            document.querySelector('#'+this.grdstudad).selected=-1;
+             document.querySelector('#'+this.male11).checked=false;
+        document.querySelector('#'+this.female11).checked=false;
+ 
+
+                this.FnfullzRefresh();
+              }
+            }
+      
+      },
+      getdate:function(dates)
+      {
+
+        // var dt1=new Date(localStorage.getItem("localsess_birth_date"));
+        //   dobdate=localStorage.getItem("localsess_birth_date");
+        //   var dt=new Date();
+        //   var pr_year=dt.getFullYear();
+        //   var bt_year=dt1.getFullYear();
+        //   var diff=parseInt(pr_year-bt_year);
+        //   this.ageofyr=diff+" Years";
+
+         var dt1=new Date(dates);
+         dobdate=dates;
+         var dt=new Date();
+         var dt=new Date();
+         var pr_year=dt.getFullYear();
+         var bt_year=dt1.getFullYear();
+         var diff=parseInt(pr_year-bt_year);
+         this.ageofyr=diff+" Years";
+
+      },
+
+      fnsuccessadd:function()
+      {
+        this.$.mydialog.toggleDialog();
+      },
+      FnfullzRefresh:function()
+      {
+        // this.hideonegender=false;
+        // this.hidetwogender=true;
+        this.enroll="";
+        this.fname="";
+        this.midname="";
+        this.lsname="";
+        male.checked=false;
+        female.checked=false;
+        this.ageofyr="";
+        this.fathername="";
+        this.mothername="";
+        this.fatheremail="";
+        this.motheremail="";
+        this.fathermob="";
+        this.mothermob="";
+        this.address1="";
+        this.address2="";
+        this.address3="";
+        this.city="";
+        this.pincode=""; 
+      },
+      setdobvalid:function()
+      {
+        alert("Select proper DOB, it cannot be future date");
+      }
+      
+      
+    });
+  })();
+  </script>
+</dom-module>

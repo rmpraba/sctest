@@ -1,0 +1,320 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-icon-button/paper-icon-button.html">
+<dom-module id="teacher-book-refernce-card">
+  <template>
+    <style>   
+       :host {
+        display: block;
+      }
+.collapse-content {  
+    padding: 15px;
+    border: 1px solid #dedede;
+  }
+ section{
+    top: 200px;
+    right: 65%;
+    width: 327px;
+    height: 300px;   
+   }
+section p{    
+  }
+   .hs-inner
+   {
+    padding: 30px 20px 10px 377px;
+    @apply(--layout-horizontal);
+    
+   }
+.hs-inner p{
+  font-size: 18px;
+  line-height: 24px;
+  text-align: justify;
+  position: relative;
+  padding: 11px 0px;
+  text-shadow: 1px 0px 1px rgba(255, 255, 255, 0.8);
+}
+
+.hs-inner p:first-letter{
+  font-size: 28px;
+}
+    .cadcdd1{
+    top: 200px;
+    right: 90% !important;
+    width: 327px;
+    height: 300px;
+    margin-left:40%;
+    margin-top:-16%;
+    overflow: auto;
+   }
+   .position
+   {
+      margin-left:29%;
+   }
+   .position1
+   {
+      margin-left:5%;
+   }
+   .hs-inner
+   {
+    width: 382px;
+    height: 350px;
+    margin-top: -11%;
+    overflow-x: hidden;
+    overflow-y: visible;
+   }
+   table
+   {
+        margin-left: -25em;
+        /*margin-top: -4em;*/
+   }
+  
+
+   #newcardd
+    {
+        margin-top: 4%;
+        margin-left: 20%;
+         width:60%;
+        min-height: 512px; 
+        border: solid 1px #555; 
+        background-color: white; 
+        box-shadow: inset 10px -10px 25px #77539e(0,0,0,0.6); -moz-box-shadow: inset 10px -10px 25px rgba(0,0,0,0.6); -webkit-box-shadow: inset 10px -10px 25px rgba(146, 93, 93, 0.6); -o-box-shadow: inset 10px -10px 25px rgba(0,0,0,0.6)
+    }
+
+    img
+    {
+          margin-top: -12%;
+          height: 122px;
+          width: 778px;
+    }
+
+    paper-fab{
+      background-color: #ff0080;
+      color: white;
+    
+    }
+     #newchapterrr
+     {
+          border-radius: 10px;
+          width: 350px;
+          height: 320px;
+       
+     }
+    paper-dropdown-menu
+    {
+      width: 15%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+    }
+      
+       #itemcarddialog
+       {
+        width: 81%;
+        height: 129px;
+        text-align: center;
+       display: inline-block;
+        @apply(--layout-center);
+        border-radius: 2px;
+        box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+        padding:5px;
+       }
+
+    </style>
+
+      <div>
+         <center><h3>BOOK CHAPTER CREATION</h3></center>
+      </div>
+       <span class="position"> 
+       <paper-dropdown-menu  label="Select the Grade">
+                <paper-menu id="teacherref" class="dropdown-content"   on-iron-select="fnsetgrade">
+                  <template is="dom-repeat" items="{{empschoolnamesarr}}">
+                    <paper-item value="{{item.grade_id}}">{{item.grade_name}}
+                    </paper-item>
+                  </template>    
+                </paper-menu>
+         </paper-dropdown-menu>
+       </span>
+         <span class="position1"> 
+           <paper-dropdown-menu  label="Select Subject">
+                <paper-menu id="teacherrefzzzz" class="dropdown-content"   on-iron-select="fnemployeename">
+                  <template is="dom-repeat" items="{{subjectarr}}">
+                     <paper-item value="{{item.subjectid}}">{{item.subjectname}}
+                     </paper-item>
+                  </template>    
+                </paper-menu>
+          </paper-dropdown-menu>
+       </span>
+  <span class="position1"> 
+ 
+
+
+         <paper-dropdown-menu id="term" label="Select Term">
+            <paper-menu id="chaptertermiddddd" class="dropdown-content"   on-iron-select="Fnchaptertermid" attr-for-selected="value" required>
+                <paper-item value="term1">Term1</paper-item>
+                <paper-item value="Term2">Term2</paper-item>
+                <paper-item value="Term3">Term3</paper-item>
+            </paper-menu>
+          </paper-dropdown-menu>
+          </span>
+      <paper-dialog id="newchapterrr" modal>
+         <paper-input label="Enter Chapter" value="{{captername}}" ></paper-input>
+         <paper-input label="Enter Peroid" value="{{period}}" allowed-pattern="[0-9]"></paper-input>
+         <paper-input label="Enter Buffer period" value="{{bufferperiod}}" allowed-pattern="[0-9]"></paper-input>
+      <center>  <paper-button  on-click="fnset" style="color:white;background-color:black">Save</paper-button>
+          <paper-button style="color:white;background-color:black" on-click="fnclose" >Close</paper-button></center>
+          </paper-input>
+        </paper-dialog>
+
+    
+        <paper-card id="newcardd">
+          <div style="padding-top: 12%;height: 9%;">
+          <img src="../../images/book5.jpg">
+            <center style="position: absolute;margin-top: -14%;margin-left: 39%;
+            color: #1d1d1f;">
+              <h2>CHAPTER NAME</h2>
+            </center>
+            <paper-fab style="bottom: 116px;left: 92%;"  icon="add" mini on-click="fnsetchapter"></paper-fab>
+            <paper-fab  style="bottom: 155px;left: 85%;" id="chapedit" icon="create" mini on-click="Fnchapteredit"></paper-fab>
+          </div>
+
+          <div class="hs-inner" hidden$="{{hidecreatechapt}}">
+            <table>
+              <template is="dom-repeat" items="{{capterarr}}" as="view">
+                <tr>
+                  <template is="dom-repeat" items="{{view}}" as="v">
+                    <td style="line-height: 2em;">
+                      <div id="itemcarddialog">
+                        <p>
+                          <teacher-book-refernce-item-card capter="{{v.capter}}" capterid="{{v.capter_id}}"></teacher-book-refernce-item-card>
+                        </p>
+                      </div>
+                    </td>
+                  </template>
+                </tr>
+              </template>
+            </table>
+          </div>  
+
+
+          <div class="hs-inner" hidden$="{{hideeditchapt}}">
+            <table>
+              <template is="dom-repeat" items="{{capterarr}}" as="view">
+                <tr>
+                  <template is="dom-repeat" items="{{view}}" as="v">
+                    <td style="line-height: 2em;">
+                      <div id="itemcarddialog">
+                        <p>
+                          <chapter-edit-card captername="{{v.capter}}" capterid1="{{v.capter_id}}"></chapter-edit-card>
+                        </p>
+                      </div>
+                    </td>
+                  </template>
+                </tr>
+              </template>
+            </table>
+          </div>      
+        </paper-card>
+<teacher-book-service-card id="bookservice"></teacher-book-service-card>
+  </template>
+  <script>
+  (function() {
+    'use strict';  
+var k;
+    Polymer({
+      is: 'teacher-book-refernce-card',
+/*set1Page:function(page1){
+   this.page1=page1;
+},*/
+    ready:function()
+    {
+      this.hidecreatechapt=false;
+      this.hideeditchapt=true;
+    },
+    fnsetgrade:function(e){
+     this.gradeid=e.target.selectedItem.value;
+      sessionStorage.setItem("grdeidz",this.gradeid);
+      this.gradename=e.target.selectedItem.textContent.trim()
+     this.$.bookservice.bookrefsection(this.gradeid,this.gradename);
+     //this.captername="";
+     this.$.newcardd.hidden=true;
+     document.querySelector('#teacherrefzzzz').selected=-1;
+     document.querySelector('#chaptertermiddddd').selected=-1;
+
+     },
+     fnemployeename:function(e){
+     this.subjectid=e.target.selectedItem.value;
+       sessionStorage.setItem("subjectidz",this.subjectid);
+      this.subjectname=e.target.selectedItem.textContent.trim();
+       document.querySelector('#chaptertermiddddd').selected=-1;
+      this.$.newcardd.hidden=true;
+     
+    },
+   
+    Fnchaptertermid:function(e){
+    this.termid=e.target.selectedItem.textContent.trim()
+   sessionStorage.setItem("termid",this.termid);
+     this.$.bookservice.getcaptervalue();
+     this.$.newcardd.hidden=false;
+   
+    },
+     fnset:function(e)
+     {
+      if(this.captername=="" && this.period=="")
+       {
+          alert("Please enter the value");
+       }
+       else if(this.bufferperiod.length==0)
+       {
+        this.bufferperiod=0;
+       }
+       else
+       {
+    this.$.bookservice.fnsetcapture(this.gradeid,this.subjectid,this.captername,this.capterid,this.period,this.bufferperiod,this.termid);
+          this.captername="";
+          this.period="";
+          this.bufferperiod="";
+          this.$.newchapterrr.toggle();
+        }
+      },
+
+   addconcept:function() {
+  this.$.addconcept.toggle();
+  },
+  addKill:function() {
+  this.$.addKill.toggle();
+},
+fncollapse1:function(e){
+ this.$.collapse1.toggle();
+ 
+},  
+fnrefresh:function()
+{
+  this.$.newcardd.hidden=true;
+  document.querySelector('#teacherref').selected=-1;
+  document.querySelector('#teacherrefzzzz').selected=-1;
+   document.querySelector('#chaptertermiddddd').selected=-1;
+  this.ready();
+},
+
+fnsetchapter:function()
+{
+  this.$.newchapterrr.toggle();
+},
+
+fnclose:function()
+{
+  this.$.newchapterrr.close();
+},
+
+Fnchapteredit:function()
+{
+    this.hidecreatechapt=true;
+      this.hideeditchapt=false;
+}
+
+
+
+
+
+  });
+  })();
+  </script>
+</dom-module>

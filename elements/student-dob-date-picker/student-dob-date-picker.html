@@ -1,0 +1,90 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-dob-date-picker">
+
+<style>
+   paper-input
+      {
+        width: 80%;
+         /*--paper-input-container-label: { color: red };*/
+         text-align:center;
+      }
+</style>
+  <template>
+    <div class="datepicker">
+      <paper-input label="Date Of Birth" class="btn" on-click="FnShowDialog" raised value="{{showdate}}"></paper-input>
+      <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="FnDismissDialog">
+      <paper-date-picker id="picker" date="{{date}}"></paper-date-picker>
+            <div class="buttons">
+              <paper-button dialog-dismiss>Cancel</paper-button>
+              <paper-button dialog-confirm>OK</paper-button>
+            </div>
+        </paper-dialog>
+    </div>
+  <dialog-page id="ID_Show_Dialog"></dialog-page>
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+var dobdate;
+    Polymer({
+      is: 'student-dob-date-picker',
+
+     
+      ready:function()
+      {
+        this.showdate=moment(new Date()).format('L');
+        localStorage.setItem("localsess_birth_date",this.showdate);
+      },
+      FnShowDialog:function(){
+        this.date=new Date();
+        this.$.dialog.toggle();
+      },
+
+      FnDismissDialog:function(e)
+      {
+
+         if (e.detail.confirmed)
+        {
+          var pickdate=moment(this.$.picker.date).format('L');
+          var dd1=new Date();
+          var dd2=new Date(pickdate);
+          var days=parseInt((dd1 - dd2) / (1000 * 60 * 60 * 24));
+            if(days<=0)
+            {
+
+              document.querySelector('student-add-card').setdobvalid();
+              this.showdate="";
+            }
+            else
+            {
+
+              this.showdate = moment(this.$.picker.date).format('L');
+              localStorage.setItem("localsess_birth_date",this.showdate);
+              document.querySelector('student-add-card').getdate(this.showdate);
+               document.querySelector('student-information-card').fnsetdateofbirth(this.showdate);
+
+               /*this.showdate = moment(this.$.picker.date).format('L');
+               if(localStorage.getItem("curr_sess_page")=="student-information-card"){
+                document.querySelector('student-information-card').fnsetdateofbirth(this.showdate);
+               }
+               else{
+                document.querySelector('student-add-card').getdate(this.showdate);
+               }*/
+               
+            }
+        }  
+      },
+      FnClearstuddob:function()
+      {
+        this.showdate = moment(new Date()).format('L');
+      }
+     
+  
+    });
+  })();
+  </script>
+</dom-module>

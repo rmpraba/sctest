@@ -1,0 +1,193 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="subject-dynamic-coscholastic-markentry-cards">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+   <div hidden>{{studentnamess}}{{ids}}{{studentid}}{{studentname}}{{classid}}{{assesmenttype}}{{gradeid}}{{gradename}}
+      {{subjectid}}{{subjectname}}{{categoryid}}{{categoryname}}{{subcategoryid}}{{grade}}{{categorycnt}}{{weight}}{{seq}}</div>
+      <h4 hidden$="{{hidelabel}}" style="text-align: center;word-wrap: break-word;">{{subcategoryname}}</h4>
+      <paper-input style="text-align: center;" id="{{ids}}"  hidden$="{{hideinput}}" on-focus="cvvxcvxcvv" value="{{score}}" ></paper-input>
+
+
+<paper-dialog id="healthandphysical" modal style="margin-left: -10%;margin-top: 2%;height:80%;width:50%;">
+      <paper-fab style="background: grey;margin-top: -3%;margin-left: 96%;width:40px;height: 40px;" icon="close" on-click="FnClose"></paper-fab>
+      <paper-dialog-scrollable style="height: 80%;">
+      <template is="dom-repeat" items="{{coarr}}">
+        <cs-sub-metrics-item-card errormessage="{{item.errormessage}}" submetric="{{item.sub_metrics}}" score1="{{item.mark}}">
+       </cs-sub-metrics-item-card>
+      </template>
+      <center>  
+      <div class="submitbutton">
+      <paper-button class="button" on-click="click">Submit</paper-button>
+      </div>
+      </center>
+     <paper-dialog-scrollable>  
+ </paper-dialog>
+    <co-scholastic-service id="coscholasticservice"></co-scholastic-service>
+    <term-assesment-service id="assesmentservice"></term-assesment-service>
+     <iron-ajax        
+        method="post"
+        id="fetchgradeforhealthajax"
+        url="{{fetchgradeforhealthurl}}"
+        params="{{fetchgradeforhealthparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchgradeforhealthResponse"
+        debounce-duration="300"
+     >
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var lower=[];
+    var higher=[];
+    var grade=[];
+    var name;
+    var idd;
+    var sname;
+    var subarr=[];
+    var subcatarr=[];
+    var arr=[];
+    var sum1,name1,sum=0,t=0;
+    var setid,catname,subcategoryid;
+    var temparr=[];
+    Polymer({
+      is: 'subject-dynamic-coscholastic-markentry-cards',
+
+     cvvxcvxcvv:function(e)
+      {
+        setid=this.ids;
+        idd=this.studentid;
+        name=this.studentname;
+        sname=this.subcategoryname;
+        catname=this.categoryname;
+        subcategoryid=this.subcategoryid;
+      //  alert(idd+" "+name+" "+sname+" "+catname+" "+subcategoryid);
+         this.$.coscholasticservice.fetchlifeskilldata(this.studentid,this.subcategoryname);
+        var id ='healthandphysical';
+        sessionStorage.setItem("category",this.subcategoryname);
+        var dialog = document.getElementById(id);
+         dialog.open();
+      },
+       fnfindsum:function(mark,cat)
+      {
+     // alert(setid);
+      //  alert(document.getElementById(setid));
+     
+       // alert(idd+" "+name+" "+sname+" "+catname);
+        if(localStorage.getItem("curr_sess_grade")=="Grade-9"||localStorage.getItem("curr_sess_grade")=="Grade-10"){
+        if(mark=='A')
+          mark=5;
+        if(mark=='B')
+          mark=4;
+        if(mark=='C')
+          mark=3;
+        if(mark=='D')
+          mark=2;
+        if(mark=='E')
+          mark=1;
+        if(mark=='')
+          mark=0;
+        }
+        else{
+        if(mark=='A')
+          mark=5;
+        if(mark=='B')
+          mark=4;
+        if(mark=='C')
+          mark=3;
+        if(mark=='')
+          mark=0;
+        }
+       var obj1={}
+       obj1.studid=idd;
+       obj1.studname=name;
+       obj1.category=catname;
+       obj1.subcategory=cat;
+       obj1.mark=mark;
+       obj1.order_seq=1;
+       subarr.push(obj1);
+       sum=parseFloat(sum)+parseFloat(mark);
+       t++;
+
+      },
+      FnSubcategory:function(subcategoryarr)
+      {
+      subcatarr=subcategoryarr;
+      },
+      FnClose:function(){
+        var id = 'healthandphysical';
+        var dialog = document.getElementById(id);
+        dialog.opened=false;
+      },
+      click:function()
+      {
+        // alert(setid);
+       // alert(document.getElementById(setid));
+       // alert(JSON.stringify(subcatarr));
+       // alert(JSON.stringify(subarr));
+       var flag=0;  
+         if(subcatarr.length>0)
+        {
+          for(var i=0;i<subcatarr.length;i++)
+          {
+            flag=0;
+            for(var j=0;j<subarr.length;j++)
+            {
+            if(subcatarr[i].sub_category==subarr[j].subcategory)
+            {
+               flag=1;
+            }
+          }
+          if(flag==0)
+          {
+        if(subcatarr[i].mark=='A')
+          subcatarr[i].mark=5;
+        if(subcatarr[i].mark=='B')
+          subcatarr[i].mark=4;
+        if(subcatarr[i].mark=='C')
+          subcatarr[i].mark=3;
+        if(subcatarr[i].mark=='D')
+          subcatarr[i].mark=2;
+        if(subcatarr[i].mark=='E')
+          subcatarr[i].mark=1;
+        if(subcatarr[i].mark=='')
+          subcatarr[i].mark=0;
+            sum=parseFloat(sum)+parseFloat(subcatarr[i].mark);
+            t++;
+          }
+        }
+        }
+       
+        var id = 'healthandphysical';
+        var dialog = document.getElementById(id);
+        dialog.opened=false;
+     sum1=(parseFloat((parseFloat(sum))/parseFloat(t))).toFixed(2);
+        document.getElementById(setid).value=sum1;
+            
+      var obj1={}
+          obj1.studid=idd;
+          obj1.studname=name;
+          obj1.category=sname;
+          obj1.subcategory=catname;
+          obj1.subcategoryid=subcategoryid;
+          obj1.summark=sum1;
+          temparr.push(obj1);
+    document.querySelector('cs-sub-metrics-item-card').clearinputdata();
+    document.querySelector('subject-dynamic-coscholastic-markentry-item-card').fngetvalue(temparr,subarr);
+         sum=0;
+          t=0;
+        },
+        fnclear:function(e){
+         temparr=[];
+         subarr=[];
+        }
+    });
+  })();
+  </script>
+</dom-module>

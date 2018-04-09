@@ -1,0 +1,454 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="subject-dynamic-coscholastic-markentry-card">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+      table{
+        /*width: 90%;*/
+        border-collapse: collapse;                          
+        margin-left: 1%;
+      }              
+      .studname{
+        width: 20%;
+      }
+      #tb1{
+          width:15%
+      }
+      .button{
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            text-transform: none;
+      }
+      #btn2{
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            height: 25px;
+            border-radius: 2px;
+            font-family: Calibri;
+            font-size: 17px;
+      }
+      .btndiv{
+        @apply(--layout-horizontal);
+        margin-left: 45%;
+      }
+      .hrspace
+      {
+       /*padding-left: 87%;*/
+       margin-left: 5%;
+       @apply(--layout-horizontal);
+      }
+      .exceldiv
+      {
+        @apply(--layout-horizontal);
+        /*margin-top: 3%;*/
+        margin-left: 8%;
+      }
+      .excelcard{
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        border-bottom: 1px solid #dedede;
+      }
+      #subjectdynamiccoscholasticid{
+        @apply(--layout-horizontal);
+      }
+      #upload{
+        margin-left: -10%;
+        /*padding-top: -2%;*/
+      }
+      .fileupload{
+        @apply(--layout-vertical);
+      }
+      #coreadfiles{
+        margin-top: 2%;
+      }
+      #check{
+        margin-top: 0.5%;
+      }
+    </style>
+    <div class="excelcard" align="right">
+      <div id="check" hidden$="{{hideheader1}}">
+      <paper-checkbox id="coscolasticcheckid1" on-change="excelmark1">Excel Upload</paper-checkbox>
+      </div>
+      <div id="subjectdynamiccoscholasticid">
+      <div class="hrspace">
+      <paper-icon-button id="download" icon="icons:file-download" onclick="exportToExcel4()"></paper-icon-button>
+      <paper-tooltip for="download">Download</paper-tooltip>
+      <!-- <input type="button" id="btn2" onclick="tableToExcel('dynamicreporttable11', 'Mark Report')" value="Download Template"> -->
+      </div>
+      <div class="exceldiv" >
+      <!-- <div class="fileupload"> -->
+        <input id="coreadfiles" type="file" onchange="coloadFiles(event)"/>
+        <xmp id="output"></xmp>
+      <!-- </div> -->
+        <paper-icon-button  id="upload" icon="icons:file-upload" on-click="FnClick1"></paper-icon-button>
+        <paper-tooltip for="upload">Upload</paper-tooltip>
+        <!-- <paper-button style="color: white;height: 25px;  background: #252626; font-family:Calibri;"  on-click="FnClick">Upload File</paper-button>     -->
+      </div>
+      </div>
+    </div>   
+    <!--  <div hidden$="{{hideheader1}}">
+            <paper-checkbox style="margin-left: 67%;padding-left: 11%;" 
+             id="coscolasticcheckid1" on-change="excelmark1">Excel Upload
+             </paper-checkbox>
+      </div>
+    <div id=subjectdynamiccoscholasticid>
+      <div class="hrspace">
+        <input type="button" id="btn2" onclick="tableToExcel('coscolaticvaluedynamicreporttable', 'Mark Report')" value="Download Template">
+     </div>
+      <div class="exceldiv" >
+         <input id="coreadfiles" type="file" onchange="coloadFiles(event)"/>
+         <xmp id="output"></xmp>
+        <paper-button style="margin-left: -19%;margin-top: -1%;width: 42%;color: white;height: 30px;  background: #252626; font-family:Calibri;"  on-click="FnClick1">Upload File</paper-button>    
+      </div>
+   </div> -->
+   
+    <div hidden$="{{hideheader1}}">    
+    <center>
+      <h1>{{schoolname}}</h1>
+      <h3>Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+      <h4>Assesment: {{assesmentname}}  &nbsp;&nbsp;&nbsp; Grade: {{grade}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section: {{section}} &nbsp;&nbsp; Subject: {{subject}} </h4>
+    <template is="dom-repeat" items="{{studarr}}"> 
+      <subject-dynamic-coscholastic-markentry-item-card id="edmeic" serialno="{{item.sno}}" studentname="{{item.student_name}}" studentid="{{item.id}}" hiddenoutinput="{{item.hiddenoutinput}}" category="{{item.category}}" grade="{{item.grade}}" temp="{{temp}}"></subject-dynamic-coscholastic-markentry-item-card>
+    </template> 
+    </center>
+    <div class="btndiv">
+    <paper-button  class="button" id="dynamicsavebtn1" on-click="FnApprove">{{btnlabel}}</paper-button>
+    </div> 
+    </div>           
+    <term-assesment-service id="assesmentservice"></term-assesment-service>
+    <co-scholastic-service id="coscholasticservice"></co-scholastic-service>
+
+
+    <subject-dynamic-coscholastic-markentry-service id="cosubjectservice"></subject-dynamic-coscholastic-markentry-service>
+    <paper-input value="{{categorylength}}" hidden></paper-input>
+      <div width="{{tabwidth}}" hidden>
+      <table id="DataTableId4" border="1" style="border-collapse: collapse;" width="{{tabwidth}}">
+      <template is="dom-repeat" items="{{studarr1}}">
+      <tr>
+      <th width="5%">{{item.sno}}</th>
+      <th width="15%">{{item.Studentno}}</th>
+      <th width="15%">{{item.studentname}}</th>
+      <template is="dom-repeat" items="{{item.category}}" as="i">
+      <th colspan$="{{i.categorycnt}}" width$="{{i.width}}">{{i.subcategoryname}}</th>
+      </template>
+      </tr>
+      </template>
+      </table> 
+     </div>
+   
+     
+   
+  </template>
+  <script type="text/javascript">
+  var array=[];
+  var array1=[];
+  var tempstudentarr=[];
+function coloadFiles(event){
+    alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(data){
+    array1=data; 
+  // alert(JSON.stringify(array1.length));
+     for(var i=0;i<array1.length;i++){
+       for(var j=0;j<tempstudentarr.length;j++){
+       // alert(array[i].StudentNo+"  "+tempstudentarr[j].student_id);
+       if((array1[i].StudentId).trim()==(tempstudentarr[j].id).trim()){
+          array.push(array1[i]);
+          }      
+      }  
+    }       
+   });
+  }
+  </script>
+  <script type="text/javascript">
+    var exportsubjectnamesolastic1;
+  function exportToExcel4(){
+    var htmls = "";
+    var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j = 0;
+    var tab = document.getElementById('DataTableId4'); // id of table
+    var lines = tab.rows.length;
+  if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+  for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : exportsubjectnamesolastic1 || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = exportsubjectnamesolastic1;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+     }
+ </script>
+  <script type="text/javascript">
+  var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name){
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+  })()
+  </script> 
+   <script>
+ (function() {
+      'use strict';
+        var scorearr=[];
+        var gradearr=[];
+        var detailarr=[];
+        var tempassesmetarr=[];
+  Polymer({
+        is: 'subject-dynamic-coscholastic-markentry-card',
+      ready:function(){
+        this.hideheader1=true;      
+        this.$.dynamicsavebtn1.hidden=true;
+       localStorage.setItem("curr_sess_template_tef","coinactive"); 
+       this.$.subjectdynamiccoscholasticid.hidden=true;
+         localStorage.setItem("curr_sess_template_tef","inactive"); 
+       localStorage.setItem("curr_sess_single_studetmap","inmapactive");
+       
+      },
+  excelmark1:function(e){
+if(document.querySelector("#coscolasticcheckid1").checked==true){
+       this.$.subjectdynamiccoscholasticid.hidden=false;
+       localStorage.setItem("curr_sess_template_tef","coactive"); 
+      }
+   if(document.querySelector("#coscolasticcheckid1").checked==false){
+this.$.subjectdynamiccoscholasticid.hidden=true;
+ document.getElementById("coreadfiles").value ="";
+       localStorage.setItem("curr_sess_template_tef","coinactive"); 
+      }
+    },
+    FnClick1:function(){
+        var temp=[];
+      if(array.length==0){
+         document.querySelector("coscholastic-assesment-card").TermMarkdialog("Pls save the file in EXCEL WORKBOOK extension!");
+        // alert("Pls save the file in EXCEL WORKBOOK extension!");
+        document.getElementById("coreadfiles").value = "";
+       }
+       else{ 
+        for(var i=0;i<array.length;i++){
+             if(JSON.stringify({})==JSON.stringify(array[i])){
+             }
+         else{
+        var setarr=[];
+            setarr=Object.keys(array[i]);
+             setarr.splice(0,3);
+   for(var j=0;j<setarr.length;j++){
+    for(var k=0;k<tempassesmetarr.length;k++){
+   
+  if(this.categorylength==setarr.length){ 
+    // alert(tempassesmetarr[k].sub_metrics.trim()+"("+tempassesmetarr[k].weightscore+")" +"   " +setarr[j].trim());
+    if(tempassesmetarr[k].sub_metrics.trim()+"("+tempassesmetarr[k].weightscore+")"==setarr[j].trim()){
+          // alert("in");
+          var m=setarr[j];
+          var obj={};
+          obj.studid=array[i].StudentId;
+          obj.studname=array[i].StudentName;
+          obj.categoryid=tempassesmetarr[k].category_id;
+          obj.categoryname=tempassesmetarr[k].category_name;
+          obj.category=tempassesmetarr[k].sub_category;
+          obj.subcategoryid=tempassesmetarr[k].sub_category;
+          obj.subcategory=tempassesmetarr[k].sub_metrics;
+          obj.tempvalu=tempassesmetarr[k].cmt1;
+          obj.value=array[i][m];
+          obj.grade="";
+          temp.push(obj);
+                  } }
+                 else{
+                   // temp=[];
+                      array=[];
+                      array1=[];
+                  //    tempstudentarr=[];
+                      setarr=[];
+                     // alert("Pls import the corrcet file name");
+                     document.getElementById("coreadfiles").value = "";
+                     }}}}}
+      if(temp.length==0){
+      document.querySelector("coscholastic-assesment-card").TermMarkdialog("Please check your sheet..All the fields must be entered!!");
+      }
+      else{
+      document.querySelector("coscholastic-assesment-card").FnToggleSpinner(true);
+      document.querySelector("coscholastic-assesment-card").spinnermsg='Please wait...uploading';
+                  
+  
+    //alert(JSON.stringify(temp));
+    
+      for(var i=0;i<temp.length;i++){
+       var a = ("A,B,C,D").split(","); 
+           var m=[{"grade":'A',"mark":'5'},{"grade":'B',"mark":'4'},{"grade":'C',"mark":'3'},{"grade":'D',"mark":'2'},{"grade":'E',"mark":'1'},{"grade":'',"mark":'0'}];
+        var f=0;
+         for (var j = 0; j < a.length; j++)
+        {
+        if(a[j]==temp[i].value)
+          f=1;
+        }
+        if(f==1){
+        for (var j= 0; j < m.length;j++)
+        {
+          if(m[j].grade==temp[i].value)
+            temp[i].mark=m[j].mark;
+        }
+        }
+        else
+        {
+          temp[i].value="";
+          temp[i].mark=temp[i].value;
+        } 
+  //alert(JSON.stringify(temp[i]));
+  // this.$.assesmentservice.callinsertassesmentmarkService(temp[i].studentid,temp[i].studentname,temp[i].categoryname,temp[i].subcategoryname,temp[i].values,temp[i].seq,temp.length); 
+   }
+   // alert('check for final arr'); 
+   // alert(JSON.stringify(temp));
+   // alert(JSON.stringify(tempstudentarr));
+   //document.querySelector("coscholastic-assesment-card").FnToggleSpinner(true);
+   var finalarr=[];
+     for( var i=0;i<tempstudentarr.length;i++){
+          var c=0;
+          var tempvalue=0;
+        for( var  j=0;j<temp.length;j++){
+            if((tempstudentarr[i].id).trim()==(temp[j].studid).trim()){
+                  c+=parseFloat(temp[j].mark);
+                   tempvalue++;   
+       // alert(temp[j].tempvalu+"=="+tempvalue+" "+c);
+          if(temp[j].tempvalu==tempvalue){
+             var obj1={};
+          obj1.studid=temp[j].studid;
+          obj1.studname=temp[j].studname;
+          obj1.category=temp[j].category;
+          obj1.subcategory=temp[j].subcategoryid;
+          obj1.summark=(parseFloat((parseFloat(c))/parseFloat(tempvalue))).toFixed(2);
+          // alert(JSON.stringify(obj1));
+          finalarr.push(obj1);
+           c=0;
+          tempvalue=0;
+           }
+         }
+        }
+      }
+      for(var i=0;i<finalarr.length;i++){
+        finalarr[i].t=i+1;
+      }
+   // alert('final start');
+   // alert(JSON.stringify(temp));
+   // alert(JSON.stringify(finalarr)); 
+   // localStorage.setItem("curr_sess_lenth",finalarr.length);
+ //  alert(localStorage.getItem("curr_sess_lenth"));
+   // for(var i=0;i<finalarr.length;i++){
+   //  var t=i+1;
+   //   this.$.coscholasticservice.callinsertcoscholasticassesmentmarkService(finalarr[i].studid,finalarr[i].studname,finalarr[i].category,finalarr[i].subcategory,finalarr[i].avg,t);
+   //       }
+   this.$.coscholasticservice.callinsertcoscholasticsubcategorymarkService(temp,finalarr);
+         document.getElementById("coreadfiles").value ="";
+            temp=[];
+            array=[];
+            array1=[];
+            tempstudentarr=[];
+            finalarr=[];
+         document.getElementById("coreadfiles").value ="";
+           this.categorylength="";
+        document.querySelector('#coscolasticcheckid1').checked=false;
+         }
+       }
+      }, 
+  fngenrategrade:function(arr){
+          tempassesmetarr=arr;
+    },
+    FnRefresh:function(){
+       this.hideheader1=true;      
+        this.$.dynamicsavebtn1.hidden=true;
+       localStorage.setItem("curr_sess_template_tef","coinactive"); 
+       this.$.subjectdynamiccoscholasticid.hidden=true;
+         localStorage.setItem("curr_sess_template_tef","inactive"); 
+       localStorage.setItem("curr_sess_single_studetmap","inmapactive");
+        this.$.coscolasticcheckid1.hidden=true;
+
+    },
+  fnstudentarrvalue:function(arr){
+         tempstudentarr=arr;
+     },
+  FnSetLabel:function(){
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Class-Teacher"||sessionStorage.getItem("curr_sess_loggedrole")=="Subject-Teacher"){
+        this.btnlabel="Submit for approval";
+        }
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Co-Ordinator"){
+        this.btnlabel="Approve";
+        }
+      },
+      FnSetMarkEnteredArray:function(arr){
+        var scorearrlen=arr;
+        // alert((this.studarr.length)-1+"  "+scorearrlen);
+        if(((this.studarr.length)-1)==(scorearrlen)){
+  this.$.cosubjectservice.callSubjectApprovalService(this.grade,this.section,this.subject);
+        }
+        else
+        {
+          // alert('Please complete markentry for all the students!!');
+          document.querySelector("coscholastic-assesment-card").TermMarkdialog("Please complete markentry for all the students!!");
+        }
+      },
+      setDefaultHeaders:function(){
+      
+        this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+        this.academicyear=localStorage.getItem("curr_sess_academicyear");
+        this.grade=localStorage.getItem("curr_sess_grade");
+        this.section=localStorage.getItem("curr_sess_section");
+        this.subject=localStorage.getItem("curr_sess_subject");
+        this.assesmentname=localStorage.getItem("curr_sess_assesment");
+        exportsubjectnamesolastic1=this.grade+"-"+this.section+"-"+localStorage.getItem("curr_sess_subject")+"-"+this.assesmentname;
+        this.$.dynamicsavebtn1.hidden=false;
+        this.hideheader1=false;
+        this.FnSetLabel();
+   if(sessionStorage.getItem("curr_sess_loggedrole")=="Co-Ordinator")
+        this.$.coscolasticcheckid1.hidden=true;
+      else
+        this.$.coscolasticcheckid1.hidden=false;
+      },
+        FnApprove:function(){
+        // this.$.subjectservice.fetchMarkSavedStudents(this.grade,this.section,this.subject);
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Class-Teacher"||sessionStorage.getItem("curr_sess_loggedrole")=="Subject-Teacher"){
+        document.querySelector("coscholastic-assesment-card").FnToggleSpinner(true);
+        document.querySelector("coscholastic-assesment-card").spinnermsg='Please wait...';
+        this.$.cosubjectservice.fetchMarkSavedStudents(this.grade,this.section,this.subject);
+        }
+       else if(sessionStorage.getItem("curr_sess_loggedrole")=="Co-Ordinator"){
+         localStorage.setItem("curr_sess_assesmenttype","");
+         document.querySelector("coscholastic-assesment-card").FnToggleSpinner(true);
+        document.querySelector("coscholastic-assesment-card").spinnermsg='Please wait...';
+        this.$.assesmentservice.Fnfaimportmark();
+        }
+
+      }
+    });
+  })();
+  </script>
+</dom-module>

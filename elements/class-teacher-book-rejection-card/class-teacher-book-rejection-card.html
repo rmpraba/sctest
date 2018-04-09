@@ -1,0 +1,193 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="class-teacher-book-rejection-card">
+  <template>
+    <style>
+      :host {   
+        display: block;
+      }  table
+        {   
+              table-layout: fixed;
+          width: 1496px;
+          border-collapse: collapse;
+          margin-left: -1%;
+          margin-top: 0%;
+        }
+
+        .card
+        {
+          @apply(--layout-horizontal);
+        } 
+        p
+        {
+          width: 25%;
+          margin-left: 10%;
+        } 
+        paper-button
+        {
+          text-transform: none;
+          height: 25px;
+        } 
+        
+
+
+         #rejectsavedialoggggg
+        {
+          border-radius: 10px;
+          width: 354px;
+          height: 170px;
+        }
+        #rejectfailuredialog
+        {
+          border-radius: 10px;
+          width: 354px;
+          height: 170px;
+        }
+    </style>
+    <div>
+
+
+            <paper-input value={{subconceptid}} hidden></paper-input>
+            <paper-input value={{subjectid}} hidden></paper-input>
+            <paper-input value={{gradeid}} hidden></paper-input>
+            <paper-input value={{sectionid}} hidden></paper-input>
+            <paper-input value={{conceptid}} hidden></paper-input>
+            <paper-input value={{rowidz}} hidden></paper-input>
+
+
+
+      <table border="1">
+      <tr>
+
+
+              <td hidden>{{empid}}</td>
+              <td style="width: 10%">{{conceptname}}</td>
+              <td style="width: 10%">{{subconceptname}}</td>
+              <td style="width: 5%;text-align: center;">{{period}}</td>
+              <td style="width: 5.4%;word-wrap: break-word;">{{skill}}</td>
+              <td style="width: 6.7%;word-wrap: break-word;">{{bldvalues}}</td>
+              <td style="width: 5.4%;word-wrap: break-word;">{{value}}</td>
+              <td style="word-wrap: break-word;width: 5.4%;">{{teachingaid}}</td>
+              <td style="word-wrap: break-word;width: 5.4%;">{{innovation}}</td> 
+              <td style="width: 5.4%;">{{planfrom}}</td>
+              <td style="width: 5.4%;">{{planto}}</td>
+              <td style="width: 5.4%;">
+                <div hidden$="{{hideeditvalue}}">{{completiondate}}</div>
+                  <complection-date-picker-card hidden$="{{hidesavevalue}}" ></complection-date-picker-card>
+              </td>
+              <td style="word-wrap: break-word;width: 5.4%;">{{remark}}</td>
+              <td style="word-wrap: break-word;width: 5.45%;">
+                <paper-textarea readonly$="{{newremarkszzz}}" value={{coremark}}></paper-textarea>
+              </td>
+              <td style="width: 5.45%;">{{enrichmentsug}}</td>
+              <td style="width: 5.45%;">{{correctionstatus}}</td>
+              <!-- <td style="width: 8.1%;">{{completionstatus}}</td> -->
+              <td style="width: 5.45%;">
+                <paper-checkbox id={{id}} on-change="fnsetyes">Yes</paper-checkbox></br>
+           </td>
+              <td><paper-icon-button  on-click="fnaroveset" icon="save"></paper-icon-button>
+             
+              </td>
+           </tr>
+      </table>
+
+
+      <paper-dialog id="rejectsavedialoggggg" modal>
+       <h3><center>SUCCESS</center></h3>
+       <center>
+         <paper-button on-click="rejectclose2dialog" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>
+
+      <paper-dialog id="rejectfailuredialog" modal>
+       <h3><center>FAILURE</center></h3>
+       <center>
+         <paper-button on-click="rejfailureclose2" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>
+       <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+ 
+  </template>
+  <script>
+  (function() {
+    'use strict';
+var costatus;
+    Polymer({
+      is: 'class-teacher-book-rejection-card',
+
+      ready:function(e)
+      {
+        
+        this.hideeditvalue=false;
+        this.newremarkszzz=true;
+  },
+  fnedit:function(e)
+  {
+    this.hidesavevalue=false;
+    this.hideeditvalue=true;
+    this.newremarkszzz=false;
+  },
+
+    fnaroveset:function(e)
+    {
+      
+    //alert(this.coremark);
+    this.$.bookservice.fnfinalreaprovebook(this.empid,this.skill,this.innovation,this.enrichmentsug,this.period,this.planneddate,this.conceptname,this.conceptid,this.remark,this.sectionid,this.subjectid,this.subconceptid,this.value,this.correctionstatus,this.completionstatus,this.rowidz,this.coremark);
+
+      this.hidesavevalue=true;
+      this.hideeditvalue=false;
+    },
+    fnsetyes:function(e){
+   
+  if(document.querySelector('#'+this.id).checked==true){
+             costatus='Yes';
+     document.querySelector('#'+this.idz).checked=false;
+      
+           }
+    },
+    
+    /*fnsetno:function(e)
+    {
+      // alert(this.id);
+
+      if(document.querySelector('#'+this.idz).checked==true)
+      {
+             costatus='No';
+        document.querySelector('#'+this.id).checked=false;
+      }
+   },*/
+
+
+      rejectclose2dialog:function()
+     {
+      this.$.rejectsavedialoggggg.close();
+     },
+     rsvopndialg:function()
+     {
+      //alert('open');
+      this.$.rejectsavedialoggggg.toggle();
+     },
+     rsfaildialog:function()
+     {
+      this.$.rejectfailuredialog.toggle();
+     },
+     rejfailureclose2:function()
+     {
+      this.$.rejectfailuredialog.close();
+     }
+
+
+    });
+  })();
+  </script>
+</dom-module>

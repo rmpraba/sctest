@@ -1,0 +1,87 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
+<link rel="import" href="..\..\bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="enrichment-dynamic-markentryitemcard">
+  <template>
+    <style>
+      table{
+        /*width: 70%;*/
+        /*table-layout:fixed;*/
+        border-collapse: collapse;
+        table-layout: fixed;
+        width: 60%;
+        /*min-width: 400px;*/
+      }
+      td{
+        height: 10px;
+      }
+      paper-input{
+      height: 20px;
+      margin-top: -1%;
+      vertical-align: top;
+      }
+    </style>
+    <div hidden>{{temp}}</div>
+    <div class="card">
+        <paper-input hidden value="{{studentid}}"></paper-input>
+        <table border="1">
+        <tr>        
+        <th width="5%" valign="top"><p>{{serialno}}</p></th>
+        <th width="10%" valign="top"><p>{{studentid}}</p></th>
+        <th width="25%" valign="top"><p>{{studentname}}</p></th>
+        <!-- <td id="tb1"><paper-input  value="{{score}}" on-change="FnActivity"></paper-input></td> -->
+        <template is="dom-repeat" items="{{category}}">
+          <td valign="top" colspan="{{item.categorycnt}}">
+          <enrichment-markentry-input categorycnt="{{item.categorycnt}}" grade="{{grade}}" studentid="{{item.studentid}}" studentname="{{item.studentname}}" classid="{{item.classid}}" assesmenttype="{{item.assesmenttype}}" gradeid="{{item.gradeid}}" gradename="{{item.gradename}}" subjectid="{{item.subjectid}}" subjectname="{{item.subjectname}}" categoryid="{{item.categoryid}}" categoryname="{{item.categoryname}}" subcategoryid="{{item.subcategoryid}}" subcategoryname="{{item.subcategoryname}}" hideinput="{{item.hiddeninput}}" hidelabel="{{item.hiddenlabel}}" score="{{item.score}}" weight="{{item.weight}}"></enrichment-markentry-input>
+          </td>
+        </template>
+        <td width="5%"><p style="text-align: center;" hidden$="{{hiddenoutinput}}">{{grade}}</p></td>
+        <td width="5%"><paper-icon-button hidden$="{{hiddenoutinput}}" icon="save" on-click="FnSave"></paper-icon-button></td>
+        </tr>
+        </table>
+    </div>
+    <beginner-assesment-service id='beginnerservice'></beginner-assesment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var scorearr=[];
+    Polymer({
+      is: 'enrichment-dynamic-markentryitemcard',
+      ready:function(){
+        scorearr=this.temp;
+        // alert('calling');
+      },
+      attached:function(){
+        scorearr=[];
+      },
+      FnSetInfoArray:function(arr){
+        scorearr=arr;
+      },
+      FnSave:function(){
+        // alert(JSON.stringify(scorearr));
+        document.querySelector("beginner-assesment-card").FnToggleSpinner(true);
+        if(scorearr.length>0){
+        for(var i=0;i<scorearr.length;i++){
+          // alert(scorearr[i].studentid+" "+this.studentid);
+          if(scorearr[i].studentid==this.studentid){
+            var temp=[];
+            temp.push(scorearr[i]);
+            this.$.beginnerservice.callbamarkinsertService(temp);
+          }
+        }
+        }
+        else{
+          alert("Please enter the marks!!");
+        }
+      },
+      FnRefresh:function(){
+        scorearr=[];
+      }   
+    });
+  })();
+  </script>
+</dom-module>

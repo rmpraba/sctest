@@ -1,0 +1,71 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="..\..\bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="..\..\bower_components/paper-tabs/paper-tab.html">
+
+<dom-module id="enrichment-activityhome-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-tabs{
+        width: 100%;
+      }
+    </style>
+    <div>
+    <div>
+      <paper-tabs selected="0" scrollable>
+          <paper-tab on-click="FnAssignment" hidden>Book/Activity Assignment</paper-tab>
+          <paper-tab on-click="FnEvaluation">Book/Activity Evaluation</paper-tab>
+          <paper-tab on-click="FnDue">Due Book/Activity</paper-tab>
+          <paper-tab on-click="FnPerformance">Performance Chart</paper-tab>
+      </paper-tabs>
+    </div>
+    <hr>
+    <div>
+      <iron-pages selected="{{page}}" attr-for-selected="data-category">
+        <section data-category="enrichment-assignment-card">
+          <enrichment-assignment-card></enrichment-assignment-card>
+        </section>
+        <section data-category="enrichment-evaluation-card">
+          <enrichment-evaluation-card></enrichment-evaluation-card>
+        </section>
+        <section data-category="enrichment-due-card">
+          <enrichment-due-card></enrichment-due-card>
+        </section>
+        <section data-category="enrichment-performance-card">
+          <enrichment-performance-card></enrichment-performance-card>
+        </section>
+      </iron-pages>
+    </div>
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'enrichment-activityhome-card',
+      FnAssignment:function(e){
+        this.page="enrichment-assignment-card";
+        this.$.enrichmentservice.FnFetchBookForStudent(localStorage.getItem('curr_sess_studentid'));
+      },
+      FnEvaluation:function(e){
+        this.page="enrichment-evaluation-card";
+        this.$.enrichmentservice.FnFetchIssuedBook(localStorage.getItem('curr_sess_studentid'));
+      },
+      FnDue:function(e){
+        this.page="enrichment-due-card";
+        this.$.enrichmentservice.FnFetchDueInfo(localStorage.getItem('curr_sess_studentid'));
+      },
+      FnPerformance:function(e){
+        this.page="enrichment-performance-card";
+        this.$.enrichmentservice.FnFetchPerformanceMeasures(localStorage.getItem('curr_sess_studentid'));
+      }
+    });
+  })();
+  </script>
+</dom-module>

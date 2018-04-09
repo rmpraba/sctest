@@ -1,0 +1,64 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="my-greeting">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      input {
+        @apply(--paper-font-body2);
+      }
+      .symbolcard{
+        @apply(--layout-horizontal);
+      }
+      paper-icon-button{
+        margin-top: -16%;
+        margin-left: -3%;
+      }
+    </style>
+    <div class="symbolcard">
+    <template is="dom-if" if="{{diff}}">
+    <!-- indiff-{{diff}} -->
+    <template is="dom-repeat" items="{{levelcount}}">
+    <!-- levelicon-{{levelicon}} -->
+    <p hidden$="{{levelvisible}}"><paper-icon-button icon="icons:{{levelicon}}" style="color: {{levelcolor}};"></paper-icon-button></p>
+    </template>
+    <template is="dom-if" if="{{subleveldiff}}">
+    <!-- (subleveldiff-{{subleveldiff}} -->
+    <p style="margin-top: 16%;">(</p>
+    <template is="dom-repeat" items="{{sublevelcount}}">
+    <!-- sublevelicon-{{sublevelicon}} -->
+    <p hidden$="{{sublevelvisible}}"><paper-icon-button icon="icons:{{sublevelicon}}" style="color: {{sublevelcolor}};margin-left: -2%;"></paper-icon-button></p>
+    <p style="margin-top: 16%;">)</p>
+    </template>
+    </template>
+    <template is="dom-if" if="{{!subleveldiff}}">
+    <!-- (elsesubleveldiff-{{subleveldiff}} -->
+    <p style="margin-top: 16%;">(</p>
+    <template is="dom-repeat" items="{{sublevelcount}}">
+    <!-- elsesublevelicon{{sublevelicon}} -->
+    <p hidden$="{{sublevelvisible}}"><paper-icon-button icon="icons:{{sublevelicon}}" style="color: {{sublevelcolor}};margin-left: -2%;"></paper-icon-button></p>
+    </template>
+    <p style="margin-top: 16%;">)</p>
+    </template>
+    </template>
+    <template is="dom-if" if="{{!diff}}">
+    <!-- elsediff-{{diff}} -->
+    <template is="dom-repeat" items="{{levelcount}}">
+    <!-- elselevelicon-{{levelicon}} -->
+    <p hidden$="{{levelvisible}}"><paper-icon-button icon="icons:{{levelicon}}" style="color: {{levelcolor}};"></paper-icon-button></p>
+    </template>
+    </template>
+    </div>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'my-greeting',
+      });
+    })();
+  </script>
+</dom-module>

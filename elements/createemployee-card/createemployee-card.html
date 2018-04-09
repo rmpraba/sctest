@@ -1,0 +1,326 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\employeerolemap-card\employeerolemap-card.html">
+<link rel="import" href="..\employeeschooltypemap-card\employeeschooltypemap-card.html">
+<link rel="import" href="..\employeecategorymap-card\employeecategorymap-card.html">
+<link rel="import" href="..\employeegrademap-card\employeegrademap-card.html">
+<link rel="import" href="..\employeesectionmap-card\employeesectionmap-card.html">
+<link rel="import" href="..\employeesubjectmap-card\employeesubjectmap-card.html">
+
+<dom-module id="createemployee-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        /*width: 30%;*/
+        margin-left: 5%;
+      }
+      .hcard{
+        @apply(--layout-vertical);
+      }
+    </style>
+    <div class='card'>
+    <h2>Employee Info</h2>
+    <div class="empcard1">
+    <paper-input id="" label="Employee Id/Name" value="{{id}}">
+    <paper-icon-button suffix icon="search" on-click="FnSearchEmployee" title="Search"></paper-icon-button>
+    </paper-input>
+    <paper-dropdown-menu label="Select Employee Id/Name" on-iron-select="FnSelectEmployee">
+      <paper-listbox class="dropdown-content" id="employeesearch">
+        <template  is="dom-repeat" items="{{employeearr}}" as="item">
+          <paper-item value="{{item.id}}">{{item.id}}-{{item.name}}</paper-item>
+        </template>
+      </paper-listbox>
+    </paper-dropdown-menu>
+    <paper-input label="Employee Name" value="{{name}}">Employee Name</paper-input>
+    <paper-input label="Email Id" value="{{emailid}}">Email Id</paper-input>
+    <paper-input label="Mobile No" value="{{mobileno}}">Mobile No</paper-input>
+    </div>
+     <div class="empcard2">
+    <h2>Role Mapping</h2>
+    <template  is="dom-repeat" items="{{rolearr}}" as="item">
+    <div class="hcard">
+    <employeerolemap-card roleid="{{item.id}}" rolename="{{item.role_name}}"></employeerolemap-card>
+    </div>
+    </template>
+    <paper-button on-click="FnAddRole">Add</paper-button>
+    </div>
+     <div class="empcard3">
+    <h2>Schooltype Mapping</h2>
+    <template  is="dom-repeat" items="{{schooltypearr}}" as="item">
+    <div class="hcard">
+    <employeeschooltypemap-card schooltypeid="{{item.school_type_id}}" schooltypename="{{item.school_type_name}}"></employeeschooltypemap-card>
+    </div>
+    </template>
+    <paper-button on-click="FnAddSchoolType">Add</paper-button>
+    </div>
+    <div class="empcard4">
+    <h2>Category Mapping</h2>
+    <template  is="dom-repeat" items="{{categoryarr}}" as="item">
+    <div class="hcard">
+    <employeecategorymap-card categoryid="{{item.subject_category_id}}" categoryname="{{item.subject_category_name}}"></employeecategorymap-card>
+    </div>
+    </template>
+    <paper-button on-click="FnAddCategory">Add</paper-button>
+    </div>
+    <div class="empcard5" hidden$="{{hidegrademap}}">
+    <h2>Grade Mapping</h2>
+    <template  is="dom-repeat" items="{{gradearr}}" as="item">
+    <div class="hcard">
+    <employeegrademap-card gradeid="{{item.grade_id}}" gradename="{{item.grade_name}}"></employeegrademap-card>
+    </div>
+    </template>
+    <paper-button on-click="FnAddGrade">Add</paper-button>
+    </div>
+    <div class="empcard6" hidden$="{{hidesectionmap}}">
+    <template  is="dom-repeat" items="{{sectionarr}}" as="item">
+    <div class="hcard">
+    <employeesectionmap-card sectionid="{{item.section_id}}" sectionname="{{item.section_name}}"></employeesectionmap-card>
+    </div>
+    </template>
+    <paper-button on-click="FnAddSection">Add</paper-button>
+    </div>
+    <div class="empcard7" hidden$="{{hidesubjectmap}}">
+    <template  is="dom-repeat" items="{{subjectarr}}" as="item">
+    <div class="hcard">
+    <employeesubjectmap-card subjectid="{{item.subjectid}}" subjectname="{{item.subjectname}}"></employeesubjectmap-card>
+    </div>
+    </template>
+    <paper-button on-click="FnAddSubject">Add</paper-button>
+    </div>  
+    <div class="btncard">
+      <!-- <paper-button on-click="FnGenerate" hidden$="{{hidegenerate}}">Generate</paper-button> -->
+      <paper-button on-click="FnCreate" hidden$="{{hidecreate}}">Create</paper-button>
+      <paper-button on-click="FnCancel" hidden$="{{hidecancel}}">Cancel</paper-button>
+    </div>
+    </div>
+    <iron-ajax        
+        id="fetchroleajax"
+        url="{{fetchroleurl}}"
+        params="{{fetchroleparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fetchroleResponse"
+        debounce-duration="300"
+    > 
+    <iron-ajax        
+        id="fetchschooltypeajax"
+        url="{{fetchschooltypeurl}}"
+        params="{{fetchschooltypeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fetchschooltypeResponse"
+        debounce-duration="300"
+    > 
+    <iron-ajax        
+        id="fetchcategorynameajax"
+        url="{{fetchcategorynameurl}}"
+        params="{{fetchcategorynameparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fetchcategorynameResponse"
+        debounce-duration="300"
+    > 
+    <iron-ajax        
+        id="fetchgradeformappingajax"
+        url="{{fetchgradeformappingurl}}"
+        params="{{fetchgradeformappingparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fetchgradeformappingResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax        
+        id="fetchsectionformappingajax"
+        url="{{fetchsectionformappingurl}}"
+        params="{{fetchsectionformappingparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fetchsectionformappingResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax        
+        id="fetchsubjectformappingajax"
+        url="{{fetchsubjectformappingurl}}"
+        params="{{fetchsubjectformappingparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fetchsubjectformappingResponse"
+        debounce-duration="300"
+    >
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var rolearr=[];
+    var schooltypearr=[];
+    var grade=[];
+    var typecnt1=0;
+    var typecnt2=0;
+    var gradecnt1=0;
+    var gradecnt2=0;
+    var categorycnt1=0;
+    var categorycnt2=0;
+    var gradearr=[];
+    var section=[];
+    var sectionarr=[];
+    var category=[];
+    var categoryarr=[];
+    Polymer({
+      is: 'createemployee-card',
+      ready:function()
+      {
+        this.hidegrademap=true;
+        this.hidesectionmap=true;
+        this.hidesubjectmap=true;
+      },
+      callService:function(){
+        // alert('calling');
+        this.fetchroleurl=sessionStorage.getItem("addrinfo")+"/fetchrole-service";
+        this.$.fetchroleajax.generateRequest();
+        this.fetchschooltypeurl=sessionStorage.getItem("addrinfo")+"/fetchschooltypename-service";
+        this.$.fetchschooltypeajax.generateRequest();
+        this.fetchcategorynameurl=sessionStorage.getItem("addrinfo")+"/fetchcategoryname-service";
+        this.$.fetchcategorynameajax.generateRequest();
+      },
+      fetchroleResponse:function(e){
+        // alert(JSON.stringify(e.detail.response.returnval));
+        var arr=e.detail.response.returnval;
+        this.rolearr=arr;
+      },
+      fetchschooltypeResponse:function(e){
+        // alert(JSON.stringify(e.detail.response.returnval));
+        var arr=e.detail.response.returnval;
+        this.schooltypearr=arr;
+      },
+      fetchcategorynameResponse:function(e){
+        // alert(JSON.stringify(e.detail.response.returnval));
+        var arr=e.detail.response.returnval;
+        this.categoryarr=arr;
+      },
+      fetchgradeformappingService:function(){
+        typecnt1=schooltypearr.length;
+        this.fetchgradeformappingurl=sessionStorage.getItem("addrinfo")+"/fetchgradeformapping-service";
+        for(var i=0;i<schooltypearr.length;i++){
+          var obj={"schoolid":"","schooltype":""};
+          obj.schooltype=schooltypearr[i];
+          this.fetchgradeformappingparam=obj;
+          this.$.fetchgradeformappingajax.generateRequest();
+        }                 
+      },
+      fetchgradeformappingResponse:function(e){
+        var arr=e.detail.response.returnval;
+        if(arr!='no rows'){
+          typecnt2++;
+        for(var i=0;i<arr.length;i++){
+          grade.push(arr[i]);
+        }        
+        }
+        if(typecnt1==typecnt2){
+          this.hidegrademap=false;
+          this.gradearr=grade;
+          typecnt1=0;
+          typecnt2=0;
+        }
+      },
+      setRole:function(role){
+        rolearr=role;
+      },
+      setSchooltype:function(schooltype){
+        schooltypearr=schooltype;
+        // this.fetchgradeformappingService();
+      },
+      setCategory:function(category){
+        categoryarr=category;
+      },
+      setGrade:function(grade){
+        gradearr=grade;
+      },
+      setSection:function(section){
+        sectionarr=section;
+      },
+      FnAddSchoolType:function(){
+        this.fetchgradeformappingService();
+      },
+      FnAddGrade:function(){
+        this.fetchsectionformappingService();
+      },
+      FnAddSection:function(){
+        // this.fetchgradeformappingService();
+      },
+      FnAddCategory:function(){
+        this.fetchsubjectformappingService();
+      },
+      FnAddSubject:function(){
+        // this.fetchgradeformappingService();
+      },
+      fetchsectionformappingService:function(){
+        // this.gradearr="";
+        gradecnt1=gradearr.length;
+        this.fetchsectionformappingurl=sessionStorage.getItem("addrinfo")+"/fetchsectionformapping-service";
+        for(var i=0;i<gradearr.length;i++){
+          var obj={"schoolid":"","gradeid":""};
+          obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+          obj.gradeid=gradearr[i];
+          this.fetchsectionformappingparam=obj;
+          this.$.fetchsectionformappingajax.generateRequest();
+        }                 
+      },
+      fetchsectionformappingResponse:function(e){
+        var arr=e.detail.response.returnval;        
+        if(arr!='no rows'){
+          gradecnt2++;
+        for(var i=0;i<arr.length;i++){
+          arr[i].section_name=(arr[i].section_id).toUpperCase();
+          section.push(arr[i]);
+        }        
+        }
+        if(gradecnt1==gradecnt2){
+          // alert(JSON.stringify(section));
+          this.hidesectionmap=false;
+          this.sectionarr=section;
+          gradecnt1=0;
+          gradecnt2=0;
+        }
+      },
+       fetchsubjectformappingService:function(){
+        // this.gradearr="";
+        categorycnt1=categoryarr.length;
+        this.fetchsubjectformappingurl=sessionStorage.getItem("addrinfo")+"/fetchsubjectformapping-service";
+        for(var i=0;i<gradearr.length;i++){
+          var obj={"schoolid":"","category":""};
+          obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+          obj.category=categoryarr[i];
+          this.fetchsubjectformappingparam=obj;
+          this.$.fetchsubjectformappingajax.generateRequest();
+        }                 
+      },
+      fetchsubjectformappingResponse:function(e){
+        var arr=e.detail.response.returnval;        
+        if(arr!='no rows'){
+          categorycnt2++;
+        for(var i=0;i<arr.length;i++){
+          subject.push(arr[i]);
+        }        
+        }
+        if(categorycnt1==categorycnt2){
+          // alert(JSON.stringify(section));
+          this.hidesubjectmap=false;
+          this.subjectarr=subject;
+          categorycnt1=0;
+          categorycnt2=0;
+        }
+      }
+    });
+  })();
+  </script>
+</dom-module>

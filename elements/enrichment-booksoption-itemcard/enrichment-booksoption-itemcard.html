@@ -1,0 +1,64 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-booksoption-itemcard">
+  <template>
+   <p hidden>{{bookid}}</p>
+   <paper-checkbox id="bookoption{{bookid}}" on-change="FnSelectBook">{{bookname}}</paper-checkbox>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var bookarr=[]; 
+    var selectbookid="";
+    Polymer({
+      is: 'enrichment-booksoption-itemcard',
+      FnSelectBook:function(e){
+        if(bookarr.length==0){
+          var obj={};
+          if(document.querySelector('#bookoption'+this.bookid).checked==true)
+          {
+          obj.bookid=this.bookid;
+          obj.bookname=this.bookname;
+          selectbookid=this.bookid;
+          bookarr.push(obj);
+          }
+        }
+        else{
+          if(document.querySelector('#bookoption'+this.bookid).checked==true){
+         // document.querySelector('#bookoption'+selectbookid).checked=false;
+          for(var i=0;i<bookarr.length;i++){
+            if(bookarr[i].bookid==this.bookid||bookarr[i].bookid==selectbookid){
+              bookarr.splice(i,1);
+            }
+          }
+          var obj={};
+          obj.bookid=this.bookid;
+          obj.bookname=this.bookname;
+          selectbookid=this.bookid;
+          bookarr.push(obj);
+          }
+          else{
+           for(var i=0;i<bookarr.length;i++){
+            if(bookarr[i].bookid==this.bookid){
+              bookarr.splice(i,1);
+              selectbookid="";
+            }
+           }
+          } 
+          }
+          document.querySelector('enrichment-studentlevel-card').FnSetBooks(bookarr);
+          //alert(JSON.stringify(bookarr));
+      },
+
+        Fnsetinfo:function(){
+         for(var i=0;i<bookarr.length;i++){
+            document.querySelector('#bookoption'+bookarr[i].bookid).checked=false;
+           
+            }
+       bookarr=[];
+     }
+    });
+  })();
+  </script>
+</dom-module>

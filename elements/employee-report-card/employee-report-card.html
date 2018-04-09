@@ -1,0 +1,398 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="employee-report-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }  
+       .title
+      {
+        margin-left: 2%;
+      }
+      
+     .tabl1
+      {
+          margin-left: 20%;
+          margin-top: 4%;
+           border-collapse: collapse;
+
+      }
+       .tabl2
+      {
+          margin-left: 12%;
+          margin-top: 4%;
+           border-collapse: collapse;
+
+      }
+     /* #grade{
+        margin-left: 40%;
+      }
+*/     #tb3{
+          width:7.5%;
+          text-align: start;
+    }
+     #tb2{
+      width:17%;
+    }
+     #tb4{
+      width:30%;
+      text-align: start;
+    }
+    #tb1{
+      width:30.5%;
+      text-align: start;
+    }
+     #tb11{
+      width:20%;
+      text-align: start;
+    }
+    #tb5{
+      width:10%;
+      text-align: start;
+    }
+    #btn{
+      width: 10%;
+      background: #252626;
+      color: white;
+      margin-top: 5%;
+      height: 30px;
+      border-radius: 4%;
+      font-family: Calibri;
+      font-size: 17px;
+      margin-left: 44%;
+      }
+
+      #btn2
+      {
+      width: 10%;
+      background: #252626;
+      color: white;
+      margin-top: 5%;
+      height: 30px;
+      border-radius: 4%;
+      font-family: Calibri;
+      font-size: 17px;
+      margin-left: 44%;
+      }
+      #td1{
+        padding:2%;
+      }
+
+      .newtempl
+      {
+              margin-left: 3%;
+            margin-top: 3%;
+      }
+      .emp22
+      {
+              margin-left: -14%;
+            position: absolute;
+            width: 161%;
+            margin-top: 6%;
+
+      }
+      .hrspace
+      {
+        margin-left: 9%;
+        /*position: absolute;*/
+        margin-top: 8%;
+      }
+       .hrspace1
+       {
+            margin-left: 9%;
+          margin-top: 8%;
+          /*position: absolute;*/
+       }
+      .fulldiv
+      {
+        @apply(--layout-horizontal);
+        border: 1px solid #6699ff;
+        padding: 5px;
+            width: 60%;
+        margin-left: 24%;
+        height: 150px;
+      }
+      .hrspace3
+      {
+        margin-left: 6%;
+        margin-top: 4%;
+
+      }
+      paper-dropdown-menu
+      {
+        width: 100%;
+        text-align: center;
+      }
+      i
+      {
+        hyphens: manual;
+      }
+    </style>
+
+     <div class="title">
+      <center>
+        <h3><b>EMPLOYEE REPORT</b></h3>
+      </center>
+      </div>
+
+
+      <div class="fulldiv">
+        <div class="newtempl" id="scltypehide">  
+          <label><b>School Types</b></label> 
+            <template is="dom-repeat" items="{{schooltypearr}}" as="view">
+              <employee-report-schooltype schooltypenamezz="{{view.school_type_name}}" schooltypeid="{{view.school_type_id}}" id="EMST{{view.school_type_id}}"></employee-report-schooltype>
+            </template>                 
+          </div>
+        <div class="hrspace" id="id11"><label>OR </label></div>
+
+        <div  class="hrspace1" id="stdchk">
+          <paper-checkbox id="chk1" on-change="selectemp">Select Specific Employee</paper-checkbox>      
+        </div>
+
+        <div class="hrspace3" id="emphide">
+          <paper-dropdown-menu id="grade" label="Select Employee">
+            <paper-menu id="empdddd" class="dropdown-content" on-iron-select="Fnemp">     
+              <template is="dom-repeat" items="{{selectemparry}}">
+                <paper-item value="{{item.emp_id}}">{{item.emp_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+        </div>  
+      </div>
+              
+     
+        <div>
+         <table border="1" class="tabl1" id="tabledetails">
+          <tr>
+            <th id="tb5">Employee ID</th>
+            <th id="tb1">Employee Name</th>
+            <th  id="tb3">Grade</th>
+            <th  id="tb3">Subject</th>
+            <th  id="tb4">Section</th> 
+          </tr>  
+            <template is="dom-repeat" items="{{emp1aaaa}}" as="view">
+            <tr>
+             <td>{{view.id}}</td>
+             <td>{{view.name}}</td>
+             <td>{{view.grade_name}}</td>
+             <td>{{view.subject_name}}</td>
+               <td>   
+                <template is="dom-repeat" items="{{view.subject}}" as="s" style="font-family: Calibri;"><!-- <b>{{s.subject_name}}</b>  -->&nbsp;{{s.section_id}}  
+               </template>
+              </td>
+            </tr>     
+            </template>  
+          </table>
+
+            <input type="button" id="btn" onclick="tableToExcel('tabledetails', 'Employee Report')" value="Export to Excel">
+        </div>  
+
+      <div>
+          <table border="1" class="tabl2" id="tabledetails2">
+          <tr>
+          <th id="tb5">Employee ID</th>
+          <th id="tb11">Employee Name</th>
+          <th  id="tb3">Grade</th>        
+          <th  id="tb3">Subject</th>  
+          <th  id="tb4">Section</th>
+          </tr>  
+          <template is="dom-repeat" items="{{emp1select}}" as="view">
+          <tr>
+           <td>{{view.id}}</td>
+           <td>{{view.emp_name}}</td>
+           <td>{{view.grade_name}}</td>
+           <td>{{view.subject_name}}</td>
+             <td>   
+              <template is="dom-repeat" items="{{view.subject}}" as="s" style="font-family: Calibri;"><!-- <b>{{s.subject_name}}</b> --> &nbsp; {{s.section_id}}
+             </template>
+            </td>
+           </template>  
+          <!-- </tr>   -->   
+            </table>
+            
+        <input type="button" id="btn2" onclick="tableToExcel('tabledetails2', 'Employee Report')" value="Export to Excel"> 
+      </div>  
+
+       
+  <iron-ajax        
+        id="Getempajax"
+        url="{{Getempurl}}"
+        params="{{Getempparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="GetempResponse"
+        debounce-duration="300"
+        > 
+  </template>
+   <script type="text/javascript">
+var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+</script>
+
+  <employee-report-service id="empservice"></employee-report-service>
+  <master-service id="uiservice"></master-service>
+  <script>
+  (function() {
+    'use strict';
+      
+      var temp1=[];
+      var temp2=[];
+      var temp3=[];
+      var tempall=[];
+      var emp1aaaa=[];
+
+
+    Polymer({
+      is: 'employee-report-card',
+             
+             fnhidden:function()
+             {
+                this.$.btn.hidden=true;
+                this.$.btn2.hidden=true;
+                this.$.tabledetails.hidden=true;
+                this.$.tabledetails2.hidden=true;
+                this.$.emphide.hidden=true;
+                chk1.checked=false;
+                //this.$.id11.hidden=true;
+                //this.hideschooltype=true;
+
+             },
+              fnvisible:function()
+             {
+              //alert("view....");
+                this.$.btn2.hidden=false;
+                this.$.tabledetails2.hidden=false;
+
+                //this.hideschooltype=true;
+
+             },
+            Fnemp:function(e)
+            {
+               
+               this.emp=e.target.selectedItem.textContent.trim();
+               this.empid=e.target.selectedItem.value;
+
+              this.Getempurl=sessionStorage.getItem("addrinfo")+"/empreport-service";
+          var obj={"school_id":"","academic_year":"","id":""};
+          obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+          obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+          obj.id=this.empid;
+          this.Getempparam=obj;
+          //alert(JSON.stringify(obj));
+          this.$.Getempajax.generateRequest();
+          this.$.btn.hidden=false;
+           this.$.tabledetails.hidden=false;
+           this.$.tabledetails2.hidden=true;
+
+            },
+
+   GetempResponse:function(e)
+    {
+         var emp1=e.detail.response.returnval;
+        // alert(JSON.stringify(emp1));
+       //  this.emp1aaaa=emp1;
+         
+          
+          for(var i=0;i<emp1.length;i++)
+          {
+            var obj={"id":"","name":"","grade_id":"","grade_name":""};
+            obj.id=emp1[i].id;
+            obj.name=emp1[i].name;
+            obj.grade_id=emp1[i].grade_id;
+            obj.grade_name=emp1[i].grade_name;
+            obj.subject_name=emp1[i].subject_name;
+            temp1.push(obj);
+            var obj1={"subject_name":"","subject_id":"","section_id":""};
+            obj1.subject_id=emp1[i].subject_id;
+            obj1.section_id=emp1[i].section_id;
+            temp1.push(obj1);
+            //alert(JSON.stringify(temp1));              
+             for(var j=i+1;j<emp1.length;j++)
+             {
+              if(emp1[i].grade_name==emp1[j].grade_name && emp1[i].subject_id==emp1[j].subject_id)
+              {
+
+                var obj2={"section_id":""}
+                obj2.section_id=","+emp1[j].section_id;
+                temp1.push(obj2);
+                //alert(JSON.stringify(temp1));
+                emp1.splice(j,1);
+                j--;
+              }
+             }
+
+               obj.subject=temp1;
+               tempall.push(obj);
+              //alert(JSON.stringify(tempall));
+               temp1=[];
+
+          }
+            
+              this.emp1aaaa=tempall;
+              tempall=[];
+          //alert(JSON.stringify(this.emp1aaaa));
+             
+        },
+          
+      FnRefresh:function()
+       {
+
+        //alert(44444);
+         document.querySelector('#empdddd').selected=-1;
+         this.$.tabledetails.hidden=true;
+         this.$.tabledetails2.hidden=true;
+         this.$.btn.hidden=true;
+         this.emp1aaaa=[];  
+       },
+
+      selectemp:function(e)
+      {
+        if(chk1.checked==true)
+        {
+          this.$.emphide.hidden=false;
+          //this.$.scltypehide.hidden=true;
+          //this.$.id11.hidden=true;
+          this.$.tabledetails2.hidden=true;
+          this.$.btn2.hidden=true;
+          document.querySelector('employee-report-schooltype').fnrefresh1();
+
+        }
+        else if(chk1.checked==false)
+        {
+          this.$.emphide.hidden=true;
+          //this.$.scltypehide.hidden=false;
+          //this.$.tabledetails.hidden=true;
+          this.$.id11.hidden=false;
+          this.$.btn.hidden=true;
+          this.$.tabledetails.hidden=true;
+           document.querySelector('#empdddd').selected=-1;
+           document.querySelector('employee-report-schooltype').fnrefresh1();
+
+        }
+
+      },
+      fnnewrefresh:function()
+      {
+        chk1.checked=false;
+        document.querySelector('#empdddd').selected=-1;
+        this.$.tabledetails.hidden=true;
+        this.$.emphide.hidden=true;
+      }
+     
+
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,116 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
+<link rel="import" href="..\..\bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../co-scholastic-service/co-scholastic-service.html">
+<dom-module id="cce-fivetoten-health-itemcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .card{
+        height: 2%;
+      }
+    </style>
+    <div class="card">
+  <table border="1">
+     <tr>        
+        <td  style="{{fonts}}"><p>{{serialno}}</p></td>
+        <td  style="{{fonts}}"><p>{{studid}}</p></td>
+        <td  style="{{fonts}}"><p>{{studname}}</p></td>
+        <td  style="{{fonts}}"><paper-input hidden$="{{hidefist}}" on-change="FnHeight" value="{{height}}"></paper-input>
+           <p hidden$="{{hidesecond}}">{{height}}</p>
+
+        </td>
+        <td  style="{{fonts}}"><paper-input  hidden$="{{hidefist}}"  on-change="FnWeight" value="{{weight}}"></paper-input>
+           <p  hidden$="{{hidesecond}}">{{weight}}</p>
+             
+        </td> 
+        <td  style="{{fonts}}">
+          <paper-input on-change="FnBloodgroup" value="{{bloodgroup}}"  hidden$="{{hidefist}}"></paper-input>
+           <p  hidden$="{{hidesecond}}">{{bloodgroup}}</p>
+
+        </td> 
+        <td  style="{{fonts}}">
+         <paper-input on-change="FnVisionleft" value="{{visionleft}}" hidden$="{{hidefist}}"></paper-input>
+           <p  hidden$="{{hidesecond}}">{{visionleft}}</p>
+        </td> 
+        <td  style="{{fonts}}">
+          <paper-input on-change="FnVisionright" value="{{visionright}}" hidden$="{{hidefist}}"></paper-input>
+           <p  hidden$="{{hidesecond}}">{{visionright}}</p>
+        </td>  
+        <td  style="{{fonts}}">
+          <paper-input on-change="FnDental" value="{{dental}}" hidden$="{{hidefist}}"></paper-input>
+           <p  hidden$="{{hidesecond}}">{{dental}}</p>
+
+        </td> 
+        <td  hidden$="{{hidesavevalue}}"  style="{{fonts}}"><paper-icon-button id="ps" icon="icons:save" on-click="FnSave"  hidden$="{{hidefist}}"></paper-icon-button>
+           <p hidden$="{{hidesecond}}">{{savelabel}}</p>
+        </td> 
+     </tr>
+        </table>
+    </div>
+    <co-scholastic-service id="assesmentservice"></co-scholastic-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var lower=[];
+    var higher=[];
+    var grade=[];
+    Polymer({
+      is: 'cce-fivetoten-health-itemcard',
+      ready:function(){
+        this.studid="";
+        this.studname="";
+        this.height="";
+        this.weight="";
+        this.bloodgroup="";
+        this.visionleft="";
+        this.visionright="";
+        this.dental="";
+      },     
+      FnHeight:function(e){        
+      },
+      FnWeight:function(e){        
+      },
+      FnBloodgroup:function(e){        
+      },
+      FnVisionleft:function(e){        
+      },
+      FnVisionright:function(e){        
+      },
+      FnDental:function(e){        
+        // this.callService();  
+      },
+      FnSave:function()
+      {
+        if(this.height==""||this.height==null)
+          this.height="";
+        if(this.weight==""||this.weight==null)
+          this.bloodgroup="";
+        if(this.bloodgroup==""||this.bloodgroup==null)
+          this.bloodgroup="";
+        if(this.visionleft==""||this.visionleft==null)
+          this.visionleft="";
+        if(this.visionright==""||this.visionright==null)
+          this.visionright="";
+        if(this.dental==""||this.dental==null)
+          this.dental="";
+       this.callService();
+      },
+      callService:function(){  
+      // alert(this.studid+" "+this.studname+" "+this.height+" "+this.weight+" "+this.bloodgroup+" "+this.visionleft+" "+this.visionright+" "+this.dental);
+   localStorage.setItem("curr_sess_template_tef","inactive"); 
+    this.$.assesmentservice.callinserthealthService(this.studid,this.studname,this.height,this.weight,this.bloodgroup,this.visionleft,this.visionright,this.dental); 
+      }
+    });
+  })();
+  </script>
+</dom-module>

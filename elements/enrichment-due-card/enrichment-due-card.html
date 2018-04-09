@@ -1,0 +1,34 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-due-card">
+  <template>
+    <style>
+      .tab{
+        width: 90%;
+      }
+      td{
+        height: 30px;
+      }
+      tr:nth-child(even) {background: #CCC};
+      tr:nth-child(odd) {background: #FFF};
+      
+    </style>
+    <div>
+    <table class="tab">
+    <tr><th>Assesment</th><th>Subject</th><th>Category</th><th>Book/Activity</th><th>Issued Date</th><th>Due Date</th><th>Status</th></tr>
+      <template is="dom-repeat" items="{{itemarr}}">
+      <tr><td>{{item.assesment_type}}</td><td>{{item.subject}}</td><td>{{item.category}}</td><td>{{item.bookactivity_name}}</td><td>{{item.issued_date}}</td><td>{{item.due_date}}</td><td>{{item.status}}</td></tr>
+      </template>
+    </table>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'enrichment-due-card',
+    });
+  })();
+  </script>
+</dom-module>

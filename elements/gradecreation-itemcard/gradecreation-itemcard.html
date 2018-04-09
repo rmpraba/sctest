@@ -1,0 +1,30 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="gradecreation-itemcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>Hello from <span>{{foo}}</span></div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'gradecreation-itemcard',
+
+      properties: {
+        foo: {
+          type: String,
+          value: 'gradecreation-itemcard',
+          notify: true
+        }
+      }
+    });
+  })();
+  </script>
+</dom-module>

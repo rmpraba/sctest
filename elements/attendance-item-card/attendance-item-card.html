@@ -1,0 +1,176 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
+<link rel="import" href="..\..\bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../co-scholastic-service/co-scholastic-service.html">
+<dom-module id="attendance-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        border-collapse: collapse;
+        width: 100%;
+
+      }
+      table { table-layout:fixed; }
+     table td { overflow: hidden; }
+      .card{
+        height: 2%;
+      }
+      
+.speccommentvalue
+      {
+        width: 90%;
+        height: 50%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+      }
+.gencommentvalue
+      { 
+        width: 90%;
+        height: 50%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+      }
+       #attendancegenericcmnt{
+      border-radius: 10px;
+      width: 37%;
+      height: 45%
+       }
+       #attendancespecificcmnt{
+       border-radius: 10px;
+    width: 37%;
+    height: 45%
+      }
+   /*   
+      #tb1{
+        width:15%
+      }
+      #tb2{
+        width:20%
+      }
+     /
+     
+    </style>
+    <div class="card">
+        <table border="1" >
+        <tr>
+        <td  style="{{fonts}}" width="5%"><paper-item hidden$="{{hidefist}}">{{serialno}}</paper-item>
+       <p  hidden$="{{hidesecond}}">{{serialno}}</p>
+        </td>
+        <td   style="{{fonts}}"> <p>{{studid}}</p></td>
+        <td   style="{{fonts}}"> <p>{{studname}}</p></td>
+
+        <td  style="{{fonts}}"><paper-input hidden$="{{hidefist}}" on-change="FnAttendance" value="{{attendance}}"></paper-input>
+       <p  hidden$="{{hidesecond}}" > {{attendance}}</p>
+        </td>
+        <td   style="{{fonts}}">
+        <paper-item on-click="FnGeneric"  hidden$="{{hidefist}}" s value="{{genericcomment}}">{{genericcomment}}</paper-item>
+         <p  hidden$="{{hidesecond}}" > {{genericcomment}}</p>
+
+
+        </td>   
+        <td  style="{{fonts}}"><paper-item  on-click="FnSpecific" hidden$="{{hidefist}}" value="{{specificcomment}}">{{specificcomment}}</paper-item>
+          <p hidden$="{{hidesecond}}" > {{specificcomment}}</p>
+
+        </td>  
+         <td  style="{{fonts}}" hidden$="{{hidesavevalue}}"><paper-icon-button hidden$="{{hidefist}}"  id="ps" icon="icons:save" on-click="FnSave"></paper-icon-button>
+         <p  hidden$="{{hidesecond}}">{{savelabel}}</p>
+        </td>
+        </tr>
+        </table>
+    </div>
+    <paper-dialog id="attendancegenericcmnt" modal>
+        <h3>Generic Comment</h3>
+        <div class="gencommentvalue">
+          <paper-textarea value="{{gencomment}}"></paper-textarea>     
+        </div>  
+        <center >
+          <paper-button on-click="genericsubmit"  style="background-color:black;color:white">Submit</paper-button>
+         <paper-button on-click="genericclose" style="background-color:black;color:white">Close</paper-button>
+        </center>
+    </paper-dialog>
+    <paper-dialog id="attendancespecificcmnt" modal>
+        <h3>Specific Comment</h3>
+        <div class="speccommentvalue">
+          <paper-textarea value="{{speccomment}}"></paper-textarea>     
+        </div>  
+        <center ">
+          <paper-button on-click="specificsubmit"  style="background-color:black;color:white">Submit</paper-button>
+         <paper-button on-click="specificclose" style="background-color:black;color:white">Close</paper-button>
+        </center>
+    </paper-dialog>
+    <co-scholastic-service id="assesmentservice"></co-scholastic-service>
+  </template>  
+  <script>
+  (function() {
+    'use strict';
+    var lower=[];
+    var higher=[];
+    var grade=[];
+    var generic;
+    Polymer({
+      is: 'attendance-item-card',
+      ready:function(){
+        this.flag=0;
+      },     
+      FnAttendance:function(e)
+      {    
+        if(parseFloat(this.attendance)<=parseFloat(this.workingdays)){
+
+        }
+        else{
+          this.attendance="";
+       document.querySelector("coscholastic-assesment-card").TermMarkdialog("Please enter valid attendance!");
+     
+        }
+      },
+      FnSpecific:function()
+      {
+        this.$.attendancespecificcmnt.toggle();
+      },
+      FnGeneric:function(e)
+      { 
+        this.$.attendancegenericcmnt.toggle();
+      },
+      genericsubmit:function(){
+        this.genericcomment=this.gencomment;
+        this.$.attendancegenericcmnt.toggle();
+      },
+      genericclose:function(){
+        this.$.attendancegenericcmnt.toggle();
+      },
+      specificsubmit:function(){
+        this.specificcomment=this.speccomment;
+        this.$.attendancespecificcmnt.toggle();
+      },
+      specificclose:function(){
+        this.$.attendancespecificcmnt.toggle();
+      },
+      FnSave:function(){
+        this.flag=1;
+        this.callService();
+      },
+      callService:function()
+      {   
+       localStorage.setItem("curr_sess_template_tef","inactive"); 
+              
+        if(this.attendance==""||this.attendance==null||this.attendance=="undefined"){
+          this.attendance="";
+        }
+        if(this.genericcomment==""||this.genericcomment==null||this.genericcomment=="undefined"){
+          this.genericcomment="";
+        }
+        if(this.specificcomment==""||this.specificcomment==null||this.specificcomment=="undefined"){
+          this.specificcomment="";
+        }
+        // alert(this.studid+"  "+this.studname+"  "+this.attendance+"  "+this.workingdays+"  "+this.genericcomment+"  "+this.specificcomment);
+        this.$.assesmentservice.callinsertattendanceService(this.studid,this.studname,this.attendance,this.workingdays,this.genericcomment,this.specificcomment); 
+        }
+    });
+  })();
+  </script>
+</dom-module>

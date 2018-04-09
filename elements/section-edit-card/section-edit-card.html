@@ -1,0 +1,177 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="section-edit-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .outcard
+      {
+        @apply(--layout-vertical);
+         border-radius: 10px;
+        border: 1px solid #6699ff;
+        padding: 20px;
+        margin-top: 6%;
+        width: 30%;
+        margin-left: 33%;
+        min-height: 300px;
+      }
+      .newdivv
+      {
+         @apply(--layout-center);
+        display: inline-block;
+        margin-left: 25%;
+        width: 40%;
+      }
+      .btn11 paper-button
+      {
+        background-color: #363636;
+        color: #ffffff;                
+        width: 7%;
+        margin-top: 5%;
+        margin-left: 37%;
+      }
+    </style>
+        <div>
+          <center><h3>SECTION UPDATE</h3></center>
+        </div>
+        <div class="outcard">
+          <div class="newdivv">
+            <paper-dropdown-menu  label="Select Grade">
+              <paper-menu id="fnedittgradeid" class="dropdown-content"  on-iron-select="fnsectiongradezz">
+                <template is="dom-repeat" items="{{sectiongradezzz}}">
+                  <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+                </template>    
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+
+          <div class="newdivv">
+            <paper-dropdown-menu  label="Select Section">
+              <paper-menu id="fneditsectionid" class="dropdown-content"   on-iron-select="fneditsection">
+                <template is="dom-repeat" items="{{secionupdatezarr}}">
+                  <paper-item value="{{item.id}}">{{item.section}}</paper-item>
+                </template>    
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+          <div class="newdivv">
+            <paper-input label="Enter New Section" value="{{sectionname}}"></paper-input>
+          </div>
+
+          <div class="btn11">
+              <paper-button on-click="fnsectionsubmit">SUBMIT</paper-button>
+          </div>
+        </div>
+
+            <demosumbit-card id="mydialog"></demosumbit-card>  
+          <master-ui-service id="uiservice"></master-ui-service>
+
+          <iron-ajax
+            id="gradesectioneditajax"
+            url="{{gradesectionediturl}}"
+            params="{{gradesectioneditparam}}"
+            handle-as="json"
+            content-type="application/json"
+            method="post"
+            on-response="gradesectioneditResponse"
+            debounce-duration="300">
+      </iron-ajax>  
+      <iron-ajax           
+        id="sectionconficsajax"
+        url="../../configfile/section.json"
+        params="{{sectionconficsparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="sectionconficsResponse"
+        debounce-duration="300">
+     </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+      var editpassarr=[];
+      var studenttablearr=[];
+    Polymer({
+      is: 'section-edit-card',
+
+     fnsectiongradezz:function(e)
+     {
+        this.sectgradename=e.target.selectedItem.textContent.trim();
+        this.sectgradeid=e.target.selectedItem.value;
+
+        this.$.sectionconficsajax.generateRequest();
+
+       // alert(this.sectgradename);
+        //this.$.uiservice.gradesectionedit(this.sectgradename);
+
+        this.gradesectionediturl=sessionStorage.getItem("addrinfo")+"/gradesectioneditzzzz-service";
+              var obj1={"schid":"","setgrade":"","academic_year":""}
+              obj1.schid=sessionStorage.getItem("curr_sess_loggedschoolid");
+              obj1.setgrade=this.sectgradename;
+              obj1.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+              this.gradesectioneditparam=obj1;
+             // alert(JSON.stringify(obj1));
+              this.$.gradesectioneditajax.generateRequest();
+       },
+    sectionconficsResponse:function(e){
+    studenttablearr=e.detail.response; 
+       // alert(JSON.stringify(studenttablearr));
+      },
+      gradesectioneditResponse:function(e)
+        {
+            var res=e.detail.response.returnval;   
+            //alert(JSON.stringify(res));
+            this.secionupdatezarr=res;
+        },
+        
+     fneditsection:function(e)
+     {
+          this.sectionid=e.target.selectedItem.value;
+          this.oldsectionname=e.target.selectedItem.textContent.trim();
+          //alert(this.sectionid+" "+this.oldsectionname);
+        this.$.sectionconficsajax.generateRequest();
+
+     },
+
+     fnsectionsubmit:function()
+     {
+
+          if(this.sectionname=="")
+          {
+            alert("Please Enter Section name");
+          }
+
+          else
+          {
+         localStorage.setItem('curr_sess_oldsectionname',this.oldsectionname);
+              var newsectionname=this.sectionname.toUpperCase();
+              var obj={"gradeid":"","gradename":"","sectionid":"","classid":"","newsectionname":""};
+              obj.gradeid=this.sectgradeid;
+              obj.gradename=this.sectgradename;
+              obj.sectionid=this.sectionname;
+              obj.classid=this.sectionid;
+              obj.newsectionname=newsectionname;
+              //alert(JSON.stringify(editpassarr));
+            this.$.uiservice.secctionupdate(this.sectgradeid,this.sectgradename,this.sectionname,this.sectionid,newsectionname,studenttablearr); 
+                  this.$.mydialog.toggleDialog();
+                  this.FnRefresh();
+          }
+     },
+
+     FnRefresh:function()
+     {
+        document.querySelector('#fnedittgradeid').selected=-1;
+        document.querySelector('#fneditsectionid').selected=-1;
+        this.sectionname="";
+     }
+
+
+    });
+  })();
+  </script>
+</dom-module>

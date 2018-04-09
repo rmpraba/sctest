@@ -1,0 +1,186 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-excel-report">
+  <template>
+    <style>
+      table{
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 5%;
+      }
+      #btn2{
+            width: 10%;
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            height: 45px;
+            border-radius: 2px;
+            /*font-weight: bold;*/
+            font-family: Calibri;
+            font-size: 17px;
+          }
+    </style>
+    <center>
+    <div hidden$="{{hideheader}}" >
+      <h1>{{schoolname}}</h1>
+      <h3>Enrichment Analysis-AY-{{academicyear}}</h3>  
+      <h4>Assesment: {{assesmentname}}  &nbsp;&nbsp;&nbsp; Grade: {{grade}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section: {{section}} &nbsp;&nbsp; Subject: {{subject}} </h4> 
+    </div>
+    </center>
+    <div hidden$="{{hidetable1}}">
+      <table id="EnrichmentReportDataTableId" border="1" style="border-collapse: collapse;">
+      <tr><th>Serial No</th><th>Student Id</th><th>Student Name</th><th>Written</th><th>Grade</th><th>Category</th><th>Level</th><th>Student Status</th></tr>
+        <template is="dom-repeat" items="{{arr}}">
+          <tr><td>{{item.sno}}</td><td>{{item.studentid}}</td><td>{{item.studentname}}</td><td>{{item.mark}}</td><td>{{item.grade}}</td><td>{{item.category}}</td><td>{{item.enrich_level}}</td><td>{{item.status}}</td></tr>
+        </template>
+      </table>
+      <center>  
+      <paper-button class="button" id="submit" on-click="importmark">{{importlabel}}</paper-button>
+      <input type="button" id="btn2" onclick="enrichmentreportexportToExcel()" value="Export to Excel">
+      </center>
+    </div>
+
+    <div hidden$="{{hidetable2}}">
+      <table id="EnrichmentReportDataTableId1" border="1" style="border-collapse: collapse;">
+      <tr><th>Serial No</th><th>Student Id</th><th>Student Name</th><th colspan="2">Reading</th><th>Grade</th><th>Category</th><th>Speed level</th><th>Comprehension level</th><th>Student Status</th></tr>
+      <tr><th></th><th></th><th></th><th>Speed</th><th>Comprehension</th><th></th><th></th><th></th><th></th><th></th></tr>
+        <template is="dom-repeat" items="{{arr}}">
+          <tr><td>{{item.sno}}</td><td>{{item.studentid}}</td><td>{{item.studentname}}</td><td>{{item.mark1}}</td><td>{{item.mark2}}</td><td>{{item.grade}}</td><td>{{item.category}}</td><td>{{item.speed_level}}</td><td>{{item.comprehension_level}}</td><th>{{item.status}}</th></tr>
+        </template>
+      </table>
+      <center>  
+      <paper-button class="button" id="submit" on-click="importmark">{{importlabel}}</paper-button>
+      <input type="button" id="btn2" onclick="enrichmentreportexportToExcel1()" value="Export to Excel">
+      </center>
+    </div>
+    
+  </template>
+  <script type="text/javascript">  
+  var filename;
+  function enrichmentreportexportToExcel(){
+  var htmls = "";
+  //alert("2");
+  var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j=0;
+    var tab = document.getElementById('EnrichmentReportDataTableId'); // id of table
+    var lines = tab.rows.length;
+
+    // the first headline of the table
+    if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+
+    // table data lines, loop starting from 1
+    for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : filename || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+    }
+    function enrichmentreportexportToExcel1(){
+  var htmls = "";
+  //alert("2");
+  var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j=0;
+    var tab = document.getElementById('EnrichmentReportDataTableId1'); // id of table
+    var lines = tab.rows.length;
+
+    // the first headline of the table
+    if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+
+    // table data lines, loop starting from 1
+    for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : filename || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+    }
+  </script>
+<script type="text/javascript">
+var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+</script>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'enrichment-excel-report',
+      ready:function(){
+        this.hidetable1=true;
+        this.hidetable2=true;
+        this.hideheader=true;
+      },
+      setDefaultHeaders:function(){
+        this.hideheader=false;
+        this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+        this.academicyear=localStorage.getItem("curr_sess_academicyear");
+        this.grade=localStorage.getItem("curr_sess_grade");
+        this.section=localStorage.getItem("curr_sess_section");
+        this.subject=localStorage.getItem("curr_sess_subject");
+        this.assesmentname=localStorage.getItem("curr_sess_assesmentname");
+        filename=this.grade+"-"+this.section+"-"+this.subject+"-"+this.assesmentname;
+      }
+    });
+  })();
+  </script>
+</dom-module>

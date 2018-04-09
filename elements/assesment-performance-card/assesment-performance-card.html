@@ -1,0 +1,49 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-card">
+  <template>
+    <style>
+      .subjectdrop{
+        @apply(--layout-horizontal);
+        /*@apply(--layout-wrap);*/
+        width: 100%;
+        /*padding: 2%;*/
+        /*margin-left: 5%;*/
+      }
+      .indrop{
+        @apply(--layout-vertical);
+        /*padding: 5%;*/
+        margin-left: 5%;
+      }
+      h4{
+        color: #111AD9  ;
+      }
+
+    </style>
+    <div class="subjectdrop">
+      <template is="dom-repeat" items="{{subjectarr}}">
+      <div class="indrop">   
+      <assesment-performance-item-expandcard assesment="{{assesment}}" subject="{{item.subject}}" categoryarr="{{item.subjectarr}}"></assesment-performance-item-expandcard>       
+      <!-- <h4>Subject Name: {{item.subject}}</h4>  
+        <assesment-performance-item-card categoryarr="{{item.subjectarr}}"></assesment-performance-item-card>
+        <paper-button on-click="FnView">View</paper-button>
+
+        <iron-collapse id="collapse{{assesment}}">
+        <div>Content goes here...</div>
+        </iron-collapse> -->
+
+      </div>    
+      </template>
+    </div>    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-card',
+      
+    });
+  })();
+  </script>
+</dom-module>

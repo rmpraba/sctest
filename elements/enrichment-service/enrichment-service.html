@@ -1,0 +1,696 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-service">
+  <template>
+    <iron-ajax
+        method="post"
+        id="gradesforenrichmentajax"
+        url="{{gradesforenrichmenturl}}"
+        params="{{gradesforenrichmentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="gradesforenrichmentResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="gradelevelforenrichmentajax"
+        url="{{gradelevelforenrichmenturl}}"
+        params="{{gradelevelforenrichmentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="gradelevelforenrichmentResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="subjectforenrichmentajax"
+        url="{{subjectforenrichmenturl}}"
+        params="{{subjectforenrichmentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="subjectforenrichmentResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="categoryforenrichmentajax"
+        url="{{categoryforenrichmenturl}}"
+        params="{{categoryforenrichmentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="categoryforenrichmentResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="insertbookinfoajax"
+        url="{{insertbookinfourl}}"
+        params="{{insertbookinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="insertbookinfoResponse"
+        debounce-duration="300"
+    >  
+    <iron-ajax
+        method="post"
+        id="generatebooksequenceajax"
+        url="{{generatebooksequenceurl}}"
+        params="{{generatebooksequenceparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="generatebooksequenceResponse"
+        debounce-duration="300"
+    > 
+    <iron-ajax
+        method="post"
+        id="updatebooksequenceajax"
+        url="{{updatebooksequenceurl}}"
+        params="{{updatebooksequenceparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="updatebooksequenceResponse"
+        debounce-duration="300"
+    > 
+    
+    <iron-ajax
+        method="post"
+        id="fetchstudentforissueajax"
+        url="{{fetchstudentforissueurl}}"
+        params="{{fetchstudentforissueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchstudentforissueResponse"
+        debounce-duration="300"
+    >  
+    <iron-ajax
+        method="post"
+        id="fetchbookforstudentajax"
+        url="{{fetchbookforstudenturl}}"
+        params="{{fetchbookforstudentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchbookforstudentResponse"
+        debounce-duration="300"
+    > 
+      
+    <iron-ajax
+        method="post"
+        id="fetchsubjectcategoryforissueajax"
+        url="{{fetchsubjectcategoryforissueurl}}"
+        params="{{fetchsubjectcategoryforissueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsubjectcategoryforissueResponse"
+        debounce-duration="300"
+    >
+
+    <iron-ajax
+        method="post"
+        id="assignbooktostudentajax"
+        url="{{assignbooktostudenturl}}"
+        params="{{assignbooktostudentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="assignbooktostudentResponse"
+        debounce-duration="300"
+    >
+    
+    <iron-ajax
+        method="post"
+        id="fetchissuedbookajax"
+        url="{{fetchissuedbookurl}}"
+        params="{{fetchissuedbookparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchissuedbookResponse"
+        debounce-duration="300"
+    >
+
+    <iron-ajax
+        method="post"
+        id="fetchdueinfoajax"
+        url="{{fetchdueinfourl}}"
+        params="{{fetchdueinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchdueinfoResponse"
+        debounce-duration="300"
+    >
+    
+    <iron-ajax
+        method="post"
+        id="updateassesmentstatusajax"
+        url="{{updateassesmentstatusurl}}"
+        params="{{updateassesmentstatusparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="updateassesmentstatusResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="updatereturnstatusajax"
+        url="{{updatereturnstatusurl}}"
+        params="{{updatereturnstatusparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="updatereturnstatusResponse"
+        debounce-duration="300"
+    >    
+    <iron-ajax
+        method="post"
+        id="fetchperformancemeasuresajax"
+        url="{{fetchperformancemeasuresurl}}"
+        params="{{fetchperformancemeasuresparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchperformancemeasuresResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="fetchallbooksajax"
+        url="{{fetchallbooksurl}}"
+        params="{{fetchallbooksparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchallbooksResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="insertenrichmentparametermappingajax"
+        url="{{insertenrichmentparametermappingurl}}"
+        params="{{insertenrichmentparametermappingparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="insertenrichmentparametermappingResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="fetchstudentcategoryforissueajax"
+        url="{{fetchstudentcategoryforissueurl}}"
+        params="{{fetchstudentcategoryforissueparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchstudentcategoryforissueResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="fetchstudentbylevelajax"
+        url="{{fetchstudentbylevelurl}}"
+        params="{{fetchstudentbylevelparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchstudentbylevelResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="fetchexistingbooksajax"
+        url="{{fetchexistingbooksurl}}"
+        params="{{fetchexistingbooksparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchexistingbooksResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="fetchselectedbookinfoajax"
+        url="{{fetchselectedbookinfourl}}"
+        params="{{fetchselectedbookinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchselectedbookinfoResponse"
+        debounce-duration="300"
+    >
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var count1=0;
+    var count2=0;
+    var bookinfo=[];
+    var bookseq=0;
+    var count1=0,count2=0;
+    Polymer({
+      is: 'enrichment-service',
+      FnFetchExistingBook:function(categorytype){
+        this.fetchexistingbooksurl=sessionStorage.getItem("addrinfo")+"/fetchexistingbooks-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.categorytype=categorytype;
+         this.fetchexistingbooksparam= obj;
+         this.$.fetchexistingbooksajax.generateRequest();
+      },
+      fetchexistingbooksResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('books-creation-card').autocompletearr(arr);
+      },
+      FnFetchSelectedBookInfo:function(bookid,bookname){
+        this.fetchselectedbookinfourl=sessionStorage.getItem("addrinfo")+"/fetchselectedbookinfo-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.bookid=bookid;
+         this.fetchselectedbookinfoparam= obj;
+         this.$.fetchselectedbookinfoajax.generateRequest();
+      },
+      fetchselectedbookinfoResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('books-creation-card').FnSetBookInfo(arr[0].book_name,arr[0].author_name,arr[0].subject_id,arr[0].subject_name,arr[0].category_id,arr[0].category_name,arr[0].quantity);
+      },
+      FnFetchAllBooks:function(){
+         this.fetchallbooksurl=sessionStorage.getItem("addrinfo")+"/fetchallbooks-service";
+          var obj={};
+          obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+          obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+          obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+          obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         this.fetchallbooksparam= obj;
+         this.$.fetchallbooksajax.generateRequest();
+       }, 
+      fetchallbooksResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('enrichment-evaluationmapping-card').bookarr=arr;
+      },
+        FnInsertEnrichmentParameterMapping:function(arr){
+        this.insertenrichmentparametermappingurl=sessionStorage.getItem("addrinfo")+"/insertenrichmentparametermapping-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         count1=0;
+         count2=0;
+         count1=arr.length;
+         for(var i=0;i<arr.length;i++){
+          obj.bookid=arr[i].bookid;
+          obj.paramid=arr[i].paramid;
+          obj.paramname=arr[i].paramname;         
+         this.insertenrichmentparametermappingparam= obj;
+         this.$.insertenrichmentparametermappingajax.generateRequest();
+        }
+      },
+      insertenrichmentparametermappingResponse:function(e){
+        count2++;
+        if(count1==count2){
+        alert(e.detail.response.returnval);
+        count1=0;
+        count2=0;
+      }
+      },
+      gradesforenrichmentService:function(){
+         this.gradesforenrichmenturl=sessionStorage.getItem("addrinfo")+"/gradesforenrichment-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         this.gradesforenrichmentparam= obj;
+         this.$.gradesforenrichmentajax.generateRequest();
+      },
+      gradesforenrichmentResponse:function(e){
+        var arr=e.detail.response.returnval;
+        // alert(JSON.stringify(arr));
+        var overall=[];
+        var temp=[];
+        var t=1;
+        for(var i=0;i<arr.length;i++){
+          if(t!=0){
+            temp.push(arr[i]);
+          }
+          if(i!=0&&i%5==0){
+            overall.push(temp);
+            temp=[];
+          }
+        }
+        document.querySelector('books-creation-card').FnSetGrade(arr);
+        document.querySelector('books-creation-card').gradearr=overall;
+      },
+      gradelevelforenrichmentService:function(){
+        this.gradelevelforenrichmenturl=sessionStorage.getItem("addrinfo")+"/gradelevelforenrichment-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         this.gradelevelforenrichmentparam= obj;
+         this.$.gradelevelforenrichmentajax.generateRequest();
+      },
+      gradelevelforenrichmentResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('books-creation-card').gradelevelarr=arr;
+      },
+      subjectforenrichmentService:function(){
+         this.subjectforenrichmenturl=sessionStorage.getItem("addrinfo")+"/subjectforenrichment-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         this.subjectforenrichmentparam= obj;
+         this.$.subjectforenrichmentajax.generateRequest();
+      },
+      subjectforenrichmentResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('books-creation-card').subjectarr=arr;
+        document.querySelector('books-issuance-card').subjectarr=arr;
+        document.querySelector('enrichment-booksmapping-card').subjectarr=arr;
+        document.querySelector('enrichment-comparison-report').subjectarr=arr;
+        document.querySelector('assesment-comparison-homecard').subjectarr=arr;
+      },
+      categoryforenrichmentService:function(subjectid){
+         this.categoryforenrichmenturl=sessionStorage.getItem("addrinfo")+"/categoryforenrichment-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.subjectid=subjectid;
+         this.categoryforenrichmentparam= obj;
+         this.$.categoryforenrichmentajax.generateRequest();
+      },
+      categoryforenrichmentResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('books-creation-card').categoryarr=arr;
+      },
+      generatebooksequence:function(arr){
+        bookinfo=arr;
+        this.generatebooksequenceurl=sessionStorage.getItem("addrinfo")+"/generatebooksequence-service";
+         var obj={}; 
+         this.generatebooksequenceparam= obj;
+         this.$.generatebooksequenceajax.generateRequest();
+      },
+      generatebooksequenceResponse:function(e){
+        var arr=e.detail.response.returnval;
+        var seq=arr[0].bookactivity_seq;
+        bookseq=parseInt(arr[0].bookactivity_seq)+1;
+        this.insertbookinfoService(seq);
+      },
+      insertbookinfoService:function(seq){        
+        count1=bookinfo.length;
+        for(var i=0;i<bookinfo.length;i++){
+          bookinfo[i].id="BK"+seq;
+          // seq++;
+         this.insertbookinfourl=sessionStorage.getItem("addrinfo")+"/insertbookinfo-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+         obj.assesmenttype=localStorage.getItem("curr_sess_assesmentname"); 
+         obj.bookid=bookinfo[i].id;
+         obj.bookname=bookinfo[i].bookname; 
+         obj.bookauthor=bookinfo[i].authorname;
+         obj.booksubid=bookinfo[i].subjectid;
+         obj.booksubname=bookinfo[i].subjectname;
+         obj.bookcatid=bookinfo[i].categoryid;
+         obj.bookcatname=bookinfo[i].categoryname;
+         obj.bookgradeid=bookinfo[i].gradeid;
+         obj.bookgradename=bookinfo[i].gradename;
+         obj.bookgrade=bookinfo[i].grade;
+         obj.bookquantity=bookinfo[i].quantity;
+         obj.category=bookinfo[i].categorytype;
+         this.insertbookinfoparam= obj;
+         this.$.insertbookinfoajax.generateRequest();
+        }
+      },
+      insertbookinfoResponse:function(e){
+        // alert(e.detail.response.returnval);
+        if(e.detail.response.returnval=='Inserted!!'){
+          count2++;
+        }
+        if(count1==count2){
+          this.updatebooksequenceService();
+          count1=0;
+          count2=0;
+        }
+      },
+      updatebooksequenceService:function(){
+         this.updatebooksequenceurl=sessionStorage.getItem("addrinfo")+"/updatebooksequence-service";
+         var obj={}; 
+         obj.seq=bookseq;
+         this.updatebooksequenceparam= obj;
+         this.$.updatebooksequenceajax.generateRequest();
+      },
+      updatebooksequenceResponse:function(e){
+        if(e.detail.response.returnval=="Updated!!")
+        alert('Created!!');
+        document.querySelector('books-creation-card').FnRefresh();
+      },
+      FnFetchSubjectCategoryForIssue:function(subjectid){
+        this.fetchsubjectcategoryforissueurl=sessionStorage.getItem("addrinfo")+"/fetchsubjectcategoryforissue-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.subjectid=subjectid;
+        this.fetchsubjectcategoryforissueparam= obj;
+        this.$.fetchsubjectcategoryforissueajax.generateRequest();
+      },
+      fetchsubjectcategoryforissueResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('books-issuance-card').categoryarr=arr;
+        document.querySelector('enrichment-booksmapping-card').categoryarr=arr;
+      },
+      FnFetchStudentForIssue:function(gradeid,sectionid,subjectid){
+        this.fetchstudentforissueurl=sessionStorage.getItem("addrinfo")+"/fetchstudentforissue-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.gradeid=gradeid;
+        obj.sectionid=sectionid;
+        obj.subjectid=subjectid;
+         this.fetchstudentforissueparam= obj;
+        this.$.fetchstudentforissueajax.generateRequest();
+      },
+      fetchstudentforissueResponse:function(e){
+        var arr=e.detail.response.returnval;
+        // alert(JSON.stringify(arr));
+        if(arr!='no rows'){
+          document.querySelector('books-issuance-card').FnShowList();
+          document.querySelector('enrichment-studentmap-itemcard').studentarr=arr;
+        }
+      },
+      FnFetchStudentCategoryForIssue:function(assesment,gradeid,sectionid,subjectid,categoryid){
+        this.fetchstudentcategoryforissueurl=sessionStorage.getItem("addrinfo")+"/fetchstudentcategoryforissue-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesment=assesment;
+        obj.gradeid=gradeid;
+        obj.sectionid=sectionid;
+        obj.subjectid=subjectid;
+        obj.categoryid=categoryid;
+        this.fetchstudentcategoryforissueparam= obj;
+        this.$.fetchstudentcategoryforissueajax.generateRequest();
+      },
+      fetchstudentcategoryforissueResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('enrichment-booksmapping-card').FnShowList();
+        document.querySelector('enrichment-booksmapping-card').levelarr=arr;
+      },
+      FnFetchStudentbyLevel:function(grade){
+        this.fetchstudentbylevelurl=sessionStorage.getItem("addrinfo")+"/fetchstudentbylevel-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesment=localStorage.getItem("curr_sess_assesmentname");
+        obj.gradeid=localStorage.getItem("curr_sess_gradename");
+        obj.sectionid=localStorage.getItem("curr_sess_sectionname");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.categoryid=localStorage.getItem("curr_sess_categoryid");
+        obj.grade=grade;
+        this.fetchstudentbylevelparam= obj;
+        this.$.fetchstudentbylevelajax.generateRequest();
+      },
+      fetchstudentbylevelResponse:function(e){
+        var studarr=e.detail.response.studarr;
+        var bookarr=e.detail.response.returnval;
+        if(studarr.length>0){
+        document.querySelector('enrichment-booksmapping-card').FnShowStudList();
+        document.querySelector('enrichment-booksmapping-card').booklevelarr=bookarr;
+        document.querySelector('enrichment-booksmapping-card').studlevelarr=studarr;
+        }
+        else{
+        alert('Students not available in this category!!');
+        document.querySelector('enrichment-booksmapping-card').FnTempRefresh();
+        }
+      },
+      FnFetchBookForStudent:function(studentid){
+        this.fetchbookforstudenturl=sessionStorage.getItem("addrinfo")+"/fetchbookforstudent-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.sectionname=localStorage.getItem("curr_sess_sectionname");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.categoryname=localStorage.getItem("curr_sess_categoryname");
+        obj.studentid=studentid;
+        this.fetchbookforstudentparam= obj;
+        this.$.fetchbookforstudentajax.generateRequest();
+      },
+      fetchbookforstudentResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('enrichment-activityhome-card').page="enrichment-assignment-card";
+        // alert(JSON.stringify(arr));
+        document.querySelector('enrichment-assignment-card').itemarr=arr;
+      },
+      FnAssignBookToStudent:function(bookarr){
+        count1=bookarr.length;
+        this.assignbooktostudenturl=sessionStorage.getItem("addrinfo")+"/assignbooktostudent-service";
+        for(var i=0;i<bookarr.length;i++){
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.sectionname=localStorage.getItem("curr_sess_sectionname");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.categoryname=localStorage.getItem("curr_sess_categoryname");
+        obj.studentid=bookarr[i].studentid;
+        obj.studentname=bookarr[i].studentname;
+        var d=new Date();
+        obj.issuedate=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+        var dd=new Date();
+        dd.setDate(dd.getDate() + 30);
+        obj.duedate=dd.getDate()+"/"+(dd.getMonth()+1)+"/"+dd.getFullYear();
+        obj.bookid=bookarr[i].bookid;
+        obj.bookname=bookarr[i].bookname;
+        this.assignbooktostudentparam= obj;
+        this.$.assignbooktostudentajax.generateRequest();
+        }
+      },
+      assignbooktostudentResponse:function(e){
+         // alert(JSON.stringify(e.detail.response.returnval));
+        count2++;
+        if(count1==count2){
+          alert('Mapped successfully!!');
+          count1=0;
+          count2=0;
+        }
+      },
+      FnFetchIssuedBook:function(studentid){
+        this.fetchissuedbookurl=sessionStorage.getItem("addrinfo")+"/fetchissuedbook-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.sectionname=localStorage.getItem("curr_sess_sectionname");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.categoryname=localStorage.getItem("curr_sess_categoryname");
+        obj.studentid=studentid;
+        this.fetchissuedbookparam= obj;
+        this.$.fetchissuedbookajax.generateRequest();
+      },
+      fetchissuedbookResponse:function(e){
+        var arr=e.detail.response.returnval;
+        // alert(JSON.stringify(arr));
+        document.querySelector('enrichment-evaluation-card').itemarr=arr;
+        // document.querySelector('enrichment-due-card').itemarr=arr;
+      },
+      FnFetchDueInfo:function(studentid){
+        this.fetchdueinfourl=sessionStorage.getItem("addrinfo")+"/fetchdueinfo-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.sectionname=localStorage.getItem("curr_sess_sectionname");
+        obj.subjectname=localStorage.getItem("curr_sess_subjectname");
+        obj.categoryname=localStorage.getItem("curr_sess_categoryname");
+        obj.studentid=studentid;
+        this.fetchdueinfoparam= obj;
+        this.$.fetchdueinfoajax.generateRequest();
+      },
+      fetchdueinfoResponse:function(e){
+        var arr=e.detail.response.returnval;
+        // alert(JSON.stringify(arr));
+        // document.querySelector('enrichment-evaluation-card').itemarr=arr;
+        document.querySelector('enrichment-due-card').itemarr=arr;
+      },
+      FnUpdateAssesmentStatus:function(paramarr){
+        this.updateassesmentstatusurl=sessionStorage.getItem("addrinfo")+"/updateassesmentstatus-service";
+        count1=paramarr.length;
+        for(var i=0;i<paramarr.length;i++){
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+        obj.gradename=localStorage.getItem("curr_sess_gradename");
+        obj.sectionname=localStorage.getItem("curr_sess_sectionname");
+        obj.subject=paramarr[i].subject;
+        obj.category=paramarr[i].category;
+        obj.subject=paramarr[i].subject;
+        obj.bookid=paramarr[i].bookid;
+        obj.bookname=paramarr[i].bookname;
+        obj.paramid=paramarr[i].paramid;
+        obj.paramname=paramarr[i].paramname;
+        obj.studentid=paramarr[i].studentid;
+        obj.studentname=paramarr[i].studentname;
+        var d=new Date();
+        obj.returndate=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+        this.updateassesmentstatusparam= obj;
+        this.$.updateassesmentstatusajax.generateRequest();
+        }
+      },
+      updateassesmentstatusResponse:function(e){        
+        if(e.detail.response.returnval=="Updated!!"){
+          count2++;
+          if(count1==count2){
+            alert('Updated!!');
+            count1=0;
+            count2=0;
+            this.FnUpdateReturnStatus();
+          }
+        }
+      },
+      FnUpdateReturnStatus:function(){
+        this.updatereturnstatusurl=sessionStorage.getItem("addrinfo")+"/updatereturnstatus-service";
+        
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+        obj.grade=localStorage.getItem("curr_sess_gradename");
+        obj.section=localStorage.getItem("curr_sess_sectionname");
+        obj.subject=localStorage.getItem("curr_sess_subjectname");
+        obj.category=localStorage.getItem("curr_sess_categoryname");
+        obj.bookid=localStorage.getItem("curr_sess_bookid");
+        obj.bookname=localStorage.getItem("curr_sess_bookname");
+        obj.studentid=localStorage.getItem("curr_sess_studentid");
+        obj.studentname=localStorage.getItem("curr_sess_studentname");
+        var d=new Date();
+        obj.returndate=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+        this.updatereturnstatusparam= obj;
+        this.$.updatereturnstatusajax.generateRequest();
+      },
+      updatereturnstatusResponse:function(e){
+        alert(e.detail.response.returnval);
+      },
+      FnFetchPerformanceMeasures:function(studentid){
+        this.fetchperformancemeasuresurl=sessionStorage.getItem("addrinfo")+"/fetchperformancemeasures-service";
+        var obj={}; 
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+        obj.categoryid=localStorage.getItem("curr_sess_categoryid");
+        obj.assesment=localStorage.getItem("curr_sess_assesment");
+        obj.studentid=studentid;
+        this.fetchperformancemeasuresparam= obj;
+        this.$.fetchperformancemeasuresajax.generateRequest();
+      },
+      fetchperformancemeasuresResponse:function(e){
+        var beginner=e.detail.response.beginner;
+        var assigned=e.detail.response.assigned;
+        var assesment=e.detail.response.assesment;
+        var parameter=e.detail.response.totalassesment;
+        // alert(JSON.stringify(beginner));
+        // alert(JSON.stringify(assigned));
+        // alert(JSON.stringify(assesment));
+        // alert(JSON.stringify(totalassesment));
+        document.querySelector('enrichment-performance-card').FnCompariosionValuePreparation(beginner);
+        document.querySelector('enrichment-performance-card').FnActivityCompleteness(assigned,parameter,assesment);
+        document.querySelector('enrichment-performance-card').FnOpenChart();
+      }
+    });
+  })();
+  </script>
+</dom-module>

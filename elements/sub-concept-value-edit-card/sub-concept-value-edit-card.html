@@ -1,0 +1,71 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="sub-concept-value-edit-card">
+  <template>
+    <style>
+      :host {
+        display: block;  
+      }
+      .collapse-content::shadow #scroller  {
+    padding: 15px;
+    border: 1px solid #dedede;
+    width: 500px;
+      height: 350px;  
+  }
+ .dialog-right-position {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+    .dialog-right-position::shadow #scroller {
+      width: 500px;
+      height: 350px;
+    }  
+
+      .card
+      {
+        @apply(--layout-horizontal);
+            margin-top: -2em;
+          margin-left: -6%;
+      }
+    </style>
+    <div>   <paper-input value="{{capterid}}" hidden></paper-input>
+        <paper-input value="{{conceptid}}" hidden></paper-input>
+        <paper-button on-click="Fnsubconceptedit" no ink><h4 style="margin-top: -1%;">{{concept}}</h4></paper-button></div>
+
+  <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+</template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'sub-concept-value-edit-card',
+
+    Fnsubconceptedit:function(e){
+      //alert(this.capterid+" "+this.conceptid);
+        this.$.bookservice.conceptsubseq();
+         localStorage.setItem("curr_sess_capters",this.capterid); 
+         localStorage.setItem("curr_sess_conceptid",this.conceptid);
+     this.$.bookservice.fnbooksubconceptedit(this.capterid,this.conceptid);
+    document.querySelector('sub-concept-value-card').setcptid=this.capterid;
+    document.querySelector('sub-concept-value-card').setconid=this.conceptid;
+    document.querySelector('sub-concept-value-card').setsubconcept=this.concept;
+    document.querySelector('app-card').setPage('homepage','');
+    document.querySelector('home-page').setPage('sub-concept-value-card','');
+    },
+    
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,226 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="dashboard-homecard">
+  <template>
+    <style>
+      .container{
+        width: 100%;
+        margin-top: 5%;
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+      }
+      .innercard{
+        width: 30%;
+      } 
+      .innercard1{
+        width: 40%;
+        margin-top: -3%;
+      } 
+      .filtercontainer{
+        width: 100%;
+        margin-top: 2%;
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+      } 
+      paper-radio-button{
+        padding-left: 2%;
+      }  
+      paper-button{
+        color:white;
+        background-color:black;
+        margin-top: 7%;
+      } 
+      paper-dialog{
+      width: 35%;
+      border-radius: 15px;
+      }
+      .menucard{
+        @apply(--layout-horizontal);
+      }
+      .buttons{
+        text-align: center;
+      }
+      #dynamicspinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+      }
+    </style>
+    <div class="filtercontainer">
+      <paper-radio-button id="dashboardanalysisoverall" on-click="FnOverall">Overall</paper-radio-button>
+      <paper-radio-button id="dashboardanalysiszonewise" on-click="FnZonewise">Zonewise</paper-radio-button>
+      <paper-radio-button id="dashboardanalysisbranchwise" on-click="FnBranchwise">Branchwise</paper-radio-button>
+    </div>
+    <div class="container">
+      <!-- <div class='innercard'>
+        <dashboard-admission-analysis-homecard></dashboard-admission-analysis-homecard>
+      </div>
+      <div class='innercard'>
+        <dashboard-collection-analysis-homecard></dashboard-collection-analysis-homecard>
+      </div> -->
+      <div class='innercard1'>
+        <dashboard-gradewise-analysis-homecard></dashboard-gradewise-analysis-homecard>
+      </div>
+    </div>
+    <dashboard-analysis-service id="dashboardservice"></dashboard-analysis-service>
+    <paper-dialog id="dashboardanalysiszone" modal>
+      <h2>Select Zone</h2>
+      <paper-dialog-scrollable>
+        <paper-dropdown-menu id="zzonewiseanalysiszone" label="Select Zone" disabled="{{read}}" required>
+        <paper-menu id="zonewiseanalysiszone" class="dropdown-content"  on-iron-select="FnSelectZonewiseZone"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{zonearr}}">
+          <paper-item value="{{item.zone}}">{{item.zone}}</paper-item>
+          </template>
+        </paper-menu>
+        </paper-dropdown-menu>
+      </paper-dialog-scrollable>
+      <center>
+      <div>
+        <paper-button on-click="FnZoneClose">Close</paper-button>
+        <paper-button on-click="FnZoneSubmit">Submit</paper-button>
+      </div>
+      </center>
+    </paper-dialog>
+    <paper-dialog id="dashboardanalysisbranch" modal>
+      <h2>Select Zone & Branch</h2>
+      <paper-dialog-scrollable>
+      <div class="menucard">
+        <paper-dropdown-menu id="bbranchwiseanalysiszone" label="Select Zone" disabled="{{read}}" required>
+        <paper-menu id="branchwisealysiszone" class="dropdown-content"  on-iron-select="FnSelectBranchwiseZone"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{zonearr}}">
+          <paper-item value="{{item.zone}}">{{item.zone}}</paper-item>
+          </template>
+        </paper-menu>
+        </paper-dropdown-menu>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <paper-dropdown-menu id="bbranchwisebranch" label="Select Branch" disabled="{{read}}" required>
+        <paper-menu id="branchwisebranch" class="dropdown-content"  on-iron-select="FnSelectBranchwiseBranch"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{brancharr}}">
+          <paper-item value="{{item.id}}">{{item.name}}</paper-item>
+          </template>
+        </paper-menu>
+        </paper-dropdown-menu>
+      </div>
+      </paper-dialog-scrollable>
+      <center>
+      <div>
+        <paper-button on-click="FnBranchClose">Close</paper-button>
+        <paper-button on-click="FnBranchSubmit">Submit</paper-button>
+      </div>
+      </center>
+    </paper-dialog>
+
+    <div class="spinner"><paper-dialog modal id="dynamicspinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+    <paper-spinner active></paper-spinner>
+    <h4>{{spinnermsg}}</h4></paper-dialog></div>
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'dashboard-homecard',
+      FnSelectZonewiseZone:function(e){
+        this.zone = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_zone",this.zone);
+        this.branchid="All";
+        localStorage.setItem("curr_sess_branchid",this.branchid);
+        this.$.dashboardservice.fetchadmissiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchcollectiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchgradewisedashboardinfo(this.zone,this.branchid,"primary","Term1","English");
+      },
+      FnSelectBranchwiseZone:function(e){
+        document.querySelector('#branchwisebranch').selected=-1;
+        this.zone = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_zone",this.zone);
+        this.$.dashboardservice.fetchdashboardbranch(this.zone);
+      },
+      FnSelectBranchwiseBranch:function(e){
+        this.branchname = e.target.selectedItem.textContent.trim();
+        this.branchid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_branchid",this.branchid);
+        localStorage.setItem("curr_sess_branchname",this.branchname);
+        this.$.dashboardservice.fetchadmissiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchcollectiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchgradewisedashboardinfo(this.zone,this.branchid,"primary","Term1","English");
+      },
+      FnZoneClose:function(){
+        this.$.dashboardanalysiszone.toggle();
+        document.querySelector('#zonewiseanalysiszone').selected=-1;
+      },
+      FnZoneSubmit:function(){
+        this.$.dashboardanalysiszone.toggle();
+        document.querySelector('#zonewiseanalysiszone').selected=-1;
+      },
+      FnBranchClose:function(){
+        this.$.dashboardanalysisbranch.toggle();
+        document.querySelector('#branchwisealysiszone').selected=-1;
+        document.querySelector('#branchwisebranch').selected=-1;
+      },
+      FnBranchSubmit:function(){
+        this.$.dashboardanalysisbranch.toggle();
+        document.querySelector('#branchwisealysiszone').selected=-1;
+        document.querySelector('#branchwisebranch').selected=-1;
+      },
+      FnCallService:function(){
+        this.FnToggleSpinner(true);
+        this.spinnermsg="Please wait...";
+        this.zone="All";
+        this.branchid="All";
+        localStorage.setItem("curr_sess_zone",this.zone);
+        localStorage.setItem("curr_sess_branchid",this.branchid);
+        document.querySelector('#dashboardanalysisoverall').checked=true;
+        this.$.dashboardservice.fetchdashboardzone();
+        this.$.dashboardservice.fetchdashboardschooltype();       
+        this.$.dashboardservice.fetchadmissiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchcollectiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchgradewisedashboardinfo(this.zone,this.branchid,"primary","Term1","English");
+      },
+      FnOverall:function(){
+        this.FnToggleSpinner(true);
+        this.spinnermsg="Please wait...";
+        this.zone="All";
+        this.branchid="All";
+        localStorage.setItem("curr_sess_zone",this.zone);
+        localStorage.setItem("curr_sess_branchid",this.branchid);
+        this.$.dashboardservice.fetchadmissiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchcollectiondashboardinfo(this.zone,this.branchid);
+        this.$.dashboardservice.fetchgradewisedashboardinfo(this.zone,this.branchid,"primary","Term1","English");
+        document.querySelector('dashboard-gradewise-analysis-homecard').FnRefresh();
+        if(document.querySelector('#dashboardanalysisoverall').checked==true){
+          document.querySelector('#dashboardanalysisbranchwise').checked=false;
+          document.querySelector('#dashboardanalysiszonewise').checked=false;
+        }       
+      },
+      FnZonewise:function(){
+        document.querySelector('dashboard-gradewise-analysis-homecard').FnRefresh();
+        if(document.querySelector('#dashboardanalysiszonewise').checked==true){
+          this.$.dashboardanalysiszone.toggle();
+          document.querySelector('#dashboardanalysisbranchwise').checked=false;
+          document.querySelector('#dashboardanalysisoverall').checked=false;
+        }
+      },
+      FnBranchwise:function(){
+        document.querySelector('dashboard-gradewise-analysis-homecard').FnRefresh();
+        if(document.querySelector('#dashboardanalysisbranchwise').checked==true){
+          this.$.dashboardanalysisbranch.toggle();
+          document.querySelector('#dashboardanalysisoverall').checked=false;
+          document.querySelector('#dashboardanalysiszonewise').checked=false;
+        }
+      },
+      FnRefresh:function(){
+        document.querySelector('#branchwisebranch').selected=-1;
+        document.querySelector('#branchwisealysiszone').selected=-1;
+        document.querySelector('#branchwisebranch').selected=-1;
+        document.querySelector('#dashboardanalysisoverall').checked=true;
+        document.querySelector('#dashboardanalysiszonewise').checked=false;
+        document.querySelector('#dashboardanalysisbranchwise').checked=false;
+      },
+      FnToggleSpinner:function(flag){
+        this.$.dynamicspinner.opened=flag;
+      }
+    });
+  })();
+  </script>
+</dom-module>

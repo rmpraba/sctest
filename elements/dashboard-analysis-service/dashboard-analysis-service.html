@@ -1,0 +1,393 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="dashboard-analysis-service">
+  <template>
+    <div>
+      <iron-ajax
+        method="post"
+        id="fetchgradewisedashboardinfoajax"
+        url="{{fetchgradewisedashboardinfourl}}"
+        params="{{fetchgradewisedashboardinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchgradewisedashboardinfoResponse"
+        debounce-duration="300"
+      >
+      <iron-ajax
+        method="post"
+        id="fetchcollectiondashboardinfoajax"
+        url="{{fetchcollectiondashboardinfourl}}"
+        params="{{fetchcollectiondashboardinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchcollectiondashboardinfoResponse"
+        debounce-duration="300"
+      >
+      <iron-ajax
+        method="post"
+        id="fetchadmissiondashboardinfoajax"
+        url="{{fetchadmissiondashboardinfourl}}"
+        params="{{fetchadmissiondashboardinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchadmissiondashboardinfoResponse"
+        debounce-duration="300"
+      >
+      <iron-ajax
+        method="post"
+        id="fetchdashboardtermajax"
+        url="{{fetchdashboardtermurl}}"
+        params="{{fetchdashboardtermparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchdashboardtermResponse"
+        debounce-duration="300"
+      >
+      <iron-ajax
+        method="post"
+        id="fetchdashboardsubjectajax"
+        url="{{fetchdashboardsubjecturl}}"
+        params="{{fetchdashboardsubjectparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchdashboardsubjectResponse"
+        debounce-duration="300"
+      >  
+      <iron-ajax
+        method="post"
+        id="fetchdashboardschooltypeajax"
+        url="{{fetchdashboardschooltypeurl}}"
+        params="{{fetchdashboardschooltypeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchdashboardschooltypeResponse"
+        debounce-duration="300"
+      >  
+      <iron-ajax
+        method="post"
+        id="fetchgradewisedashboardinfoajax1"
+        url="{{fetchgradewisedashboardinfourl1}}"
+        params="{{fetchgradewisedashboardinfoparam1}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchgradewisedashboardinfoResponse1"
+        debounce-duration="300"
+      >  
+      <iron-ajax
+        method="post"
+        id="fetchdashboardzoneajax"
+        url="{{fetchdashboardzoneurl}}"
+        params="{{fetchdashboardzoneparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchdashboardzoneResponse"
+        debounce-duration="300"
+      >
+      <iron-ajax
+        method="post"
+        id="fetchdashboardbranchajax"
+        url="{{fetchdashboardbranchurl}}"
+        params="{{fetchdashboardbranchparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchdashboardbranchResponse"
+        debounce-duration="300"
+      >
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({      
+      is: 'dashboard-analysis-service',
+      fetchdashboardzone:function(){
+        this.fetchdashboardzoneurl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchdashboardzone-service";
+         this.$.fetchdashboardzoneajax.generateRequest();
+      },
+      fetchdashboardzoneResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('dashboard-homecard').zonearr=arr;
+      },
+      fetchdashboardbranch:function(zone){
+        this.fetchdashboardbranchurl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchdashboardbranch-service";
+         var obj={};
+         obj.zone=zone;
+         this.fetchdashboardbranchparam= obj;
+         this.$.fetchdashboardbranchajax.generateRequest();
+      },
+      fetchdashboardbranchResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('dashboard-homecard').brancharr=arr;
+      },
+      fetchdashboardschooltype:function(){
+        this.fetchdashboardschooltypeurl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchdashboardschooltype-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         // obj.academicyear="AY-"+localStorage.getItem("curr_sess_academicyear");  
+         // obj.academicyear="AY-2018-2019";  
+         this.fetchdashboardschooltypeparam= obj;
+         this.$.fetchdashboardschooltypeajax.generateRequest();
+      },
+      fetchdashboardschooltypeResponse:function(e){
+        var typearr=e.detail.response.schooltype;
+        document.querySelector('dashboard-gradewise-analysis-homecard').typearr=typearr;
+      },
+      fetchdashboardterm:function(schooltype){
+        this.fetchdashboardtermurl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchdashboardterm-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         // obj.academicyear="AY-"+localStorage.getItem("curr_sess_academicyear");  
+         // obj.academicyear="AY-2018-2019";  
+         obj.schooltype=schooltype;
+         this.fetchdashboardtermparam= obj;
+         this.$.fetchdashboardtermajax.generateRequest();
+      },
+      fetchdashboardtermResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('dashboard-gradewise-analysis-homecard').termarr=arr;
+      },
+      fetchdashboardsubject:function(schooltype,term){
+        this.fetchdashboardsubjecturl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchdashboardsubject-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         // obj.academicyear="AY-"+localStorage.getItem("curr_sess_academicyear");  
+         // obj.academicyear="AY-2018-2019";  
+         obj.schooltype=schooltype;
+         obj.term=term;
+         this.fetchdashboardsubjectparam= obj;
+         this.$.fetchdashboardsubjectajax.generateRequest();
+      },
+      fetchdashboardsubjectResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('dashboard-gradewise-analysis-homecard').subjectarr=arr;
+      },
+      fetchadmissiondashboardinfo:function(zone,branch){
+        this.fetchadmissiondashboardinfourl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchadmissiondashboardinfo-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         // obj.academicyear="AY-"+localStorage.getItem("curr_sess_academicyear");  
+         obj.academicyear="AY-2018-2019";  
+         obj.zone=zone;
+         obj.branch=branch;
+         this.fetchadmissiondashboardinfoparam= obj;
+         this.$.fetchadmissiondashboardinfoajax.generateRequest();
+      },
+      fetchadmissiondashboardinfoResponse:function(e){
+        var arr=e.detail.response.returnval;
+        var status=e.detail.response.status;
+        for(var i=0;i<arr.length;i++){
+          for(var j=0;j<status.length;j++){
+          if(arr[i].admission_status==status[j].admission_status&&arr[i].active_status==status[j].active_status){
+            arr[i].status=status[j].status;
+          }
+          }
+        }
+      document.querySelector('dashboard-admission-analysis-homecard').FnToggleChart(arr);
+      },
+      fetchcollectiondashboardinfo:function(zone,branch){
+        this.fetchcollectiondashboardinfourl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchcollectiondashboardinfo-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         // obj.academicyear="AY-"+localStorage.getItem("curr_sess_academicyear");  
+         obj.academicyear="AY-2018-2019";  
+         obj.zone=zone;
+         obj.branch=branch;
+         this.fetchcollectiondashboardinfoparam= obj;
+         this.$.fetchcollectiondashboardinfoajax.generateRequest();
+      },
+      fetchcollectiondashboardinfoResponse:function(e){
+        var totalarr=e.detail.response.totalarr;
+        var paidarr=e.detail.response.paidarr;
+        var discount=e.detail.response.discountarr;
+
+        if(totalarr.length>0){
+        var pflag=0;
+        var npflag=0;
+        for(var i=0;i<totalarr.length;i++)
+        {
+          totalarr[i].sno=(i+1);
+          var paidamount=0;
+          var paidflag=0;
+          var pendingamount=0;
+          var pendingflag=0;
+          var discountamount=0;
+          if(paidarr.length>0){
+          for(var j=0;j<paidarr.length;j++){
+            if(totalarr[i].admission_no==paidarr[j].admission_no&&totalarr[i].school_id==paidarr[j].school_id)
+            {
+              paidflag=1;
+              paidamount=parseFloat(paidamount)+(parseFloat(paidarr[j].paidamount)-parseFloat(0));
+              totalarr[i].paid_amount=paidamount;
+              pflag++;
+            }
+          }
+          if(paidflag==0)
+            {
+            paidamount=parseFloat(paidamount)+parseFloat(0);
+            totalarr[i].paid_amount=paidamount;
+            npflag++;
+            }
+          paidamount=0;
+          paidflag=0;
+          discountamount=0;
+          }
+        }
+        }
+        if(discount.length>0){
+        for(var i=0;i<totalarr.length;i++){
+          var f=0;
+          for(var j=0;j<discount.length;j++){
+            if(totalarr[i].admission_no==discount[j].admission_no&&totalarr[i].school_id==discount[j].school_id){
+              f=1;
+              totalarr[i].discount_amount=discount[j].discount_amount;
+            }
+          }
+          if(f==0)
+            totalarr[i].discount_amount=0;
+        }
+        }
+        for(var i=0;i<totalarr.length;i++){
+          totalarr[i].total_amount=parseFloat(totalarr[i].fees)-parseFloat(totalarr[i].discount_amount);
+          totalarr[i].pending_amount=parseFloat(totalarr[i].total_amount)-parseFloat(totalarr[i].paid_amount);
+        }
+        var paidamount=0;
+        var pendingamount=0;
+        var discountamount=0;
+        var overall=[];
+        for(var i=0;i<totalarr.length;i++){
+          paidamount=parseFloat(paidamount)+parseFloat(totalarr[i].paid_amount);
+          pendingamount=parseFloat(pendingamount)+parseFloat(totalarr[i].pending_amount);
+          discountamount=parseFloat(discountamount)+parseFloat(totalarr[i].discount_amount);
+          if(i==(totalarr.length)-1)
+          {
+            overall.push({"type":"Collection","amount":paidamount});
+            overall.push({"type":"Due","amount":pendingamount});
+            overall.push({"type":"Discount","amount":discountamount});
+          }
+        }
+        // alert(JSON.stringify(overall));
+      document.querySelector('dashboard-collection-analysis-homecard').FnToggleChart(overall); 
+      },
+      fetchgradewisedashboardinfo:function(zone,branch,schooltype,term,subject){
+        // alert(zone+"  "+branch+"  "+schooltype+"  "+term+"  "+subject);
+        this.fetchgradewisedashboardinfourl=sessionStorage.getItem("addrinfo")+"/dashboard-fetchgradewisedashboardinfo-service";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.term=term;
+         obj.subject=subject;
+         obj.schooltype=schooltype;
+         obj.zone=zone;
+         obj.branch=branch;
+         this.fetchgradewisedashboardinfoparam= obj;
+         this.$.fetchgradewisedashboardinfoajax.generateRequest();
+      },      
+      fetchgradewisedashboardinfoResponse:function(e){
+        var arr=e.detail.response.returnval;
+        var gradearr=e.detail.response.grade;
+        // alert(JSON.stringify(gradearr));
+        var overall=[];
+        for(var i=0;i<arr.length;i++){
+          var temp=[];
+          var obj={};
+          obj.term_cat_grade=arr[i].term_cat_grade;
+          temp.push(arr[i]);
+          for(var j=i+1;j<arr.length;j++){
+            if(arr[i].term_cat_grade==arr[j].term_cat_grade){
+              temp.push(arr[j]);
+              arr.splice(j,1);
+              j--;
+            }
+          }
+          for(var x=0;x<gradearr.length;x++){
+            var f=0;
+            var catgrade="";
+            var id="";
+            var pos="";
+            for(var y=0;y<temp.length;y++){
+              catgrade=temp[y].term_cat_grade;
+              id=temp[y].id;
+              pos=y;
+            if(temp[y].grade==gradearr[x].grade){
+              f=1;
+            }
+            }
+            if(f==0){
+              var obj={};
+              obj.id=id;
+              obj.term_cat_grade=catgrade;
+              obj.grade=gradearr[x].grade;
+              obj.count=0;
+              temp.splice(pos,0,obj);
+            }
+          }
+          // alert(JSON.stringify(temp));
+          overall.push({"term_cat_grade":arr[i].term_cat_grade,"info":temp});
+        }
+        // alert(JSON.stringify(overall));
+        document.querySelector('dashboard-gradewise-analysis-homecard').FnToggleChart(overall);
+        document.querySelector('dashboard-homecard').FnToggleSpinner(false);
+      },
+      fetchgradewisedashboardinfo1:function(zone,branch,schooltype,term,subject){
+        // alert(zone+"  "+branch+"  "+schooltype+"  "+term+"  "+subject);
+        this.fetchgradewisedashboardinfourl1=sessionStorage.getItem("addrinfo")+"/dashboard-fetchgradewisedashboardinfo-service1";
+         var obj={};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");  
+         obj.term=term;
+         obj.subject=subject;
+         obj.schooltype=schooltype;
+         obj.zone=zone;
+         obj.branch=branch;
+         this.fetchgradewisedashboardinfoparam1= obj;
+         this.$.fetchgradewisedashboardinfoajax1.generateRequest();
+      },      
+      fetchgradewisedashboardinfoResponse1:function(e){
+        var arr=e.detail.response.returnval;
+        var gradearr=e.detail.response.grade;
+        var overall=[];
+        for(var i=0;i<arr.length;i++){
+          var temp=[];
+          var obj={};
+          obj.term_cat_grade=arr[i].term_cat_grade;
+          temp.push(arr[i]);
+          for(var j=i+1;j<arr.length;j++){
+            if(arr[i].term_cat_grade==arr[j].term_cat_grade){
+              temp.push(arr[j]);
+              arr.splice(j,1);
+              j--;
+            }
+          }
+          for(var x=0;x<gradearr.length;x++){
+            var f=0;
+            var catgrade="";
+            var id="";
+            var pos="";
+            for(var y=0;y<temp.length;y++){
+              catgrade=temp[y].term_cat_grade;
+              id=temp[y].id;
+              pos=y;
+            if(temp[y].grade==gradearr[x].grade){
+              f=1;
+            }
+            }
+            if(f==0){
+              var obj={};
+              obj.id=id;
+              obj.term_cat_grade=catgrade;
+              obj.grade=gradearr[x].grade;
+              obj.count=0;
+              temp.splice(pos,0,obj);
+            }
+          }
+          // alert(JSON.stringify(temp));
+          overall.push({"term_cat_grade":arr[i].term_cat_grade,"info":temp});
+        }
+        // alert(JSON.stringify(overall));
+        document.querySelector('dashboard-gradewise-analysis-homecard').FnToggleChart(overall);
+        document.querySelector('dashboard-homecard').FnToggleSpinner(false);
+      }
+    });
+  })();
+  </script>
+</dom-module>

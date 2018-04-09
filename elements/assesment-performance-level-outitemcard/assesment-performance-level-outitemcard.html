@@ -1,0 +1,66 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/iron-icons/image-icons.html">
+
+<dom-module id="assesment-performance-level-outitemcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .indrop{
+        @apply(--layout-horizontal);
+        width: 100%;
+      }
+      iron-icon.tiny {
+          --iron-icon-height: 12px;
+          --iron-icon-width: 12px;
+          margin-top: 2%;
+          --iron-icon-fill-color: #111AD9;
+      }
+      assesment-performance-student-list{
+        @apply(--layout-vertical);
+        width: 100%;
+      }
+      .incard{
+        @apply(--layout-horizontal);
+        width: 100%;
+      }
+      .cardd{
+        @apply(--layout-vertical);
+        width: 100%;
+      }
+      h3{
+        color: #111AD9;
+      }
+      paper-dialog{
+        width: 80%;
+      }
+    </style>
+    <div hidden>{{assesment}}{{subcategory}}{{subject}}{{configcolumn}}</div>
+    <div>
+    <div class="indrop">
+      <h5 style="width: 80%;">Category : {{category}}</h5> 
+      <div style="width:20%;text-align: right;margin-top: 4%;padding-top: 5%;"><iron-icon class="tiny" icon="image:remove-red-eye" on-click="FnView"></iron-icon></div>             
+    </div>
+        <assesment-performance-level-itemcard subject="{{subject}}" category="{{category}}" 
+        subject="{{subject}}" categoryname="{{categoryname}}" subcategory="{{subcategory}}" level="{{level}}" configcolumn="{{configcolumn}}" assesment="{{assesment}}" levelarr="{{levelarr}}"></assesment-performance-level-itemcard>
+    </div>
+    <performance-report-service id="performancereportservice"></performance-report-service>
+  
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-level-outitemcard',
+      FnView:function(){
+        // alert(this.configcolumn+" "+this.assesment);
+        document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(true);
+        document.querySelector('student-performance-tracking-homecard').spinnermsg="Please wait...";
+        this.$.performancereportservice.FnFetchlevelbasedstudents(this.subject,this.categoryname,this.subcategory,this.level,this.configcolumn,this.assesment);
+      }
+    });
+  })();
+  </script>
+</dom-module>

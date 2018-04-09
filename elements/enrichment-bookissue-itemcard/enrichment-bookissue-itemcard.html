@@ -1,0 +1,45 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-bookissue-itemcard">
+  <template>
+    <style>
+      .card{
+        text-align: center;
+        /*height: 150px;*/
+        /*width: 150%;*/
+        /*margin-top: 5%;*/
+      }
+      b{
+        font-family: Arial, Helvetica, sans-serif;
+        color: #27408B;
+      }
+    </style>
+    <div class="card" on-click="FnFetchStudents" id="levelcard{{grade}}">
+    <div><b>Level {{grade}}</b></div>
+    <div><b style="color: red;">({{category}})</b></div>
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var temp="";
+    Polymer({
+      is: 'enrichment-bookissue-itemcard',
+      FnFetchStudents:function(){
+        if(temp==""||temp==this.grade){
+        document.querySelector('#levelcard'+this.grade).style.backgroundColor="#ffff00";
+        temp=this.grade;
+        }
+        else{
+        document.querySelector('#levelcard'+temp).style.backgroundColor="#ffffff";
+        document.querySelector('#levelcard'+this.grade).style.backgroundColor="#ffff00";
+        temp=this.grade;
+        }
+        this.$.enrichmentservice.FnFetchStudentbyLevel(this.grade);
+      }
+    });
+  })();
+  </script>
+</dom-module>

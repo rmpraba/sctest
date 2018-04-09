@@ -1,0 +1,41 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-student-list">
+  <template>
+    <style>
+      .outdrop{
+        @apply(--layout-vertical);
+        width: 100%;
+      }
+      .indrop{
+        @apply(--layout-horizontal);
+        width: 100%;
+      }
+      assesment-performance-student-list-itemcard{
+        margin-left: 3%;
+        margin-top: 1%;
+        width: 20%;
+      }
+      .name{
+        width: 30%;
+      }
+    </style>
+    <div class="outdrop">
+    <template is="dom-repeat" items="{{studentarr}}">
+    <div class="indrop">
+    <h4 class="name">{{item.student_name}}</h4>
+    <assesment-performance-student-list-itemcard levelarr="{{item.levelarr}}"></assesment-performance-student-list-itemcard>
+    </div>
+    <hr>
+    </template>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-student-list',
+    });
+  })();
+  </script>
+</dom-module>

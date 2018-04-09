@@ -1,0 +1,143 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="single-employee-subject-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+       paper-checkbox.paper-checkbox-0
+      {
+      
+         font-family: 'Roboto', 'Noto', sans-serif;
+         -webkit-font-smoothing: antialiased;
+         padding-top: 3px;
+     }
+    </style>
+    <div class="subcard">
+    <paper-input hidden value="{{empid}}"></paper-input>
+      <paper-checkbox id="{{subjectid}}" on-change="fnsetsubject">{{subjectname}}</paper-checkbox>
+    </div>
+     <iron-ajax
+        method="post"
+        id="fetchsinglesubjectajax"
+        url="{{fetchsinglesubjecturl}}"
+        params="{{fetchsinglesubjectparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsinglesubjectResponse"
+        debounce-duration="300">
+      </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+var subarr=[]; 
+var tempgradearr=[];
+    Polymer({
+      is: 'single-employee-subject-card',
+
+     fnsetsubject:function(e){
+        if(document.querySelector('#'+this.subjectid).checked==true)
+         {
+          document.querySelector('single-employee-grade-card').fnclear1();
+          tempgradearr=[];
+         
+                     var obj={};
+                     obj.id=this.subjectid;
+                     obj.subjectname=this.subjectname;
+                     subarr.push(obj);
+   sessionStorage.setItem("curr_sess_loggedsubjectid",this.subjectid);
+  this.fetchsinglesubjecturl=sessionStorage.getItem("addrinfo")+"/fetchsinglesubject-service";
+      var obj={};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj.empid=this.empid;
+      obj.subjectid=sessionStorage.getItem("curr_sess_loggedsubjectid");
+      this.fetchsinglesubjectparam=obj;
+    //  alert(JSON.stringify(obj));
+      this.$.fetchsinglesubjectajax.generateRequest();
+
+           for(var i=0;i<subarr.length;i++){
+               if(subarr[i].id==this.subjectid){
+                var C=subarr[i].id;
+                 document.querySelector('#'+C).checked==true;  
+                }
+              if(subarr[i].id!=this.subjectid){
+                var M=subarr[i].id;
+                 document.querySelector('#'+M).checked=false;
+                subarr.splice(i,1)
+                 }
+           }     
+        } 
+     },
+ fnsetvalue:function(e){
+     
+
+   
+  document.querySelector('single-employee-grade-card').graddarrvales(tempgradearr);
+   tempgradearr=[];
+     },
+     fetchsinglesubjectResponse:function(e){
+    var res=e.detail.response.gradearr;
+    var res1=e.detail.response.dbarr;
+    var res2=e.detail.response.sectionarr;
+    var res3=e.detail.response.smarr;
+
+    // alert(JSON.stringify(res));
+    //alert(JSON.stringify(res1));
+    //alert(JSON.stringify(res2));
+    //alert(JSON.stringify(res3));
+
+  tempgradearr=res3;
+  for(var j=0;j<res.length;j++){
+            var flag=0;
+              for(var i=0;i<res1.length;i++){
+                  
+                  if(res[j].grade_id==res1[i].grade_id)
+                  {    
+                   flag=1;
+                  
+                   res[j].check=true;  
+                 
+
+                  }
+                 }
+                 if(flag==0){
+                  res[j].check=false;
+                 }
+               }
+  for(var j=0;j<res2.length;j++){
+              var flag=0;
+              for(var i=0;i<res1.length;i++){
+                  
+                  if(res2[j].class_id==res1[i].class_id)
+                  {    
+                   flag=1;
+                   res2[j].check=true;   
+                  }
+                 }
+                 if(flag==0){
+                  res2[j].check=false;
+                 }
+               }
+
+               
+     // alert(JSON.stringify(res));
+     //alert(JSON.stringify(res2));
+      document.querySelector('single-staff-mapping-card').gradearr=res;
+      document.querySelector('single-staff-mapping-card').sectionarr=res2;
+     },
+     fnclean:function()
+     {
+          for(var i=0;i<subarr.length;i++)
+          {
+             var M=subarr[i].id;
+            document.querySelector('#'+M).checked=false;
+          }
+     }
+    });
+  })();
+  </script>
+</dom-module>

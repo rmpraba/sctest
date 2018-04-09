@@ -1,0 +1,195 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../demosumbit-card/demosumbit-card.html">
+<dom-module id="working-days-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+   table{
+        width: 60%;  
+        border-collapse: collapse;                          
+        margin-left: 1%;
+      }              
+   .studname{
+        width: 30%;
+      }
+      #tb1{
+          width:23.6%
+        }
+        #tn1{
+       width: 18.9%;
+        }
+        .newdropzzz
+        {
+          margin-left: 6em;
+          margin-top: 1em;
+        }
+        .newdivzzz
+        {  
+          @apply(--layout-horizontal);    
+          border-radius: 10px;
+          border: 1px solid #6699ff;
+          padding: 15px; 
+          width: 46%;
+          margin-left: 30%;
+          margin-top: 5% !important;
+          min-height: 100px; 
+        }
+
+        .workscl
+      {
+        @apply(--layout-vertical);
+      }
+    paper-checkbox.paper-checkbox-0
+      {
+      
+         font-family: 'Roboto', 'Noto', sans-serif;
+         -webkit-font-smoothing: antialiased;
+         padding-top: 4px;
+     }
+    </style>  
+
+    <div>
+      <CENTER>
+        <h3><b>WORKING DAYS</b></h3>   
+      </CENTER>
+    </div>
+    
+    <div class="newdivzzz">
+          <div class="workscl">
+            <div>
+              <label><b>School Type</b></label>
+            </div>  
+            <div>
+              <template is="dom-repeat" items="{{Sectiongradearrr}}" as="view">
+                <workingday-creation-item-card schooltypename="{{view.school_type_name}}" schootypeid="{{view.school_type_id}}" id="WDAYPH{{view.school_type_id}}">
+                </workingday-creation-item-card>  
+              </template>
+            </div> 
+          </div>  
+          
+        <div class="newdropzzz">
+          <paper-dropdown-menu id="term" label="Select Acadamic year">
+              <paper-menu id="rtermmmzzz" class="dropdown-content"   on-iron-select="fnsetonacadamicsectionzz" attr-for-selected="value" required>
+                <paper-item value="2016-2017">2016-2017</paper-item>
+                <paper-item value="2017-2018">2017-2018</paper-item>
+                <paper-item value="2018-2019">2018-2019</paper-item>
+                <paper-item value="2019-2020">2019-2020</paper-item>
+              </paper-menu>
+          </paper-dropdown-menu>
+        </div>
+     
+   </div> </br></br>
+   <center>
+    <template is="dom-repeat" items="{{category}}" as="view">
+      <table border="1">
+        <tr> 
+          <th width="10%" valign="top"><p>{{view.gradename}}</p></th>
+           <template is="dom-repeat" items="{{view.subject}}" as="s">
+                  <td width="10%">
+                     <working-demo-card score="{{s.working}}" terms="{{s.termid}}" hideheadervalue="{{view.hideheadervalue}}" hideheadervalue1="{{view.hideheadervalue1}}" fonts="{{view.fonts}}" gradeid="{{view.gradeid}}" gradename="{{view.gradename}}" acadamicyears="{{acadamicyear}}" schootypids="{{schootypidz}}" >
+                      </working-demo-card>
+                  </td>
+           </template>
+          <th width="10%">
+           <div hidden$="{{view.hideheadervalue1}}"><p>Save</p></div>
+           <div hidden$="{{view.hideheadervalue}}">
+            <paper-icon-button id="btt" icon='save' on-click='FnSave'></paper-icon-button>
+          </div>
+         </th>
+       </tr>
+     </table>
+    </template>
+  </center>
+    
+   
+      <demosumbit-card id="mydialog1"></demosumbit-card>
+      <master-ui-service id="uiservice"></master-ui-service>
+<iron-ajax        
+        id="fnsectiostudentpassvalue1ajax"
+        url="{{fnsectiostudentpassvalue1url}}"
+        params="{{fnsectiostudentpassvalue1param}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fnsectiostudentpassvalue1Response"
+        debounce-duration="300">
+      </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var passvalue=[];
+     Polymer({
+      is: 'working-days-card',
+  
+    
+        ready:function()
+      {
+         this.$.term.hidden=true;
+     
+      },
+      fnpassworking:function(arr){
+      passvalue=arr;
+      },
+      FnSave:function(e){
+        for(var i=0;i<passvalue.length;i++){
+
+            this.fnsectiostudentpassvalue1url=sessionStorage.getItem("addrinfo")+"/terminsert-service";
+ 
+            var obj={"school_id":"","termvalue":"","termid":"","acadamicyears":"","gradename":"","gradeid":"","schootypids":""};
+
+                  obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+                  obj.termvalue=passvalue[i].termvalue;
+                 obj.termid=passvalue[i].termid;
+                 obj.acadamicyears=passvalue[i].acadamicyears;
+                 obj.gradename=passvalue[i].gradename;
+                 obj.schootypids=passvalue[i].schootypids;
+                 obj.gradeid=passvalue[i].gradeid;
+               this.fnsectiostudentpassvalue1param=obj;
+                 //alert(JSON.stringify(obj));
+                 this.$.fnsectiostudentpassvalue1ajax.generateRequest();
+          }
+      if(passvalue.length==0){
+
+      }
+      else
+      document.querySelector('working-demo-card').fnsplice();
+          passvalue.splice(obj);
+          alert('Inserted successfully');
+   
+
+      },
+      FnRefresh:function()
+      {
+        document.querySelector('#rtermmmzzz').selected=-1;
+      },
+      showacademicyr:function()
+      {
+        this.$.term.hidden=false;
+      },
+    
+      Setsectionvalue:function(e)
+      {
+
+      this.schootypidz=e;
+      },
+     
+      fnsetonacadamicsectionzz:function(e)
+      {
+         this.acadamicyear=e.target.selectedItem.textContent.trim(); 
+         this.$.uiservice.fnsetpasssectinvalue2(this.schootypidz,this.acadamicyear);
+    
+      },
+         scooltypgridvalzzz:function(arr){
+        //  alert(JSON.stringify(arr));
+         gridschooltypearr=arr;
+       },   
+   
+
+ });
+  })();
+  </script>
+</dom-module>
+

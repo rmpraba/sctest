@@ -1,0 +1,531 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
+<link rel="import" href="..\..\bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
+<link rel="import" href="../scorecard-service/scorecard-service.html">
+<link rel="import" href="../report-service/report-service.html">
+<link rel="import" href="../assesmentwise-report-card/assesmentwise-report-card.html">
+<link rel="impor  t" href="../termwise-report-card/termwise-report-card.html">
+<link rel="import" href="../consolidatedtermwise-report-card/consolidatedwise-report-card.html">
+
+<dom-module id="consolidated-report-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .button{
+        background: #252626;
+        color: white;
+        margin-top: 2%;
+        text-transform: none;
+      }
+      #btn2{ 
+            /*width: 15%;*/
+            background: #252626;
+            color: white;
+            margin-top: 2%; 
+            height: 25px;
+            border-radius: 2px;
+            /*font-weight: bold;*/
+            font-family: Calibri;
+            font-size: 17px;
+          }
+      .btndiv{
+        @apply(--layout-horizontal);
+        margin-left: 45%;
+      }
+      table{
+        border-collapse: collapse;
+        /*table-layout: fixed;*/
+        /*width: 100%;*/
+      }
+      th,td{
+        style="text-align: center;word-wrap: break-word;"
+      }
+      paper-dropdown-menu{
+        margin-left: 2%;
+        --paper-input-container-label: { color: red };
+        text-align:center;
+      }
+       #dynamicapprovespinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }
+          .topheader1
+          {
+              margin-left: 34%;
+              margin-top: -1%;
+          }
+          .inner
+          {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+            @apply(--layout-wrap);
+          }
+          #btn3
+          {
+            /*width: 15%;*/
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            height: 25px;
+            border-radius: 2px;
+            margin-left: 48%;
+            font-family: Calibri;
+            font-size: 17px;
+          }
+          /*#consolidatefullreport{
+            text-align: center;
+          }*/
+    </style>
+
+      <div class="card">
+          <div class="inner">
+
+          <paper-dropdown-menu hidden$="{{hideschool}}" label="Select School" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="reportschoolname"  on-iron-select="FnSelectSchool"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{schoolarr}}">
+                <paper-item value="{{item.id}}">{{item.name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="grade" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="gradetyp"  on-iron-select="FnSelectGrade"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="section" label="Select Section" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="sectyp"  on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_name}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>         
+
+          <paper-dropdown-menu id="type" label="Choose Report Type" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="rpttype"  on-iron-select="FnSelectType"  attr-for-selected="value" required>
+               <paper-item value="Categorywise">Categorywise</paper-item>
+              <paper-item value="Subjectwise">Subjectwise</paper-item>
+                <paper-item value="Assesmentwise">Assesmentwise</paper-item>
+                <paper-item value="Termwise">Termwise</paper-item>
+                <paper-item value="ConsolidatedTerm">ConsolidatedTerm</paper-item>              
+            </paper-menu>
+          </paper-dropdown-menu>
+
+           <paper-dropdown-menu hidden$="{{hideterm}}" id="term" label="Select Term" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="termtyp"  on-iron-select="FnSelectTerm"  attr-for-selected="value" required>
+              <!-- <template is="dom-repeat" items="{{sectionarr}}"> -->
+                <paper-item value="term1">Term1</paper-item>
+                <paper-item value="term2">Term2</paper-item>
+                <paper-item value="term3">Term3</paper-item>
+              <!-- </template> -->
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu hidden$="{{hideassesment}}" id="term" label="Select Assesment" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="asstyp" on-iron-select="FnSelectAssesment"  attr-for-selected="value" required>
+              <!-- <template is="dom-repeat" items="{{sectionarr}}"> -->
+                <paper-item value="assesment1">Assesment1</paper-item>
+                <paper-item value="assesment2">Assesment2</paper-item>
+                <paper-item value="assesment3">Assesment3</paper-item>
+              <!-- </template> -->
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu hidden$="{{hidesubject}}" id="term" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="subtyp" on-iron-select="FnSelectSubject"  attr-for-selected="value" required>
+      <template is="dom-repeat" items="{{subjectarr}}">
+       <paper-item value="{{item.subject_name}}">{{item.subject_name}}</paper-item>
+      </template>
+            </paper-menu>
+       </paper-dropdown-menu>  
+    </div>
+    </div>
+
+  <div id="consolidatefullreport">  
+    <div class="topheader1" hidden$="{{hideconsolheader}}">
+      <center>
+        <h1 style="margin-left: -51%;">{{schoolname}}</h1>
+        <h3 style="margin-left: -47%;">Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+        <h4 style="margin-left: -47%;">Grade: {{gradename}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section: {{section}}</h4>
+      </center>
+    </div>
+
+    <div width="{{tabwidth}}" hidden$="{{hidedynamictable}}">
+      <center>
+      <table id="ConsolidatedReportDataTableId" border="1" style="border-collapse: collapse;" width="{{tabwidth}}">
+      <template is="dom-repeat" items="{{studarr}}">
+      <tr>
+      <th width="5%">{{item.sno}}</th>
+      <th width="15%">{{item.studentname}}</th>
+      <template is="dom-repeat" items="{{item.category}}" as="i">
+      <th colspan$="{{i.categorycnt}}" width$="{{i.width}}">{{i.subcategoryname}}</th>
+      
+      </template>
+      </tr>
+      </template>
+      </table>
+      </center>  
+      </div>
+
+      <input type="button" id="btn3" onclick="consolidatedreportexportToExcel()" value="Export to Excel">
+    </div>  
+
+      <div class="spinner">
+        <paper-dialog modal id="consolidatespinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner></paper-dialog>
+      </div>
+    <scorecard-service id="scorecardservice"></scorecard-service>
+    <report-service id="reportservice"></report-service>
+  </template>
+ <script type="text/javascript">
+    var filename;
+function consolidatedreportexportToExcel(){
+var htmls = "";
+//alert("2");
+var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j = 0;
+    var tab = document.getElementById('ConsolidatedReportDataTableId'); // id of table
+    var lines = tab.rows.length;
+
+    // the first headline of the table
+    if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+
+    // table data lines, loop starting from 1
+    for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : filename || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+    }
+
+    
+  </script>
+    <script type="text/javascript">
+  var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+  })()
+  </script>
+
+  <script>  
+  (function() {
+    'use strict';
+    var gradename;
+    var section;
+    var subject,type,termname,assesment;
+    var item=[];
+    Polymer({
+      is: 'consolidated-report-card',
+      ready:function(){
+        this.hideterm=true;
+        this.hideassesment=true; 
+        this.hidesubject=true; 
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+        this.$.btn3.hidden=true;
+      // this.hidecategory=true; 
+      },
+      FnHideSchool:function(){
+        // this.ready();
+        if(sessionStorage.getItem("curr_sess_loggedroleid")!='management')
+          this.hideschool=true;
+        else
+          this.hideschool=false;
+      },
+      FnSelectSchool:function(e){
+        var name=e.target.selectedItem.textContent.trim(); 
+        var school=e.target.selectedItem.value.trim(); 
+        sessionStorage.setItem("curr_sess_loggedschoolid",school);
+        sessionStorage.setItem("curr_sess_loggedschoolname",name);
+        this.FnRefresh();
+        document.querySelector('#gradetyp').selected=-1;
+        document.querySelector('#sectyp').selected=-1;
+        document.querySelector('#rpttype').selected=-1;
+        document.querySelector('#termtyp').selected=-1;
+        document.querySelector('#asstyp').selected=-1;
+        document.querySelector('#subtyp').selected=-1;
+        
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+        this.$.scorecardservice.callGradeService();
+      },  
+      FnSelectGrade:function(e){        
+        gradename = e.target.selectedItem.textContent.trim();       
+        this.gradeid = e.target.selectedItem.value;       
+        //alert(this.gradeid);
+        localStorage.setItem("curr_sess_grade",gradename);
+        localStorage.setItem("curr_sess_gradeid",this.gradeid);
+
+        document.querySelector('#sectyp').selected=-1;
+        document.querySelector('#rpttype').selected=-1;
+        document.querySelector('#termtyp').selected=-1;
+        document.querySelector('#asstyp').selected=-1;
+        document.querySelector('#subtyp').selected=-1;
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+        this.$.btn3.hidden=true;
+        this.$.scorecardservice.callSectionService(gradename);
+        // if(this.flag==1){
+        // document.querySelector('#sectyp').selected=-1;
+        // document.querySelector('#rpttype').selected=-1;
+        // document.querySelector('#termtyp').selected=-1;
+        // document.querySelector('#asstyp').selected=-1;
+        // document.querySelector('#subtyp').selected=-1;
+        // this.callService();
+        // }
+      },
+      FnSelectSection:function(e){
+        section = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_section",section);
+        // if(this.flag==1){             
+        document.querySelector('#rpttype').selected=-1;
+        document.querySelector('#termtyp').selected=-1;
+        document.querySelector('#asstyp').selected=-1;
+        document.querySelector('#subtyp').selected=-1;
+        
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+        this.$.btn3.hidden=true;
+        //this.callService();
+        //}
+      },
+       FnSelectType:function(e){
+        type = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_reporttype",type);
+        document.querySelector('#termtyp').selected=-1;
+        document.querySelector('#asstyp').selected=-1;
+        document.querySelector('#subtyp').selected=-1;
+        if(type=="Categorywise"){
+        this.$.reportservice.callfetchsubjectnameService(); 
+        this.hideterm=false;
+        // this.hideassesment=false;
+        this.hidesubject=false;
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+        this.hideassesment=true;
+        this.$.btn3.hidden=true;
+     //   this.$.categ.setDefaultHeaders();
+        }
+        if(type=="Subjectwise"){
+        this.$.reportservice.callfetchsubjectnameService(); 
+        this.hideterm=false;
+        this.hidesubject=false;
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+        this.hideassesment=true;
+        this.$.btn3.hidden=true;
+     //   this.$.subject.setDefaultHeaders();
+        } 
+        if(type=="Assesmentwise"){
+        this.hideterm=false;
+        this.hideassesment=false;
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+        this.hidesubject=true;
+        this.$.btn3.hidden=true;
+     //    this.$.assesment.setDefaultHeaders();
+        }                
+        if(type=="Termwise"){
+        this.hideterm=false;   
+        this.hidesubject=true;
+        this.hideassesment=true;  
+        this.hidedynamictable=true;  
+        this.hideconsolheader=true; 
+        this.$.btn3.hidden=true;
+      //   this.$.term.setDefaultHeaders(); 
+        } 
+        if(type=="ConsolidatedTerm"){
+        this.hideterm=true;
+        this.hidedynamictable=false;
+        this.hideconsolheader=false;
+        this.$.btn3.hidden=false;
+        this.hideterm=true;
+        this.hidesubject=true;
+        this.hideassesment=true;
+        this.FnSpinnerrActive(true);
+         this.$.reportservice.callFetchstudentnameService();
+        }        
+      },
+      FnSelectSubject:function(e){
+
+        subject = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_subject",subject);
+        // document.querySelector('#termtyp').selected=-1;
+        // document.querySelector('#asstyp').selected=-1;
+        // document.querySelector('#subtyp').selected=-1;
+        if(type=="Subjectwise"||type=="Categorywise"){  
+          // if(type=="Categorywise") 
+          // document.querySelector('categorywise-report').FnRefresh();
+          //this.$.categ.setDefaultHeaders(); 
+       //   this.$.subject.setDefaultHeaders();    
+          this.$.reportservice.callFetchstudentnameService(); 
+          this.hidedynamictable=false;  
+          this.hideconsolheader=false;
+          this.hideassesment=true;
+          this.hidesubject=false;
+          this.$.btn3.hidden=false;
+
+        }
+        // this.callService();
+      },
+      FnSelectTerm:function(e){
+        termname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_termname",termname);
+        document.querySelector('#subtyp').selected=-1;
+        if(type=="Termwise"){
+      //    this.$.term.setDefaultHeaders(); 
+          this.$.reportservice.callFetchstudentnameService(); 
+          this.hidedynamictable=false;
+          this.hideconsolheader=false;
+          this.hideassesment=true;
+          this.hidesubject=true;
+          this.$.btn3.hidden=false;
+        }
+        if(type=="ConsolidatedTerm"){        
+       // this.$.consolidated.setDefaultHeaders();
+
+        this.$.reportservice.callFetchstudentnameService(); 
+        this.hidedynamictable=false;
+        this.hideconsolheader=false;
+        this.hideassesment=true;
+          this.hidesubject=true;
+          this.$.btn3.hidden=false;
+
+        } 
+        // this.callService();
+      },
+      FnSelectAssesment:function(e){
+        assesment = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_assesment",assesment);
+        // alert(assesment);
+        if(type=="Assesmentwise"){
+      //    this.$.assesment.setDefaultHeaders();
+          this.$.reportservice.callFetchstudentnameService(); 
+          this.hideassesment=false;
+          this.hidesubject=true;
+          this.hidedynamictable=false;  
+          this.hideconsolheader=false;
+          this.$.btn3.hidden=false;
+
+        }
+        // this.callService();
+      },
+      callService:function(){  
+        this.flag="1";
+        this.$.reportservice.callFetchstudentnameService();        
+      } ,
+      /*FnHide:function(){
+        if(localStorage.getItem("curr_sess_reporttype")=="Assesmentwise"){
+          this.assesmentcard=false;
+        }
+        if(localStorage.getItem("curr_sess_reporttype")=="Termwise"){
+          this.termcard=false;
+        }
+         if(localStorage.getItem("curr_sess_reporttype")=="Subjectwise"){
+          this.subjectcard=false;
+        }
+
+        if(localStorage.getItem("curr_sess_reporttype")=="Categorywise"){
+          // alert('hi');
+          this.categorycard=false;
+        }
+        if(localStorage.getItem("curr_sess_reporttype")=="ConsolidatedTerm"){
+          // alert('hi');
+          this.consolidatedtermcard=false;
+        }
+      },*/
+      FnRefresh:function()
+      {
+        this.gradearr=[];
+        this.sectionarr=[];
+        document.querySelector('#reportschoolname').selected=-1;
+        document.querySelector('#gradetyp').selected=-1;
+        document.querySelector('#sectyp').selected=-1;
+        document.querySelector('#rpttype').selected=-1;
+        document.querySelector('#termtyp').selected=-1;
+        document.querySelector('#asstyp').selected=-1;
+        document.querySelector('#subtyp').selected=-1;
+        
+         this.assesmentcard=true;  
+         this.subjectcard=true;
+        this.termcard=true;
+        this.consolidatedtermcard=true;
+        this.hideterm=true;
+        this.hideassesment=true;
+        this.hidesubject=true;
+        this.hidedynamictable=true;
+        this.hideconsolheader=true;
+          this.$.btn3.hidden=true;
+
+         gradename="";
+     section="";
+     subject="";
+     type="";
+     termname="";
+     assesment="";
+    item=[];
+
+      },
+
+      FnSpinnerrActive:function(flag)
+      {
+        //alert(flag);
+        if(flag==true)
+          this.$.consolidatespinner.opened=true;
+        if(flag==false)
+          this.$.consolidatespinner.opened=false;
+      },
+        setDefaultHeaders:function()
+        {
+          this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+          this.academicyear=localStorage.getItem("curr_sess_academicyear");
+          this.gradename=localStorage.getItem("curr_sess_grade");
+          this.section=localStorage.getItem("curr_sess_section");
+          this.subject=localStorage.getItem("curr_sess_subject");
+          this.assesment=localStorage.getItem("curr_sess_assesment");
+          filename=this.gradename+"-"+this.section+"-"+this.subject+"-"+this.assesment;
+        }
+  });
+  })();
+  </script>
+</dom-module>

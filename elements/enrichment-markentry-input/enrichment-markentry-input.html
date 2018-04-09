@@ -1,0 +1,84 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-markentry-input">
+  <template>
+    <style>
+    paper-input{
+      height: 20px;
+      margin-top: -2%;
+      vertical-align: top;
+    }
+    </style>
+      <div hidden>{{studentid}}{{studentname}}{{classid}}{{assesmenttype}}{{gradeid}}{{gradename}}
+      {{subjectid}}{{subjectname}}{{categoryid}}{{categoryname}}{{subcategoryid}}{{grade}}{{categorycnt}}{{weight}}</div>
+      <h4 hidden$="{{hidelabel}}" style="text-align: center;">{{subcategoryname}}</h4>
+      <paper-input style="text-align: center;" label="" hidden$="{{hideinput}}" value="{{score}}" on-change="FnChange"></paper-input>
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var arr=[];
+    Polymer({
+      is: 'enrichment-markentry-input',
+      ready:function(){
+        arr=[];
+      },
+      attached:function(){
+        arr=[];
+      },
+      FnChange:function(e){
+        var obj={};
+        obj.studentid=this.studentid;
+        obj.studentname=this.studentname;
+        obj.classid=this.classid;
+        obj.assesmenttype=this.assesmenttype;
+        obj.gradeid=this.gradeid;
+        obj.gradename=this.gradename;
+        obj.subjectid=this.subjectid;
+        obj.subjectname=this.subjectname;
+        obj.categoryid=this.categoryid;
+        obj.categoryname=this.categoryname;
+        obj.subcategoryid=this.subcategoryid;
+        obj.subcategoryname=this.subcategoryname;
+        obj.value=this.score;
+        obj.grade=this.grade;
+        obj.categorycnt=this.categorycnt;
+        if(this.weight==null||this.weight==""){
+          if(parseFloat(this.score)>=0){
+            obj.value=this.score;
+          }
+          else{
+            obj.value="";
+          }
+        }
+        else{
+        if(parseFloat(this.score)>=0&&parseFloat(this.score)<=parseFloat(this.weight)){
+        obj.value=this.score;
+        }
+        else{
+        this.score="";
+        obj.value=this.score;
+        }
+        }
+        if(arr.length==0)
+        arr.push(obj);
+        else{
+          for(var i=0;i<arr.length;i++){
+            if(arr[i].studentid==this.studentid&&arr[i].subjectid==this.subjectid&&arr[i].categoryid==this.categoryid&&arr[i].subcategoryid==this.subcategoryid&&arr[i].subcategoryname==this.subcategoryname){
+              arr.splice(i,1);
+            }
+          }
+        arr.push(obj);
+        }
+        document.querySelector('enrichment-dynamic-markentryitemcard').FnSetInfoArray(arr);
+        document.querySelector('enrichment-dynamic-markentrycard').FnSetInfoArray(arr);
+      },
+      FnRefresh:function(){
+        arr=[];
+      }
+    });
+  })();
+  </script>
+</dom-module>

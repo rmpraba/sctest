@@ -1,0 +1,173 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="term-creation-card">
+  <template>
+    <style>   
+     :host  
+      {
+         margin-left: 10%;
+         display: block;
+         @apply(--layout-center);  
+       
+      }
+      .card   
+      {
+       @apply(--layout-center);
+        width: 60%;
+        margin-top: 3%;
+        margin-left: 8%;
+      } 
+      .headdiv
+      {
+        margin-left: -5%;
+        width: 200%;
+      }   
+
+      .title
+      {
+        @apply(--layout-center);
+         
+          width: 200%;
+          margin-left: 33%;
+      }
+
+    
+      .buttons paper-button
+      {
+        @apply(--layout-right);
+      background-color: #363636;    
+      color: #ffffff;
+      width: 10%;
+      margin-left: 45%;
+      margin-top: 9%;
+      }
+
+       .school
+      {
+        margin-top: 3%;
+        margin-left:27%;
+        width: 50%;
+      }
+
+    
+   
+      .creatediv
+      {
+       
+        margin-left: 4%;
+        top: 23% !important;
+        width: 27%;
+      }
+     
+      .vertical-row 
+      {
+            border: 1px  solid grey;
+            height: 100px;
+            margin-left: 32em;
+            min-height: 830px;
+            top: 12.6% !important;
+       } 
+     .newcard
+       {
+        overflow-y: scroll;
+        overflow-x: hidden;
+       }
+       .outcardzzzzzzzz
+       {
+        position: fixed;
+        margin-left : 40%;
+        margin-top: 6%;
+       }
+    </style> 
+    <div>
+         
+          <paper-input value="{{generatevalue}}" hidden></paper-input>
+        <term-dialog-card></term-dialog-card> 
+    
+    </div>
+ <div class="titlediv" style="position: fixed;margin-top: -1em;">
+      <div class="tit1" style="margin-left: 29em;"> 
+        <h3><b>Term Name</b></h3>        
+      </div>
+      <div class="tit2" style="position: absolute;margin-left: 45em;width: 100%;"> 
+        <h4><b>Current Term name</b></h4>        
+      </div>
+      <div class="tit3" style="margin-left: 13%;margin-top: 4%;"> 
+        <h4><b>Create Term Name</b></h4>        
+      </div>
+    </div>
+   <div class="vertical-row" style="position:fixed;"></div>
+      <div class="creatediv" style="position:fixed;" hidden$="{{hideschooltype}}">
+        <div class="card">
+          <paper-input label="Term Creation" id="termcreationid" required error-message="Needs Term!" value="{{termname}}"  ></paper-input>
+        </div>
+        <div class="buttons">
+             <paper-button class="popup-btn" on-click="FnSubmit">Submit </paper-button>
+        </div>     
+      </div>
+
+    <div class="outcardzzzzzzzz" hidden$="{{hideoutnewcard}}">
+      <table cellspacing="0" cellpadding="1" border="0" width="630px">
+        <tr>
+          <td>
+            <table cellspacing="0" cellpadding="1" border="0" width="600px">
+              <tr>
+                <th><h4><label style="margin-left:8%"></label></h4></th>
+                  <th><paper-icon-button id="btn1" icon="icons:add" hidden on-click="getschoolname"></paper-icon-button>
+                  <paper-tooltip for="btn1">Create</paper-tooltip>
+                </th>
+                <th></th>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div  class="newcard col-sm-12" style="width:590px; height:260px;">
+              <table cellspacing="0" cellpadding="1" border="0" width="730px">
+                <template is="dom-repeat" items="{{termarr}}" as="s">
+                  <tr>
+                    <td> 
+                      <term-creation-item-card   termname="{{s.term_name}}" termid="{{s.term_id}}" hideschooltypenameinput="true" hideschooltypenameitem="false"> 
+                      </term-creation-item-card>
+                    </td>
+                  </tr>
+                </template>
+              </table>
+            </div>
+          </td>
+        </tr>    
+      </table>
+    </div>
+    <term-dialog-card id="dialog"></term-dialog-card>
+   <master-term-mapping-ui-service id="mastertermservice"></master-term-mapping-ui-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'term-creation-card',
+      FnSubmit:function(e){
+       if(this.termname=="" || this.termname==null){
+       this.$.dialog.Termdialog("please check the term value"); 
+     
+       }
+      else{
+         var d=this.termname.toLowerCase();
+         var c=d;
+         var id=this.generatevalue.substring(1);
+        this.$.mastertermservice.fnpasstermvalue1(c,this.generatevalue,id); 
+      //  this.$.mastertermservice.fngenerateterm();
+
+         this.termname="";
+       }
+     }
+   
+    });  
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,45 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-service">
+  <template>
+    <iron-ajax
+        method="post"
+        id="fetchallstudentsajax"
+        url="{{fetchallstudentsurl}}"
+        params="{{fetchallstudentsparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchallstudentsResponse"
+        debounce-duration="300"
+    >
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'student-service',
+      callFecthStudentService:function(grade,section){
+         this.fetchallstudentsurl=sessionStorage.getItem("addrinfo")+"/fetchallstudents-service";
+         var obj={"schoolid":"","termtype":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+         obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+         obj.grade=grade;
+         obj.section=section;
+         this.fetchallstudentsparam= obj;
+         this.$.fetchallstudentsajax.generateRequest();
+      },
+      fetchallstudentsResponse:function(e){
+        var arr=e.detail.response.returnval;
+        // alert(JSON.stringify(arr));
+        document.querySelector('addnewstudent-card').FnView();
+        document.querySelector('addnewstudent-card').studarr=arr;
+        document.querySelector('addnewstudent-card').grade=localStorage.getItem("curr_sess_grade");
+        document.querySelector('addnewstudent-card').section=localStorage.getItem("curr_sess_section");
+      }
+    });
+  })();
+  </script>
+</dom-module>

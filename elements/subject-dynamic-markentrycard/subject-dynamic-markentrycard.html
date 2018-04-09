@@ -1,0 +1,455 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="subject-dynamic-markentrycard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        width: 60%;
+        border-collapse: collapse;                          
+        margin-left: 1%;
+      }              
+     .studname{
+        width: 30%;
+      }
+      #tb1{
+          width:15%
+        }
+     .button{
+            /*width: 15%;*/
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            text-transform: none;
+            /*margin-left: 45%;*/
+          }
+     #btn2{
+            /*width: 15%;*/
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            height: 25px;
+            border-radius: 2px;
+            /*font-weight: bold;*/
+            font-family: Calibri;
+            font-size: 17px;
+          }
+      .btndiv{
+        @apply(--layout-horizontal);
+        margin-left: 45%;
+      }
+      .hrspace
+      {
+       /*padding-left: 87%;*/
+       margin-left: 5%;
+       @apply(--layout-horizontal);
+      }
+    .exceldiv
+      {
+        @apply(--layout-horizontal);
+        /*margin-top: 3%;*/
+        margin-left: 8%;
+      }
+      .excelcard{
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        border-bottom: 1px solid #dedede;
+      }
+      #hiddenexcelheaderfiles1{
+        @apply(--layout-horizontal);
+      }
+      #upload{
+        margin-left: -10%;
+        /*padding-top: -2%;*/
+      }
+      .fileupload{
+        @apply(--layout-vertical);
+      }
+      #readfile1{
+        margin-top: 2%;
+      }
+      #check{
+        margin-top: 0.5%;
+      }
+    </style>
+    <div>
+    <div class="excelcard" align="right">
+      <div id="check" hidden$="{{hideheader}}">
+      <paper-checkbox id="templatecheckvalueid11" on-change="excelmark1">Excel Upload</paper-checkbox>
+      </div>
+      <div id="hiddenexcelheaderfiles1">
+      <div class="hrspace">
+      <paper-icon-button id="download" icon="icons:file-download" onclick="exportToExcel5()"></paper-icon-button>
+      <paper-tooltip for="download">Download</paper-tooltip>
+      <!-- <input type="button" id="btn2" onclick="tableToExcel('dynamicreporttable11', 'Mark Report')" value="Download Template"> -->
+      </div>
+      <div class="exceldiv" >
+      <!-- <div class="fileupload"> -->
+        <input id="readfile1" type="file" onchange="loadFile1(event)"/>
+        <xmp id="output"></xmp>
+      <!-- </div> -->
+        <paper-icon-button  id="upload" icon="icons:file-upload" on-click="FnClick"></paper-icon-button>
+        <paper-tooltip for="upload">Upload</paper-tooltip>
+        <!-- <paper-button style="color: white;height: 25px;  background: #252626; font-family:Calibri;"  on-click="FnClick">Upload File</paper-button>     -->
+      </div>
+      </div>
+    </div>
+    <!--   <div hidden$="{{hideheader}}">
+            <paper-checkbox style="margin-left: 67%;padding-left: 11%;" 
+             id="templatecheckvalueid11" on-change="excelmark1">Excel Upload</paper-checkbox>
+     </div>
+    <div id=hiddenexcelheaderfiles1>
+      <div class="hrspace">
+        <input type="button" id="btn2" onclick="tableToExcel('dynamicreporttable111', 'Mark Report')" value="Download Template">
+     </div>
+      <div class="exceldiv" >
+         <input id="readfile1" type="file" onchange="loadFile1(event)"/>
+         <xmp id="output"></xmp>
+        <paper-button style="margin-left: -19%;margin-top: -1%;width: 42%;color: white;height: 30px;  background: #252626; font-family:Calibri;"  on-click="FnClick">Upload File</paper-button>    
+      </div>
+   </div> -->
+    <div hidden$="{{hideheader}}">
+    <center>
+   
+      <h1>{{schoolname}}</h1>
+      <h3>Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+      <h4>Assesment: {{assesmentname}}  &nbsp;&nbsp;&nbsp; Grade: {{grade}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section: {{section}} &nbsp;&nbsp; Subject: {{subject}} </h4> 
+ 
+      <!-- <table border="1" >   -->
+      <!-- <tr><td></td>
+        <template is="dom-repeat" items="{{titlearr}}">
+          <th colspan="{{item.categorycnt}}" style="text-align: center;">{{item.categoryname}}</th>
+        </template>
+      </tr>  --> 
+      <div>
+      <template is="dom-repeat" items="{{studarr}}">
+      <!-- <tr><td> -->
+      <subject-dynamic-markentryitemcard id="edmeic" serialno="{{item.sno}}" studentname="{{item.student_name}}" studentid="{{item.id}}" hiddenoutinput="{{item.hiddenoutinput}}" category="{{item.category}}" grade="{{item.grade}}" temp="{{temp}}"></subject-dynamic-markentryitemcard>
+      <!-- </td></tr> -->
+      </template>  
+       </div>
+      
+      <!-- </table> -->
+      </center> 
+    <!-- </template>      -->
+     <div class="btndiv">
+    <!-- <paper-button class="button" id="grade" on-click="FnGenerateGrade">Generate Grade</paper-button> -->
+    <paper-button disabled$="{{disablesave}}" class="button" id="dynamicsavebtn" on-click="FnApprove">{{btnlabel}}</paper-button>
+    </div>
+    </div>
+   
+    </div>  
+    <subject-dynamic-service id="subjectservice"></subject-dynamic-service>
+   
+   <div width="{{tabwidth}}" hidden>
+    <table id="DataTableId5" border="1" style="border-collapse: collapse;" width="{{tabwidth}}">
+      <template is="dom-repeat" items="{{studarr1}}">
+      <tr>
+      <th width="5%">{{item.sno}}</th>
+      <th width="15%">{{item.Studentno}}</th>
+      <th width="15%">{{item.studentname}}</th>
+      <template is="dom-repeat" items="{{item.category}}" as="i">
+ <th colspan$="{{i.categorycnt}}" width$="{{i.width}}">{{i.subcategoryname}}</th>
+      </template>
+      </tr>
+      </template>
+      </table> 
+    </div>
+</div>
+  <paper-input value="{{categorylength}}" hidden ></paper-input>
+  <term-assesment-service id="assesmentservice"></term-assesment-service>
+
+  </template>
+   <script type="text/javascript">
+  var array=[];
+  var array1=[];
+  var tempstudentarr=[];
+  
+  function loadFile1(event) {
+  alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(data){
+    array1=data; 
+  //  alert(JSON.stringify(array1));
+     for(var i=0;i<array1.length;i++){
+       for(var j=0;j<tempstudentarr.length;j++){
+       // alert(array[i].StudentNo+"  "+tempstudentarr[j].student_id);
+       if((array1[i].StudentId).trim()==(tempstudentarr[j].id).trim()){
+          array.push(array1[i]);
+         }      
+    }  
+    }       
+  });
+  }
+  </script>
+  <script type="text/javascript">
+     var exporthighersubjectnamecosolastic;
+function exportToExcel5(){
+var htmls = "";
+//alert("2");
+var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j = 0;
+    var tab = document.getElementById('DataTableId5'); // id of table
+    var lines = tab.rows.length;
+
+    // the first headline of the table
+    if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+
+    // table data lines, loop starting from 1
+    for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : exporthighersubjectnamecosolastic || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = exporthighersubjectnamecosolastic;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+  
+    }
+
+
+
+
+
+
+  </script>
+  <script type="text/javascript">
+ 
+  var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+  })()
+  </script>
+  <script>
+
+  (function() {
+    'use strict';
+    var scorearr=[];
+    var gradearr=[];
+    var detailarr=[]; 
+    var tempassesmetarr=[];
+    Polymer({
+      is: 'subject-dynamic-markentrycard',
+      ready:function(){
+        // this.disablesave=true;
+        this.hideheader=true;      
+        this.$.dynamicsavebtn.hidden=true;
+        this.$.hiddenexcelheaderfiles1.hidden=true;
+       localStorage.setItem("curr_sess_template_tef","inactive"); 
+         localStorage.setItem("curr_sess_single_studetmap","inmapactive");
+
+      },
+      fngenrategrade:function(arr){
+         tempassesmetarr=arr;
+     //  alert(JSON.stringify(tempassesmetarr));
+     
+        },
+    fnstudentarrvalue:function(arr){
+        tempstudentarr=arr;
+      // alert(JSON.stringify(tempstudentarr));
+
+      },
+        FnClick:function(){
+         //alert(JSON.stringify(array));
+        var temp=[];
+     
+         if(array.length==0){
+        alert("Pls save the file in EXCEL WORKBOOK extension!");
+        document.getElementById("readfile1").value = "";
+       }
+       else{ 
+        for(var i=0;i<array.length;i++){
+             if(JSON.stringify({})==JSON.stringify(array[i])){
+             }
+         else{
+        var setarr=[];
+           setarr=Object.keys(array[i]);
+             setarr.splice(0,3);
+                  for(var j=0;j<setarr.length;j++){
+                  for(var k=0;k<tempassesmetarr.length;k++){
+                //alert(this.categorylength+" "+setarr.length);
+  if(this.categorylength==setarr.length){ 
+   if(tempassesmetarr[k].category_name.trim()+"("+tempassesmetarr[k].weight.trim()+")"==setarr[j].trim()){
+          var m=setarr[j];
+          var obj={};
+          obj.studentid=array[i].StudentId;
+          obj.studentname=array[i].StudentName;
+          obj.classid=localStorage.getItem("curr_sess_classid");
+          obj.assesmenttype=localStorage.getItem("curr_sess_assesmenttype");
+          obj.gradeid=localStorage.getItem("curr_sess_gradeid");;
+          obj.gradename=localStorage.getItem("curr_sess_grade");
+          obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+          obj.subjectname=localStorage.getItem("curr_sess_subject");
+          obj.categoryid=tempassesmetarr[k].category_id;
+          obj.categoryname=tempassesmetarr[k].category_name;
+          obj.subcategoryid=tempassesmetarr[k].sub_category_id;
+          obj.subcategoryname=tempassesmetarr[k].sub_category_name;
+          obj.seq=tempassesmetarr[k].sub_seq;
+          obj.value=array[i][m];
+          obj.grade="";
+          temp.push(obj);
+         // alert(JSON.stringify(temp));
+                 } }
+                 else{
+                     // temp=[];
+                      array=[];
+                      array1=[];
+                  //    tempstudentarr=[];
+                      setarr=[];
+                     // alert("Pls import the corrcet file name");
+                     document.getElementById("readfile1").value = "";
+                     }}}}}
+      if(temp.length==0){
+      document.querySelector("term-assesment-card").TermMarkdialog("Please check your sheet..All the fields must be entered!!");
+      }
+      else{
+      document.querySelector("term-assesment-card").FnToggleSpinner(true);
+      document.querySelector("term-assesment-card").spinnermsg="Please wait...uploading"
+      for(var i=0;i<temp.length;i++){
+         this.$.assesmentservice.callinsertfaassesmentmarkService(temp[i].studentid,temp[i].studentname,temp[i].categoryname,temp[i].categoryname,temp[i].value,1,temp.length);     
+      }
+         document.getElementById("readfile1").value ="";
+            temp=[];
+            array=[];
+            array1=[];
+            tempstudentarr=[];
+            document.getElementById("readfile1").value ="";
+           this.categorylength="";
+
+         }               
+     
+       }
+      },
+      FnSetLabel:function(){
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Class-Teacher"||sessionStorage.getItem("curr_sess_loggedrole")=="Subject-Teacher"){
+        this.btnlabel="Submit for approval";
+        }
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Co-Ordinator"){
+        this.btnlabel="Approve";
+        }
+      },
+  excelmark1:function(e){
+ if(document.querySelector("#templatecheckvalueid11").checked==true){
+       this.$.hiddenexcelheaderfiles1.hidden=false;
+       localStorage.setItem("curr_sess_template_tef","active"); 
+      }
+   if(document.querySelector("#templatecheckvalueid11").checked==false){
+this.$.hiddenexcelheaderfiles1.hidden=true;
+ document.getElementById("readfile1").value ="";
+       localStorage.setItem("curr_sess_template_tef","inactive"); 
+     }
+    
+    },
+      FnSetGrade:function(arr){
+        gradearr=arr;
+      }, 
+      setDefaultHeaders:function(){
+        this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+        this.academicyear=localStorage.getItem("curr_sess_academicyear");
+        this.grade=localStorage.getItem("curr_sess_grade");
+        this.section=localStorage.getItem("curr_sess_section");
+        this.subject=localStorage.getItem("curr_sess_subject");
+        this.assesmentname=localStorage.getItem("curr_sess_assesment");
+        this.$.dynamicsavebtn.hidden=false;
+         exporthighersubjectnamecosolastic=this.grade+"-"+this.section+"-"+localStorage.getItem("curr_sess_subject")+"-"+this.assesmentname;
+    if(sessionStorage.getItem("curr_sess_loggedrole")=="Co-Ordinator")
+      this.$.templatecheckvalueid11.hidden=true;
+         else
+      this.$.templatecheckvalueid11.hidden=false;
+
+      },
+      FnRefresh:function()
+      {
+        this.studarr=[];
+        this.label=[];
+        this.temp=[];
+        scorearr=[];
+        this.disablesave=false;
+        this.hideheader=true;
+        this.$.dynamicsavebtn.hidden=true;
+        this.$.hiddenexcelheaderfiles1.hidden=true;
+
+        this.FnSetLabel();
+       localStorage.setItem("curr_sess_template_tef","inactive"); 
+      document.querySelector("#templatecheckvalueid11").checked=false;
+        // this.$.edmeic.FnRefresh();
+      },
+      FnSetMarkEnteredArray:function(arr){
+        var scorearrlen=arr;
+        // alert(scorearr.length);
+        // alert(this.studarr.length);
+        if(((this.studarr.length)-1)==(scorearrlen)){
+          // alert('Approved!!');
+          this.$.subjectservice.callSubjectApprovalService(this.grade,this.section,this.subject);
+        }
+        else
+        {
+          // alert('Please complete markentry for all the students!!');
+          document.querySelector("term-assesment-card").FnToggleSpinner(false);
+          document.querySelector("term-assesment-card").TermMarkdialog("Please complete markentry for all the students!!");
+        }
+      },
+      FnApprove:function(){
+        document.querySelector("term-assesment-card").FnToggleSpinner(true);
+        document.querySelector("term-assesment-card").spinnermsg="Please wait..."
+        this.$.subjectservice.fetchMarkSavedStudents(this.grade,this.section,this.subject);
+      }
+      // FnSetAlreadyEnteredMarks:function(arr){
+      //   var temp=[];
+      //   for(var i=0;i<arr.length;i++){
+      //   var obj={};
+      //   obj.studentid=arr[i].student_id;
+      //   obj.studentname=arr[i].student_name;
+      //   obj.classid=arr[i].class_id;
+      //   obj.assesmenttype=arr[i].assesment_type;
+      //   obj.gradeid=arr[i].grade_id;
+      //   obj.gradename=arr[i].grade_name;
+      //   obj.subjectid=arr[i].subject_id;
+      //   obj.subjectname=arr[i].subject_name;
+      //   obj.categoryid=arr[i].category_id;
+      //   obj.categoryname=arr[i].category_name;
+      //   obj.subcategoryid=arr[i].sub_category_id;
+      //   obj.subcategoryname=arr[i].sub_category_name;
+      //   obj.value=arr[i].score;
+      //   obj.grade=arr[i].grade;
+      //   temp.push(obj);
+      //   }
+      //   this.temp=temp;
+      //   this.$.edmeic.FnSetInfoArray(temp);
+      // }
+    });
+  })();
+  </script>
+</dom-module>
+

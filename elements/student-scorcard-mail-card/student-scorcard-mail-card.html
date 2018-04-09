@@ -1,0 +1,196 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
+<link rel="import" href="..\..\bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
+<link rel="import" href="../scorecard-service/scorecard-service.html">
+<link rel="import" href="../student-list-card/student-list-card.html">
+
+<dom-module id="student-scorcard-mail-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+      width: 100%;        
+      @apply(--layout-vertical);
+      }
+      .inner{
+      @apply(--layout-horizontal);
+      margin-left: 30%;
+      }
+      .list{
+      /*margin-left: 10%;*/
+      margin-top: 5%;
+      }
+      paper-dropdown-menu{
+        margin-left: 5%;
+      }
+      paper-dropdown-menu{
+      width: 15%;
+      /*margin-left: 3%;*/
+    --paper-input-container-label: { color: red };
+      text-align:center;
+       }
+       table{
+        /*width: 60%;*/
+        border-collapse: collapse;
+        width:80%
+      }
+        #tb1{
+         width:15%
+        }
+        #tb2{
+         width:35%
+        }
+        #tb3{
+         width:10%
+        }
+        #itemcard:nth-child(odd) {
+        background-color: white;
+       
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      #itemcard{
+      width: 80%;
+      /*margin-left: 15%;*/
+      margin-top: 5%;
+      }
+      #dynamicspinneree1{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+    }
+    </style>
+      <div class="card">
+          <div class="inner">
+
+          <paper-dropdown-menu id="term" label="Select Term" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="mailrterm"  on-iron-select="FnSelectTerm"  attr-for-selected="value" required> 
+              <template is="dom-repeat" items="{{termarr}}">
+                  <paper-item value="{{item.term_name}}">{{item.term_name}}</paper-item>
+              </template>    
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="grade" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="mailrgrade"  on-iron-select="FnSelectGrade"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_name}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="section" label="Select Section" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="mailrsection"  on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_name}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+       </div>
+    </div>
+   <div id="setalllbulmailid">
+    <div style="margin-top: -2%;margin-left: 79%;">
+     <paper-checkbox id="setectalllbox" on-change="fnsekectall">SelectAll</paper-checkbox>
+    </div>
+    <div style="margin-top: -2%;margin-left: 87%;color: white;background: #363636a3;
+    width: 9%;border-radius: 18px;">
+     <paper-button on-click="bulksendmail">Send mail</paper-button>
+    </div>
+    </div>
+    <center>
+      <div class="list" >
+   <template is="dom-repeat" items="{{studentarr}}">
+       <div id='itemcard'>
+         <student-scorcard-mail-item-card verifyvalues="{{item.verifyvalue}}" fontsvalue="{{item.fonts}}" studentid="{{item.student_id}}" studentname="{{item.student_name}}" verifyvalueids="{{item.verifyvalueid}}" id="{{item.ids}}{{item.seqid}}" emailid="{{item.email}}" check1t="{{check1tid}}"  check2t="{{check2tid}}" alls="{{item.all_id}}"> </student-scorcard-mail-item-card>
+     </div>
+   </template>
+    </div>
+    </center>
+       <div class="spinner"><paper-dialog modal id="dynamicspinneree1" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner></paper-dialog></div>
+ <scorecard-service id="scorecardservice"></scorecard-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var gradename;
+    var section;
+    var termname;
+    var item=[];
+    var temparr=[];
+    Polymer({
+      is: 'student-scorcard-mail-card',
+      ready:function(){
+        this.hidecard=true;  
+        this.$.setalllbulmailid.hidden=true;       
+      },  
+      FnToggleSpinner:function(flag){
+        this.$.dynamicspinneree1.opened=flag;
+      },
+      FnRefresh:function()
+      {  
+      document.querySelector('#mailrgrade').selected=-1;
+      document.querySelector('#mailrsection').selected=-1;
+      document.querySelector('#mailrterm').selected=-1;
+      this.$.setalllbulmailid.hidden=true; 
+       this.$.setectalllbox.checked=false;        
+      document.querySelector('student-scorcard-mail-item-card').generateallvalue1(this.studentarr);
+     this.studentarr="";
+      },
+      passtempvalue:function(arr){
+       temparr=arr;
+      },
+      bulksendmail:function(e){
+        this.FnToggleSpinner(true);
+    document.querySelector('student-scorcard-mail-item-card').bulksendmailvalue();
+
+      },
+ getallvalues:function(e){
+ document.querySelector('student-scorcard-mail-item-card').generateallvalue(this.studentarr);
+    },
+    getallvalues1:function(e){
+ document.querySelector('student-scorcard-mail-item-card').generateallvalue1(this.studentarr);
+    },
+      FnSelectTerm:function(e){
+        termname = e.target.selectedItem.textContent.trim();       
+        localStorage.setItem("curr_sess_termname",termname);        
+        
+      },
+      FnSelectGrade:function(e){        
+        gradename = e.target.selectedItem.textContent.trim();       
+        localStorage.setItem("curr_sess_grade",gradename);
+        this.$.scorecardservice.callSectionService(gradename);
+      
+      },
+      FnSelectSection:function(e){
+        section = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_section",section);                
+        this.callService();
+        this.$.setalllbulmailid.hidden=false;       
+
+      },
+      callService:function(){
+        this.flag="1"; 
+         this.$.scorecardservice.getinmailinfo();
+   
+       
+      },
+    fnsekectall:function(e){
+       if(this.$.setectalllbox.checked==true){
+        document.querySelector('student-scorcard-mail-item-card').generateallvalue(this.studentarr);
+       }
+  else if(this.$.setectalllbox.checked==false)
+        document.querySelector('student-scorcard-mail-item-card').generateallvalue1(this.studentarr);
+        
+    }
+  
+    
+  });
+  })();
+  </script>
+</dom-module>
+

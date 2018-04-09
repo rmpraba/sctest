@@ -1,0 +1,102 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="single-employee-section-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+       paper-checkbox.paper-checkbox-0
+      {
+      
+         font-family: 'Roboto', 'Noto', sans-serif;
+         -webkit-font-smoothing: antialiased;
+         padding-top: 3px;
+     }
+    </style>
+    <div class="sectcard">
+    <paperinput hidden value="{{sectionid}}"></paperinput>
+    <paperinput hidden value="{{classid}}"></paperinput>
+    <paperinput hidden value="{{gradeid}}"></paperinput>
+    <paperinput hidden value="{{empid}}"></paperinput>
+    
+    <paper-checkbox on-change="fnsection" id="{{classid}}" checked="{{check}}" >{{sectionid}}</paper-checkbox>
+    </div>
+      <iron-ajax
+        method="post"
+        id="singleempsectionajax"
+        url="{{singleempsectionurl}}"
+        params="{{singleempsectionparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="singleempsectionResponse"
+        debounce-duration="300">
+        </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+var classarr=[];
+    Polymer({
+      is: 'single-employee-section-card',
+      fnsection:function(e){
+            if(document.querySelector('#'+this.classid).checked==true)
+                    {
+                      var obj={};
+                      obj.classid=this.classid;
+                      obj.sectionid=this.sectionid;
+                      obj.gradeid=this.gradeid;
+                      classarr.push(obj);
+                       }
+               else if(document.querySelector('#'+this.classid).checked==false){
+                     
+   this.singleempsectionurl=sessionStorage.getItem("addrinfo")+"/singleempsection-service";
+      var obj={};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj.grade_id=this.gradeid;
+      obj.empid=this.empid;
+      obj.classid=this.classid;
+
+      obj.subjectid=sessionStorage.getItem("curr_sess_loggedsubjectid");
+       //alert(JSON.stringify(obj)); 
+      this.singleempsectionparam=obj;
+      this.$.singleempsectionajax.generateRequest();  
+
+                     for(var i=0;i<classarr.length;i++){
+                        if(classarr[i].classid==this.classid){
+                            classarr.splice(i,1);
+                        } } }
+     
+   document.querySelector('single-staff-mapping-card').fnfinalvalue(classarr)    
+           },
+       singleempsectionResponse:function(e)
+       {
+          var res=e.detail.response.returnval;
+          // alert(JSON.stringify(res));
+           document.querySelector('single-staff-mapping-card').fnsetvaluez();
+       },
+           clear:function(e){
+                     for(var i=0;i<classarr.length;i++){
+                         var m=classarr[i].classid;
+                       document.querySelector('#'+m).checked=false;        
+                     }
+                     var obj={};
+                     classarr.splice(obj);         
+                     classarr=[];
+            },
+    
+    });
+  })();
+  </script>
+</dom-module>

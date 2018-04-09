@@ -1,0 +1,182 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-performance-card">
+  <template>
+    <style>
+      .container{
+        @apply(--layout-horizontal);
+        width: 100%;
+      }
+    </style>
+    <div class="container">
+      <div id="chartContainer" style="height: 300px; width: 40%;"></div>
+      <div style="width: 60%; margin-left: 5%;" id="booksContainer">
+        <h3>Issued Books</h3>
+        <template is="dom-repeat" items="{{activityarr}}">
+        <enrichment-issued-bookstatus-card sno="{{item.sno}}" completed="{{item.completed}}" status="{{item.status}}" assesmenttype="{{item.assesmenttype}}" activity="{{item.activity}}" paramarr="{{item.parameter}}"></enrichment-issued-bookstatus-card>
+        </template>
+      </div>
+    </div>
+  </template>
+  <script type="text/javascript" src="../../scripts/canvasjs.min.js"></script>
+  <script>
+  (function() {
+    'use strict';
+    var chartarr=[];
+    Polymer({
+      is: 'enrichment-performance-card',
+      FnCompariosionValuePreparation:function(arr){
+       // alert(JSON.stringify(arr));
+       if(arr.length>0){      
+       for(var i=0;i<arr.length;i++)
+       {
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].sub_category_name;
+        obj.legendText= arr[i].sub_category_name;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].assesment_type;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var j=i+1;j<arr.length;j++)
+        {
+           if(arr[i].student_id==arr[j].student_id&&arr[i].category_id==arr[j].category_id&&arr[i].sub_category_id==arr[j].sub_category_id)
+           {
+            var obj1={};
+            obj1.label=arr[j].assesment_type;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[j].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+        }
+       chartarr.push(obj);
+       }
+       }
+       // alert(JSON.stringify(chartarr));
+      },
+      FnOpenChart:function(){
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision",
+        fontSize: 30
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "Category Marks"
+      },     
+      data: chartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+chart.render();
+chartarr=[];
+},
+FnActivityCompleteness:function(assigned,parameter,assesment){
+  for(var i=0;i<assigned.length;i++){
+    var temp=0;
+    var c1=0;
+    var c2=0;
+    for(var j=0;j<assesment.length;j++){
+      c1++;
+      if(assigned[i].student_id==assesment[j].student_id&&assigned[i].assesment_type==assesment[j].assesment_type&&assigned[i].bookactivity_id==assesment[j].bookactivity_id&&assigned[i].parameter_id==assesment[j].parameter_id){
+        temp=1;
+        c2++;
+        assigned[i].flag="Completed";
+        assigned[i].green=false;
+        assigned[i].red=true;
+       }
+     }
+    if (temp==0){
+      assigned[i].flag="Not Completed";
+      assigned[i].green=true;
+      assigned[i].red=false;
+     }
+  
+   }
+
+  // alert(JSON.stringify(assigned));
+  var temparr=[];
+  if(assigned.length>0){      
+       for(var i=0;i<assigned.length;i++)
+       {
+        var c1=0,c2=0;
+        var parameter=[];
+        var obj={};
+        obj.sno=i+1;
+        obj.activity= assigned[i].bookactivity_name;
+        obj.assesmenttype= assigned[i].assesment_type;
+        obj.status= assigned[i].status;
+        // obj.completed= assigned[i].completed;
+        var obj1={};
+        obj1.param=assigned[i].parameter_name;
+        obj1.flag=assigned[i].flag;
+        obj1.gflag=assigned[i].green;
+        obj1.rflag=assigned[i].red;
+        c1++;
+        if(assigned[i].flag=="Completed")
+          c2++;
+        parameter.push(obj1);
+        obj.parameter=parameter;
+        for(var j=i+1;j<assigned.length;j++)
+        {
+
+           if(assigned[i].student_id==assigned[j].student_id&&assigned[i].bookactivity_id==assigned[j].bookactivity_id)
+           {
+            c1++;
+            var obj1={};
+            obj1.param=assigned[j].parameter_name;
+            obj1.flag=assigned[j].flag;
+            obj1.gflag=assigned[j].green;
+            obj1.rflag=assigned[j].red;
+            if(assigned[j].flag=="Completed")
+            c2++;
+            parameter.push(obj1);
+            obj.parameter=parameter;
+            assigned.splice(j,1);
+            j--;
+           }
+        }
+        // alert(c1+" "+c2);
+        if(c1==c2)
+        {
+          obj.completed=100;
+        }
+        else{
+          obj.completed=(c2/c1)*100;
+        }
+       temparr.push(obj);
+       }
+       }
+       c1=0,c2=0;
+       // alert(JSON.stringify(temparr));
+       this.activityarr=temparr;
+       temparr=[];
+  }    
+
+    });
+  })();
+  </script>
+</dom-module>

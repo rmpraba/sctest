@@ -1,0 +1,410 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../term-assesment-service/term-assesment-service.html">
+<link rel="import" href="../cc-maths-onetofour-card/cc-maths-onetofour-card.html">
+<link rel="import" href="../cc-evs-onetofour-card/cc-evs-onetofour-card.html">
+<dom-module id="term-assesment-card">
+  <template>
+    <style>
+    :host {
+        display: block;
+    }    
+    .card{
+        @apply(--layout-vertical);
+      }
+    .drop{        
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        border-bottom: 1px solid #dedede;
+    }
+    paper-dropdown-menu{
+      width: 15%;
+      margin-left: 3%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+    }
+ /*   .spinner{
+      margin-left: 50%;            
+    }*/
+    #dynamicspinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+    #termmarkdialogid11{
+      width: 20%;
+      border-radius: 25px;
+    }
+    h4{
+      color: #061E98;
+    }
+    </style>
+    <div class='card'>
+     
+     <div class='drop' hidden$="{{hidedrop}}">
+
+          <paper-dropdown-menu id="grade" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu id="gradenam1" class="dropdown-content"  on-iron-select="FnSelectGrade"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="section" label="Select Section" disabled="{{read}}" required>
+            <paper-menu id="sectionnam1" class="dropdown-content"  on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_name}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu hidden$="{{hideassesment}}" id="assessment" label="Select Assesment" disabled="{{read}}" required>
+            <paper-menu id="assesmentcat1" class="dropdown-content"  on-iron-select="FnSelectAssesment"  attr-for-selected="value" required> 
+              <template is="dom-repeat" items="{{assesmentarr}}">
+                <paper-item value="{{item.assesment_name}}">{{item.assesment_name}}</paper-item>      
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu> 
+
+          <paper-dropdown-menu hidden$="{{hideassesmenttype}}" id="assesmenttype" label="Select type" disabled="{{read}}" required>
+            <paper-menu id="assestype1" class="dropdown-content"  on-iron-select="FnSelectAssesmentType"  attr-for-selected="value" required>   
+              <!-- <template is="dom-repeat" items="{{typearr}}"> -->
+                <paper-item value="{{FA1}}">{{FA1}}</paper-item>
+                <paper-item value="{{FA2}}">{{FA2}}</paper-item>
+                <paper-item value="{{SA1}}">{{SA1}}</paper-item>
+              <!-- </template> -->
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="subject" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu id="subjectnam1" class="dropdown-content"  on-iron-select="FnSelectSubject"  attr-for-selected="value" required>   
+              <template is="dom-repeat" items="{{subjectarr}}">
+                <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>                
+          
+     </div>
+    </div>
+    <div class="spinner"><paper-dialog modal id="dynamicspinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner>
+    <h4>{{spinnermsg}}</h4></paper-dialog></div>
+      <paper-dialog id="termmarkdialogid11" modal>
+       <h3 style="color:green"><center>{{getindialogvalu}}</center></h3>
+       <center>
+      <paper-button on-click="failureclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>    
+
+    <term-assesment-service id="assesmentservice"></term-assesment-service>
+    <subject-dynamic-service id="subjectservice"></subject-dynamic-service>
+    <dynamic-scholastic-subject-service id="scholasticsubjectservice"></dynamic-scholastic-subject-service>
+
+  </template>
+  <script>
+  (function() {
+    // var flag=0;
+    'use strict';
+    var gradename,section,term,assesment,subject,academicyear,assesmenttype,subjectid;
+    Polymer({
+      is: 'term-assesment-card',
+      
+      ready:function(){
+       this.flag=0;
+       this.hidedrop=false;
+       this.hideassesment=false;
+      },
+     TermMarkdialog:function(argvalue)
+     {
+     // alert(argvalue);
+       this.getindialogvalu=argvalue;
+       this.$.termmarkdialogid11.toggle();
+     },
+     failureclose:function()
+      {
+      this.$.termmarkdialogid11.close();
+      if(this.hidedrop==true&&this.getindialogvalu!="Mark Saved!")
+      {
+        document.querySelector('home-page').setPage('approveassesment','');
+        document.querySelector('approve-one-to-four-card').FnCallService();
+      }
+      },
+    FnHideView:function(){
+        this.flag=0;
+        this.hideassesmenttype=true;
+        // this.hideassesment=true;
+        // alert(localStorage.getItem('curr_sess_termname'));
+        if((localStorage.getItem('curr_sess_termname')).toLowerCase()=='term1'){
+          this.FA1='FA1';
+          this.FA2='FA2';
+          this.SA1='SA1';
+        }
+        if((localStorage.getItem('curr_sess_termname')).toLowerCase()=='term2'){
+          this.FA1='FA3';
+          this.FA2='FA4';
+          this.SA1='SA2';
+        }
+      },
+    FnSelectGrade:function(e){
+        document.querySelector('#sectionnam1').selected=-1;
+        document.querySelector('#assesmentcat1').selected=-1;
+        document.querySelector('#subjectnam1').selected=-1;
+        gradename = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_grade",gradename);
+        localStorage.setItem("curr_sess_gradeid",this.gradeid);
+        this.$.assesmentservice.callSectionService(gradename);
+        this.$.assesmentservice.callAssesmentService(gradename);
+        if(this.flag==1)
+          document.querySelector('subject-dynamic-markentrycard').studarr=[];
+          // this.callService();
+   if(localStorage.getItem("curr_sess_page")=="subject-dynamic-markentrycard")
+   document.querySelector('subject-dynamic-markentrycard').hideheader=true;
+    if(localStorage.getItem("curr_sess_page")=="dynamic-scholastic-markentry-card")
+   document.querySelector('dynamic-scholastic-markentry-card').hideheader=true;
+    
+      },
+      FnSelectSection:function(e){
+        document.querySelector('#assesmentcat1').selected=-1;
+        document.querySelector('#subjectnam1').selected=-1;
+        section = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_section",section);
+        this.$.assesmentservice.callSubjectService(gradename,section);
+        if(this.flag==1)
+          document.querySelector('subject-dynamic-markentrycard').studarr=[];
+         
+ if(localStorage.getItem("curr_sess_page")=="subject-dynamic-markentrycard")
+   document.querySelector('subject-dynamic-markentrycard').hideheader=true;
+ if(localStorage.getItem("curr_sess_page")=="dynamic-scholastic-markentry-card")
+   document.querySelector('dynamic-scholastic-markentry-card').hideheader=true;
+    
+     }, 
+     fnsubjectinfo:function(arr) {
+      this.subjectinfo=arr;
+     } ,     
+      FnSelectSubject:function(e){
+        this.flag=1;
+        var sname = e.target.selectedItem.value; 
+        subject=e.target.selectedItem.textContent.trim(); 
+        var inx=sname.indexOf("  ");
+        var pref=sname.substring(0,inx);
+        if(pref=="Second Language"||pref=="Third Language")
+        subjectid=sname.substring((inx+2));
+        else
+        subjectid=sname;
+      //  alert("pref:"+pref);
+     //   alert("name:"+subjectid);
+        subject = e.target.selectedItem.textContent.trim(); 
+        localStorage.setItem("curr_sess_subject",subject);
+        localStorage.setItem("curr_sess_subjectid",subjectid);
+        localStorage.setItem("curr_sess_languagepref",pref);
+       // alert(localStorage.getItem("curr_sess_subjectid"));
+        for(var i=0;i<this.subjectinfo.length;i++)
+       {
+         if(subjectid==this.subjectinfo[i].subject_id)
+          {
+             this.type=this.subjectinfo[i].type;   
+          } 
+        }
+       localStorage.setItem("curr_sess_type",this.type);
+        //alert(this.type);
+        this.callService(); 
+  if(localStorage.getItem("curr_sess_page")=="subject-dynamic-markentrycard")
+   document.querySelector('subject-dynamic-markentrycard').hideheader=true;
+    if(localStorage.getItem("curr_sess_page")=="dynamic-scholastic-markentry-card")
+   document.querySelector('dynamic-scholastic-markentry-card').hideheader=true;
+          
+      },
+   FnSelectAssesment:function(e){
+        document.querySelector('#subjectnam1').selected=-1;
+        assesment = e.target.selectedItem.textContent.trim();
+  //alert(localStorage.getItem("curr_sess_page"));
+        localStorage.setItem("curr_sess_assesment",assesment);
+        localStorage.setItem("curr_sess_assesmenttype",assesment);
+        if(this.flag==1)
+   document.querySelector('subject-dynamic-markentrycard').studarr=[];
+          // this.callService();
+       if(localStorage.getItem("curr_sess_page")=="subject-dynamic-markentrycard")
+   document.querySelector('subject-dynamic-markentrycard').hideheader=true;
+    if(localStorage.getItem("curr_sess_page")=="dynamic-scholastic-markentry-card")
+   document.querySelector('dynamic-scholastic-markentry-card').hideheader=true;
+    
+      },
+      FnSelectAssesmentType:function(e){
+        assesmenttype = e.target.selectedItem.textContent.trim();
+        // alert(assesmenttype);
+        localStorage.setItem("curr_sess_assesmenttype",assesmenttype);
+        if(this.flag==1)
+          this.callService();
+  if(localStorage.getItem("curr_sess_page")=="subject-dynamic-markentrycard")
+   document.querySelector('subject-dynamic-markentrycard').hideheader=true;
+    if(localStorage.getItem("curr_sess_page")=="dynamic-scholastic-markentry-card")
+   document.querySelector('dynamic-scholastic-markentry-card').hideheader=true;
+    
+
+      },
+      callService:function(){        
+        this.FnRefresh();
+        if(gradename=="Grade-1"||gradename=="Grade-2"||gradename=="Grade-3"||gradename=="Grade-4")
+        {
+          this.FnToggleSpinner(true);
+          this.spinnermsg="Please wait...Loading";
+          if(localStorage.getItem('curr_sess_report')=='0'){
+          document.querySelector('term-assesment-sheet-card').setPage('dynamic-scholastic-markentry-card');
+          document.querySelector('dynamic-scholastic-markentry-card').FnRefresh();
+          this.$.scholasticsubjectservice.subjectsubmittedcheckService(gradename,section,subject);
+     //this.$.scholasticsubjectservice.templateincoscolasticsubject(gradename,section,subject);
+          }
+          if(localStorage.getItem('curr_sess_report')=='1'){
+            // alert('in');
+          document.querySelector('term-assesment-sheet-card').setPage('dynamic-scholastic-markentry-report');
+          document.querySelector('dynamic-scholastic-markentry-report').FnRefresh();
+          this.$.scholasticsubjectservice.callFetchStudentInfo1(gradename,section,subject);
+          }
+        // if(subject=="Mathematics")
+        // {
+        // // alert('yes');  
+        // document.querySelector('cc-maths-onetofour-card').studarr=[];     
+        // this.$.assesmentservice.callFetchStudentInfo(gradename,section);             
+        //    document.querySelector('term-assesment-sheet-card').setPage('cc-maths-onetofour-card');
+        //    document.querySelector('cc-maths-onetofour-card').setDefaultHeaders();
+        //    document.querySelector('cc-maths-onetofour-card').FnSpinnerrActive(true); 
+        // }  
+        // if(subject=="EVS")
+        // { 
+        //   document.querySelector('cc-evs-onetofour-card').studarr=[];       
+        //   this.$.assesmentservice.callFetchStudentInfo(gradename,section);          
+        //   document.querySelector('term-assesment-sheet-card').setPage('cc-evs-onetofour-card');
+        //   document.querySelector('cc-evs-onetofour-card').setDefaultHeaders();
+        //   document.querySelector('cc-evs-onetofour-card').FnSpinnerrActive(true); 
+          
+        // }
+        //  if(subject=="English"||subject=="II Language Hindi"||subject=="II Language Kannada")
+        //  { 
+        //   document.querySelector('cc-eng-onetofour-card').studarr=[];     
+        //   this.$.assesmentservice.callFetchStudentInfo(gradename,section);          
+        //   document.querySelector('term-assesment-sheet-card').setPage('cc-eng-onetofour-card');
+        //   document.querySelector('cc-eng-onetofour-card').setDefaultHeaders();
+        //   document.querySelector('cc-eng-onetofour-card').FnSpinnerrActive(true); 
+        // }
+        // if(subject=="GK")
+        // {   
+        //   document.querySelector('cc-gk-onetofour-card').studarr=[];     
+        //   this.$.assesmentservice.callFetchStudentInfo(gradename,section);          
+        //   document.querySelector('term-assesment-sheet-card').setPage('cc-gk-onetofour-card');
+        //   document.querySelector('cc-gk-onetofour-card').setDefaultHeaders();
+        //   document.querySelector('cc-gk-onetofour-card').FnSpinnerrActive(true); 
+          
+        // }       
+        // if(subject=="Computer")
+        // {  
+        //   document.querySelector('cc-computer-onetofour-card').studarr=[];      
+        //   this.$.assesmentservice.callFetchStudentInfo(gradename,section);          
+        //   document.querySelector('term-assesment-sheet-card').setPage('cc-computer-onetofour-card');
+        //   document.querySelector('cc-computer-onetofour-card').setDefaultHeaders();
+        //   document.querySelector('cc-computer-onetofour-card').FnSpinnerrActive(true); 
+        // }        
+        }
+        else if(gradename!="Grade-1"||gradename!="Grade-2"||gradename!="Grade-3"||gradename!="Grade-4")
+        {
+          if(assesment=="FA1"||assesment=="FA2"||assesment=="FA3"||assesment=="FA4")
+          { 
+          this.$.assesmentservice.callFetchFaStudentInfo();                     
+          document.querySelector('cc-fa-fivetoten-card').studarr=[]; 
+          document.querySelector('term-assesment-sheet-card').setPage('cc-fa-fivetoten-card');
+          document.querySelector('cc-fa-fivetoten-card').setDefaultHeaders(); 
+          document.querySelector('cc-fa-fivetoten-card').FnSpinnerrActive(true); 
+          }
+          else if(assesment=="SA1"||assesment=="SA2")
+          {
+          this.$.assesmentservice.callFetchFaStudentInfo();           
+          if((gradename=="Grade-9"||gradename=="Grade-10")&&localStorage.getItem("curr_sess_subject")=="English"){
+          document.querySelector('cc-sa-ninetoten-english').studarr=[]; 
+          document.querySelector('term-assesment-sheet-card').setPage('cc-sa-ninetoten-english');
+          document.querySelector('cc-sa-ninetoten-english').setDefaultHeaders();
+          document.querySelector('cc-sa-ninetoten-english').FnSpinnerrActive(true); 
+          }
+          else{
+          document.querySelector('cc-sa-fivetoten-card').studarr=[]; 
+          document.querySelector('term-assesment-sheet-card').setPage('cc-sa-fivetoten-card');
+          document.querySelector('cc-sa-fivetoten-card').setDefaultHeaders();
+          document.querySelector('cc-sa-fivetoten-card').FnSpinnerrActive(true);  
+          }
+          }
+          else{
+          this.FnToggleSpinner(true);
+          this.spinnermsg="Please wait...Loading";
+          if(localStorage.getItem('curr_sess_report')=='0'){
+          document.querySelector('term-assesment-sheet-card').setPage('subject-dynamic-markentrycard');
+          document.querySelector('subject-dynamic-markentrycard').FnRefresh();
+          this.$.subjectservice.subjectsubmittedcheckService(gradename,section,subject);
+          }
+          if(localStorage.getItem('curr_sess_report')=='1'){
+          document.querySelector('term-assesment-sheet-card').setPage('dynamic-markentry-report');
+          document.querySelector('dynamic-markentry-report').FnRefresh();
+          this.$.subjectservice.FnFetchDynamicallyEnteredMarks(gradename,section,subject);
+          }
+          }
+        }
+      },
+      FnRefresh:function()
+      {
+        var subj=localStorage.getItem("curr_sess_subject");
+        var assestype=localStorage.getItem("curr_sess_assesmenttype");
+        if(subj=="Mathematics")
+        {  
+           document.querySelector('cc-maths-onetofour-card').FnRefresh();
+        }  
+        if(subj=="EVS"){  
+          document.querySelector('cc-evs-onetofour-card').FnRefresh();
+        }
+         if(subj=="English"||subj=="II Language Hindi"||subj=="II Language Kannada"){      
+          
+          document.querySelector('cc-eng-onetofour-card').FnRefresh();
+        }
+        if(subj=="GK"){        
+         
+          document.querySelector('cc-gk-onetofour-card').FnRefresh();
+          
+        }       
+        if(subj=="Computer")
+        {        
+          
+          document.querySelector('cc-computer-onetofour-card').FnRefresh();
+        }        
+                
+          if(assestype=="FA1"||assestype=="FA2"||assestype=="FA3"||assestype=="FA4"){
+         
+          document.querySelector('cc-fa-fivetoten-card').FnRefresh();  
+          }
+          if(assestype=="SA1"||assestype=="SA2"){
+         
+          document.querySelector('cc-sa-fivetoten-card').FnRefresh();
+          }
+      },
+      FnRefreshcard:function(){
+        document.querySelector('#gradenam1').selected=-1;
+        document.querySelector('#sectionnam1').selected=-1;
+        document.querySelector('#assesmentcat1').selected=-1;
+        document.querySelector('#assestype1').selected=-1;
+        document.querySelector('#subjectnam1').selected=-1;
+        // document.querySelector('subject-dynamic-markentryitemcard').FnRefresh();
+        // document.querySelector('subject-dynamic-markentry-input').FnRefresh();
+        this.flag=0;
+      },
+      FnToggleSpinner:function(flag){
+      //  alert(flag);
+        this.$.dynamicspinner.opened=flag;
+        
+      }
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,72 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\enrichment-activityhome-card\enrichment-activityhome-card.html">
+
+<dom-module id="enrichment-individual-assignment">
+  <template>
+    <style>
+    .container{
+      @apply(--layout-horizontal);
+      width: 100%;
+    }
+    .card1{
+      width: 25%;
+      margin-top: 5%;
+    }
+    .card2{
+      width: 75%;
+    }
+    .card-content{
+      text-align: center;
+    }
+    b{
+      font-family: Arial, Helvetica, sans-serif;
+      color: #27408B;
+    }
+    </style>
+    <div class="container">
+    <div class="card1">
+    <paper-card image="../../images/studenttosubject.jpg" on-click="FnClickStudent">
+    <div class="card-content">
+    <div class="cafe-header"><b>{{studentname}}</b>
+      <div class="cafe-location cafe-light">
+        <span><b>Grade</b></span>
+      </div>
+    </div>
+    <div class="cafe-rating">
+      <b>{{studentid}}</b>
+    </div>
+    </div>
+    </paper-card>
+    </div> 
+    <div hidden$="{{hidecard}}" class="card2">
+    <enrichment-activityhome-card></enrichment-activityhome-card>
+    </div>
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'enrichment-individual-assignment',
+      ready:function(){
+        this.hidecard=true;
+      },
+      FnSetStudInfo:function(studentid,studentname){
+        this.studentid=studentid;
+        this.studentname=studentname;
+        localStorage.setItem("curr_sess_studentid",this.studentid);
+        localStorage.setItem("curr_sess_studentname",this.studentname);
+        // this.$.enrichmentservice.FnFetchBookForStudent(this.studentid);
+        document.querySelector('enrichment-activityhome-card').page="enrichment-evaluation-card";
+        this.$.enrichmentservice.FnFetchIssuedBook(localStorage.getItem('curr_sess_studentid'));
+      },
+      FnRefresh:function(){
+        
+      }
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,70 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="term-assesment-to-grade-mapping-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-checkbox.paper-checkbox-0
+      { 
+      
+         font-family: 'Roboto', 'Noto', sans-serif;
+         -webkit-font-smoothing: antialiased;
+         padding-top:1%;
+
+     }
+     .paperbox{
+        --paper-checkbox-size: 20px;
+     }
+    </style>
+      <p hidden>{{schooltypeid}}</p>
+   
+       <paper-checkbox  class="paperbox" on-change="fnchange" id="{{id}}">{{schooltypename}}</paper-checkbox></br></br>
+       <master-term-mapping-ui-service id="masteruivalue"></master-term-mapping-ui-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+var temp=[];
+    Polymer({
+      is: 'term-assesment-to-grade-mapping-item-card',
+fnchange:function(e)
+{
+  
+if(temp.length!=0){
+     document.querySelector("term-assesment-grade-card").fnrefresh();
+     document.querySelector("term-assesment-to-grade-mapping").hiddenvalues=true;
+     
+  
+}
+
+  if(document.querySelector('#'+this.id).checked==true){
+   this.$.masteruivalue.Fngetassesmentgrade(this.schooltypeid,this.schooltypename);
+     var obj={};
+         obj.id=this.id;
+          temp.push(obj);
+          for(var i=0;i<temp.length;i++){
+              if(temp[i].id!=this.id){
+                var c=temp[i].id;
+                document.querySelector('#'+c).checked=false;
+              }
+          }
+  }
+  else if(document.querySelector('#'+this.id).checked==false){
+    for(var i=0;i<temp.length;i++){
+       if(temp[i].id!=this.id){
+     temp.splice(i,1)
+       }}}},
+       ref:function(){
+         for(var i=0;i<temp.length;i++){
+             var c=temp[i].id;
+                document.querySelector('#'+c).checked=false;
+              }
+       },
+   });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,50 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-evaluation-parametercard">
+  <template>
+    <style>
+    </style>
+    <div>
+      <paper-checkbox id="evalparam{{id}}" on-change="FnSelect">{{name}}</paper-checkbox>
+      <br>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var arr=[];
+    Polymer({
+      is: 'enrichment-evaluation-parametercard',
+      FnSelect:function(e){
+        if(document.querySelector('#evalparam'+this.id).checked==true){
+          if(arr.length==0){
+            arr.push({'paramid':this.id,'paramname':this.name});
+          }
+          else{
+            var t=0;
+            for(var i=0;i<arr.length;i++){
+              if(arr[i].paramid==this.id){
+                t=1;
+                arr.splice(i,1);
+                i--;
+              }
+            }
+            if(t==0)
+              arr.push({'paramid':this.id,'paramname':this.name});
+          }
+        }
+        else{
+          for(var i=0;i<arr.length;i++){
+              if(arr[i].paramid==this.id){
+                arr.splice(i,1);
+                i--;
+              }
+          }
+        }
+        document.querySelector('enrichment-evaluation-itemcard').FnSetParameter(arr);
+      }
+    });
+  })();
+  </script>
+</dom-module>

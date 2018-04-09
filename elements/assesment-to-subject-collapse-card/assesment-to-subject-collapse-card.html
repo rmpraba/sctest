@@ -1,0 +1,660 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-to-subject-collapse-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      },
+      .content{
+       
+         overflow: auto;
+          @apply(--layout-vertical);
+         
+      }
+        table{
+      
+        border-collapse: collapse;                          
+        margin-left: 1%;
+        text-align: left;
+      } 
+      #categorytypeid{
+      width: 32%;
+      height: 45%;
+      border-radius: 25px;
+      }
+      .viewdata{
+        margin-top: 5%;
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:blue;
+      }
+      .viewdata1{
+        margin-top: 5%;
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:red;
+      }
+    </style>
+      <p hidden>{{assesmentbulkvalue}}</p>
+      <paper-card   style="width:80%;box-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 1px, rgba(0, 0, 0, 0.0980392) 1px 1px 1px;"> 
+      <table width="80%" border="0" cellpadding="0" cellspacing="0" >
+        <tr> 
+         <th width="10%" >{{sno}}</th>
+      
+         <th  width="40%">{{subjectname}}</th>
+        <th width="10%"  >
+           <ahref class="viewdata" on-click="fnchange" id="views{{subjectid}}"><u>View info</u></ahref>
+          <ahref  class="viewdata1" on-click="fnchange1"  hidden$="{{hideinfovalus1}}"  id="close{{subjectid}}"><u>Close info</u></ahref>
+        </th>
+        <th width="10%">
+         <iron-icon icon="icons:add" on-click="Fnaddcategory"></iron-icon>
+        </th>
+       </tr>
+     </table>
+   </paper-card>
+
+<iron-collapse id="{{subjectid}}">
+
+  <div class="content">
+    <div id="papercategoryid" >
+      <h3>{{categorytitle}}:</h3>
+    <template is="dom-repeat" items="{{categorryarr}}" as="view">
+       <assesment-to-category-card assesmentbulkvalue="{{assesmentbulkvalue}}" cno="{{view.cno}}" categoryid="{{view.category_id}}" categoryname='{{view.category_name}}' subjectname="{{subjectname}}" subjectid='{{subjectid}}' assesmenttype='{{view.assesment_type}}' flag="{{view.flag}}"></assesment-to-category-card>
+     </template> 
+    </div>
+   </div>
+ </iron-collapse>
+
+<paper-dialog  id=categorytypeid   modal>
+ <span class="content">
+    <paper-icon-button  style="margin-left:85%;"  icon='close' id="fncloseid"  on-click="fnclose" ></paper-icon-button> 
+     <Center><h2>Subject Category Name</h2></Center></br>
+   <div hidden$="{{hiddenhighlecelinfo}}">
+     <b>&nbsp;&nbsp; This Category are include in  Sub-Category ? </b>
+  <paper-checkbox id="assesmentyesid{{subjectid}}" on-change="fnclickyes">Yes</paper-checkbox>
+  <paper-checkbox id="assesmentnoid{{subjectid}}" on-change="fnclickno">No</paper-checkbox>
+  </div>
+   <paper-input id="categorygetids" value="{{categorynames}}" label="Category"></paper-input>
+       <paper-input value="{{mark}}"  id="markid" label="Mark"></paper-input>
+    <center>
+    <paper-button id="fnsubmitid" on-click="fnsubmit" style="color:black;border:2px solid black">Submit</paper-button>
+   </center>
+</span>
+ </paper-dialog>
+  <master-term-mapping-ui-service id="masteruiservice"></master-term-mapping-ui-service>
+      <iron-ajax        
+        id="collapsecategoryvalueajax"
+        url="{{collapsecategoryvalueurl}}"
+        params="{{collapsecategoryvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="collapsecategoryvalueResponse"
+        debounce-duration="300">
+       </iron-ajax>
+        <iron-ajax        
+        id="categorygetseqnumberajax"
+        url="{{categorygetseqnumberurl}}"
+        params="{{categorygetseqnumberparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="categorygetseqnumberResponse"
+        debounce-duration="300"> 
+         </iron-ajax>
+       <iron-ajax        
+         id="subseqajax"
+         url="{{subsequrl}}"
+         params="{{subseqparam}}"
+         handle-as="json"   
+         content-type="application/json"
+         method="post"
+         on-response="subseqResponse"
+         debounce-duration="300">
+        </iron-ajax> 
+
+   <iron-ajax        
+        id="saveassesmentnameajax"
+        url="{{saveassesmentnameurl}}"
+        params="{{saveassesmentnameparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="saveassesmentnameResponse"
+        debounce-duration="300">    
+  </iron-ajax>
+
+       <iron-ajax        
+        id="savesubassesmentnameajax"
+        url="{{savesubassesmentnameurl}}"
+        params="{{savesubassesmentnameparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="savesubassesmentnameResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax        
+        id="CategoryEditinfoajax"
+        url="{{CategoryEditinfourl}}"
+        params="{{CategoryEditinfoparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="CategoryEditinfoResponse"
+        debounce-duration="300">
+        
+      </iron-ajax>
+      <iron-ajax        
+        id="CategoryEditinfo1ajax"
+        url="{{CategoryEditinfo1url}}"
+        params="{{CategoryEditinfo1param}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="CategoryEditinfo1Response"
+        debounce-duration="300">
+        
+      </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+ var temp=[];
+ var categoryvalus;
+ var c1=0,c2=0,c3=0,c4=0;
+ var flags=0;
+    Polymer({
+      is: 'assesment-to-subject-collapse-card',
+
+  fnchange1:function(){
+       document.querySelector('#'+this.subjectid).opened=false;
+       document.querySelector('#views'+this.subjectid).hidden=false;
+       document.querySelector('#close'+this.subjectid).hidden=true;
+ 
+  for(var i=0;i<temp.length;i++)
+         {  
+           if(this.subjectid==temp[i].subjectid)
+           {
+             temp.splice(i,1);
+           }
+        }
+       
+  },
+ fnchange:function(e){
+ 
+       document.querySelector('#'+this.subjectid).opened=true;
+       document.querySelector('#views'+this.subjectid).hidden=true;
+       document.querySelector('#close'+this.subjectid).hidden=false;
+       this.hideinfovalus1=false;
+       var obj={};
+           obj.subjectid=this.subjectid;
+           temp.push(obj);
+           this.fncollapsecategoryvalue();
+       for(var i=0;i<temp.length;i++)
+         {  
+           if(this.subjectid!=temp[i].subjectid)
+           {
+             var id=temp[i].subjectid;
+             document.querySelector('#'+id).opened=false;
+             document.querySelector('#views'+id).hidden=false;
+             document.querySelector('#close'+id).hidden=true;
+              
+             temp.splice(i,1);
+           }
+        }
+       
+   
+  
+  },
+ CategoryEditinfo:function(subjectid,subjectname,assesmenttype,categoryid,categoryname,flag){
+       this.CategoryEditinfourl=sessionStorage.getItem("addrinfo")+"/CategoryEditinfo-service";
+     var obj={};
+         obj.subjectid=subjectid;
+         obj.subjectname=subjectname;
+         obj.assesmentid=assesmenttype;
+         obj.assesmentname=assesmenttype;
+         obj.categoryid=categoryid;
+         obj.flag=flag;
+         obj.categoryname=categoryname;
+         obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+         obj.gradename=localStorage.getItem("curr_sess_grade");
+         obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+         obj.board=localStorage.getItem("curr_sess_board");
+         obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+         obj.assesmentid=localStorage.getItem("curr_sess_assesmentname");
+         obj.assesmentname=localStorage.getItem("curr_sess_assesmentname");
+         obj.assesmentset=localStorage.getItem("curr_sess_assesmentall");
+         this.CategoryEditinfoparam=obj;
+         // alert(JSON.stringify(obj));
+         this.$.CategoryEditinfoajax.generateRequest();
+      }, 
+        CategoryEditinfoResponse:function(e){
+       var res=e.detail.response.returnval;
+       // alert(JSON.stringify(res));
+        this.fncollapsecategoryvalue();
+    },
+
+CategoryEditinfo1:function(subjectid,subjectname,assesmenttype,categoryid,categoryname,flag){
+       this.CategoryEditinfo1url=sessionStorage.getItem("addrinfo")+"/CategoryEditinfo1-service";
+     var obj={};
+         obj.subjectid=subjectid;
+         obj.subjectname=subjectname;
+         obj.assesmentid=assesmenttype;
+         obj.assesmentname=assesmenttype;
+         obj.categoryid=categoryid;
+         obj.flag=flag;
+         obj.categoryname=categoryname;
+         obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+         obj.gradename=localStorage.getItem("curr_sess_grade");
+         obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+         obj.board=localStorage.getItem("curr_sess_board");
+         obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+         obj.assesmentid=localStorage.getItem("curr_sess_assesmentname");
+         obj.assesmentname=localStorage.getItem("curr_sess_assesmentname");
+         obj.assesmentset=localStorage.getItem("curr_sess_assesmentall");
+         this.CategoryEditinfo1param=obj;
+         // alert(JSON.stringify(obj));
+         this.$.CategoryEditinfo1ajax.generateRequest();
+      }, 
+        CategoryEditinfo1Response:function(e){
+       var res=e.detail.response.returnval;
+       // alert(JSON.stringify(res));
+        
+    },
+
+
+  fnclose:function(){
+   this.$.categorytypeid.toggle(); 
+  },
+Fnaddcategory:function(e){
+
+
+
+if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+  this.hiddenhighlecelinfo=false;
+  //  this.$.markid.hidden=true;
+  this.$.markid.hidden=true;
+    this.$.categorygetids.hidden=true;
+    this.$.fnsubmitid.hidden=true;
+    //this.$.fncloseid.hidden=true;
+document.querySelector('#assesmentnoid'+this.subjectid).checked=false;
+document.querySelector('#assesmentyesid'+this.subjectid).checked=false;
+  }
+ else{
+   if(localStorage.getItem("curr_sess_type")=="Once"){
+     this.hiddenhighlecelinfo=true;
+      categoryvalus='no';
+      this.$.markid.hidden=false;
+      this.$.categorygetids.hidden=false;
+      this.$.fnsubmitid.hidden=false;
+   }
+   else{
+    this.hiddenhighlecelinfo=false;
+    // this.$.markid.hidden=true;
+     this.$.markid.hidden=true;
+     this.$.categorygetids.hidden=true;
+     this.$.fnsubmitid.hidden=true;
+  }
+
+   
+ }
+ 
+  this.$.categorytypeid.toggle(); 
+  this.categorygetseqnumber();
+    this.subseqvalue();
+
+    },
+  subseqvalue:function(e){
+       this.subsequrl=sessionStorage.getItem("addrinfo")+"/fetchsubjectseq-service";
+        this.$.subseqajax.generateRequest();
+      },
+    subseqResponse:function(e){
+       var res=e.detail.response.returnval;
+     this.currentsubcategoryid=res[0].subcat_seq;
+   
+    },
+ categorygetseqnumber:function(e){
+    this.categorygetseqnumberurl=sessionStorage.getItem("addrinfo")+"/generateterm-service";
+        this.$.categorygetseqnumberajax.generateRequest();
+       },
+       categorygetseqnumberResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+         this.currentcategoryid=res[0].cat_seq;
+      },
+
+ fnclickyes:function(e){
+  if(document.querySelector('#assesmentyesid'+this.subjectid).checked==true){
+     categoryvalus='yes';
+     this.$.markid.hidden=true;
+     this.$.categorygetids.hidden=false;
+     this.$.fnsubmitid.hidden=false;
+   //  this.$.fncloseid.hidden=false;
+  }
+  else if(document.querySelector('#assesmentyesid'+this.subjectid).checked==false){
+       this.$.markid.hidden=true;
+       this.$.categorygetids.hidden=true;
+        this.$.fnsubmitid.hidden=true;
+     //  this.$.fncloseid.hidden=true;
+  }
+  document.querySelector('#assesmentnoid'+this.subjectid).checked=false;
+ },
+ fnclickno:function(e){
+   if(document.querySelector('#assesmentnoid'+this.subjectid).checked==true){
+      categoryvalus='no';
+      this.$.markid.hidden=false;
+      this.$.categorygetids.hidden=false;
+      this.$.fnsubmitid.hidden=false;
+    //this.$.fncloseid.hidden=false;
+    }
+  else if(document.querySelector('#assesmentnoid'+this.subjectid).checked==false){
+      this.$.markid.hidden=true;
+      this.$.categorygetids.hidden=true;
+      this.$.fnsubmitid.hidden=true;
+    //  this.$.fncloseid.hidden=true;
+  }
+  document.querySelector('#assesmentyesid'+this.subjectid).checked=false;
+},
+
+fnsubmit:function(e){
+     
+    if(categoryvalus=="" ||categoryvalus==null || this.categorynames== "" || this.categorynames==null){
+      alert("please checked the value");
+  
+    }
+    else{
+      if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+ // alert("primary");
+    if(categoryvalus=="yes"){
+    
+         this.saveassesmentname1();
+        this.$.categorytypeid.toggle(); 
+    }
+ else if(categoryvalus=="no"){
+        if(this.mark=="")
+        alert("please check the mark entry");
+        else{
+     this.savesubassesmentname();
+     this.$.categorytypeid.toggle(); 
+        }
+       }
+      }
+    else if(localStorage.getItem("curr_sess_grade")=="Grade-5"||localStorage.getItem("curr_sess_grade")=="Grade-6"||localStorage.getItem("curr_sess_grade")=="Grade-7"||localStorage.getItem("curr_sess_grade")=="Grade-8"||localStorage.getItem("curr_sess_grade")=="Grade-9"||localStorage.getItem("curr_sess_grade")=="Grade-10"){
+        alert("High");
+    if(localStorage.getItem("curr_sess_type")=="Once"){
+
+      if(categoryvalus=="no"){
+        this.savesubassesmentname();
+        this.$.categorytypeid.toggle(); 
+      }
+    }
+    else{
+         if(categoryvalus=="yes"){
+    
+         this.saveassesmentname1();
+        this.$.categorytypeid.toggle(); 
+     }
+     else if(categoryvalus=="no"){
+        if(this.mark=="")
+        alert("please check the mark entry");
+        else{
+     this.savesubassesmentname();
+     this.$.categorytypeid.toggle(); 
+        }
+       }
+      } } } },
+     ready:function(){
+  
+  this.$.markid.hidden=true;
+  this.$.categorygetids.hidden=true;
+  this.$.fnsubmitid.hidden=true;
+  //this.$.fncloseid.hidden=true;
+  this.categorynames="";
+  this.globid="";
+},
+
+
+saveassesmentname1:function(){
+    // alert(JSON.stringify(this.assesmentbulkvalue));
+
+    if(localStorage.getItem("curr_sess_assesmentall")=="active"){
+      var t=0;
+       for(var i=0;i<this.assesmentbulkvalue.length;i++){
+               t=i+1;
+               c1=this.assesmentbulkvalue.length;
+ this.saveassesmentnameurl=sessionStorage.getItem("addrinfo")+"/saveassesmentname-service";
+        var obj={};
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_grade");
+           obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+           obj.board=localStorage.getItem("curr_sess_board");
+           obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+           obj.assesmentname=this.assesmentbulkvalue[i].assesment_name;
+           obj.assesmentid=this.assesmentbulkvalue[i].assesment_id;
+           obj.assesmentset=localStorage.getItem("curr_sess_assesmentall");
+           obj.categoryid=this.subjectid+"-c"+this.currentcategoryid;
+           obj.categoryname=this.categorynames;
+           obj.tempid='c'+this.currentcategoryid;
+           obj.subjectid=this.subjectid;
+           obj.subjectname=this.subjectname;
+            obj.type=localStorage.getItem("curr_sess_type");
+           obj.categoryvalus=categoryvalus;
+      //   alert(JSON.stringify(obj));
+        this.saveassesmentnameparam=obj;
+        this.$.saveassesmentnameajax.generateRequest();
+       }
+   
+    }
+   else if(localStorage.getItem("curr_sess_assesmentall")=="passive"){
+ this.saveassesmentnameurl=sessionStorage.getItem("addrinfo")+"/saveassesmentname-service";
+        var obj={};
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_grade");
+           obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+           obj.board=localStorage.getItem("curr_sess_board");
+           obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+           obj.assesmentname=localStorage.getItem("curr_sess_assesmentname");
+           obj.assesmentid=localStorage.getItem("curr_sess_assesmentname");
+           obj.assesmentset=localStorage.getItem("curr_sess_assesmentall");
+           obj.type=localStorage.getItem("curr_sess_type");
+           obj.categoryid=this.subjectid+"-c"+this.currentcategoryid;
+           obj.categoryname=this.categorynames;
+           obj.tempid='c'+this.currentcategoryid;
+           obj.subjectid=this.subjectid;
+           obj.subjectname=this.subjectname;
+           obj.categoryvalus=categoryvalus;
+          // alert(JSON.stringify(obj));
+          this.saveassesmentnameparam=obj;
+         this.$.saveassesmentnameajax.generateRequest();
+   }
+          
+      
+      },
+      saveassesmentnameResponse:function(e)
+      {
+        c2++;
+           var res=e.detail.response.returnval;
+           // alert(JSON.stringify(res));
+if(localStorage.getItem("curr_sess_assesmentall")=="active"){
+    if(c1==c2){
+           this.categorygetseqnumber();
+           this.subseqvalue();
+           this.fncollapsecategoryvalue();
+           this.categorynames="";  
+           this.mark="";
+           c1=0;
+           c2=0;
+     }
+   
+    }
+   else if(localStorage.getItem("curr_sess_assesmentall")=="passive"){
+           this.categorygetseqnumber();
+           this.subseqvalue();
+           this.fncollapsecategoryvalue();
+           this.categorynames="";  
+           this.mark="";
+        }
+       },
+        savesubassesmentname:function(){
+        
+    if(localStorage.getItem("curr_sess_assesmentall")=="active")
+        {
+          
+          for(var i=0;i<this.assesmentbulkvalue.length;i++){
+           var currentid=i+1;
+            var d=(parseInt(this.currentcategoryid)+parseInt(currentid));
+            var m=(parseInt(this.currentsubcategoryid)+parseInt(currentid));
+           c3=this.assesmentbulkvalue.length;
+                  this.savesubassesmentnameurl=sessionStorage.getItem("addrinfo")+"/savesubassesmentname-service";
+
+       var obj={};
+           obj.assesmentname=this.assesmentbulkvalue[i].assesment_name;
+           obj.assesmentid=this.assesmentbulkvalue[i].assesment_id;
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_grade");
+           obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+           obj.board=localStorage.getItem("curr_sess_board");
+         obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+           obj.assesmentset=localStorage.getItem("curr_sess_assesmentall");
+           obj.subjectid=this.subjectid;
+           obj.subjectname=this.subjectname;
+           obj.categoryid=this.subjectid+"-c"+d;
+           obj.subcategoryid=this.subjectid+"-c"+d+"-sub"+m;
+           obj.categoryname=this.categorynames;
+           obj.subcategoryname=this.categorynames;
+           obj.tempid='sub'+m;
+           obj.mark=this.mark;
+           obj.seq=1;
+           obj.subjectid=this.subjectid;
+           obj.subjectname=this.subjectname;
+           obj.categoryvalus=categoryvalus;
+            obj.type=localStorage.getItem("curr_sess_type");
+          //alert(JSON.stringify(obj));
+           this.savesubassesmentnameparam=obj;
+           this.$.savesubassesmentnameajax.generateRequest();
+
+
+          }
+         
+
+
+        }
+      else if(localStorage.getItem("curr_sess_assesmentall")=="passive"){
+          this.savesubassesmentnameurl=sessionStorage.getItem("addrinfo")+"/savesubassesmentname-service";
+       var obj={};
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_grade");
+           obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+           obj.board=localStorage.getItem("curr_sess_board");
+           obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+           obj.assesmentname=localStorage.getItem("curr_sess_assesmentname");
+           obj.assesmentid=localStorage.getItem("curr_sess_assesmentname");
+            obj.assesmentset=localStorage.getItem("curr_sess_assesmentall");
+           obj.subjectid=this.subjectid;
+           obj.subjectname=this.subjectname;
+           obj.categoryid=this.subjectid+"-"+'c'+this.currentcategoryid;
+           obj.subcategoryid=this.subjectid+"-c"+this.currentcategoryid+"-sub"+this.currentsubcategoryid;
+           obj.categoryname=this.categorynames;
+           obj.subcategoryname=this.categorynames;
+           obj.tempid='sub'+this.currentsubcategoryid;
+           obj.mark=this.mark;
+           obj.seq=1;
+           obj.subjectid=this.subjectid;
+           obj.subjectname=this.subjectname;
+           obj.categoryvalus=categoryvalus;
+            obj.type=localStorage.getItem("curr_sess_type");
+          // alert(JSON.stringify(obj));
+           this.savesubassesmentnameparam=obj;
+           this.$.savesubassesmentnameajax.generateRequest();
+
+        }
+        
+          
+      
+        },
+      savesubassesmentnameResponse:function(e)
+      {
+        c4++;
+
+  var res=e.detail.response.returnval;
+         //alert(JSON.stringify(res));
+         
+  if(localStorage.getItem("curr_sess_assesmentall")=="active"){
+  if(c3==c4){
+   this.saveassesmentname1(); 
+   c3=0;
+   c4=0;
+  }
+   
+    }
+      else if(localStorage.getItem("curr_sess_assesmentall")=="passive"){
+ this.saveassesmentname1(); 
+
+      }
+        
+
+        
+      },
+fncollapsecategoryvalue:function()     
+       {
+        this.categorryarr="";
+       this.collapsecategoryvalueurl=sessionStorage.getItem("addrinfo")+"/assesmensubjectdbvalue-service";
+       var obj={};
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_grade");
+           obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+           obj.board=localStorage.getItem("curr_sess_board");
+      obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj.assesmentname=localStorage.getItem("curr_sess_assesmentname");
+      obj.assesmentset=localStorage.getItem("curr_sess_assesmentall");
+      obj.type=localStorage.getItem("curr_sess_type");
+           obj.subjectid=this.subjectid;
+           this.collapsecategoryvalueparam=obj;
+           this.$.collapsecategoryvalueajax.generateRequest();
+       },
+ collapsecategoryvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+     //   alert(JSON.stringify(res));
+          for(var i=0;i<res.length;i++){
+              res[i].cno=i+1;
+             }
+             this.categorryarr=res;
+     //   alert(JSON.stringify(this.categorryarr));
+    
+        
+        if(res.length!=0){
+       
+          this.categorytitle="Category Name";
+          this.$.papercategoryid.hidden=false;
+           document.querySelector('#'+this.subjectid).opened=true;
+         document.querySelector('#views'+this.subjectid).hidden=true;
+         document.querySelector('#close'+this.subjectid).hidden=false;
+
+
+        }
+        else{
+
+        this.categorytitle="";
+       this.$.papercategoryid.hidden=true;
+      document.querySelector('#views'+this.subjectid).hidden=false;
+       document.querySelector('#close'+this.subjectid).hidden=true;
+
+        }
+       
+      }
+
+    });
+  })();
+  </script>
+</dom-module>

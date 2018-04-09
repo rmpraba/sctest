@@ -1,0 +1,97 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/value-card/value-card.html">
+
+<dom-module id="aproval-book">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <div>
+        <paper-input value={{valueid}} hidden></paper-input>
+        <paper-input value={{valuename}} hidden></paper-input>
+        <paper-input value={{conceptid}} hidden></paper-input>
+        <paper-input value={{capterid}} hidden></paper-input>
+    <paper-checkbox on-change="fnsezzt1" id={{id}} checked="{{check}}">{{valuename}}</paper-checkbox></div>  
+    <iron-ajax
+        method="post"
+        id="bookvaldelajax"
+        url="{{bookvaldelurl}}"
+        params="{{bookvaldelparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="bookvaldelResponse"
+        debounce-duration="300">
+</iron-ajax> 
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+ var concarr=[];
+ var temparr1=[];
+ 
+    Polymer({
+      is: 'aproval-book',
+
+  fnsezzt1:function(e){
+   //alert(this.id);
+   //alert(document.querySelector('#'+this.id).checked);
+   document.querySelector('aproval-book-innovatiosn-item-card').fneditsetvalue();
+      if(document.querySelector('#'+this.id).checked==true){
+        var obj={};
+        obj.id=this.id;
+        obj.rowid=this.rowid;
+        obj.valueid=this.valueid;
+        obj.valuename=this.valuename;
+        if(concarr.length==0)
+        concarr.push(obj);
+        else{
+          var f=0;
+          for(var i=0;i<concarr.length;i++){
+            if(concarr[i].id==this.id&&concarr[i].valueid==this.valueid&&concarr[i].rowid==this.rowid){
+            f=1;
+            }
+          }
+          if(f==0)
+            concarr.push(obj);
+        }
+      }
+      if(document.querySelector('#'+this.id).checked==false){
+          for(var i=0;i<concarr.length;i++){
+            if(concarr[i].id==this.id&&concarr[i].valueid==this.valueid&&concarr[i].rowid==this.rowid){
+            concarr.splice(i,1);
+            }
+          }
+      }
+ document.querySelector('aproval-book-innovatiosn-item-card').fnpasparr1(concarr);
+     
+       },
+       fnclean1:function(e){
+         var obj={};
+         concarr.splice(obj);
+         temparr1.splice(obj);
+       },
+
+       newRefreshkmdddd:function(e)
+       {
+        if(concarr!=0)
+        {
+          for(var k=0;k<concarr.length;k++)
+          {
+            var vleidd=concarr[k].id;
+            document.querySelector('#'+vleidd).checked=false;
+            concarr.splice(k,1);
+          }
+        }
+       },
+       setvaluesz:function(e){
+       concarr=e;
+       },
+   }); 
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,884 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="performance-report-service">
+  <template>
+    <style></style>
+    <div>
+    <iron-ajax
+        method="post"
+        id="fetchbranchajax"
+        url="{{fetchbranchurl}}"
+        params="{{fetchbranchparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchbranchResponse"
+        debounce-duration="300">
+    <iron-ajax
+        method="post"
+        id="fetchacademicyearajax"
+        url="{{fetchacademicyearurl}}"
+        params="{{fetchacademicyearparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchacademicyearResponse"
+        debounce-duration="300">
+    <iron-ajax
+        method="post"
+        id="fetchgradeajax"
+        url="{{fetchgradeurl}}"
+        params="{{fetchgradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchgradeResponse"
+        debounce-duration="300">
+    <iron-ajax
+        method="post"
+        id="fetchsectionajax"
+        url="{{fetchsectionurl}}"
+        params="{{fetchsectionparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsectionResponse"
+        debounce-duration="300">
+    <iron-ajax
+        method="post"
+        id="fetchassesmentinfoajax"
+        url="{{fetchassesmentinfourl}}"
+        params="{{fetchassesmentinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchassesmentinfoResponse"
+        debounce-duration="300">
+        <iron-ajax
+        method="post"
+        id="fetchsublevelstudentajax"
+        url="{{fetchsublevelstudenturl}}"
+        params="{{fetchsublevelstudentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsublevelstudentResponse"
+        debounce-duration="300">
+        <iron-ajax
+        method="post"
+        id="fetchassesmentcategoryajax"
+        url="{{fetchassesmentcategoryurl}}"
+        params="{{fetchassesmentcategoryparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchassesmentcategoryResponse"
+        debounce-duration="300">  
+        <iron-ajax
+        method="post"
+        id="fetchlevelbasedstudentsajax"
+        url="{{fetchlevelbasedstudentsurl}}"
+        params="{{fetchlevelbasedstudentsparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchlevelbasedstudentsResponse"
+        debounce-duration="300">  
+        <iron-ajax
+        method="post"
+        id="fetchexcelassesmentinfoajax"
+        url="{{fetchexcelassesmentinfourl}}"
+        params="{{fetchexcelassesmentinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchexcelassesmentinfoResponse"
+        debounce-duration="300">
+        <iron-ajax
+        method="post"
+        id="fetchexceptionexcelassesmentinfoajax"
+        url="{{fetchexceptionexcelassesmentinfourl}}"
+        params="{{fetchexceptionexcelassesmentinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchexceptionexcelassesmentinfoResponse"
+        debounce-duration="300">        
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var assesarr=[];
+    var count1=0,count2=0;
+    var overall1=[];
+    var overallassesmentarr=[];
+    var overalltotalarr=[];
+    var excel=[];
+    Polymer({
+      is: 'performance-report-service',
+       FnFetchExceptionExcelAssesmentInfo(schoolid,academicyear,gradeid,gradename,sectionid,sectionname){
+        this.fetchexceptionexcelassesmentinfourl=sessionStorage.getItem("addrinfo")+"/performance-fetchexceptionexcelassesmentinfo-service";
+        var obj={"schoolid":""};
+        obj.schoolid=schoolid;
+        obj.academicyear=academicyear;        
+        obj.gradeid=gradeid;
+        obj.grade=gradename;
+        obj.sectionid=sectionid;
+        obj.sectionname=sectionname;
+        this.fetchexceptionexcelassesmentinfoparam= obj;
+        this.$.fetchexceptionexcelassesmentinfoajax.generateRequest();
+      },
+      fetchexceptionexcelassesmentinfoResponse:function(e){
+        var student=e.detail.response.student;
+        var assesment=e.detail.response.assesment;
+        var subject=e.detail.response.subject;
+        var category=e.detail.response.category;
+        var subcategory=e.detail.response.subcategory;
+        var enrich=e.detail.response.enrich;
+        var ascii=e.detail.response.ascii;
+        var indicator=e.detail.response.indicator;
+        // alert(JSON.stringify(span));
+        var tempcnt=0;
+        var divider=0;
+        var percent=0;
+        var tabwidth=0;
+        var overall=[];
+        var temp=[];
+        for(var i=0;i<assesment.length;i++){
+          assesment[i].spancount=(parseFloat(assesment[i].subcatcount)*4);
+          tempcnt=parseFloat(tempcnt)+parseFloat(assesment[i].spancount);
+        }
+        // alert(tempcnt);
+        percent=120;
+        tabwidth="150%";
+        divider=parseFloat(percent)/(parseFloat(tempcnt));
+        // alert(divider);
+        for(var i=0;i<assesment.length;i++){
+          assesment[i].spancount=(parseFloat(assesment[i].subcatcount)*4);
+          var obj={};
+          obj.assesment=assesment[i].assesment_type;
+          obj.spancount=assesment[i].spancount;
+          obj.width=parseFloat(assesment[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        
+        overall.push({"sno":"Sno","studentid":"Student Id","studentname":"Student Name","titlearr":temp,"legend":"Comments","level":"No of levels up/Down"});
+        var temp=[];
+        for(var i=0;i<subject.length;i++){
+          subject[i].spancount=(parseFloat(subject[i].subcatcount)*4);
+          var obj={};
+          obj.assesment=subject[i].subject_name;
+          obj.spancount=subject[i].spancount;
+          obj.width=parseFloat(subject[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        var temp=[];
+        for(var i=0;i<category.length;i++){
+          category[i].spancount=(parseFloat(category[i].subcatcount)*4);
+          var obj={};
+          obj.assesment=category[i].category_name;
+          obj.spancount=category[i].spancount;
+          obj.width=parseFloat(category[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        var temp=[];
+        for(var i=0;i<subcategory.length;i++){
+          subcategory[i].spancount=4;
+          var obj={};
+          obj.assesment=subcategory[i].sub_category_name;
+          obj.spancount=subcategory[i].spancount;
+          obj.width=parseFloat(subcategory[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        var temp=[];
+        var t=1;
+        for(var i=0;i<tempcnt;i++){
+          var obj={};
+          if(t==1)
+          obj.assesment="Score";
+          if(t==2)
+          obj.assesment="Grade";
+          if(t==3)
+          obj.assesment="Category";
+          if(t==4)
+          obj.assesment="Level";
+          obj.spancount=1;
+          obj.width=parseFloat(1)*parseFloat(divider)+"%";
+          temp.push(obj);
+          t++;
+          if(t==5)
+            t=1;
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        for(var x=0;x<student.length;x++){
+        var temp=[];
+        for(var i=0;i<subcategory.length;i++){          
+        for(var j=0;j<enrich.length;j++){
+          if(student[x].id==enrich[j].student_id&&subcategory[i].assesment_type==enrich[j].assesment_id&&subcategory[i].subject_id==enrich[j].subject_id&&subcategory[i].subject_name==enrich[j].subject_name&&subcategory[i].category_id==enrich[j].category_id&&subcategory[i].category_name==enrich[j].category_name&&subcategory[i].sub_category_id==enrich[j].sub_category_id&&subcategory[i].sub_category_name==enrich[j].sub_category_name){            
+            for(var n=0;n<4;n++){
+            var obj={};
+            if(n==0)
+            obj.assesment=enrich[j].score;
+            if(n==1)
+            obj.assesment=enrich[j].grade;
+            if(n==2)
+            obj.assesment=enrich[j].level;
+            if(n==3){
+            if(enrich[j].sub_category_name=="Written"||enrich[j].sub_category_name=="Writing")
+            obj.assesment=enrich[j].enrich_level;
+            if(enrich[j].sub_category_name=="Speed")
+            obj.assesment=enrich[j].speed_level;
+            if(enrich[j].sub_category_name=="Comprehension")
+            obj.assesment=enrich[j].comprehension_level;
+            }
+            temp.push(obj);
+            }
+          }
+        }
+        }
+        overall.push({"sno":x+1,"studentid":student[x].id,"studentname":student[x].student_name,"titlearr":temp});
+        }
+        // alert(JSON.stringify(ascii.length));
+        var studoverall=[];
+        for(var i=0;i<ascii.length;i++){
+          var t=1;
+          var x=[];
+          var obj={};
+          obj.studentid=ascii[i].student_id;
+          x.push(ascii[i]);
+          for(var j=i+1;j<ascii.length;j++){
+            if(ascii[i].student_id==ascii[j].student_id){
+              x.push(ascii[j]);
+              ascii.splice(j,1);
+              j--;
+            }
+          }
+          obj.studarr=x;
+          studoverall.push(obj);
+        }
+        var diffoverall=[];
+        var difffinal=[];
+        for(var i=0;i<studoverall.length;i++){
+          var x=[];
+          var y=[];
+          var obj={};
+          var diff="0";
+          var seq="";
+          obj.studentid=studoverall[i].studentid;
+          // obj1.studentid=studoverall[i].studentid;
+          for(var j=0;j<studoverall[i].studarr.length;j++){
+            if(j!=0){
+              diff=parseFloat(studoverall[i].studarr[j].ascii)-parseFloat(studoverall[i].studarr[j-1].ascii);
+              // x.push(diff);
+              if(diff>0)
+              {
+                seq+='n';
+                // y.push('p');
+              }
+              else if(diff<0)
+              {
+                seq+='p';
+                // y.push('n');
+              }
+              else
+              {
+                seq+='e';
+                // y.push('e');
+              }
+            }
+          }
+          // alert(seq);
+          for(var n=0;n<indicator.length;n++){
+            if(seq==indicator[n].combination){
+              obj.colorcode=indicator[n].colorcode;
+              obj.legend=indicator[n].legend;
+              if(diff!=0){
+                obj.level=Math.abs(diff);
+              }
+            }
+          }
+          // obj.diffarr=x;
+          diffoverall.push(obj);
+          // obj1.diffarr=y;
+          // difffinal.push(obj1);
+        }
+
+        for(var i=0;i<overall.length;i++){
+          for(var j=0;j<diffoverall.length;j++){
+            if(overall[i].studentid==diffoverall[j].studentid){
+              overall[i].legend=diffoverall[j].legend;
+              overall[i].colorcode=diffoverall[j].colorcode;
+              overall[i].level=diffoverall[j].level;
+            }
+          }
+        }
+
+        document.querySelector('student-performance-tracking-homecard').setExcelArray(overall);
+        document.querySelector('student-performance-tracking-homecard').excelarrr=overall;
+        document.querySelector('student-performance-tracking-homecard').hidedownloadicon=false;
+        document.querySelector('student-performance-tracking-homecard').downloadlabel="Download";     
+        document.querySelector('student-performance-tracking-homecard').hidetitle=false;
+        // document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(false);
+        // document.querySelector('student-performance-tracking-homecard').exportToExcel();
+      },
+       FnFetchExcelAssesmentInfo(schoolid,academicyear,gradeid,gradename,sectionid,sectionname){
+        this.fetchexcelassesmentinfourl=sessionStorage.getItem("addrinfo")+"/performance-fetchexcelassesmentinfo-service";
+        var obj={"schoolid":""};
+        obj.schoolid=schoolid;
+        obj.academicyear=academicyear;        
+        obj.gradeid=gradeid;
+        obj.grade=gradename;
+        obj.sectionid=sectionid;
+        obj.sectionname=sectionname;
+        this.fetchexcelassesmentinfoparam= obj;
+        this.$.fetchexcelassesmentinfoajax.generateRequest();
+      },
+      fetchexcelassesmentinfoResponse:function(e){
+        var student=e.detail.response.student;
+        var assesment=e.detail.response.assesment;
+        var subject=e.detail.response.subject;
+        var category=e.detail.response.category;
+        var subcategory=e.detail.response.subcategory;
+        var enrich=e.detail.response.enrich;
+        var ascii=e.detail.response.ascii;
+        var indicator=e.detail.response.indicator;
+        // alert(JSON.stringify(span));
+        var tempcnt=0;
+        var divider=0;
+        var percent=0;
+        var tabwidth=0;
+        var overall=[];
+        var temp=[];
+        for(var i=0;i<assesment.length;i++){
+          assesment[i].spancount=(parseFloat(assesment[i].subcatcount)*4);
+          tempcnt=parseFloat(tempcnt)+parseFloat(assesment[i].spancount);
+        }
+        // alert(tempcnt);
+        percent=120;
+        tabwidth="150%";
+        divider=parseFloat(percent)/(parseFloat(tempcnt));
+        // alert(divider);
+        for(var i=0;i<assesment.length;i++){
+          assesment[i].spancount=(parseFloat(assesment[i].subcatcount)*4);
+          var obj={};
+          obj.assesment=assesment[i].assesment_type;
+          obj.spancount=assesment[i].spancount;
+          obj.width=parseFloat(assesment[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        overall.push({"sno":"Sno","studentid":"Student Id","studentname":"Student Name","titlearr":temp});
+        var temp=[];
+        for(var i=0;i<subject.length;i++){
+          subject[i].spancount=(parseFloat(subject[i].subcatcount)*4);
+          var obj={};
+          obj.assesment=subject[i].subject_name;
+          obj.spancount=subject[i].spancount;
+          obj.width=parseFloat(subject[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        var temp=[];
+        for(var i=0;i<category.length;i++){
+          category[i].spancount=(parseFloat(category[i].subcatcount)*4);
+          var obj={};
+          obj.assesment=category[i].category_name;
+          obj.spancount=category[i].spancount;
+          obj.width=parseFloat(category[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        var temp=[];
+        for(var i=0;i<subcategory.length;i++){
+          subcategory[i].spancount=4;
+          var obj={};
+          obj.assesment=subcategory[i].sub_category_name;
+          obj.spancount=subcategory[i].spancount;
+          obj.width=parseFloat(subcategory[i].spancount)*parseFloat(divider)+"%";
+          temp.push(obj);
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        var temp=[];
+        var t=1;
+        for(var i=0;i<tempcnt;i++){
+          var obj={};
+          if(t==1)
+          obj.assesment="Score";
+          if(t==2)
+          obj.assesment="Grade";
+          if(t==3)
+          obj.assesment="Category";
+          if(t==4)
+          obj.assesment="Level";
+          obj.spancount=1;
+          obj.width=parseFloat(1)*parseFloat(divider)+"%";
+          temp.push(obj);
+          t++;
+          if(t==5)
+            t=1;
+        }
+        overall.push({"sno":"","studentid":"","studentname":"","titlearr":temp});
+        for(var x=0;x<student.length;x++){
+        var temp=[];
+        for(var i=0;i<subcategory.length;i++){          
+        for(var j=0;j<enrich.length;j++){
+          if(student[x].id==enrich[j].student_id&&subcategory[i].assesment_type==enrich[j].assesment_id&&subcategory[i].subject_id==enrich[j].subject_id&&subcategory[i].subject_name==enrich[j].subject_name&&subcategory[i].category_id==enrich[j].category_id&&subcategory[i].category_name==enrich[j].category_name&&subcategory[i].sub_category_id==enrich[j].sub_category_id&&subcategory[i].sub_category_name==enrich[j].sub_category_name){            
+            for(var n=0;n<4;n++){
+            var obj={};
+            if(n==0)
+            obj.assesment=enrich[j].score;
+            if(n==1)
+            obj.assesment=enrich[j].grade;
+            if(n==2)
+            obj.assesment=enrich[j].level;
+            if(n==3){
+            if(enrich[j].sub_category_name=="Written"||enrich[j].sub_category_name=="Writing")
+            obj.assesment=enrich[j].enrich_level;
+            if(enrich[j].sub_category_name=="Speed")
+            obj.assesment=enrich[j].speed_level;
+            if(enrich[j].sub_category_name=="Comprehension")
+            obj.assesment=enrich[j].comprehension_level;
+            }
+            temp.push(obj);
+            }
+          }
+        }
+        }
+        overall.push({"sno":x+1,"studentid":student[x].id,"studentname":student[x].student_name,"titlearr":temp});
+        }
+
+        // document.querySelector('student-performance-tracking-homecard').setExcelArray(overall);
+        document.querySelector('student-performance-tracking-homecard').excelarr=overall;
+        document.querySelector('student-performance-tracking-homecard').hidedownloadicon=false;
+        document.querySelector('student-performance-tracking-homecard').downloadlabel="Download";     
+        document.querySelector('student-performance-tracking-homecard').hidetitle=false;
+        // document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(false);
+        // document.querySelector('student-performance-tracking-homecard').exportToExcel();
+        
+      },
+      FnFetchBranchService:function(){
+        this.fetchbranchurl=sessionStorage.getItem("addrinfo")+"/performance-fetchbranch-service";
+        this.$.fetchbranchajax.generateRequest();
+      },
+      fetchbranchResponse:function(e){
+        document.querySelector('student-performance-tracking-homecard').brancharr=e.detail.response.returnval;
+      },
+      FnFetchAcademicYear:function(){
+        this.fetchacademicyearurl=sessionStorage.getItem("addrinfo")+"/performance-fetchacademicyear-service";
+        this.$.fetchacademicyearajax.generateRequest();
+      },
+      fetchacademicyearResponse:function(e){
+        document.querySelector('student-performance-tracking-homecard').academicarr=e.detail.response.returnval;
+      },
+      FnFetchGrade:function(schoolid,academicyear){
+        this.fetchgradeurl=sessionStorage.getItem("addrinfo")+"/performance-fetchgrade-service";
+        var obj={"schoolid":""};
+        obj.schoolid=schoolid;
+        obj.academicyear=academicyear;        
+        this.fetchgradeparam= obj;
+        this.$.fetchgradeajax.generateRequest();
+      },
+      fetchgradeResponse:function(e){
+        document.querySelector('student-performance-tracking-homecard').gradearr=e.detail.response.returnval;
+      },
+      FnFetchSection:function(schoolid,academicyear,gradeid){
+        this.fetchsectionurl=sessionStorage.getItem("addrinfo")+"/performance-fetchsection-service";
+        var obj={"schoolid":""};
+        obj.schoolid=schoolid;
+        obj.academicyear=academicyear;             
+        obj.gradeid=gradeid;
+        this.fetchsectionparam= obj;
+        this.$.fetchsectionajax.generateRequest();
+      },
+      fetchsectionResponse:function(e){
+        document.querySelector('student-performance-tracking-homecard').sectionarr=e.detail.response.returnval;
+      },
+      FnFetchAssesmentInfo:function(schoolid,academicyear,gradeid,gradename,sectionid,sectionname){
+        this.fetchassesmentinfourl=sessionStorage.getItem("addrinfo")+"/performance-fetchassesmentinfo-service";
+        var obj={"schoolid":""};
+        obj.schoolid=schoolid;
+        obj.academicyear=academicyear;             
+        obj.grade=gradename;
+        obj.section=sectionname;
+        this.fetchassesmentinfoparam= obj;
+        this.$.fetchassesmentinfoajax.generateRequest();
+      },
+      fetchassesmentinfoResponse:function(e){
+        var assesmentarr=e.detail.response.returnval;
+        var gradearr=e.detail.response.grade;
+        var total=e.detail.response.total;
+        var overall=[];
+        var arr1=[];
+        var temp=[];
+        var assesmenttype="";
+        for(var i=0;i<assesmentarr.length;i++){
+          assesmenttype=assesmentarr[i].assesment_type;
+          temp.push(assesmentarr[i]);
+          for(var j=i+1;j<assesmentarr.length;j++){
+          // alert(assesmentarr[i].assesment_type+"-"+assesmentarr[i].level+"  "+assesmentarr[j].assesment_type+"-"+assesmentarr[j].level);
+          if(assesmentarr[i].assesment_type==assesmentarr[j].assesment_type){
+            // alert('in');
+            temp.push(assesmentarr[j]);
+            assesmentarr.splice(j,1);
+            j--;
+            // break;
+          }
+          }
+          arr1.push({'assesment':assesmenttype,'totalarr':temp});
+          temp=[];
+        }
+        // alert(JSON.stringify(arr1));
+        
+        for(var k=0;k<arr1.length;k++){
+        var arr2=[];        // var temp=[];
+        var subject="";
+        for(var i=0;i<arr1[k].totalarr.length;i++){
+          subject=arr1[k].totalarr[i].subject_name;
+          arr1[k].totalarr[i].width=(parseFloat(arr1[k].totalarr[i].count)/parseFloat(total))*100;
+          temp.push(arr1[k].totalarr[i]);
+          for(var x=0;x<gradearr.length;x++){
+            if((gradearr[x].category).toLowerCase()==(arr1[k].totalarr[i].level).toLowerCase()){
+              arr1[k].totalarr[i].colorcode=gradearr[x].color_code;
+            }
+          }
+          for(var j=i+1;j<arr1[k].totalarr.length;j++){
+          if(arr1[k].totalarr[i].subject_name==arr1[k].totalarr[j].subject_name){
+            for(var x=0;x<gradearr.length;x++){
+              if((gradearr[x].category).toLowerCase()==(arr1[k].totalarr[j].level).toLowerCase()){
+                arr1[k].totalarr[j].colorcode=gradearr[x].color_code;
+              }
+            }
+            arr1[k].totalarr[j].width=(parseFloat(arr1[k].totalarr[j].count)/parseFloat(total))*100;
+            // alert(JSON.stringify(arr1[k].totalarr[j]));
+            temp.push(arr1[k].totalarr[j]);
+            arr1[k].totalarr.splice(j,1);
+            j--;
+            // break;
+          }
+          }
+          arr2.push({'subject':subject,'subjectarr':temp});
+          temp=[];
+        }
+        arr1[k].totalarr=arr2;
+        }
+        overall=arr1;
+        overall1=overall;
+        // alert(JSON.stringify(overall));
+        document.querySelector('student-performance-tracking-homecard').assesmentarr=overall;
+        document.querySelector('student-performance-tracking-homecard').total=total;
+        // alert('in'+localStorage.getItem("curr_sess_assesment")+localStorage.getItem("curr_sess_assesment").length);
+        if(localStorage.getItem("curr_sess_assesment")!="")
+        this.FnFetchAssesmentCategory(localStorage.getItem("curr_sess_assesment"));
+        else{
+        document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(false);
+        this.FnFetchAssesmentCategory(localStorage.getItem("curr_sess_assesment"));
+        }
+      },
+      FnFetchAssesmentCategory:function(assesment){
+        this.fetchassesmentcategoryurl=sessionStorage.getItem("addrinfo")+"/performance-fetchassesmentcategory-service";
+        var obj={"schoolid":""};
+        obj.schoolid=localStorage.getItem("curr_sess_schoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");            
+        obj.gradename=localStorage.getItem("curr_sess_grade");            
+        obj.sectionname=localStorage.getItem("curr_sess_section");            
+        obj.assesment=assesment;
+        this.fetchassesmentcategoryparam= obj;
+        this.$.fetchassesmentcategoryajax.generateRequest();
+      },
+      fetchassesmentcategoryResponse:function(e){
+        var arr=e.detail.response.returnval;
+        var levelconfigarr=e.detail.response.levelconfig;
+        count1=levelconfigarr.length;
+        for(var i=0;i<levelconfigarr.length;i++){
+          this.FnFetchSublevelStudents(levelconfigarr[i].assesment_type,levelconfigarr[i].category_name,levelconfigarr[i].sub_category_name,levelconfigarr[i].level_config);
+        }
+      },
+      FnFetchSublevelStudents:function(assesment,category,subcategory,configcolumn){
+        this.fetchsublevelstudenturl=sessionStorage.getItem("addrinfo")+"/performance-fetchsublevelstudent-service";
+        var obj={"schoolid":""};
+        obj.schoolid=localStorage.getItem("curr_sess_schoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");            
+        obj.gradename=localStorage.getItem("curr_sess_grade");            
+        obj.sectionname=localStorage.getItem("curr_sess_section");            
+        obj.assesment=assesment;
+        // obj.subject=subject;
+        obj.category=category;
+        obj.subcategory=subcategory;
+        obj.configcolumn=configcolumn;
+        this.fetchsublevelstudentparam= obj;
+        this.$.fetchsublevelstudentajax.generateRequest();
+      },
+      fetchsublevelstudentResponse:function(e){
+        var assesmentarr=e.detail.response.returnval;
+        var totalarr=e.detail.response.total;
+        // alert(JSON.stringify(assesmentarr));
+        // alert(JSON.stringify(totalarr));
+        for(var i=0;i<assesmentarr.length;i++){
+          overallassesmentarr.push(assesmentarr[i]);
+        }
+        for(var i=0;i<totalarr.length;i++){
+          overalltotalarr.push(totalarr[i]);
+        }
+
+        for(var i=0;i<assesmentarr.length;i++){
+          assesarr.push(assesmentarr[i]);
+        }
+        count2++;
+        if(count1==count2){
+        var overall=[];
+        var arr1=[];
+        var temp=[];
+        var subject="";
+        var subjectname="";
+        var categoryname="";
+        var configcolumn="";
+        var assesment="";
+        for(var i=0;i<overallassesmentarr.length;i++){
+          // alert(overallassesmentarr[i].configcolumn);
+          subject=overallassesmentarr[i].subject_name+"-"+overallassesmentarr[i].category_name;
+          subjectname=overallassesmentarr[i].subject_name;
+          categoryname=overallassesmentarr[i].category_name;
+          // configcolumn=overallassesmentarr[i].configcolumn;
+          assesment=overallassesmentarr[i].assesment;
+          temp.push(overallassesmentarr[i]);
+          for(var j=i+1;j<overallassesmentarr.length;j++){
+          if(overallassesmentarr[i].subject_name==overallassesmentarr[j].subject_name&&overallassesmentarr[i].category_name==overallassesmentarr[j].category_name&&overallassesmentarr[i].sub_category_name==overallassesmentarr[j].sub_category_name){
+            temp.push(overallassesmentarr[j]);
+            overallassesmentarr.splice(j,1);
+            j--;
+          }
+          }
+          // alert(JSON.stringify(temp));
+          arr1.push({'subject':subject,'subjectname':subjectname,'categoryname':categoryname,'assesment':assesment,'categoryarr':temp});
+          temp=[];
+        }
+        // alert(JSON.stringify(arr1));
+        
+        for(var k=0;k<arr1.length;k++){
+        // alert(arr1.length+"----"+arr1[k].categoryarr.length);
+        var arr2=[];     
+        var category="";
+        var subcategoryname="";
+        var level="";
+        var configcolumn="";
+        // alert('category display');
+        // alert(JSON.stringify(arr1[k].categoryarr));
+        for(var i=0;i<arr1[k].categoryarr.length;i++){
+          category=arr1[k].categoryarr[i].sub_category_name+"-"+arr1[k].categoryarr[i].level;
+          subcategoryname=arr1[k].categoryarr[i].sub_category_name;
+          level=arr1[k].categoryarr[i].level;
+          configcolumn=arr1[k].categoryarr[i].configcolumn;
+          // alert(category+" "+subcategoryname+" "+level+" "+configcolumn); 
+          // alert('out');
+          for(var x=0;x<overalltotalarr.length;x++){
+            if(overalltotalarr[x].subject_name==arr1[k].subjectname&&overalltotalarr[x].level==arr1[k].categoryarr[i].level)
+              arr1[k].categoryarr[i].width=(parseFloat(arr1[k].categoryarr[i].count)/parseFloat(overalltotalarr[x].count))*100;
+          }      
+          temp.push(arr1[k].categoryarr[i]);
+          for(var j=i+1;j<arr1[k].categoryarr.length;j++){
+          // alert(arr1[k].categoryarr[i].sub_category_name+" "+arr1[k].categoryarr[j].sub_category_name+" "+arr1[k].categoryarr[i].level+" "+arr1[k].categoryarr[j].level+"  "+arr1[k].categoryarr[i].configcolumn+" "+arr1[k].categoryarr[j].configcolumn);
+          if(arr1[k].categoryarr[i].sub_category_name==arr1[k].categoryarr[j].sub_category_name&&arr1[k].categoryarr[i].level==arr1[k].categoryarr[j].level&&arr1[k].categoryarr[i].configcolumn==arr1[k].categoryarr[j].configcolumn){
+            // arr1[k].categoryarr[j].width=(parseFloat(arr1[k].categoryarr[j].count)/parseFloat(total))*100;
+            for(var x=0;x<overalltotalarr.length;x++){
+            if(overalltotalarr[x].subject_name==arr1[k].subjectname&&overalltotalarr[x].level==arr1[k].categoryarr[j].level)
+              arr1[k].categoryarr[j].width=(parseFloat(arr1[k].categoryarr[j].count)/parseFloat(overalltotalarr[x].count))*100;
+            } 
+            temp.push(arr1[k].categoryarr[j]);
+            arr1[k].categoryarr.splice(j,1);
+            j--;
+          }
+          }
+          arr2.push({'category':category,'configcolumn':configcolumn,'subcategoryname':subcategoryname,'level':level,'levelarr':temp});
+          temp=[];
+        }
+        // alert(JSON.stringify(arr2));
+        arr1[k].categoryarr=arr2;
+        }
+        overall=arr1;
+        // alert(JSON.stringify(overall.length));
+        // alert(JSON.stringify(overall));
+        // if(localStorage.getItem("curr_sess_assesment")!="")
+        // {
+        // }        
+        document.querySelector('student-performance-tracking-homecard').detailarr=overall;
+        document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(false);
+        // document.querySelector('student-performance-tracking-homecard').total=total;
+        assesarr=[];
+        count1=0;
+        count2=0;
+        overalltotalarr=[];
+        overallassesmentarr=[];
+        localStorage.setItem("curr_sess_assesment","");
+        }
+        document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(false);
+      },
+      FnFetchlevelbasedstudents:function(subject,categoryname,subcategory,level,configcolumn,assesment){
+        this.fetchlevelbasedstudentsurl=sessionStorage.getItem("addrinfo")+"/performance-fetchlevelbasedstudents-service";
+        var obj={"schoolid":""};
+        obj.schoolid=localStorage.getItem("curr_sess_schoolid");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");            
+        obj.gradename=localStorage.getItem("curr_sess_grade");            
+        obj.sectionname=localStorage.getItem("curr_sess_section");            
+        obj.assesment=assesment;
+        obj.subject=subject;
+        obj.categoryname=categoryname;
+        obj.subcategory=subcategory;
+        obj.level=level;
+        obj.configcolumn=configcolumn;
+        this.subject=subject;
+        this.categoryname=categoryname;
+        this.subcategory=subcategory;
+        this.level=level;
+        this.fetchlevelbasedstudentsparam= obj;
+        this.$.fetchlevelbasedstudentsajax.generateRequest();
+      },
+      fetchlevelbasedstudentsResponse:function(e){
+        var studarr=e.detail.response.levelarr;
+        var arr=e.detail.response.returnval;     
+        // alert(JSON.stringify(studarr)); 
+        // alert(JSON.stringify(arr)); 
+        var overall=[];
+        var arr1=[];
+        var temp=[];
+        var arr2=[];
+        var temp1=[];
+        var studentname="";
+        var studentid="";
+        var category="";
+        for(var i=0;i<studarr.length;i++){
+          category=studarr[i].category;
+          temp1.push(studarr[i]);
+          for(var j=i+1;j<studarr.length;j++){
+          if(studarr[i].category==studarr[j].category){
+            temp1.push(studarr[j]);
+            studarr.splice(j,1);
+            j--;
+          }
+          }
+          arr2.push({'category':category,'studarr':temp1});
+          temp1=[];
+        }
+        for(var i=0;i<arr.length;i++){
+          studentid=arr[i].student_id;
+          studentname=arr[i].student_name;
+          temp.push(arr[i]);
+          for(var j=i+1;j<arr.length;j++){
+          if(arr[i].student_id==arr[j].student_id){
+            temp.push(arr[j]);
+            arr.splice(j,1);
+            j--;
+          }
+          }
+          arr1.push({'studentid':studentid,'studentname':studentname,'levelarr':temp});
+          temp=[];
+        }
+        // alert(JSON.stringify(arr1));
+        // alert(JSON.stringify(arr2));
+        for(var i=0;i<arr2.length;i++){
+          for(var j=0;j<arr2[i].studarr.length;j++){
+            for(var k=0;k<arr1.length;k++){
+              if(arr2[i].studarr[j].student_id==arr1[k].studentid){
+                if(arr1[k].levelarr.length>0){
+                // arr1[k].levelarr[0].diff=true;
+                for(var x=1;x<arr1[k].levelarr.length;x++){
+                  var leveldiff=parseInt(arr1[k].levelarr[x-1].level_id)-parseInt(arr1[k].levelarr[x].level_id);
+                  var subleveldiff=parseInt(arr1[k].levelarr[x-1].sublevel_id)-parseInt(arr1[k].levelarr[x].sublevel_id);
+                  if(leveldiff==0){
+                    arr1[k].levelarr[x].diff=true;
+                    arr1[k].levelarr[x].levelicon="thumbs-up-down";
+                    arr1[k].levelarr[x].levelcolor="#0000ff";
+                    arr1[k].levelarr[x].levelvisible=false;
+                    var arrr=[];
+                    for(var n=0;n<1;n++){
+                      var obj={};
+                      obj.count=n;
+                      arrr.push(obj);
+                    }
+                    arr1[k].levelarr[x].levelcount=arrr;
+                    if(subleveldiff==0){
+                      // alert('in');
+                      arr1[k].levelarr[x].subleveldiff=true;
+                      arr1[k].levelarr[x].sublevelicon="swap-horiz";
+                      arr1[k].levelarr[x].sublevelcolor="#0000ff";
+                      arr1[k].levelarr[x].sublevelvisible=false;
+                      var arrr=[];
+                    for(var n=0;n<1;n++){
+                      var obj={};
+                      obj.count=n;
+                      arrr.push(obj);
+                    }
+                    arr1[k].levelarr[x].sublevelcount=arrr;
+                    }
+                    else if(subleveldiff>0){
+                      // alert('in in');
+                      arr1[k].levelarr[x].subleveldiff=false;
+                      arr1[k].levelarr[x].sublevelicon="arrow-upward";
+                      arr1[k].levelarr[x].sublevelcolor="#00ff00";
+                      arr1[k].levelarr[x].sublevelvisible=false;
+                      var arrr=[];
+                    for(var n=0;n<Math.abs(subleveldiff);n++){
+                      var obj={};
+                      obj.count=n;
+                      arrr.push(obj);
+                    }
+                    arr1[k].levelarr[x].sublevelcount=arrr;
+                    }
+                    else if(subleveldiff<0){
+                      // alert('in in in');
+                      arr1[k].levelarr[x].subleveldiff=false;
+                      arr1[k].levelarr[x].sublevelicon="arrow-downward";
+                      arr1[k].levelarr[x].sublevelcolor="#ff0000";
+                      arr1[k].levelarr[x].sublevelvisible=false;
+                      var arrr=[];
+                    for(var n=0;n<Math.abs(subleveldiff);n++){
+                      var obj={};
+                      obj.count=n;
+                      arrr.push(obj);
+                    }
+                    arr1[k].levelarr[x].sublevelcount=arrr;
+                    }
+                  }
+                  else if(leveldiff>0){
+                    arr1[k].levelarr[x].diff=false;
+                    arr1[k].levelarr[x].levelicon="thumb-up";
+                    arr1[k].levelarr[x].levelcolor="#00ff00";
+                    arr1[k].levelarr[x].levelvisible=false;
+                    var arrr=[];
+                    for(var n=0;n<Math.abs(leveldiff);n++){
+                      var obj={};
+                      obj.count=n;
+                      arrr.push(obj);
+                    }
+                    arr1[k].levelarr[x].levelcount=arrr;
+                  }
+                  else if(leveldiff<0){
+                    arr1[k].levelarr[x].diff=false;
+                    arr1[k].levelarr[x].levelicon="thumb-down";
+                    arr1[k].levelarr[x].levelcolor="#ff0000";
+                    arr1[k].levelarr[x].levelvisible=false;
+                    var arrr=[];
+                    for(var n=0;n<Math.abs(leveldiff);n++){
+                      var obj={};
+                      obj.count=n;
+                      arrr.push(obj);
+                    }
+                    arr1[k].levelarr[x].levelcount=arrr;
+                  }
+                }
+                }
+                arr2[i].studarr[j].levelarr=arr1[k].levelarr;
+              }
+            }
+          }
+        }
+        // alert(JSON.stringify(arr2));
+        overall=arr2;
+
+        // alert(JSON.stringify(overall));
+        // alert(JSON.stringify(overall.length));
+        document.querySelector("student-performance-tracking-homecard").studentarr=[];
+         document.querySelector("student-performance-tracking-homecard").studentarr=overall;
+         document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(false);
+        document.querySelector("student-performance-tracking-homecard").FnShowDialog(this.subject,this.categoryname,this.subcategory,this.level);
+        overall=[];
+        // document.querySelector("assesment-performance-level-outitemcard").studentarr=overall;
+        // document.querySelector("assesment-performance-level-outitemcard").FnShowDialog(this.subject,this.categoryname,this.subcategory,this.level);
+      }
+    });
+  })();
+  </script>
+</dom-module>

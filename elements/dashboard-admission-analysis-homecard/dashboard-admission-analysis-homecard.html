@@ -1,0 +1,56 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="dashboard-admission-analysis-homecard">
+  <template>
+    <style>
+    .innercard{
+      width: 50%;
+     }
+    </style>
+    <div class="innercard">
+    <div id="admissionchartContainer" style="height: 250; width: 250;"></div>
+    </div>
+  </template>
+  <script type="text/javascript" src="../../scripts/canvasjs.min.js"></script>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'dashboard-admission-analysis-homecard',
+      FnToggleChart:function(arr){
+        var data=[];
+        for(var i=0;i<arr.length;i++){
+          var obj={};
+          obj.y=arr[i].count;
+          obj.label=arr[i].status;
+          data.push(obj);
+        }
+        this.FnShowChart(data);
+      },
+      FnShowChart:function(data){
+        var chart = new CanvasJS.Chart("admissionchartContainer",
+        {
+        title:{
+        text: "Admission Dashboard"
+        },
+        width:300,
+        height:250,
+        legend: {
+        maxWidth: 350,
+        itemWidth: 120
+        },
+        data: [
+        {
+        type: "pie",
+        showInLegend: true,
+        legendText: "{indexLabel}",
+        dataPoints: data
+        }
+        ]
+        });
+        chart.render();
+      }
+    });
+  })();
+  </script>
+</dom-module>

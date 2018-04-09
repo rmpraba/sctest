@@ -1,0 +1,1663 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-add-service">
+  <template>
+      <iron-ajax
+        method="post"
+        id="fnstudentaddajax"
+        url="{{fnstudentaddurl}}"
+        params="{{fnstudentaddparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnstudentaddResponse"
+        debounce-duration="300"
+      >
+ 
+    
+    <iron-ajax
+        method="post"
+        id="fnparentaddajax"
+        url="{{fnparentaddurl}}"
+        params="{{fnparentaddparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnparentaddResponse"
+        debounce-duration="300"
+      >
+
+       <iron-ajax
+        method="post"
+        id="getgradeajax"
+        url="{{getgradeurl}}"
+        params="{{getgradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getgradeResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="getgrade1ajax"
+        url="{{getgrade1url}}"
+        params="{{getgrade1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getgrade1Response"
+        debounce-duration="300">
+      </iron-ajax>
+
+       <iron-ajax
+        method="post"
+        id="fetchstudentremoveajax"
+        url="{{fetchstudentremoveurl}}"
+        params="{{fetchstudentremoveparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchstudentremoveResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+      
+
+      <iron-ajax
+        method="post"
+        id="prestudentremovedetajax"
+        url="{{prestudentremovedeturl}}"
+        params="{{prestudentremovedetparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="prestudentremovedetResponse"
+        debounce-duration="300">
+      </iron-ajax>
+
+      <iron-ajax
+        method="post"
+        id="deletestudentinfoajax"
+        url="{{deletestudentinfourl}}"
+        params="{{deletestudentinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="deletestudentinfoResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="deletestudtermmarksajax"
+        url="{{deletestudtermmarksurl}}"
+        params="{{deletestudtermmarksparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="deletestudtermmarksResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="deletestudtermmarks1ajax"
+        url="{{deletestudtermmarks1url}}"
+        params="{{deletestudtermmarks1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="deletestudtermmarks1Response"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax
+        method="post"
+        id="fetchstudentinfoajax"
+        url="{{fetchstudentinfourl}}"
+        params="{{fetchstudentinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchstudentinfoResponse"
+        debounce-duration="300">
+         <iron-ajax
+        method="post"
+        id="fngetstudentallinfoajax"
+        url="{{fngetstudentallinfourl}}"
+        params="{{fngetstudentallinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetstudentallinfoResponse"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax
+        method="post"
+        id="fngetsectionnameajax"
+        url="{{fngetsectionnameurl}}"
+        params="{{fngetsectionnameparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetsectionnameResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="lanprefajax"
+        url="{{lanprefurl}}"
+        params="{{lanprefparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="lanprefResponse"
+        debounce-duration="300">
+      </iron-ajax>
+     
+       <iron-ajax           
+        id="academic1ajax"
+        url="../../configfile/academicconfig.json"
+        params="{{academicparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="academic1Response"
+        debounce-duration="300">
+        </iron-ajax>
+         <iron-ajax
+        method="post"
+        id="fnparentinfomationajax"
+        url="{{fnparentinfomationurl}}"
+        params="{{fnparentinfomationparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnparentinfomationResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnpersonalinfomationajax"
+        url="{{fnpersonalinfomationurl}}"
+        params="{{fnpersonalinfomationparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnpersonalinfomationResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnlaninfomationajax"
+        url="{{fnlaninfomationurl}}"
+        params="{{fnlaninfomationparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnlaninfomationResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnlaninfomation1ajax"
+        url="{{fnlaninfomation1url}}"
+        params="{{fnlaninfomation1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnlaninfomation1Response"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnacadamicsinfomationajax"
+        url="{{fnacadamicsinfomationurl}}"
+        params="{{fnacadamicsinfomationparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnacadamicsinfomationResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnacadamicsinfomation1ajax"
+        url="{{fnacadamicsinfomation1url}}"
+        params="{{fnacadamicsinfomation1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnacadamicsinfomation1Response"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fngetinfosectionerrdilalogajax"
+        url="{{fngetinfosectionerrdilalogurl}}"
+        params="{{fngetinfosectionerrdilalogparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetinfosectionerrdilalogResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnacadamicsinfomation2ajax"
+        url="{{fnacadamicsinfomation2url}}"
+        params="{{fnacadamicsinfomation2param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnacadamicsinfomation2Response"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fetchsinglestaffajax"
+        url="{{fetchsinglestaffurl}}"
+        params="{{fetchsinglestaffparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsinglestaffResponse"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax
+        method="post"
+        id="fnsetsingleemployeeajax"
+        url="{{fnsetsingleemployeeurl}}"
+        params="{{fnsetsingleemployeeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsetsingleemployeeResponse"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax
+        method="post"
+        id="fetchsinglegradeajax"
+        url="{{fetchsinglegradeurl}}"
+        params="{{fetchsinglegradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsinglegradeResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnsinglegrademappingajax"
+        url="{{fnsinglegrademappingurl}}"
+        params="{{fnsinglegrademappingparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnsinglegrademappingResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      
+
+      <iron-ajax
+        method="post"
+        id="fnstudpersonalinfoajax"
+        url="{{fnstudpersonalinfourl}}"
+        params="{{fnstudpersonalinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnstudpersonalinfoResponse"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax
+        method="post"
+        id="flagupdatestudajax"
+        url="{{flagupdatestudurl}}"
+        params="{{flagupdatestudparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="flagupdatestudResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fngetstudname1ajax"
+        url="{{fngetstudname1url}}"
+        params="{{fngetstudname1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetstudname1Response"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="fnstudnameinfo1ajax"
+        url="{{fnstudnameinfo1url}}"
+        params="{{fnstudnameinfo1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnstudnameinfo1Response"
+        debounce-duration="300">
+      </iron-ajax>
+        <iron-ajax
+        method="post"
+        id="fnacadamicsinfomation3ajax"
+        url="{{fnacadamicsinfomation3url}}"
+        params="{{fnacadamicsinfomation3param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnacadamicsinfomation3Response"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax
+        method="post"
+        id="getalltermmarksajax"
+        url="{{getalltermmarksurl}}"
+        params="{{getalltermmarksparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getalltermmarksResponse"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax
+        method="post"
+        id="getalltermmarks1ajax"
+        url="{{getalltermmarks1url}}"
+        params="{{getalltermmarks1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getalltermmarks1Response"
+        debounce-duration="300">
+      </iron-ajax>
+     <iron-ajax           
+        id="studentconficsajax"
+        url="../../configfile/student.json"
+        params="{{studentconficsparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="studentconficsResponse"
+        debounce-duration="300">
+    </iron-ajax>
+    <iron-ajax
+        method="post"
+        id="fngetstudenttermajax"
+        url="{{fngetstudenttermurl}}"
+        params="{{fngetstudenttermparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fngetstudenttermResponse"
+        debounce-duration="300">
+      </iron-ajax>
+          <iron-ajax
+        method="post"
+        id="schoolstudentinfoajax"
+        url="{{schoolstudentinfourl}}"
+        params="{{schoolstudentinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="schoolstudentinfoResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+        <iron-ajax
+        method="post"
+        id="previousschoolinfoajax"
+        url="{{previousschoolinfourl}}"
+        params="{{previousschoolinfoparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="previousschoolinfoResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+      <iron-ajax
+        method="post"
+        id="fnschoolnameajax"
+        url="{{fnschoolnameurl}}"
+        params="{{fnschoolnameparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fnschoolnameResponse"
+        debounce-duration="300">
+      </iron-ajax>  
+        <iron-ajax
+        method="post"
+        id="schoolgradeajax"
+        url="{{schoolgradeurl}}"
+        params="{{schoolgradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="schoolgradeResponse"
+        debounce-duration="300">
+      </iron-ajax>  
+        <iron-ajax
+        method="post"
+        id="schoolsectionajax"
+        url="{{schoolsectionurl}}"
+        params="{{schoolsectionparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="schoolsectionResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+        <iron-ajax
+        method="post"
+        id="schooltermajax"
+        url="{{schooltermurl}}"
+        params="{{schooltermparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="schooltermResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+       <iron-ajax
+        method="post"
+        id="currentschoolinsertdataajax"
+        url="{{currentschoolinsertdataurl}}"
+        params="{{currentschoolinsertdataparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="currentschoolinsertdataResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+       <iron-ajax
+        method="post"
+        id="currentschooltermvisetransferajax"
+        url="{{currentschooltermvisetransferurl}}"
+        params="{{currentschooltermvisetransferparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="currentschooltermvisetransferResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="schooltranferfivetotenajax"
+        url="{{schooltranferfivetotenurl}}"
+        params="{{schooltranferfivetotenparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="schooltranferfivetotenResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+       <iron-ajax
+        method="post"
+        id="schooltranferonetofourajax"
+        url="{{schooltranferonetofoururl}}"
+        params="{{schooltranferonetofourparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="schooltranferonetofourResponse"
+        debounce-duration="300">
+      </iron-ajax>   
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var len1=0;
+    var len2=0;
+    var studenttablearr=[];
+    Polymer({
+      is: 'student-add-service',
+ studentconfics:function(){
+        this.$.studentconficsajax.generateRequest();
+      },
+  studentconficsResponse:function(e){
+    studenttablearr=e.detail.response; 
+       // alert(JSON.stringify(studenttablearr));
+      }, 
+  fnacadamic:function(){
+        this.$.academic1ajax.generateRequest();
+      },
+      academic1Response:function(e){
+        document.querySelector('student-information-card').academicarr=e.detail.response; 
+        
+      },
+
+fetchsinglestaff:function()
+        {
+ this.fetchsinglestaffurl=sessionStorage.getItem("addrinfo")+"/fetchstafffo-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.fetchsinglestaffparam=obj;
+      this.$.fetchsinglestaffajax.generateRequest();
+        },
+fetchsinglestaffResponse:function(e)
+        {
+  var res=e.detail.response.returnval;
+  //alert(JSON.stringify(res));
+  document.querySelector('single-staff-mapping-card').getstudentdet(res);
+        },
+
+currentschooltermvisetransfer:function(termname,newschoolname,studentid,selectschoolid,curracaid,curracaname,currgradeid,currgradename,cursectionid,cursectionname,schoolid,classid,section,gradeid,gradename)
+        {
+     this.studentid=studentid;
+     this.newschoolid=selectschoolid; 
+     this.newacademicyear=curracaid; 
+     this.newacademic=curracaname;     
+     this.newgradeid=currgradeid; 
+     this.newgradename=currgradename; 
+     this.newsectionid=cursectionid;
+     this.newsectionname=cursectionname;
+     this.oldschoolid=schoolid; 
+     this.oldsectionid=classid; 
+     this.oldsectionname=section; 
+     this.oldgradeid=gradeid; 
+     this.oldgradename=gradename; 
+     this.termname=termname; 
+     this.newschoolname=newschoolname;
+ this.currentschooltermvisetransferurl=sessionStorage.getItem("addrinfo")+"/currentschooltermvisetransfer-service";
+  var obj={};
+      obj.oldschoolid=schoolid;  
+      obj.oldacademic=localStorage.getItem("curr_sess_academicyear");
+      obj.academicyear="AY-"+localStorage.getItem("curr_sess_academicyear");  
+      obj.oldgradename=gradename;  
+      obj.oldgradeid=gradeid;  
+      obj.oldsectionid=classid;  
+      obj.oldsectionname=section; 
+      obj.studentid=studentid; 
+      obj.newschoolid=selectschoolid;
+      obj.newschoolname=newschoolname;
+      obj.newsectionname=cursectionname;
+      obj.newsectionid=cursectionid;
+      obj.newacademic=curracaid;
+      obj.status="Admitted";
+      obj.termname=termname
+      obj.newgradename=currgradename;
+      obj.newgradeid=currgradeid;
+   this.currentschooltermvisetransferparam=obj;
+    //alert(JSON.stringify(obj));
+    this.$.currentschooltermvisetransferajax.generateRequest();
+        },
+  currentschooltermvisetransferResponse:function(e){
+   var res =e.detail.response.returnval;
+  if(res=="commonProcess")
+  {
+  if(this.newgradename=="Grade-1"||this.newgradename=="Grade-2"||this.newgradename=="Grade-3"||this.newgradename=="Grade-4"){
+  
+    this.schooltranferonetofour(this.studentid,this.newschoolid,this.newacademicyear,this.newgradeid,this.newgradename,this.newsectionid,this.newsectionname,this.oldschoolid,this.oldgradeid,this.oldgradename,this.oldsectionid,this.oldsectionname,this.termname);
+   }
+else {
+  this.schooltranferfivetoten(this.studentid,this.newschoolid,this.newacademicyear,this.newgradeid,this.newgradename,this.newsectionid,this.newsectionname,this.oldschoolid,this.oldgradeid,this.oldgradename,this.oldsectionid,this.oldsectionname,this.termname);
+  }
+}
+  },
+schooltranferonetofour:function(studentid,newschoolid,newacademicyear,newgradeid,newgradename,newsectionid,newsectionname,oldschoolid,oldgradeid,oldgradename,oldsectionid,oldsectionname,termname){
+  
+this.schooltranferonetofoururl=sessionStorage.getItem("addrinfo")+"/schooltranferonetofour-service";
+  var obj={};
+      obj.newschoolid=newschoolid;  
+      obj.newacademicyear=newacademicyear;
+      obj.newgradeid=newgradeid;  
+      obj.newgradename=newgradename;  
+      obj.newsectionid=newsectionid;  
+      obj.newsectionname=newsectionname;  
+      obj.oldschoolid=oldschoolid; 
+      obj.studentid=studentid; 
+      obj.oldgradeid=oldgradeid;
+      obj.oldgradename=oldgradename;
+      obj.oldsectionid=oldsectionid;
+      obj.oldsectionname=oldsectionname;
+      obj.oldacademicyear=localStorage.getItem("curr_sess_academicyear"); 
+      obj.termname=termname;
+      this.schooltranferonetofourparam=obj;
+     // alert(JSON.stringify(obj));
+      this.$.schooltranferonetofourajax.generateRequest();
+  },
+  schooltranferonetofourResponse:function(e){
+    var res=e.detail.response.returnval;
+   // alert(JSON.stringify(res));
+  if(res=="process"){
+    this.currentschoolinsertdata(this.newschoolname,this.studentid,this.newschoolid,this.newacademicyear,this.newacademic,this.newgradeid,this.newgradename,this.newsectionid,this.newsectionname,this.oldschoolid,this.oldsectionid,this.oldsectionname,this.oldgradeid,this.oldgradename,0)
+  }
+  },
+schooltranferfivetoten:function(studentid,newschoolid,newacademicyear,newgradeid,newgradename,newsectionid,newsectionname,oldschoolid,oldgradeid,oldgradename,oldsectionid,oldsectionname,termname){
+  
+this.schooltranferfivetotenurl=sessionStorage.getItem("addrinfo")+"/schooltranferfivetoten-service";
+  var obj={};
+      obj.newschoolid=newschoolid;  
+      obj.newacademicyear=newacademicyear;
+      obj.newgradeid=newgradeid;  
+      obj.newgradename=newgradename;  
+      obj.newsectionid=newsectionid;  
+      obj.newsectionname=newsectionname;  
+      obj.oldschoolid=oldschoolid; 
+      obj.studentid=studentid; 
+      obj.oldgradeid=oldgradeid;
+      obj.oldgradename=oldgradename;
+      obj.oldsectionid=oldsectionid;
+      obj.oldsectionname=oldsectionname;
+      obj.termname=termname;
+      obj.oldacademicyear=localStorage.getItem("curr_sess_academicyear"); 
+      this.schooltranferfivetotenparam=obj;
+     // alert(JSON.stringify(obj));
+      this.$.schooltranferfivetotenajax.generateRequest();
+  },
+  schooltranferfivetotenResponse:function(e){
+    var res=e.detail.response.returnval;
+      //alert(JSON.stringify(res));
+if(res=="process"){
+   this.currentschoolinsertdata(this.newschoolname,this.studentid,this.newschoolid,this.newacademicyear,this.newacademic,this.newgradeid,this.newgradename,this.newsectionid,this.newsectionname,this.oldschoolid,this.oldsectionid,this.oldsectionname,this.oldgradeid,this.oldgradename,0);
+}
+
+  },
+
+currentschoolinsertdata:function(newschoolname,studentid,selectschoolid,curracaid,curracaname,currgradeid,currgradename,cursectionid,cursectionname,schoolid,classid,section,gradeid,gradename,flage)
+        {
+     this.flage=flage;
+ this.currentschoolinsertdataurl=sessionStorage.getItem("addrinfo")+"/currentschoolinsertdata-service";
+  var obj={};
+      obj.schoolid=schoolid;  
+      obj.academicyear="AY-"+localStorage.getItem("curr_sess_academicyear");  
+      obj.gradename=gradename;  
+      obj.gradeid=gradeid;  
+    obj.acadamicyears=localStorage.getItem("curr_sess_academicyear");;   
+      obj.sectionid=classid;  
+      obj.sectionname=section; 
+      obj.studentid=studentid; 
+      obj.newschoolid=selectschoolid;
+      obj.newschoolname=newschoolname;
+      obj.newacademic=curracaid;
+      obj.status="Admitted";
+      obj.cursectionid=cursectionid;
+      obj.newgradename=currgradename;
+      obj.newgradeid=currgradeid;
+      this.currentschoolinsertdataparam=obj;
+     // alert(JSON.stringify(obj));
+      this.$.currentschoolinsertdataajax.generateRequest();
+        },
+currentschoolinsertdataResponse:function(e)
+        {
+      var res=e.detail.response.returnval;
+   
+   if(this.flage==0){  
+     this.deletestudentinfo(this.studentid,this.oldgradeid,this.oldsectionid,this.oldgradename,this.oldsectionname,this.termname,this.name,1);
+        }
+      else if(this.flage==0){
+       //alert('school transfer Succesfully');
+    document.querySelector('school-transfer-card').FnToggleSpinner(false);
+    document.querySelector('school-transfer-card').schooldialog("School Transfer Succesfully");
+    
+      }
+
+  
+        }, 
+schoolgrade:function(currentchoolid,currentschoolname,curracaid)
+        {
+ this.schoolgradeurl=sessionStorage.getItem("addrinfo")+"/schoolgrade-service";
+    var obj={};
+        obj.schoolid=currentchoolid;  
+        obj.schoolname=currentschoolname; 
+        obj.acadamicyear=curracaid; 
+        this.schoolgradeparam=obj;
+        this.$.schoolgradeajax.generateRequest();
+        },
+schoolgradeResponse:function(e)
+        {
+  var res=e.detail.response.returnval;
+ 
+  document.querySelector('school-transfer-card').gradearr=res;
+        },
+
+   schoolsection:function(currentchoolid,currentschoolname,gradeid,gradename,curracaid)
+        {
+ this.schoolsectionurl=sessionStorage.getItem("addrinfo")+"/schoolsection-service";
+    var obj={};
+        obj.schoolid=currentchoolid;  
+        obj.schoolname=currentschoolname;  
+        obj.gradeid=gradeid;  
+        obj.gradename=gradename;
+        obj.acadamicyear=curracaid;
+       this.schoolsectionparam=obj;
+      this.$.schoolsectionajax.generateRequest();
+        },
+schoolsectionResponse:function(e)
+        {
+     var res=e.detail.response.returnval;
+      document.querySelector('school-transfer-card').sectionarr=res;
+   },    
+   schooltermservice:function(schoolid,academicyear,gradeid)
+        {
+this.schooltermurl=sessionStorage.getItem("addrinfo")+"/schoolterm-service";
+    var obj={};
+        obj.schoolid=schoolid;  
+        obj.gradeid=gradeid;  
+        obj.academicyear=academicyear;
+       this.schooltermparam=obj;
+      this.$.schooltermajax.generateRequest();
+        },
+schooltermResponse:function(e)
+        {
+     var res=e.detail.response.returnval;
+      document.querySelector('school-transfer-card').termarr=res;
+   },      
+fnschoolstudentinfo:function()
+        {
+ this.schoolstudentinfourl=sessionStorage.getItem("addrinfo")+"/schoolstudentinfo-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.schoolstudentinfoparam=obj;
+     this.$.schoolstudentinfoajax.generateRequest();
+        },
+schoolstudentinfoResponse:function(e)
+        {
+  var res=e.detail.response.returnval;
+ // alert(JSON.stringify(res));
+  document.querySelector('school-transfer-card').getstudentdet(res);
+        }, 
+     fnschoolname:function()
+        {
+    this.fnschoolnameurl=sessionStorage.getItem("addrinfo")+"/fnschoolname-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.fnschoolnameparam=obj;
+      this.$.fnschoolnameajax.generateRequest();
+        },
+fnschoolnameResponse:function(e)
+        {
+  var res=e.detail.response.returnval;
+  var res1=e.detail.response.accarr;
+ // alert(JSON.stringify(res));
+ // alert(JSON.stringify(res1));
+  document.querySelector('school-transfer-card').schoolarr=(res);
+  document.querySelector('school-transfer-card').academicarr=(res1);
+        }, 
+  previousschoolinfo:function(stuid,stuname)
+        {
+ this.previousschoolinfourl=sessionStorage.getItem("addrinfo")+"/previousschoolinfo-service";
+    var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj.stuid=stuid; 
+      this.previousschoolinfoparam=obj;
+     this.$.previousschoolinfoajax.generateRequest();
+        },
+previousschoolinfoResponse:function(e)
+  {
+  
+var res=e.detail.response.returnval;
+    //alert(JSON.stringify(res));
+ document.querySelector('school-transfer-card').
+schoolid=res[0].school_id;
+ document.querySelector('school-transfer-card').academic=res[0].academic_year;
+ document.querySelector('school-transfer-card').gradename=res[0].class;
+ document.querySelector('school-transfer-card').gradeid=res[0].grade_id;
+ document.querySelector('school-transfer-card').section=res[0].section;
+ document.querySelector('school-transfer-card').classid=res[0].class_id;
+ document.querySelector('school-transfer-card').schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+ document.querySelector('school-transfer-card').schoolid=res[0].school_id;
+   },         
+getalltermmarks:function(stuid)
+        {
+ this.getalltermmarksurl=sessionStorage.getItem("addrinfo")+"/getalltermmarks-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj.studentid=stuid;
+      this.getalltermmarksparam=obj;
+      this.$.getalltermmarksajax.generateRequest();
+        },
+getalltermmarksResponse:function(e)
+        {
+  var res=e.detail.response.returnval;
+   document.querySelector("student-remove-card").termarrs=res;
+        }, 
+        getalltermmarks1:function(stuid)
+        {
+  this.getalltermmarks1url=sessionStorage.getItem("addrinfo")+"/getalltermmarks-service1";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj.studentid=stuid;
+      this.getalltermmarks1param=obj;
+      // alert(JSON.stringify(obj));
+      this.$.getalltermmarks1ajax.generateRequest();
+        },
+getalltermmarks1Response:function(e)
+        {
+       var res=e.detail.response.returnval;
+       // alert(JSON.stringify(res));      
+    if(res!='no rows'){
+    document.querySelector("student-information-card").hideterm=false;
+    // document.querySelector("student-information-card").termarrrs=res;
+    document.querySelector("student-information-card").FnSpinnerActive(false); 
+    }
+    else{
+      document.querySelector("student-information-card").hideterm=true;
+      document.querySelector("student-information-card").FnSpinnerActive(false); 
+    }
+      }, 
+fnsinglegrademapping:function(empid,arr,subjectid){
+  len1=arr.length;
+    for(var i=0;i<arr.length;i++){
+       if(arr[i].gradeid=='g1' ||arr[i].gradeid=='g2' ||arr[i].gradeid=='g3' ||arr[i].gradeid=='g4'){
+          this.fnsinglegrademappingurl=sessionStorage.getItem("addrinfo")+"/fnsinglegrademapping-service";
+       var obj={};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj.gradeid=arr[i].gradeid;
+      obj.classid=arr[i].classid;
+       obj.sectionid=arr[i].sectionid;
+      obj.subjectid=subjectid;
+      obj.empid=empid;
+      obj.schooltype='primary';
+      obj.flage='active';
+      obj.roleid='subject-teacher';
+      this.fnsinglegrademappingparam=obj;
+      this.$.fnsinglegrademappingajax.generateRequest();
+       }
+       else{
+      var obj1={};
+        this.fnsinglegrademappingurl=sessionStorage.getItem("addrinfo")+"/fnsinglegrademapping-service";
+      obj1.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj1.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj1.gradeid=arr[i].gradeid;
+      obj1.classid=arr[i].classid;
+      obj1.sectionid=arr[i].sectionid;
+      obj1.roleid='subject-teacher';
+      obj1.flage='active';
+      obj1.subjectid=subjectid;
+      obj1.empid=empid;
+      obj1.schooltype='high';
+      this.fnsinglegrademappingparam=obj1;
+      this.$.fnsinglegrademappingajax.generateRequest();
+      } }
+     },
+        fnsinglegrademappingResponse:function(e)
+        {
+
+          len2++;
+           var res=e.detail.response.returnval;
+        // alert(JSON.stringify(res));
+          if(len1==len2){
+            alert("Inserted successfully");
+           document.querySelector('single-staff-mapping-card').fnsetvaluez();
+           len1=0;
+           len2=0;
+          }
+      
+
+        }, 
+ fnsetsingleemployee:function(id)
+        {
+this.fnsetsingleemployeeurl=sessionStorage.getItem("addrinfo")+"/fnsetsingleemployee-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj.studid=id;
+      //alert(JSON.stringify(obj)); 
+      this.fnsetsingleemployeeparam=obj;
+      this.$.fnsetsingleemployeeajax.generateRequest();
+        },
+fnsetsingleemployeeResponse:function(e)
+        {
+  var res=e.detail.response.returnval;
+  //alert(JSON.stringify(res));
+  document.querySelector('single-staff-mapping-card').dbarr=res;
+        }, 
+ fetchsinglegrade:function()
+        {
+        this.fetchsinglegradeurl=sessionStorage.getItem("addrinfo")+"/fetchsinglegrade-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      this.fetchsinglegradeparam=obj;
+      this.$.fetchsinglegradeajax.generateRequest();
+        },
+fetchsinglegradeResponse:function(e)
+        {
+  var res=e.detail.response.gradearr;
+  var res1=e.detail.response.subjectarr;
+  var res2=e.detail.response.rolearr;
+  /*alert(JSON.stringify(res));
+  alert(JSON.stringify(res1));
+  alert(JSON.stringify(res2));  
+ */
+  document.querySelector('single-staff-mapping-card').gradearr=res;
+  document.querySelector('single-staff-mapping-card').subjectarr=res1;
+  document.querySelector('single-staff-mapping-card').rolearr=res2;
+        },  
+        
+fnparentinfomation:function(studid,fathername1,mothername1,fathermob,mothermob,motheremail,fatheremail,address1,address2,address3,city,pincode)
+           {  
+ this.fnparentinfomationurl=sessionStorage.getItem("addrinfo")+"/fnparentinfomation-service";
+           var obj={};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+            obj.studid=studid;
+            obj.fathername1=fathername1;
+               obj.mothername1=mothername1;
+               obj.fathermob=fathermob;
+               obj.mothermob=mothermob;
+               obj.motheremail=motheremail;
+               obj.fatheremail=fatheremail;
+                     obj.address1=address1;
+               obj.address2=address2;
+               obj.address3=address3;
+               obj.city=city;
+               obj.pincode=pincode;
+               this.fnparentinfomationparam=obj;
+               //alert(JSON.stringify(obj));
+           this.$.fnparentinfomationajax.generateRequest();
+        },
+       fnparentinfomationResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+          document.querySelector('student-information-card').parentsubmitinfo();
+          document.querySelector('student-information-card').FnSpinnerActive(false);
+         },
+   fnpersonalinfomation:function(academicyear,fname,lsname,midname,showdate,ageofyrs,studid,gender)
+           {  
+
+           
+  this.fnpersonalinfomationurl=sessionStorage.getItem("addrinfo")+"/fnpersonalinfomation-service";
+           var obj={};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+                obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.showdate=showdate;
+               obj.ageofyrs=ageofyrs;
+               obj.studid=studid;
+               obj.gender=gender;
+               obj.studentname=fname+' '+midname+' ' +lsname;
+              this.fnpersonalinfomationparam= obj;
+               //alert(JSON.stringify(obj));
+               this.$.fnpersonalinfomationajax.generateRequest();
+        },
+    fnpersonalinfomationResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+document.querySelector('student-information-card').FnSpinnerActive(false);
+  document.querySelector('student-information-card').parentsubmitinfo();
+        
+        },
+fnstudnameinfo:function(fname,lsname,midname,studid,gradename,gradeid,classid,sectionname){
+     for(var i=0;i<studenttablearr.length;i++){
+     this.fnstudnameinfo1url=sessionStorage.getItem("addrinfo")+"/fnstudnameinfo-service";
+
+       var obj={};
+       obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+       obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+       obj.studenttable=studenttablearr[i].studenttable;
+       obj.dbgradeid=studenttablearr[i].grade_id;
+       obj.dbgradename=studenttablearr[i].gradename;
+       obj.dbclassid=studenttablearr[i].classid;
+       obj.dbsection=studenttablearr[i].section;
+       obj.dbstudid=studenttablearr[i].studentid;
+       obj.dbstudentname=studenttablearr[i].studentname;
+       obj.gradeid1=gradeid;
+       obj.gradename1=gradename;
+       obj.classid1=classid;
+       obj.section1=sectionname;
+       obj.studid1=studid;
+       obj.studentname1=fname+' '+midname+' ' +lsname;
+       //alert(JSON.stringify(obj));
+       this.fnstudnameinfo1param=obj;
+       this.$.fnstudnameinfo1ajax.generateRequest();
+
+         }
+        },
+      fnstudnameinfoResponse:function(e)
+        {
+           var res=e.detail.response.returnval;
+           //alert(JSON.stringify(res));
+        },
+        fnstudpersonalinfo:function(academicyear,fname,lsname,midname,showdate,ageofyrs,studid,gender)
+        {
+            this.fnstudpersonalinfourl=sessionStorage.getItem("addrinfo")+"/fnstudpersonalinfo-service";
+              var obj={};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+                obj.academic_year="AY-"+localStorage.getItem("curr_sess_academicyear");
+               obj.showdate=showdate;
+               obj.ageofyrs=ageofyrs;
+               obj.studid=studid;
+               obj.gender=gender;
+               obj.firstname=fname;
+               obj.middlename=midname;
+               obj.lastname=lsname;
+               obj.studentname=fname+' '+midname+' ' +lsname;
+              this.fnstudpersonalinfoparam= obj;
+               //alert(JSON.stringify(obj));
+              this.$.fnstudpersonalinfoajax.generateRequest();
+        },
+        fnstudpersonalinfoResponse:function(e)
+        {
+           var res=e.detail.response.returnval;
+           this.fetchstudentinfo();
+           //alert(JSON.stringify(res));
+        },
+    fnlaninfomation:function(studid,gradeidzzsss,gradenamez,classid,sectionid,secondlan,name,thirdlan)
+             {  
+            this.gradenamez=gradenamez;
+            this.studid=studid;
+            this.gradeidzzsss=gradeidzzsss;
+            this.gradenamez=gradenamez;
+            this.classid=classid;
+            this.sectionid=sectionid;
+            this.thirdlen=thirdlan;
+            this.value=name;
+    this.fnlaninfomationurl=sessionStorage.getItem("addrinfo")+"/fnlaninfomation-service";
+               var obj={"schoolid":"","schoolname":"","studentname":"","studnetid":"","grade":""};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+                obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.studid=studid;
+               obj.gradeidzzsss=gradeidzzsss;
+               obj.gradenamez=gradenamez;
+               obj.classid=classid;
+               obj.sectionid=sectionid;
+               // alert(classid+" "+sectionid);
+               obj.secondlan=secondlan;
+               obj.name=name;
+               this.fnlaninfomationparam=obj;
+               //alert(JSON.stringify(obj));
+               this.$.fnlaninfomationajax.generateRequest();
+          },
+       fnlaninfomationResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+  if(this.gradenamez=='Grade-1'||this.gradenamez=='Grade-2'||this.gradenamez=='Grade-3'||this.gradenamez=='Grade-4')
+  {
+document.querySelector('student-information-card').FnSpinnerActive(false);
+document.querySelector('student-information-card').parentsubmitinfo(); 
+}
+else{
+   this.fnlaninfomation1(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.thirdlen,this.value);
+          }
+          
+           //alert(JSON.stringify(res));
+        },
+
+
+   fnlaninfomation1:function(studid,gradeidzzsss,gradenamez,classid,sectionid,thirdlen,name)
+           {  
+            this.fnlaninfomation1url=sessionStorage.getItem("addrinfo")+"/fnlaninfomation1-service";
+               var obj={"schoolid":"","schoolname":"","studentname":"","studnetid":"","grade":""};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+               obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.studid=studid;
+               obj.gradeidzzsss=gradeidzzsss;
+               obj.gradenamez=gradenamez;
+               obj.classid=classid;
+               obj.sectionid=sectionid;
+               obj.thirdlen=thirdlen;
+               obj.name=name;
+               this.fnlaninfomation1param=obj;
+              // alert(JSON.stringify(obj));
+               this.$.fnlaninfomation1ajax.generateRequest();
+        },
+fnlaninfomation1Response:function(e)
+        {
+          var res=e.detail.response.returnval;
+document.querySelector('student-information-card').FnSpinnerActive(false);
+ document.querySelector('student-information-card').parentsubmitinfo();
+        },
+   fnacadamicsinfomation:function(studid,gradeidzzsss,gradenamez,classid,sectionid,termid,name,date,gender,ageofyrs,langpref,schooltype,gradeidzzsss1,gradeidnames,classidszz,sectionnames)
+           {  
+            this.studid=studid;
+            this.gradeidzzsss=gradeidzzsss;
+            this.gradenamez=gradenamez;
+            this.classid=classid;
+            this.sectionid=sectionid;
+            this.termid=termid;
+            this.value=name;
+            this.showdate=date;
+            this.gender=gender;
+            this.ageofyrs=ageofyrs;
+            this.schooltype=schooltype;
+            this.gradeidzzsss1=gradeidzzsss1;
+            this.gradeidnames=gradeidnames;
+            this.classidszz=classidszz;
+            this.sectionnames=sectionnames;
+       this.fnacadamicsinfomationurl=sessionStorage.getItem("addrinfo")+"/fnacadamicsinfomation-service";
+               var obj={};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+                obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.date=date;
+               obj.gender=gender;
+               obj.ageofyrs=ageofyrs;
+               obj.studid=studid;
+               obj.gradeidzzsss=gradeidzzsss;
+               obj.gradenamez=gradenamez;
+               obj.classid=classid;
+               obj.sectionid=sectionid;
+               obj.termid=termid;
+               obj.name=name;
+               obj.langpref=langpref;
+              this.fnacadamicsinfomationparam=obj;
+               //alert(JSON.stringify(obj));
+             this.$.fnacadamicsinfomationajax.generateRequest();
+     },
+     fnacadamicsinfomationResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+          this.fnacadamicsinfomation3(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,this.gender,this.ageofyrs,this.schooltype);
+          // document.querySelector('student-information-card').parentsubmitinfo();
+        },
+ fnacadamicsinfomation3:function(studid,gradeidzzsss,gradenamez,classid,sectionid,termid,name,date,gender,ageofyrs,schooltype)
+           {  
+       this.fnacadamicsinfomation3url=sessionStorage.getItem("addrinfo")+"/fnacadamicsinfomation3-service";
+               var obj={};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+                obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.studid=studid;
+               obj.date=date;
+               obj.gender=gender;
+               obj.ageofyrs=ageofyrs;
+               obj.gradeidzzsss=gradeidzzsss;
+               obj.gradenamez=gradenamez;
+               obj.classid=classid;
+               obj.sectionid=sectionid;
+               obj.termid=termid;
+               obj.name=name;
+               obj.schooltype=schooltype;
+              this.fnacadamicsinfomation3param=obj;
+               //alert(JSON.stringify(obj));
+        this.$.fnacadamicsinfomation3ajax.generateRequest();
+     },
+     fnacadamicsinfomation3Response:function(e)
+        {
+          var res=e.detail.response.returnval;  
+          if(this.gradenamez=='Nursery'||this.gradenamez=='Junior KG'||this.gradenamez=='Senior KG'||this.gradenamez=='Grade-1'||this.gradenamez=='Grade-2'||this.gradenamez=='Grade-3'||this.gradenamez=='Grade-4'){
+          this.fnacadamicsinfomation1(this.studid,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames,this.termid);  
+          }
+          else
+          this.fnacadamicsinfomation2(this.studid,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames,this.termid);   
+        },
+      fnacadamicsinfomation1:function(studid,gradeidzzsss,gradenamez,classid,sectionid,termid){
+             this.fnacadamicsinfomation1url=sessionStorage.getItem("addrinfo")+"/fnacadamicsinfomation1-service";
+               var obj={};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+                obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.studid=studid;
+               obj.gradeidzzsss=gradeidzzsss;
+               obj.gradenamez=gradenamez;
+               obj.classid=classid;
+               obj.sectionid=sectionid;
+               obj.termid=termid;
+              this.fnacadamicsinfomation1param=obj;
+               //alert(JSON.stringify(obj));
+               this.$.fnacadamicsinfomation1ajax.generateRequest();
+      },
+fnacadamicsinfomation1Response:function(e)
+        {
+          var res=e.detail.response.returnval;
+document.querySelector('student-information-card').FnSpinnerActive(false);
+          document.querySelector('student-information-card').parentsubmitinfo();
+          // this.fetchstudentremove();
+        },
+     fnacadamicsinfomation2:function(studid,gradeidzzsss,gradenamez,classid,sectionid,termid){
+             this.fnacadamicsinfomation2url=sessionStorage.getItem("addrinfo")+"/fnacadamicsinfomation2-service";
+               var obj={};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+                obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+               obj.studid=studid;
+               obj.gradeidzzsss=gradeidzzsss;
+               obj.gradenamez=gradenamez;
+               obj.classid=classid;
+               obj.sectionid=sectionid;
+               obj.termid=termid;
+              this.fnacadamicsinfomation2param=obj;
+               // alert(JSON.stringify(obj));
+ this.$.fnacadamicsinfomation2ajax.generateRequest();
+      },
+fnacadamicsinfomation2Response:function(e)
+        {
+          var res=e.detail.response.returnval;
+          document.querySelector('student-information-card').parentsubmitinfo();
+           document.querySelector('student-information-card').FnSpinnerActive(false);
+        },
+
+
+
+fnstudentadd:function(enroll,fname,midname,lsname,showdate,age,fathername,mothername,gradename,academicyear,gender,transport)
+           {  
+            this.fnstudentaddurl=sessionStorage.getItem("addrinfo")+"/addstudent-service";
+               var obj={"schoolid":"","schoolname":"","studentname":"","studnetid":"","grade":"","flag":""};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+               
+               obj.grade=gradename;
+               obj.studnetid=enroll;
+               obj.firstname=fname;
+               obj.middlename=midname;
+               obj.lastname=lsname;
+               obj.studentname=fname+' '+midname+' ' +lsname;
+               obj.dob=localStorage.getItem("localsess_birth_date");
+               obj.age=age;
+               obj.fathername=fathername;
+               obj.mothername=mothername;
+               obj.academicyear=academicyear;
+               obj.gender=gender;
+               obj.transport=transport;
+               obj.enquiry_no="";
+               obj.flag='1';
+               this.fnstudentaddparam= obj;
+               //alert(JSON.stringify(obj));
+               this.$.fnstudentaddajax.generateRequest();
+        },
+        fnstudentaddResponse:function(e)
+        {
+          var res=e.detail.response.returnval
+          //alert('student');
+        // alert(JSON.stringify(res));
+          if(res=='Inserted!')
+          {
+            if(localStorage.getItem("curr_sess_page")=="student-add-card")
+              document.querySelector('student-add-card').fnsuccessadd();
+            else
+              alert(" Inserted Succesfully..!");
+          }
+          else
+          {
+            alert('Already Exits');
+          }
+        },
+  fnparentadd:function(enroll,fathername,fatheremail,fathermob,address1,address2,address3,city,pincode,motheremail,mothername)
+        {
+  this.fnparentaddurl=sessionStorage.getItem("addrinfo")+"/parentadd-service";
+
+               var obj={"schoolid":""};
+               obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+               obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+               obj.studnetid=enroll;
+               obj.fathername=fathername;
+               obj.fatheremail=fatheremail;
+               obj.fathermob=fathermob;
+               obj.mothername=mothername;
+               obj.matheremail=motheremail;
+               obj.address1=address1;
+               obj.address2=address2;
+               obj.address3=address3;
+               obj.city=city;
+               obj.pincode=pincode;
+               this.fnparentaddparam=obj;
+               //alert(JSON.stringify(obj));
+               this.$.fnparentaddajax.generateRequest();
+        },
+        fnparentaddResponse:function(e)
+        {
+          var res=e.detail.response.returnval
+          //alert('parent');
+          // alert(JSON.stringify(res));
+        },
+
+        fngetgrade:function()
+        {
+            this.getgradeurl=sessionStorage.getItem("addrinfo")+"/getgradestudent-service";
+            this.$.getgradeajax.generateRequest();
+        },
+         getgradeResponse:function(e)
+        {
+            var res=e.detail.response.returnval
+            //alert(JSON.stringify(res));
+          if(localStorage.getItem("curr_sess_page")=="student-add-card")
+          {
+            document.querySelector('student-add-card').studentgradearrr=res;
+          } 
+          if(localStorage.getItem("curr_sess_page")=="student-information-card")
+          {
+            document.querySelector('student-information-card').studentgradearrr=res;
+            document.querySelector('student-information-card').infogradearrr=res;
+          }     
+
+        },
+         fnget1grade:function()
+        {
+            this.getgrade1url=sessionStorage.getItem("addrinfo")+"/getgradestudent1-service";
+            this.$.getgrade1ajax.generateRequest();
+        },
+        getgrade1Response:function(e)
+        {
+            var res=e.detail.response.returnval
+            //alert(JSON.stringify(res));
+       document.querySelector('student-information-card').infogradearrr=res;
+         },
+
+fngetinfosectionerrdilalog:function(gradeid,sectionid,gradename,sectionname,studid)
+        {
+          //alert(1);
+ this.fngetinfosectionerrdilalogurl=sessionStorage.getItem("addrinfo")+"/fngetinfosectionerrdilalog-service";
+            var obj={"school_id":"","academic_year":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.gradeid=gradeid;
+            obj.gradename=gradename;
+            obj.sectionid=sectionid;
+            obj.sectionname=sectionname;
+            obj.studid=studid;
+            //alert(JSON.stringify(obj));
+            this.fngetinfosectionerrdilalogparam=obj;
+            this.$.fngetinfosectionerrdilalogajax.generateRequest();
+         },
+fngetinfosectionerrdilalogResponse:function(e){
+        var res=e.detail.response.termarr;
+        var res1=e.detail.response.langarr;
+        //alert(JSON.stringify(res));
+        //alert(JSON.stringify(res1));
+document.querySelector('student-information-card').FnSpinnerActive(false);        
+if(res!="empty"){
+if(res.length>0){
+  document.querySelector('student-information-card').termarrinfonatioid=false;
+}
+document.querySelector('student-information-card').termarr=res;
+document.querySelector('student-information-card').termarrinformation1();  
+}
+
+else{
+document.querySelector('student-information-card').termarrinformation();
+document.querySelector('student-information-card').termarrinfonatioid=true;
+
+}
+
+
+  if(res1!="empty"){
+     if(res1.length>0){
+  document.querySelector('student-information-card').langinfomationid=false;
+}
+      document.querySelector('student-information-card').langdialogarr=res1;  
+    }
+  else
+      document.querySelector('student-information-card').langinfomationid=true;  
+  },
+        fetchstudentremoveResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+          //alert(JSON.stringify(res));
+ 
+       document.querySelector('student-remove-card').getstudentdet(res);
+        
+        },
+        fetchstudentremove:function()
+        {
+          this.fetchstudentremoveurl=sessionStorage.getItem("addrinfo")+"/Fnfetchstudentremove-service";
+            var obj={"school_id":"","academic_year":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear");obj.loggedid=sessionStorage.getItem("curr_sess_loggedid");
+            obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+              this.fetchstudentremoveparam=obj;
+            this.$.fetchstudentremoveajax.generateRequest();
+        },
+     /*   fetchstudentremoveResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+       // alert(JSON.stringify(res));
+        document.querySelector('student-remove-card').getstudentdet(res);
+          //document.querySelector('student-information-card').getstudentdet(res);
+        },*/
+fngetsectionname:function(id){
+          this.fngetsectionnameurl=sessionStorage.getItem("addrinfo")+"/fngetinfosectionname-service";
+            var obj={"school_id":"","academic_year":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+            obj.grade_id=id;
+            //alert(JSON.stringify(obj)); 
+              this.fngetsectionnameparam=obj;
+            this.$.fngetsectionnameajax.generateRequest();
+},
+fngetsectionnameResponse:function(e){
+ var res=e.detail.response.returnval;
+//  alert(JSON.stringify(res)); 
+   document.querySelector('student-information-card').sectionarr=res;
+},
+lanpref:function(){
+          this.lanprefurl=sessionStorage.getItem("addrinfo")+"/lanpref-service";
+            var obj={"school_id":"","academic_year":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+            this.lanprefparam=obj;
+            this.$.lanprefajax.generateRequest();
+},
+lanprefResponse:function(e){
+ var res=e.detail.response.secondarr;
+ var res1=e.detail.response.thirdarr;
+//alert(JSON.stringify(res)); 
+   document.querySelector('student-information-card').secondarr=res;
+   document.querySelector('student-information-card').thirdarr=res1;
+},
+
+ fetchstudentinfo:function()
+        {
+ this.fetchstudentinfourl=sessionStorage.getItem("addrinfo")+"/fetchstudentinfo-service";
+  var obj={"school_id":"","academic_year":""};
+      obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj.academic_year="AY-"+localStorage.getItem("curr_sess_academicyear"); 
+      this.fetchstudentinfoparam=obj;
+      this.$.fetchstudentinfoajax.generateRequest();
+        },
+fetchstudentinfoResponse:function(e)
+        {
+  var res=e.detail.response.returnval;
+   document.querySelector('student-information-card').getstudentdet(res);
+        }, 
+ fngetstudentallinfo:function(id)
+ {
+         this.fngetstudentallinfourl=sessionStorage.getItem("addrinfo")+"/fngetstudentallinfo-service";
+            var obj={"schoolid":"","academic_year":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.studentid=id;
+            this.fngetstudentallinfoparam=obj;
+            //alert(JSON.stringify(obj));
+          this.$.fngetstudentallinfoajax.generateRequest(); 
+        },
+        fngetstudentallinfoResponse:function(e){
+        var res=e.detail.response.personalarr;
+        var res1=e.detail.response.langarr;
+        var res2=e.detail.response.parentarr;
+      
+      if(res2.length>0){ 
+      document.querySelector('student-information-card').fathername1=res2[0].parent_name;
+
+      document.querySelector('student-information-card').mothername1=res2[0].mother_name;
+      document.querySelector('student-information-card').fathermob=res2[0].mobile;
+      document.querySelector('student-information-card').motheremail=res2[0].alternate_mail;
+     document.querySelector('student-information-card').address1=res2[0].address1;
+      document.querySelector('student-information-card').fatheremail=res2[0].email;
+      document.querySelector('student-information-card').mothermob=res2[0].mother_mobile;
+      document.querySelector('student-information-card').city=res2[0].city;
+      document.querySelector('student-information-card').pincode=res2[0].pincode;
+      }
+      //document.querySelector('student-information-card').fname=res[0].student_name;
+     
+      //document.querySelector('student-information-card').ageofyrs=res[0].ageinmonth;
+      document.querySelector('student-information-card').academicyear=localStorage.getItem("curr_sess_academicyear"); 
+      if(res.length>0){
+        document.querySelector('student-information-card').schooltype=res[0].school_type;
+      document.querySelector('student-information-card').gradeidzzsss=res[0].gradeid;
+       document.querySelector('student-information-card').gradeidzzsss1=res[0].gradeid;
+       document.querySelector('student-information-card').gradeidnames=res[0].grade_name;
+      document.querySelector('student-information-card').classid=res[0].classid;
+         document.querySelector('student-information-card').classidszz=res[0].classid;
+       document.querySelector('student-information-card').sectionnames=res[0].section_name;  
+      }
+         if(res1.length==1){
+ //document.querySelector('student-information-card').hidestudentinfolangid=true;
+
+        document.querySelector('student-information-card').secondlan=res1[0].subject_id;
+          }
+         if(res1.length==2){
+ //document.querySelector('student-information-card').hidestudentinfolangid=false;
+         document.querySelector('student-information-card').secondlan=res1[0].subject_id;
+        document.querySelector('student-information-card').thirdlen=res1[1].subject_id;
+         }
+         if(res.length!=0){
+         document.querySelector("student-information-card").hideterm=false;
+         this.getalltermmarks1(res[0].id);
+         }
+         else{
+         document.querySelector("student-information-card").hideterm=true;
+         document.querySelector('student-information-card').FnSpinnerActive(false);
+         }
+        },
+
+        prestudentremovedet:function(id)
+        {
+            this.prestudentremovedeturl=sessionStorage.getItem("addrinfo")+"/Prestudentremove-service";
+            var obj={"schoolid":"","academic_year":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.studentid=id;
+            this.prestudentremovedetparam=obj;
+            //alert(JSON.stringify(obj));
+            this.$.prestudentremovedetajax.generateRequest();
+        },
+
+        prestudentremovedetResponse:function(e)
+        {
+          var res=e.detail.response.returnval;
+          //alert(JSON.stringify(res));
+          if(localStorage.getItem("curr_sess_page")=="student-information-card"){
+          document.querySelector('student-information-card').grade=res[0].grade_name;
+          document.querySelector('student-information-card').section=res[0].section_name;
+          document.querySelector('student-information-card').gradeid=res[0].grade_id;
+          document.querySelector('student-information-card').classid=res[0].class_id;
+
+          }
+          if(localStorage.getItem("curr_sess_page")=="student-remove-card"){
+          }
+          document.querySelector('student-remove-card').grade=res[0].grade_name;
+          document.querySelector('student-remove-card').section=res[0].section_name;
+          document.querySelector('student-remove-card').gradeid=res[0].grade_id;
+          document.querySelector('student-remove-card').classid=res[0].class_id;
+            
+        },
+
+        deletestudentinfo:function(id,gradeid,classid,grade,section,tremname,name,flag)
+        {
+          this.studentid=id;
+          this.gradeid=gradeid;
+          this.classid=classid;
+          this.grade=grade;
+          this.section=section;
+          this.tremname=tremname;
+          this.value=name;
+          this.flag=flag;
+            this.deletestudentinfourl=sessionStorage.getItem("addrinfo")+"/deletestudentremove-service";
+            var obj={"schoolid":"","academic_year":"","flag":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.studentid=id;
+            obj.gradeid=gradeid;
+            obj.classid=classid;
+            this.deletestudentinfoparam=obj;
+           //alert(JSON.stringify(obj));
+            this.$.deletestudentinfoajax.generateRequest();
+        },
+        deletestudentinfoResponse:function(e)
+        {
+          //alert('student');
+          var res=e.detail.response.updatearr1;
+          var res1=e.detail.response.delarr; 
+          if(this.grade=="Nursery" ||this.grade=="Junior KG" || this.grade=="Senior KG" || this.grade=="Grade-1" || this.grade=="Grade-2" ||this.grade=="Grade-3" || this.grade=="Grade-4" )
+          this.deletestudtermmarks(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname);
+          else
+          this.deletestudtermmarks1(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname);
+          // alert('Deleted Succesfully');
+       // document.querySelector('student-remove-card').recall();
+          //alert(JSON.stringify(res));
+          //alert(JSON.stringify(res1));
+        },
+
+        deletestudtermmarks:function(studentid,gradeid,classid,grade,section,term)
+        {
+            //alert('call');
+            this.deletestudtermmarksurl=sessionStorage.getItem("addrinfo")+"/deletetermstudent-service";
+            var obj={"schoolid":"","academic_year":"","flag":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.studentid=studentid;
+            obj.gradename=grade;
+            obj.section=section;
+            obj.term=term;
+            this.deletestudtermmarksparam=obj;
+         
+            this.$.deletestudtermmarksajax.generateRequest();
+          },
+          deletestudtermmarksResponse:function(e)
+        {
+        
+          var res2=e.detail.response.trdeltarr;
+          // alert("Deleted");
+          var res3=e.detail.response.overdelarr;
+          this.flagupdatestud(this.studentid,this.grade);
+          //alert(JSON.stringify(res3));
+           //alert(JSON.stringify(res2));
+        },
+         deletestudtermmarks1:function(studentid,gradeid,classid,grade,section,term)
+        {
+        //  alert('call');
+            this.deletestudtermmarks1url=sessionStorage.getItem("addrinfo")+"/deletetermstudent1-service";
+            var obj={"schoolid":"","academic_year":"","flag":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.studentid=studentid;
+            obj.gradename=grade;
+            obj.section=section;
+            obj.term=term;
+            this.deletestudtermmarks1param=obj;
+         
+            this.$.deletestudtermmarks1ajax.generateRequest();
+        },
+        deletestudtermmarks1Response:function(e)
+        {
+          var res=e.detail.response.returnval;
+          this.flagupdatestud(this.studentid,this.grade,this.value);
+         },
+
+         flagupdatestud:function(studentid,grade)
+         {
+       this.flagupdatestudurl=sessionStorage.getItem("addrinfo")+"/flagupdatestudent-service";
+            var obj={"schoolid":"","academic_year":"","flag":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year="AY-"+localStorage.getItem("curr_sess_academicyear"); 
+            obj.studentid=studentid;
+            obj.grade=grade;
+            obj.flag='0';
+            this.flagupdatestudparam=obj;
+            this.$.flagupdatestudajax.generateRequest();
+         },
+         flagupdatestudResponse:function(e)
+         {
+            var res=e.detail.response.returnval;
+           if(this.flag==0){
+            alert('Deleted Succesfully');
+            document.querySelector('student-remove-card').recall();
+          }
+          else if(this.flag==1){
+    
+     document.querySelector('school-transfer-card').FnToggleSpinner(false);
+      document.querySelector('school-transfer-card').schooldialog("School info Deleted Succesfully");
+          }
+           
+            //alert(JSON.stringify(res));
+         },
+         fngetstudname1:function(studentid)
+         {
+            this.fngetstudname1url=sessionStorage.getItem("addrinfo")+"/fngetstudname1-service";
+            var obj={"schoolid":"","academic_year":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academic_year="AY-"+localStorage.getItem("curr_sess_academicyear"); 
+            obj.studentid=studentid;
+            this.fngetstudname1param=obj;
+            //alert(JSON.stringify(obj));
+            this.$.fngetstudname1ajax.generateRequest(); 
+         },
+    
+          fngetstudname1Response:function(e)
+          {
+             var res=e.detail.response.returnval;
+            // alert(JSON.stringify(res));
+            document.querySelector('student-information-card').fname=res[0].first_name;
+            document.querySelector('student-information-card').midname=res[0].middle_name;
+            document.querySelector('student-information-card').lsname=res[0].last_name;
+            document.querySelector('student-information-card').ageofyrs=res[0].age;
+            document.querySelector('student-information-card').showdate=res[0].dob;
+            document.querySelector('student-information-card').fngender(res[0].gender);
+            document.querySelector('student-information-card').gradeidzzsss=res[0].gradeid;
+            document.querySelector('student-information-card').gradeidzzsss1=res[0].gradeid;
+            document.querySelector('student-information-card').gradeidnames=res[0].gradename;
+            this.fngetstudentterm(res[0].gradename);
+          },
+          fngetstudentterm:function(grade)
+         {
+            this.fngetstudenttermurl=sessionStorage.getItem("addrinfo")+"/fngetstudentterm-service";
+            var obj={"schoolid":"","academic_year":""};
+            obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+            obj.academicyear=localStorage.getItem("curr_sess_academicyear"); 
+            // obj.studentid=studentid;
+            obj.grade=grade;
+            this.fngetstudenttermparam=obj;
+            //alert(JSON.stringify(obj));
+            this.$.fngetstudenttermajax.generateRequest(); 
+         },    
+          fngetstudenttermResponse:function(e)
+          {
+            var res=e.detail.response.returnval;
+            // alert(JSON.stringify(res));
+            document.querySelector('student-information-card').termarrrs=res;
+          }
+    });
+  })();
+  </script>
+</dom-module>

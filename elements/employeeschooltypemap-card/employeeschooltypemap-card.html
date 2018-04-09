@@ -1,0 +1,36 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="employeeschooltypemap-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        @apply(--layout-horizontal);
+      }
+    </style>
+    <div class="card">
+      <paper-checkbox id="{{schooltypeid}}" on-change="schooltypechangeHandler">{{schooltypename}}</paper-checkbox>
+    </div>    
+  </template>
+  <script>
+  (function() {
+    var schooltypearr=[];
+    'use strict';
+    Polymer({
+      is: 'employeeschooltypemap-card',
+      schooltypechangeHandler:function(e){
+        if(schooltypearr.length==0)
+          schooltypearr.push(e.target.id);
+        for(var i=0;i<schooltypearr.length;i++){
+          if(schooltypearr[i]==e.target.id)
+            schooltypearr.splice(i,1);
+        }
+        schooltypearr.push(e.target.id);
+        document.querySelector('createemployee-card').setSchooltype(schooltypearr);        
+      }
+    });
+  })();
+  </script>
+</dom-module>

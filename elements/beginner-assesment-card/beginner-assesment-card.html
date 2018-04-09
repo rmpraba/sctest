@@ -1,0 +1,221 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../beginner-assesment-service/beginner-assesment-service.html">
+<link rel="import" href="../beginner-assesment-markentrysheet/beginner-assesment-markentrysheet.html">
+<link rel="import" href="../component-service/component-service.html">
+<link rel="import" href="../assesment-sheet-card/assesment-sheet-card.html">
+<dom-module id="beginner-assesment-card">
+  <template>
+    <style>
+      :host{
+        display: block;
+      }    
+      .card{
+        @apply(--layout-vertical);
+            margin-left: -15%;
+      }
+
+      .drop{        
+        @apply(--layout-horizontal);
+        margin-top:2%;
+        margin-left: 25%;
+      }
+      paper-dropdown-menu{
+        width: 15%;
+        margin-left: 3%;
+      }
+      paper-dropdown-menu{
+      width: 15%;
+      margin-left: 3%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+      }
+      .spinner{
+      margin-left: 50%;            
+      }
+    #dynamicspinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+    }
+     #beginnerkdialogid{
+      width: 20%;
+      border-radius: 25px;
+    }
+    </style>
+    <div class='card'>     
+    <div class='drop'>      
+          <paper-dropdown-menu id="beginnerassesmenttype" label="Select Assesment" disabled="{{read}}" required>
+            <paper-menu id="beginnerassesmenttypee" class="dropdown-content"  on-iron-select="FnSelectAssesment"  attr-for-selected="value" required>  
+              <template is="dom-repeat" items="{{assesmentarr}}">
+                <paper-item value="{{item.assesment_category_id}}">{{item.assesment_category_name}}</paper-item>                             
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="grade" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu  id="gradenamrrrrr" class="dropdown-content"  on-iron-select="FnSelectGrade"  attr-for-selected="value" required> 
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="section" label="Select Section" disabled="{{read}}" required>
+            <paper-menu id="sectionnamnnnnn" class="dropdown-content"  on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.class_id}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="subject" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu id="subjectnamttttt" class="dropdown-content"  on-iron-select="FnSelectSubject"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{subjectarr}}">
+                <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>        
+     </div>
+    </div>
+    <div class="spinner"><paper-dialog modal id="dynamicspinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner></paper-dialog></div>
+      <paper-dialog id="beginnerkdialogid" modal>
+       <h3 style="color:green"><center>{{getindialogvalu}}</center></h3>
+       <center>
+      <paper-button on-click="failureclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>
+
+    <beginner-assesment-service id="bassesmentservice"></beginner-assesment-service>
+    <component-service id="componentservice"></component-service>
+  </template>
+  <script>
+  (function() {
+    var flag=0;
+    'use strict';
+      var gradename,section,term,assesment,subject,academicyear,assesmentname;
+    Polymer({
+      is: 'beginner-assesment-card',
+      ready:function(){
+        this.flag=0;
+        this.hidesheet=true;
+        localStorage.setItem("curr_sess_page","beginner-assesment-card"); 
+      }, 
+    TermMarkdialog:function(argvalue)
+     {
+      // alert(argvalue);
+       this.getindialogvalu=argvalue;
+       this.$.beginnerkdialogid.toggle();
+     },
+     failureclose:function()
+      {
+      this.$.beginnerkdialogid.close();
+      }, 
+      FnToggleSpinner:function(flag){
+        this.$.dynamicspinner.opened=flag;
+      },                             
+      FnSelectAssesment:function(e){
+        assesmentname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_assesmentname",assesmentname);
+        // alert(localStorage.getItem("curr_sess_assesmentname"));
+        if(this.flag==1){
+        document.querySelector('enrichment-dynamic-markentrycard').FnRefresh();
+        document.querySelector('#gradenamrrrrr').selected=-1;
+        document.querySelector('#sectionnamnnnnn').selected=-1;
+        document.querySelector('#subjectnamttttt').selected=-1;
+        document.querySelector('enrichment-dynamic-markentrycard').fullrefresh();
+        document.querySelector('enrichment-dynamic-markentrycard').fnhideexcelbox();
+        this.$.bassesmentservice.callEnrichmentSubjectService(assesmentname,gradename);    
+        // this.FnServiceCall(); 
+        }
+      },
+      FnSelectacademicyear:function(e){
+        academicyear = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_academicyear",academicyear);
+        if(this.flag==1){
+        document.querySelector('enrichment-dynamic-markentrycard').FnRefresh();
+        this.$.bassesmentservice.callEnrichmentSubjectService(assesmentname,gradename);    
+        // this.FnServiceCall(); 
+        }
+      },
+      FnSelectGrade:function(e){
+        gradename = e.target.selectedItem.textContent.trim();
+        this.gradeid=e.target.selectedItem.value;
+        localStorage.setItem("curr_sess_grade",gradename);
+        localStorage.setItem("curr_sess_gradeid",this.gradeid);
+        this.$.bassesmentservice.callSectionService(gradename);
+        if(this.flag==1){
+        document.querySelector('enrichment-dynamic-markentrycard').FnRefresh();
+         document.querySelector('enrichment-dynamic-markentrycard').fullrefresh();
+         document.querySelector('enrichment-dynamic-markentrycard').fnhideexcelbox();
+        document.querySelector('#sectionnamnnnnn').selected=-1;
+        document.querySelector('#subjectnamttttt').selected=-1;
+        this.$.bassesmentservice.callEnrichmentSubjectService(assesmentname,gradename);    
+        // this.FnServiceCall();  
+        }        
+      },
+      FnSelectSection:function(e){        
+        section = e.target.selectedItem.textContent.trim();
+        this.classid = e.target.selectedItem.value;
+        localStorage.setItem("curr_sess_section",section); 
+        localStorage.setItem("curr_sess_classid",this.classid); 
+        this.$.bassesmentservice.callEnrichmentSubjectService(assesmentname,gradename);    
+        if(this.flag==1){
+        document.querySelector('enrichment-dynamic-markentrycard').FnRefresh();
+        document.querySelector('#subjectnamttttt').selected=-1;
+        document.querySelector('enrichment-dynamic-markentrycard').fullrefresh();
+        document.querySelector('enrichment-dynamic-markentrycard').fnhideexcelbox();
+        }     
+      },
+      FnSelectSubject:function(e){
+        this.flag=1;
+        document.querySelector('enrichment-dynamic-markentrycard').FnRefresh();
+
+        document.querySelector('enrichment-dynamic-markentrycard').fullrefresh();
+        
+        document.querySelector('enrichment-dynamic-markentrycard').fnviewexcelbox();
+        // document.querySelector('enrichment-dynamic-markentryitemcard').FnRefresh();
+        // document.querySelector('enrichment-markentry-input').FnRefresh();
+        subject = e.target.selectedItem.textContent.trim();
+        this.subjectid = e.target.selectedItem.value;
+        localStorage.setItem("curr_sess_subject",subject);
+        localStorage.setItem("curr_sess_subjectid",this.subjectid);
+        this.FnServiceCall(); 
+      },
+      FnServiceCall:function(){
+        document.querySelector('beginner-assesment-service').FnFetchEnrichmentGrade(assesmentname,gradename,section,subject);
+        document.querySelector('beginner-assesment-service').callFetchInfoForTemplate(gradename,section,subject);
+        document.querySelector('beginner-assesment-service').callFetchStudentInfo(gradename,section,subject);
+        document.querySelector('beginner-assesment-service').callFetchAssesmentStudentInfo(gradename,section,subject);
+
+        document.querySelector('assesment-sheet-card').setPage('enrichment-dynamic-markentrycard');
+        document.querySelector('enrichment-dynamic-markentrycard').setDefaultHeaders();
+
+        document.querySelector('enrichment-dynamic-markentrycard').getdynamichead();
+        // alert(subject);
+        // if(subject=="English"){
+        // document.querySelector('beginner-assesment-markentrysheet').setDefaultHeaders();
+        // document.querySelector('assesment-sheet-card').setPage('beginner-assesment-markentrysheet');          
+        // }
+        // else
+        // {
+        // document.querySelector('beginner-assesment-lang-markentrysheet').setDefaultHeaders(); 
+        // document.querySelector('assesment-sheet-card').setPage('beginner-assesment-lang-markentrysheet');        
+        // }
+      },
+       FnRefresh:function()
+      {
+        document.querySelector('#gradenamrrrrr').selected=-1;
+        document.querySelector('#sectionnamnnnnn').selected=-1;
+        document.querySelector('#subjectnamttttt').selected=-1;
+        document.querySelector('#beginnerassesmenttypee').selected=-1;
+        document.querySelector('enrichment-dynamic-markentrycard').FnRefresh();
+        this.flag=0;
+         document.querySelector('enrichment-dynamic-markentrycard').ready();
+      }      
+    });      
+  })();
+  </script>
+</dom-module>

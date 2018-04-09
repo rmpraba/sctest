@@ -1,0 +1,36 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="employeegrademap-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        @apply(--layout-vertical);
+      }
+    </style>
+    <div class="card">
+      <paper-checkbox id="{{gradeid}}" on-change="gradechangeHandler">{{gradename}}</paper-checkbox>
+    </div>    
+  </template>
+  <script>
+  (function() {
+    var gradearr=[];
+    'use strict';
+    Polymer({
+      is: 'employeegrademap-card',
+      gradechangeHandler:function(e){
+        if(gradearr.length==0)
+          gradearr.push(e.target.id);
+        for(var i=0;i<gradearr.length;i++){
+          if(gradearr[i]==e.target.id)
+            gradearr.splice(i,1);
+        }
+        gradearr.push(e.target.id);
+        document.querySelector('createemployee-card').setGrade(gradearr);        
+      }
+    });
+  })();
+  </script>
+</dom-module>

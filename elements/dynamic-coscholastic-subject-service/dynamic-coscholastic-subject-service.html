@@ -1,0 +1,734 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="dynamic-coscholastic-subject-service">
+  <template>
+    <iron-ajax        
+        method="post"
+        id="fetchinfoforsubjecttemplateajax"
+        url="{{fetchinfoforsubjecttemplateurl}}"
+        params="{{fetchinfoforsubjecttemplateparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchinfoforsubjecttemplateResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax
+        method="post"
+        id="fetchsubjectstudentajax"
+        url="{{fetchsubjectstudenturl}}"
+        params="{{fetchsubjectstudentparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsubjectstudentResponse"
+        debounce-duration="300"
+    > 
+    <iron-ajax        
+        method="post"
+        id="fetchstudentforsubjectreportajax"
+        url="{{fetchstudentforsubjectreporturl}}"
+        params="{{fetchstudentforsubjectreportparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchstudentforsubjectreportResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax        
+        method="post"
+        id="fetchmarksavedstudentsajax"
+        url="{{fetchmarksavedstudentsurl}}"
+        params="{{fetchmarksavedstudentsparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchmarksavedstudentsResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax        
+        method="post"
+        id="subjectapprovalajax"
+        url="{{subjectapprovalurl}}"
+        params="{{subjectapprovalparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="subjectapprovalResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax        
+        method="post"
+        id="subjectsubmittedcheckajax"
+        url="{{subjectsubmittedcheckurl}}"
+        params="{{subjectsubmittedcheckparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="subjectsubmittedcheckResponse"
+        debounce-duration="300"
+    >
+    <iron-ajax        
+        method="post"
+        id="fetchdynamicallyenteredmarksajax"
+        url="{{fetchdynamicallyenteredmarksurl}}"
+        params="{{fetchdynamicallyenteredmarksparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchdynamicallyenteredmarksResponse"
+        debounce-duration="300"
+    >   
+    <iron-ajax
+        method="post"
+        id="fetchsubjectstudentajax1"
+        url="{{fetchsubjectstudenturl1}}"
+        params="{{fetchsubjectstudentparam1}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="fetchsubjectstudentResponse1"
+        debounce-duration="300"
+    > 
+       <iron-ajax
+        method="post"
+        id="templateincoscolasticsubject2ajax"
+        url="{{templateincoscolasticsubject2url}}"
+        params="{{templateincoscolasticsubject2param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="templateincoscolasticsubject2Response"
+        debounce-duration="300"
+    > 
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var assesscategory=[];
+    var assesscategorycnt=[];
+    var sgrade,ssection,ssubject;
+    var studentarr=[];
+    var overall=[];
+    var gradename,section,subject,languagepref;
+    Polymer({
+      is: 'dynamic-coscholastic-subject-service',
+      callSubjectApprovalService:function(grade,section,subject){
+      this.subjectapprovalurl=sessionStorage.getItem("addrinfo")+"/subjectscholasticapproval-service";
+         var obj={"schoolid":"","academicyear":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesment=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.gradename=grade;
+         obj.section=section;
+         obj.subject=subject;
+         obj.role=sessionStorage.getItem("curr_sess_loggedrole");
+         if(obj.role=='Class-Teacher'||obj.role=='Subject-Teacher'){
+            obj.flag='0';
+         }
+         if(obj.role=='Co-Ordinator'||obj.role=='HeadMistress'){
+            obj.flag='1';
+         }
+         this.subjectapprovalparam= obj;
+         this.$.subjectapprovalajax.generateRequest();
+      },
+      subjectapprovalResponse:function(e){
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Class-Teacher"||sessionStorage.getItem("curr_sess_loggedrole")=="Subject-Teacher"){
+            if(e.detail.response.returnval=='done'){
+               // alert('Submitted for approval!!');
+            document.querySelector("coscholastic-assesment-card").FnToggleSpinner(false);
+            document.querySelector('dynamic-coscholastic-markentry-card').disablesave=true;
+            document.querySelector('coscholastic-assesment-card').TermMarkdialog("Submitted for approval!!");
+            }
+            if(e.detail.response.returnval=='exist'){
+            document.querySelector("coscholastic-assesment-card").FnToggleSpinner(false);
+                // alert('Already submitted!!');
+            document.querySelector('coscholastic-assesment-card').TermMarkdialog("Already submitted!!");
+            // document.querySelector('term-assesment-card').TermMarkdialog("Already submitted!!");
+            }
+          }
+          else{
+          if(e.detail.response.returnval=='done'){
+            alert('Approved!!');
+            document.querySelector('dynamic-coscholastic-markentry-card').disablesave=true;
+            // document.querySelector('term-assesment-card').TermMarkdialog("Approved!!");                
+            } 
+            if(e.detail.response.returnval=='exist'){
+                alert('Already approved!!');
+            //document.querySelector('term-assesment-card').TermMarkdialog("Already approved!!");
+
+            }
+        }
+      },
+      fetchMarkSavedStudents:function(grade,section,subject){
+        this.fetchmarksavedstudentsurl=sessionStorage.getItem("addrinfo")+"/fetchscholasticmarksavedstudents-service";
+         var obj={"schoolid":"","academicyear":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesment=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.gradename=grade;
+         obj.section=section;
+         obj.subject=subject;
+         obj.langpref=localStorage.getItem("curr_sess_languagepref");
+         this.fetchmarksavedstudentsparam= obj;
+         this.$.fetchmarksavedstudentsajax.generateRequest();
+      },
+      fetchmarksavedstudentsResponse:function(e){
+        var arr=e.detail.response.returnval;
+        document.querySelector('dynamic-coscholastic-markentry-card').FnSetMarkEnteredArray(arr[0].total);
+      },
+      subjectsubmittedcheckService:function(grad,sec,sub){
+        gradename=grad;
+        section=sec;
+        subject=sub;
+        this.subjectsubmittedcheckurl=sessionStorage.getItem("addrinfo")+"/scholasticsubjectsubmittedcheck-service";
+         var obj={"schoolid":"","academicyear":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesment=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.gradename=gradename;
+         obj.section=section;
+         obj.subject=subject;
+         obj.role=sessionStorage.getItem("curr_sess_loggedrole");
+         if(obj.role=='Class-Teacher'||obj.role=='Subject-Teacher'){
+            obj.flag='0';
+         }
+         if(obj.role=='Co-Ordinator'||obj.role=='HeadMistress'){
+            obj.flag='1';
+         }
+         this.subjectsubmittedcheckparam= obj;
+         this.$.subjectsubmittedcheckajax.generateRequest();
+      },
+      subjectsubmittedcheckResponse:function(e){
+        // alert(e.detail.response.returnval);
+        // alert(sessionStorage.getItem("curr_sess_loggedrole"));
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Class-Teacher"||sessionStorage.getItem("curr_sess_loggedrole")=="Subject-Teacher"){
+        if(e.detail.response.returnval=='exist'){
+               //   alert('Already Submitted!!');
+       document.querySelector('coscholastic-assesment-card').FnToggleSpinner(false);
+  document.querySelector('coscholastic-assesment-card').TermMarkdialog("Already Submitted!!");
+
+        }
+        else{
+            this.callFetchInfoForSubjectTemplate(gradename,subject);
+            // this.callFetchStudentInfo(gradename,section,subject);
+        }
+        }
+        if(sessionStorage.getItem("curr_sess_loggedrole")=="Co-Ordinator"||sessionStorage.getItem("curr_sess_loggedrole")=="HeadMistress"){
+        if(e.detail.response.returnval=='exist'){
+            alert('Already Approved!!');
+            document.querySelector('coscholastic-assesment-card').FnToggleSpinner(false);
+        }
+        else{
+            this.callFetchInfoForSubjectTemplate(gradename,subject);
+            // this.callFetchStudentInfo(gradename,section,subject);
+            document.querySelector('approve-one-to-four-card').FnSpinnerrActive(false); 
+        }
+        }
+      },
+      callFetchInfoForSubjectTemplate:function(grade,sub){
+        this.fetchinfoforsubjecttemplateurl=sessionStorage.getItem("addrinfo")+"/fetchinfoforcosubjecttemplate-service";
+         var obj={"schoolid":"","academicyear":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesment=localStorage.getItem("curr_sess_assesment");
+         obj.gradename=gradename;
+         obj.section=section;
+         obj.subject=subject;
+         this.fetchinfoforsubjecttemplateparam= obj;
+         this.$.fetchinfoforsubjecttemplateajax.generateRequest();
+      },
+      fetchinfoforsubjecttemplateResponse:function(e){
+        // alert(JSON.stringify(e.detail.response.returnval));
+        assesscategorycnt=e.detail.response.catarr;
+        assesscategory=e.detail.response.returnval;
+        if(assesscategory.length>0){
+        localStorage.setItem("curr_sess_assesment",assesscategory[0].assesment_type);
+        this.callFetchStudentInfo(gradename,section,subject);
+         }
+    //categorycnt=e.detail.response.catarr;
+      },
+      callFetchStudentInfo:function(grad,sec,sub){
+        sgrade=gradename;
+        ssection=section;
+        ssubject=subject;
+         this.fetchsubjectstudenturl=sessionStorage.getItem("addrinfo")+"/fetchsubjectstudent-service";
+         var obj={"schoolid":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.gradename=gradename;
+         obj.section=section;
+         obj.subject=subject;
+         obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+         obj.langpref=localStorage.getItem("curr_sess_languagepref");
+         this.fetchsubjectstudentparam= obj;
+         this.$.fetchsubjectstudentajax.generateRequest();        
+      },
+      fetchsubjectstudentResponse:function(e){   
+         // alert(JSON.stringify(e.detail.response.returnval));  
+        // alert(JSON.stringify(assesscategorycnt));
+        var arr=e.detail.response.returnval;
+        if(assesscategory.length>0){
+         studentarr=arr;
+         var categorytitle=[];
+         var title=[];
+         var temp=[];
+         var tempcnt=0;
+         var divider=0;
+         var percent=0;
+         var tabwidth=0;
+        for(var i=0;i<assesscategorycnt.length;i++){
+          var obj={};
+          obj.category_id=assesscategorycnt[i].category_id;
+          obj.category_name=assesscategorycnt[i].category_name;
+          obj.spancnt=assesscategorycnt[i].cnt;
+          temp.push(obj);
+          tempcnt+=parseFloat(assesscategorycnt[i].cnt);
+        }
+        if(parseFloat(tempcnt)>=8){
+          percent=80;
+          tabwidth="100%";
+        }
+        else if(parseFloat(tempcnt)>=3){
+          percent=40;
+          tabwidth="60%";
+        }
+        else{
+          percent=25;
+          tabwidth="45%";
+        }
+        divider=parseFloat(percent)/(parseFloat(tempcnt));
+         categorytitle=[]
+         temp=[];
+        for(var i=0;i<assesscategory.length;i++){
+          var obj={};
+          obj.sub_category_id=assesscategory[i].sub_category_id;
+          obj.sub_category_name=assesscategory[i].sub_category_name;
+          obj.weight=assesscategory[i].weight;
+          temp.push(obj);
+        }         
+        for(var i=0;i<temp.length;i++){
+            var cnt=1;
+            var obj={};
+            obj.hiddenlabel=false;
+            obj.hiddeninput=true;
+            obj.studentname="Student Name";
+            obj.subcategoryname=temp[i].sub_category_name+" ("+temp[i].weight+")";
+            for(var j=i+1;j<temp.length;j++){
+              if(temp[i].sub_category_name==temp[j].sub_category_name&&temp[i].sub_category_id==temp[j].sub_category_id){
+                cnt++;
+                temp.splice(j,1);
+                j--;
+              }
+            }
+            obj.categorycnt=cnt;
+            obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+            categorytitle.push(obj);
+           }
+           overall.push({"tabwidth":tabwidth,"serialno":"Sno","id":"Student Id",student_name:'Student Name',hiddenoutinput:true,'category':categorytitle});
+         for(var i=0;i<studentarr.length;i++){
+          var finalarr=[];
+          for(var j=0;j<assesscategory.length;j++){
+            var obj={};
+            obj.studentid=studentarr[i].id;
+            obj.studentname=studentarr[i].student_name;
+            obj.classid=studentarr[i].class_id;
+            obj.assesmenttype=assesscategory[j].assesment_type;
+            obj.gradeid=assesscategory[j].grade_id;
+            obj.gradename=assesscategory[j].grade_name;
+            obj.subjectid=assesscategory[j].subject_id;
+            obj.subjectname=assesscategory[j].subject_name;
+            obj.categoryid=assesscategory[j].category_id;
+            obj.categoryname=assesscategory[j].category_name;
+            obj.subcategoryid=assesscategory[j].sub_category_id;
+            obj.subcategoryname=assesscategory[j].sub_category_name;
+            obj.weight=assesscategory[j].weight;
+            obj.seq=assesscategory[j].sub_seq;
+            obj.score="";
+            obj.hiddenlabel=true;
+            obj.hiddeninput=false;
+            obj.categorycnt=1;
+            obj.width=parseFloat(1)*parseFloat(divider)+"%";
+            finalarr.push(obj);
+          }
+          studentarr[i].tabwidth=tabwidth;
+          studentarr[i].hiddenoutinput=false;          
+          studentarr[i].category=finalarr;
+          studentarr[i].grade='';
+          overall.push(studentarr[i]);
+         }     
+         this.fetchstudentforsubjectreportService();
+        }
+        else{
+        overall=[];
+        assesscategory=[];
+        sgrade="";
+        ssection="";
+        ssubject="";
+        studentarr=[];
+        overall=[]; 
+     document.querySelector('dynamic-coscholastic-markentry-itemcard').FnRefresh();
+     document.querySelector('coscholastic-markentry-card').FnRefresh();
+     document.querySelector('dynamic-coscholastic-markentry-card').hideheader=true;
+     document.querySelector('dynamic-coscholastic-markentry-card').studarr=overall;
+     document.querySelector('coscholastic-assesment-card').FnToggleSpinner(false);
+
+        }
+        // alert(JSON.stringify(overall));
+      },
+      fetchstudentforsubjectreportService:function(){
+        // alert('coming......');
+         this.fetchstudentforsubjectreporturl=sessionStorage.getItem("addrinfo")+"/fetchstudentforscholasticsubjectreport-service";
+         var obj={"schoolid":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.grade=gradename;
+         obj.section=section;
+         obj.subject=subject;
+         this.fetchstudentforsubjectreportparam= obj;
+         this.$.fetchstudentforsubjectreportajax.generateRequest();
+      },
+      fetchstudentforsubjectreportResponse:function(e){
+        var arr=e.detail.response.returnval;
+        // alert(JSON.stringify(overall));
+        // alert(JSON.stringify(arr));
+        if(arr.length>0){
+        for(var i=0;i<overall.length;i++){
+          for(var j=0;j<arr.length;j++){
+          if(overall[i].id==arr[j].student_id){
+            for(var k=0;k<overall[i].category.length;k++){
+            if((overall[i].category[k].subjectname).toLowerCase()==(arr[j].subject_id).toLowerCase()&&(overall[i].category[k].categoryname).toLowerCase()==(arr[j].category).toLowerCase()&&(overall[i].category[k].subcategoryname).toLowerCase()==(arr[j].sub_category).toLowerCase()){
+        if(Number.isInteger(parseFloat(overall[i].category[k].weight))){
+        overall[i].category[k].score=arr[j].mark;
+        }
+        else{
+        var m=[{"grade":'A',"mark":'8'},{"grade":'B',"mark":'7'},{"grade":'C',"mark":'5'},{"grade":'D',"mark":'3'}];
+        for (var x = 0; x < m.length; x++)
+        {
+          if(m[x].mark==arr[j].mark)
+          overall[i].category[k].score=m[x].grade;
+        }
+        }
+              // overall[i].category[k].score=arr[j].mark;
+            }
+            }
+          }
+          }
+        }        
+        }
+        for(var i=1;i<overall.length;i++){
+          overall[i].serialno=i;
+        }
+        // alert(JSON.stringify(overall));
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('dynamic-coscholastic-markentry-card');
+        document.querySelector('dynamic-coscholastic-markentry-card').hideheader=false;
+        document.querySelector('dynamic-coscholastic-markentry-card').setDefaultHeaders();
+        document.querySelector('dynamic-coscholastic-markentry-card').FnSetLabel();
+ document.querySelector('dynamic-coscholastic-markentry-card').studarr=overall;
+   document.querySelector('coscholastic-assesment-card').FnToggleSpinner(false);
+      overall=[];  
+    this.templateincoscolasticsubject(gradename,section,subject);
+      },
+      callFetchStudentInfo1:function(grad,sec,sub){
+        sgrade=grad;
+        ssection=sec;
+        ssubject=sub;
+         this.fetchsubjectstudenturl1=sessionStorage.getItem("addrinfo")+"/fetchsubjectstudent-service";
+         var obj={"schoolid":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.gradename=sgrade;
+         obj.section=ssection;
+         obj.subject=ssubject;
+         obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+         obj.langpref=localStorage.getItem("curr_sess_languagepref");
+         this.fetchsubjectstudentparam1= obj;
+         this.$.fetchsubjectstudentajax1.generateRequest();        
+      },
+      fetchsubjectstudentResponse1:function(e){   
+        studentarr=e.detail.response.returnval;
+        // alert(JSON.stringify(studentarr));
+        this.FnFetchDynamicallyEnteredMarks(sgrade,ssection,ssubject);
+      },
+      FnFetchDynamicallyEnteredMarks:function(gradename,section,subject){
+        this.fetchdynamicallyenteredmarksurl=sessionStorage.getItem("addrinfo")+"/fetchdynamicallyenteredscholasticmarks-service";
+         var obj={"schoolid":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.grade=gradename;
+         obj.section=section;
+         obj.subject=subject;
+         this.subject=subject;
+         this.fetchdynamicallyenteredmarksparam= obj;
+         this.$.fetchdynamicallyenteredmarksajax.generateRequest();
+      },
+      fetchdynamicallyenteredmarksResponse:function(e){
+        var assesscategory=e.detail.response.map;
+        var assesscategorycnt=e.detail.response.categorycnt;
+        var arr=e.detail.response.returnval;
+        // alert(JSON.stringify(assesscategory));
+        // alert(JSON.stringify(assesscategorycnt));
+        // alert(JSON.stringify(arr));
+        var temp=[];
+        var obj={};
+        var title=[];
+        var overall=[];
+        var row=[];
+        var cat=[];
+         if(assesscategory.length>0){
+            // alert('in');
+         // studentarr=arr;
+         var categorytitle=[];
+         var title=[];
+         var temp=[];
+         var tempcnt=0;
+         var divider=0;
+         var percent=0;
+         var tabwidth=0;
+        for(var i=0;i<assesscategorycnt.length;i++){
+          var obj={};
+          obj.category_id=assesscategorycnt[i].category_id;
+          obj.category_name=assesscategorycnt[i].category_name;
+          obj.spancnt=assesscategorycnt[i].cnt;
+          temp.push(obj);
+          tempcnt+=parseFloat(assesscategorycnt[i].cnt);
+        }
+        if(parseFloat(tempcnt)>=8){
+          percent=80;
+          tabwidth="95%";
+        }
+        else if(parseFloat(tempcnt)>=3){
+          percent=40;
+          tabwidth="55%";
+        }
+        else{
+          percent=25;
+          tabwidth="40%";
+        }
+        divider=parseFloat(percent)/(parseFloat(tempcnt));
+        for(var i=0;i<temp.length;i++){
+            var obj={};
+            obj.studentname="Student Name";
+            obj.subcategoryname=temp[i].category_name;
+            obj.categorycnt=temp[i].spancnt;
+            obj.width=parseFloat(temp[i].spancnt)*parseFloat(divider)+"%";
+            categorytitle.push(obj);
+         }
+         // cat.push({"studentname":"","tabwidth":tabwidth,"serialno":"",'category':categorytitle});
+         // document.querySelector('dynamic-scholastic-markentry-report').catarr=cat;
+         overall.push({"sno":"Sno","id":"Student Id","studentname":"Student Name","tabwidth":tabwidth,"serialno":"",'category':categorytitle});
+         categorytitle=[]
+         temp=[];
+        for(var i=0;i<assesscategory.length;i++){
+          var obj={};
+          obj.sub_category_id=assesscategory[i].sub_category_id;
+          obj.sub_category_name=assesscategory[i].sub_category_name;
+          obj.weight=assesscategory[i].weight;
+          temp.push(obj);
+        }         
+        // alert(JSON.stringify(temp));
+        for(var i=0;i<temp.length;i++){
+            var cnt=1;
+            var obj={};
+            obj.studentname="Student Name";
+            obj.subcategoryname=temp[i].sub_category_name+" ("+temp[i].weight+")";
+            for(var j=i+1;j<temp.length;j++){
+              if(temp[i].sub_category_name==temp[j].sub_category_name&&temp[i].sub_category_id==temp[j].sub_category_id){
+                cnt++;
+                temp.splice(j,1);
+                j--;
+              }
+            }
+            obj.categorycnt=cnt;
+            obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+            categorytitle.push(obj);
+        }
+        overall.push({"id":"","studentname":"","tabwidth":tabwidth,"serialno":"",'category':categorytitle});
+        var m=[{"grade":'A',"mark":'8'},{"grade":'B',"mark":'7'},{"grade":'C',"mark":'5'},{"grade":'D',"mark":'3'}];
+        for(var i=0;i<arr.length;i++){
+            var obj={};
+            var cnt=1;
+            var category=[];
+            obj.id=arr[i].student_id;
+            obj.studentname=arr[i].student_name;
+            if(this.subject=="Personality Development"){
+                for(var x=0;x<m.length;x++){
+                    if(arr[i].mark==m[x].mark)
+                        arr[i].mark=m[x].grade;
+                }
+            }
+            obj.subcategoryname=arr[i].mark;
+            obj.categorycnt=cnt;
+            obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+            category.push(obj);
+            for(var j=i+1;j<arr.length;j++){
+            obj={};
+            if(arr[i].student_id==arr[j].student_id){
+            if(this.subject=="Personality Development"){
+                for(var x=0;x<m.length;x++){
+                    if(arr[j].mark==m[x].mark)
+                        arr[j].mark=m[x].grade;
+                }
+            }
+            obj.subcategoryname=arr[j].mark;
+            arr.splice(j,1);
+            j--;
+            obj.categorycnt=cnt;
+            obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+            category.push(obj);
+            }
+            }
+            // obj.categorycnt=cnt;
+            // obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+            // category.push(obj);
+            // alert(JSON.stringify(category));
+
+            overall.push({"id":arr[i].student_id,"studentname":arr[i].student_name,"tabwidth":tabwidth,"category":category});
+            // category=[];
+        }
+        for(var i=2,j=0;i<overall.length;i++,j++){
+            overall[i].sno=j+1;
+        }
+        // alert(JSON.stringify(overall));
+        document.querySelector('dynamic-coscholastic-markentry-report').hideheader=false;
+        document.querySelector('dynamic-coscholastic-markentry-report').setDefaultHeaders();
+        document.querySelector('dynamic-coscholastic-markentry-report').tabwidth=tabwidth;
+        document.querySelector('dynamic-coscholastic-markentry-report').studarr1=overall;
+        document.querySelector('coscholastic-assesment-card').FnToggleSpinner(false);
+        temp=[];
+        overall=[];
+      }  
+      },
+ templateincoscolasticsubject:function(gradename,section,subject){
+        this.templateincoscolasticsubject2url=sessionStorage.getItem("addrinfo")+"/templateincoscolasticsubject-service";
+         var obj={"schoolid":"","gradename":"","section":"","subject":""};
+         obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+         obj.assesmenttype=localStorage.getItem("curr_sess_assesment");
+         obj.termname=localStorage.getItem("curr_sess_termname");
+         obj.langpref=localStorage.getItem("curr_sess_languagepref");
+         obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+         obj.gradename=gradename;
+         obj.section=section;
+         obj.subject=subject;
+         this.templateincoscolasticsubject2param=obj;
+       //  alert(JSON.stringify(obj));
+         this.$.templateincoscolasticsubject2ajax.generateRequest();
+      },
+  templateincoscolasticsubject2Response:function(e){
+       var arr=e.detail.response.enricharr;
+       var arr1=e.detail.response.studentarr;
+       var arr3=e.detail.response.categorycnt;
+        //alert(JSON.stringify(arr));
+document.querySelector('dynamic-coscholastic-markentry-card').fngenrategrade(arr);
+document.querySelector('dynamic-coscholastic-markentry-card').fnstudentarrvalue(arr1);
+
+
+        var temp=[];
+        var obj={};
+        var title=[];
+        var overall1=[];
+        var row=[];
+        var cat=[];
+        var tabwidth=0;
+         if(assesscategory.length>0){
+         // studentarr=arr;
+         var categorytitle=[];
+         var title=[];
+         var temp=[];
+         var tempcnt=0;
+         var divider=0;
+         var percent=0;
+       var c=0
+        for(var i=0;i<arr3.length;i++){
+          var obj={};
+          obj.category_id=arr3[i].category_id;
+          obj.category_name=arr3[i].category_name;
+          obj.spancnt=arr3[i].cnt;
+        //  c=arr3[i].cnt;
+          c+=arr3[i].cnt;
+          temp.push(obj);
+          tempcnt+=parseFloat(arr3[i].cnt);
+        }
+        if(parseFloat(tempcnt)>=8){
+          percent=80;
+          tabwidth="100%";
+        }
+        else if(parseFloat(tempcnt)>=3){
+          percent=40;
+          tabwidth="60%";
+        } 
+        else{
+          percent=25;
+          tabwidth="45%";
+        }
+        divider=parseFloat(percent)/(parseFloat(tempcnt));
+        for(var i=0;i<temp.length;i++){
+            var obj={};
+            obj.studentname="Student Name";
+            obj.subcategoryname=temp[i].category_name+"("+temp[i].weight+")";
+            obj.categorycnt=temp[i].spancnt;
+            obj.width=parseFloat(temp[i].spancnt)*parseFloat(divider)+"%";
+            categorytitle.push(obj);
+           }
+       //overall1.push({"sno":"Sno","Studentno":"StudentNo","studentname":"StudentName","tabwidth":tabwidth,"serialno":"",'category':categorytitle});
+         categorytitle=[]
+         temp=[];
+        for(var i=0;i<arr.length;i++){
+          var obj={};
+          obj.sub_category_id=arr[i].sub_category_id;
+          obj.sub_category_name=arr[i].sub_category_name;
+          obj.weight=arr[i].weight;
+          temp.push(obj);
+         }  
+        for(var i=0;i<temp.length;i++){
+            var cnt=1;
+            var obj={};
+            obj.studentname="StudentName";
+            obj.subcategoryname=temp[i].sub_category_name+"("+temp[i].weight+")";
+            for(var j=i+1;j<temp.length;j++){
+              if(temp[i].sub_category_name==temp[j].sub_category_name&&temp[i].sub_category_id==temp[j].sub_category_id){
+                cnt++;
+                temp.splice(j,1);
+                j--;
+               }
+             }
+            obj.categorycnt=cnt;
+            obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+            categorytitle.push(obj);
+         }
+   overall1.push({"sno":"Sno","Studentno":"StudentId","studentname":"StudentName","tabwidth":tabwidth,"serialno":"",'category':categorytitle});
+      
+        for(var i=0;i<arr1.length;i++){
+            var obj={};
+            var cnt=1;
+            var category=[];
+            obj.studentname=arr1[i].student_name;
+            obj.categorycnt=cnt;
+            obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+            category.push(obj);
+            for(var j=1;j<c;j++){
+             obj={};
+             obj.subcategoryname="";
+             obj.categorycnt=cnt;
+              obj.width=parseFloat(cnt)*parseFloat(divider)+"%";
+              category.push(obj);
+              }
+           
+          overall1.push({"sno":i+1,"Studentno":arr1[i].id,"studentname":arr1[i].student_name,"tabwidth":tabwidth,"category":category});
+              }
+document.querySelector('dynamic-coscholastic-markentry-card').categorylength=c;
+document.querySelector('dynamic-coscholastic-markentry-card').tabwidth=tabwidth;
+document.querySelector('dynamic-coscholastic-markentry-card').studarr1=overall1;
+temp=[];
+overall1=[];
+document.querySelector('term-assesment-card').FnToggleSpinner(false);
+        }
+   },
+    });
+  })();
+  </script>
+</dom-module>

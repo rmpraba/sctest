@@ -1,0 +1,38 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-levelcard">
+  <template>
+    <style>
+      .collapseoutdrop{     
+        width: 100%;   
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+      }
+      .collapseindrop{ 
+        @apply(--layout-vertical);
+        margin-left: 3%;
+      }
+      assesment-performance-level-outitemcard{
+        width: 200px;
+      }
+    </style>
+    <div>
+      <div class="collapseoutdrop">
+      <template is="dom-repeat" items="{{categoryarr}}">
+      <div class="collapseindrop"> 
+      <assesment-performance-level-outitemcard subject="{{subjectname}}" category="{{item.category}}" categoryname="{{categoryname}}" subcategory="{{item.subcategoryname}}" level="{{item.level}}" configcolumn="{{item.configcolumn}}" assesment="{{assesment}}" levelarr="{{item.levelarr}}"></assesment-performance-level-outitemcard>
+      </div>
+      </template>
+      </div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-levelcard',
+    });
+  })();
+  </script>
+</dom-module>

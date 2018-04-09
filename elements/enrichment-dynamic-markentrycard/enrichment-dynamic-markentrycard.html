@@ -1,0 +1,672 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<script src="https://unpkg.com/alasql@0.4.2/dist/alasql.min.js"></script>
+ <script src="https://unpkg.com/xlsx@0.11.5/dist/xlsx.core.min.js"></script>
+ 
+<dom-module id="enrichment-dynamic-markentrycard">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+      table{
+        width: 60%;
+        border-collapse: collapse;                          
+        margin-left: 1%;
+      }              
+      .studname{
+        width: 30%;
+      }
+      #tb1{
+          width:15%
+      }
+      .button{
+            /*width: 15%;*/
+            background: #252626;
+            color: white;
+            /*margin-top: 2%;*/
+            text-transform: none;
+            /*margin-left: 45%;*/
+      }
+      #btn2{
+            background: #252626;
+            color: white;
+            height: 35px;
+            border-radius: 2px;
+            font-family: Calibri;
+            font-size: 17px;
+            width: 100%;
+            margin-left: 7%;
+            margin-top: -3%;
+          }
+      .btndiv{
+        @apply(--layout-horizontal);
+        margin-left: 45%;
+
+      }
+
+      .hrspace
+      {
+        margin-left: 5%;
+        @apply(--layout-horizontal);
+       
+      }
+      .exceldiv
+      {
+        @apply(--layout-horizontal);
+        /*margin-top: 3%;*/
+        margin-left: 8%;
+      }
+      .excelcard{
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        border-bottom: 1px solid #dedede;
+      }
+      #hiddenexcelheaderfiles{
+        @apply(--layout-horizontal);
+      }
+      #upload{
+        margin-left: -10%;
+        /*padding-top: -2%;*/
+      }
+      .fileupload{
+        @apply(--layout-vertical);
+      }
+      #enrichreadfile{
+        margin-top: 2%;
+      }
+      #enrichck1{
+        margin-top: 0.5%;
+      }
+
+    </style>
+    <div> 
+      <div class="excelcard" align="right">
+      <div id="enrichck1" hidden$="{{centheadr}}">
+      <paper-checkbox id="enrtchk" on-change="excelmark">Excel Upload</paper-checkbox>
+      </div>
+      <div id="hiddenexcelheaderfiles">
+      <div class="hrspace">
+      <paper-icon-button id="download" icon="icons:file-download" onclick="enrichmentexportToExcel()"></paper-icon-button>
+      <paper-tooltip for="download">Download</paper-tooltip>
+      <!-- <input type="button" id="btn2" onclick="tableToExcel('dynamicreporttable11', 'Mark Report')" value="Download Template"> -->
+      </div>
+      <div class="exceldiv" hidden$="{{excelheader}}">
+      <!-- <div class="fileupload"> -->
+        <input id="enrichreadfile" type="file" onchange="loadFile(event)"/>
+        <xmp id="output"></xmp>
+      <!-- </div> -->
+        <paper-icon-button  id="upload" icon="icons:file-upload" on-click="FnClick"></paper-icon-button>
+        <paper-tooltip for="upload">Upload</paper-tooltip>
+        <!-- <paper-button style="color: white;height: 25px;  background: #252626; font-family:Calibri;"  on-click="FnClick">Upload File</paper-button>     -->
+       </div>
+       </div>
+       </div>
+
+      <!-- <div class="hrspace" id="enrichck1">
+     <paper-checkbox style="margin-left: -9%;" id="enrtchk" on-change="excelmark">Excel Upload</paper-checkbox>  
+              <!-- <label>Excel Uploading</label> -->
+     <!--      <input type="button" id="btn2" onclick="tableToExcel('enrichdynamicreporttable11', 'Mark Report')" value="Download Template">
+      </div>
+
+      <div class="exceldiv"  hidden$="{{excelheader}}">
+        <input id="readfile" type="file" onchange="loadFile(event)"/>
+        <xmp id="output"></xmp>
+        <paper-button style="margin-left: -9%;margin-top: -4%;width:100%;color:white;height:35px;background-color:black;"  on-click="FnClick">Upload File</paper-button>    
+      </div>  --> 
+        
+    <div   class="mainhd" hidden$="{{centheadr}}">
+    <!-- <template is="dom-repeat" items="{{label}}"> -->
+      <center>
+      <h1>{{schoolname}}</h1>
+      <h3>Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+      <h4>Assesment: {{assesmentname}}  &nbsp;&nbsp;&nbsp; Grade: {{grade}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section: {{section}} &nbsp;&nbsp; Subject: {{subject}} </h4> 
+      <!-- <table border="1" >   -->
+      <!-- <tr><td></td>
+        <template is="dom-repeat" items="{{titlearr}}">
+          <th colspan="{{item.categorycnt}}" style="text-align: center;">{{item.categoryname}}</th>
+        </template>
+      </tr>  --> 
+      <div>
+      <template is="dom-repeat" items="{{studarr}}">
+      <!-- <tr><td> -->  
+      <enrichment-dynamic-markentryitemcard id="edmeic" serialno="{{item.serialno}}" studentname="{{item.student_name}}" studentid="{{item.id}}" hiddenoutinput="{{item.hiddenoutinput}}" category="{{item.category}}" grade="{{item.grade}}" temp="{{temp}}"></enrichment-dynamic-markentryitemcard>
+      <!-- </td></tr> -->
+      </template>    
+      </div>
+       
+      <!-- </table> -->
+      </center> 
+    <!-- </template>      -->
+    </div>
+    <div class="btndiv"  hidden$="{{hidebtndivv}}">
+    <paper-button class="button" id="grade" on-click="FnGenerateGrade">Generate Grade</paper-button>
+    <paper-button disabled$="{{disablesave}}" class="button" id="save" on-click="FnSave">Save</paper-button>
+    </div> 
+    <div id="enrichdynamicreporttable11" hidden>
+   <div width="{{tabwidth}}">
+      <table id="EnrichmentDataTableId" border="1" style="border-collapse: collapse;" width="{{tabwidth}}">
+      <template is="dom-repeat" items="{{studarr1}}">
+      <tr>
+      <th width="5%">{{item.sno}}</th>
+      <th width="15%">{{item.Studentno}}</th>
+      <th width="15%">{{item.studentname}}</th>
+      <template is="dom-repeat" items="{{item.category}}" as="i">
+      <th colspan$="{{i.categorycnt}}" width$="{{i.width}}">{{i.subcategoryname}}</th>
+      </template>
+      </tr>
+      </template>
+      </table>  
+  </div>
+ </div> 
+  <paper-input value="{{categorylength}}" hidden></paper-input>
+
+  <beginner-assesment-service id="beginnerservice"></beginner-assesment-service>
+  </template>
+
+  <script type="text/javascript">  
+  var filename;
+  function enrichmentexportToExcel(){
+  var htmls = "";
+  //alert("2");
+  var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j=0;
+    var tab = document.getElementById('EnrichmentDataTableId'); // id of table
+    var lines = tab.rows.length;
+
+    // the first headline of the table
+    if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+
+    // table data lines, loop starting from 1
+    for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : filename || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+    }
+  </script>
+
+  <script type="text/javascript">
+  var array=[];
+  var array1=[];
+  var tempstudentarr=[];
+  
+  function loadFile(event) {
+  alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(data){
+    array1=data; 
+    // alert(JSON.stringify(array1));
+     for(var i=0;i<array1.length;i++){
+       for(var j=0;j<tempstudentarr.length;j++){
+       // alert(array[i].StudentNo+"  "+tempstudentarr[j].student_id);
+       if(array1[i].StudentId==tempstudentarr[j].id){
+          array.push(array1[i]);
+         }      
+    }  
+    }       
+  });
+  }
+  </script>
+  <script type="text/javascript">
+  var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+  })()
+  </script>
+  <script>
+  (function() {
+    'use strict';
+    var scorearr=[];
+    var gradearr=[];
+    var detailarr=[];
+    var tempassesmetarr=[];
+    // var weight="";
+     Polymer({
+      is: 'enrichment-dynamic-markentrycard',
+      ready:function(){
+       this.disablesave=true;
+       this.centheadr=true;
+       this.hidebtndivv=true;
+       this.excelheader=true;
+        // this.$.componentservice.callcomponentService();        
+      },
+      fnstudentarrvalue:function(arr){
+      tempstudentarr=arr;
+     //   alert(JSON.stringify(tempstudentarr));
+
+      },
+        fngenrategrade:function(arr){
+        tempassesmetarr=arr;
+       },
+       FnSave:function(){
+        var temp=[];
+        for(var i=0;i<scorearr.length;i++){
+        var obj={};
+        obj.studentid=scorearr[i].student_id;
+        obj.studentname=scorearr[i].student_name;
+        obj.classid=scorearr[i].class_id;
+        obj.assesmenttype=scorearr[i].assesment_type;
+        obj.gradeid=scorearr[i].grade_id;
+        obj.gradename=scorearr[i].grade_name;
+        obj.subjectid=scorearr[i].subject_id;
+        obj.subjectname=scorearr[i].subject_name;
+        obj.categoryid=scorearr[i].category_id;
+        obj.categoryname=scorearr[i].category_name;
+        obj.subcategoryid=scorearr[i].sub_category_id;
+        obj.subcategoryname=scorearr[i].sub_category_name;
+        obj.value=scorearr[i].score;
+        obj.grade=scorearr[i].grade;
+        obj.level=scorearr[i].level;
+        obj.enrichlevel=scorearr[i].enrichlevel;
+        obj.speedlevel=scorearr[i].speedlevel;
+        obj.comprehensionlevel=scorearr[i].comprehensionlevel;
+        temp.push(obj);
+        }       
+        // alert(JSON.stringify(temp)); 
+        document.querySelector("beginner-assesment-card").FnToggleSpinner(true);
+        document.querySelector("beginner-assesment-card").spinnermsg="Please wait...Saving";
+        this.$.beginnerservice.callbamarkinsertService(temp);
+        // alert(JSON.stringify(scorearr));
+        // alert("Mark entry for this section completed!");
+      },
+        FnClick:function(){
+        var temp=[];
+     
+         if(array.length==0){
+        alert("Pls save the file in EXCEL WORKBOOK extension!");
+        document.getElementById("enrichreadfile").value = "";
+       }
+       else{ 
+        for(var i=0;i<array.length;i++){
+             if(JSON.stringify({})==JSON.stringify(array[i])){
+             }
+         else{
+        var setarr=[];
+           setarr=Object.keys(array[i]);
+             setarr.splice(0,3);
+                for(var j=0;j<setarr.length;j++){
+                  for(var k=0;k<tempassesmetarr.length;k++){
+                     if(this.categorylength==setarr.length){ 
+           if(tempassesmetarr[k].sub_category_name+"("+tempassesmetarr[k].weight+")"==setarr[j]){
+              var m=setarr[j];
+              var obj={};
+          obj.studentid=array[i].StudentId;
+          obj.studentname=array[i].StudentName;
+          obj.classid=localStorage.getItem("curr_sess_classid");
+          obj.assesmenttype=localStorage.getItem("curr_sess_assesmentname");
+          obj.gradeid=localStorage.getItem("curr_sess_gradeid");;
+          obj.gradename=localStorage.getItem("curr_sess_grade");
+          obj.subjectid=localStorage.getItem("curr_sess_subjectid");
+          obj.subjectname=localStorage.getItem("curr_sess_subject");
+          obj.categoryid=tempassesmetarr[k].category_id;
+          obj.categoryname=tempassesmetarr[k].category_name;
+          obj.subcategoryid=tempassesmetarr[k].sub_category_id;
+          obj.subcategoryname=tempassesmetarr[k].sub_category_name;
+          obj.value=array[i][m];
+          obj.grade="";
+          temp.push(obj);
+                 } }
+                 else{
+                      temp=[];
+                      array=[];
+                      array1=[];
+                   //   tempstudentarr=[];
+                  //  alert("Pls import the corrcet file name");
+                     document.getElementById("enrichreadfile").value = "";
+                  }}}}}
+
+  if(temp.length==0){
+  alert("Pls import the corrcet file name");
+}
+else{
+ document.querySelector("beginner-assesment-card").FnToggleSpinner(true);
+          document.querySelector("beginner-assesment-card").spinnermsg="Please wait...Loading";
+           this.$.beginnerservice.callbamarkinsertService(temp);
+           temp=[];
+           array=[];
+           array1=[];
+            tempstudentarr=[];
+        document.getElementById("enrichreadfile").value = "";
+         this.categorylength="";
+       }
+     }
+      },
+      FnSetGrade:function(arr,detail,weight){
+        gradearr=arr;
+        detailarr=detail;
+        this.weight=weight;
+        // alert("fncall"+this.weight);
+      },
+      FnGenerateGrade:function(e)
+      {       
+        this.$.beginnerservice.FnFetchBeginnerMarksForGrade();
+        this.disablesave=false;
+      },
+      FnGenerateGradee:function(){       
+        var temparr=this.studarr;
+        // alert(JSON.stringify(scorearr))
+        // alert(JSON.stringify(gradearr))
+        // alert(JSON.stringify(temparr))
+        if(localStorage.getItem("curr_sess_assesmentname")=="EBOY"||localStorage.getItem("curr_sess_assesmentname")=="EMOY"||(localStorage.getItem("curr_sess_assesmentname")=="EEOY")&&(this.grade=="Grade-1"||this.grade=="Grade-2"||this.grade=="Grade-3"||this.grade=="Grade-4")){
+        if(this.subject=="English"){
+        if((temparr.length)-2==((scorearr.length)/2)){        
+        var total=0;
+        var max=0;
+        var min=0;
+        for(var i=0;i<scorearr.length;i++){
+          if(scorearr[i].sub_category_id=="s1-c1-sub1"){
+            if(parseFloat(scorearr[i].score)>max)
+              max=parseFloat(scorearr[i].score).toFixed(2);
+            if(parseFloat(scorearr[i].score)<min)
+              min=parseFloat(scorearr[i].score).toFixed(2);
+            total=parseFloat(parseFloat(total)+parseFloat(scorearr[i].score)).toFixed(2);
+          }
+        }
+        var avg=Math.round(parseFloat(total/(parseFloat(scorearr.length/2).toFixed(2))).toFixed(2));
+        var maxdiff=Math.round(parseFloat((parseFloat(max)-parseFloat(avg))/3).toFixed(2));
+        var mindiff=Math.round(parseFloat((parseFloat(avg)-parseFloat(min))/3).toFixed(2));
+        // alert(avg+" "+maxdiff+" "+mindiff);
+        var maxdev=0;
+        
+        // if(parseFloat(maxlevel1)<parseFloat(max))
+        // {
+        //   maxdev=parseFloat(max)-parseFloat(maxlevel1);
+        //   maxlevel1=parseFloat(maxlevel1)+parseFloat(maxdev);
+        // }
+        var maxlevel1=Math.round(parseFloat(avg)+parseFloat(maxdiff));
+        var maxlevel2=Math.round(parseFloat(avg)+(parseFloat(maxdiff)*2));
+        var maxlevel3=Math.round(parseFloat(avg)+(parseFloat(maxdiff)*3));
+        var minlevel1=Math.round(parseFloat(avg)-parseFloat(mindiff));
+        var minlevel2=Math.round(parseFloat(avg)-(parseFloat(mindiff)*2));
+        var minlevel3=Math.round(parseFloat(avg)-(parseFloat(mindiff)*3));
+        // alert(total+"  "+avg);
+        for(var i=2;i<(temparr).length;i++){
+        for(var j=0;j<scorearr.length;j++){
+          // if(scorearr[j].student_id=="ENR01188")
+            // alert(scorearr[j].score+" "+parseFloat(avg)+" "+maxlevel1+" "+maxlevel2+" "+maxlevel3);
+          if(temparr[i].id==scorearr[j].student_id){
+          if(scorearr[j].sub_category_id=="s1-c1-sub1"){
+              if(parseFloat(scorearr[j].score)>=parseFloat(avg)){
+                temparr[i].speed="greater";
+                if((parseFloat(scorearr[j].score)>=parseFloat(avg)&&parseFloat(scorearr[j].score)<=parseFloat(maxlevel1))||parseFloat(scorearr[j].score)<=parseFloat(avg)){
+                temparr[i].speedlevel="Level3"; 
+                } 
+                if(parseFloat(scorearr[j].score)>=parseFloat(maxlevel1)&&parseFloat(scorearr[j].score)<=parseFloat(maxlevel2)){
+                temparr[i].speedlevel="Level2"; 
+                } 
+                if((parseFloat(scorearr[j].score)>=parseFloat(maxlevel2)&&parseFloat(scorearr[j].score)<=parseFloat(maxlevel3))||parseFloat(scorearr[j].score)>=parseFloat(maxlevel3))
+                {
+                temparr[i].speedlevel="Level1";  
+                }
+              }
+              else if(parseFloat(scorearr[j].score)<parseFloat(avg)){
+                temparr[i].speed="lesser";
+                if((parseFloat(scorearr[j].score)<=parseFloat(avg)&&parseFloat(scorearr[j].score)>=parseFloat(minlevel1))||parseFloat(scorearr[j].score)>=parseFloat(avg))
+                temparr[i].speedlevel="Level1";  
+                if(parseFloat(scorearr[j].score)<=parseFloat(minlevel1)&&parseFloat(scorearr[j].score)>=parseFloat(minlevel2))
+                temparr[i].speedlevel="Level2";  
+                if((parseFloat(scorearr[j].score)<=parseFloat(minlevel2)&&parseFloat(scorearr[j].score)>=parseFloat(minlevel3))||parseFloat(scorearr[j].score)<=parseFloat(minlevel3))
+                temparr[i].speedlevel="Level3";
+              }
+          }
+          else{
+            temparr[i].comprehension=scorearr[j].score;
+
+          }
+          }
+        }
+        }        
+        for(var i=0;i<temparr.length;i++){
+          for(var j=0;j<gradearr.length;j++){
+            if(temparr[i].speed==gradearr[j].type&&((parseFloat(temparr[i].comprehension)>=parseFloat(gradearr[j].minimum))&&(parseFloat(temparr[i].comprehension)<=parseFloat(gradearr[j].maximum))&&gradearr[j].assesment_type==localStorage.getItem('curr_sess_assesmentname'))){
+              temparr[i].grade=gradearr[j].grade;
+              temparr[i].level=gradearr[j].category; 
+              // alert(temparr[i].comprehension);
+              for(var x=0;x<detailarr.length;x++){                
+                if(detailarr[x].grade==gradearr[j].grade&&((parseFloat(temparr[i].comprehension)>=parseFloat(detailarr[x].minimum))&&(parseFloat(temparr[i].comprehension)<=parseFloat(detailarr[x].maximum)))&&gradearr[j].assesment_type==localStorage.getItem('curr_sess_assesmentname')&&gradearr[j].assesment_type==detailarr[x].assesment_type){
+                  // alert("in");
+                  temparr[i].comprehensionlevel=detailarr[x].level;
+                }
+              }             
+            }
+          }
+        }
+        this.studarr=[];
+        var overall=[];
+        for(var i=0;i<temparr.length;i++){
+          var obj={};
+          obj.school_id=temparr[i].school_id;
+          obj.id=temparr[i].id;
+          obj.student_name=temparr[i].student_name;
+          obj.class_id=temparr[i].class_id;
+          obj.hiddenoutinput=temparr[i].hiddenoutinput;
+          obj.category=temparr[i].category;
+          obj.grade=temparr[i].grade;
+          obj.level=temparr[i].level;
+          obj.speed=temparr[i].speed;
+          obj.comprehension=temparr[i].comprehension;
+          obj.speedlevel=temparr[i].speedlevel;
+          obj.comprehensionlevel=temparr[i].comprehensionlevel;
+          overall.push(obj);
+        }
+        // alert(JSON.stringify(overall));
+        this.studarr=overall;
+        for(var i=0;i<overall.length;i++){
+          for(var j=0;j<overall[i].category.length;j++){
+            for(var k=0;k<scorearr.length;k++){
+              if(overall[i].category[j].studentid==scorearr[k].student_id&&overall[i].category[j].categoryid==scorearr[k].category_id&&overall[i].category[j].subcategoryid==scorearr[k].sub_category_id&&overall[i].category[j].subjectid==scorearr[k].subject_id)
+              {
+                scorearr[k].grade=overall[i].grade;
+                scorearr[k].level=overall[i].level;
+                scorearr[k].speedlevel=overall[i].speedlevel;
+                scorearr[k].comprehensionlevel=overall[i].comprehensionlevel;
+              }
+            }
+          }
+        }
+        this.FnSetAlreadyEnteredMarks(scorearr);
+        }
+        else{
+        alert('Please complete all student entry!!');
+        }        
+        }
+        }
+        else{
+          // alert((temparr.length)+" "+(scorearr.length));
+         
+          //alert(JSON.stringify(scorearr));
+          //alert(JSON.stringify(temparr));
+          //alert(JSON.stringify(gradearr));
+     if((temparr.length)-2==(scorearr.length))
+     {
+      // alert("in"+this.weight);
+      //alert(temparr.length);
+        for(var i=2;i<temparr.length;i++)
+        {
+          //alert(temparr[i].category.length);
+          for(var k=0;k<temparr[i].category.length;k++)
+          {
+            //alert(parseFloat((parseFloat(temparr[i].category[k].score)/30)*100).toFixed(2));
+              var val=parseFloat((parseFloat(temparr[i].category[k].score)/parseFloat(this.weight))*100).toFixed(2);
+          //alert(val);
+            for(var j=0;j<gradearr.length;j++){
+        // alert(((parseFloat(val)+"  "+parseFloat(gradearr[j].minimum))+"  "+(parseFloat(val)+"  "+parseFloat(gradearr[j].maximum)))+"  "+gradearr[j].assesment_type+"  "+localStorage.getItem('curr_sess_assesmentname'));
+        if(((parseFloat(val)>=parseFloat(gradearr[j].minimum))&&(parseFloat(val)<=parseFloat(gradearr[j].maximum)))&&gradearr[j].assesment_type==localStorage.getItem('curr_sess_assesmentname')){
+          // alert(JSON.stringify(temparr));
+          // alert(JSON.stringify(gradearr));
+              // alert(JSON.stringify(gradearr[j]));
+              // alert("category..."+gradearr[j].grade+"..."+gradearr[j].category);
+              temparr[i].grade=gradearr[j].grade;
+              temparr[i].level=gradearr[j].category;
+              // alert(detailarr[x].grade+"  "+gradearr[j].grade+"  "+gradearr[j].assesment_type+"  "+localStorage.getItem('curr_sess_assesmentname')+"  "+gradearr[j].assesment_type+"  "+detailarr[x].assesment_type);
+              for(var x=0;x<detailarr.length;x++){
+                if(detailarr[x].grade==gradearr[j].grade&&((parseFloat(val)>=parseFloat(detailarr[x].minimum))&&(parseFloat(val)<=parseFloat(detailarr[x].maximum)))&&gradearr[j].assesment_type==localStorage.getItem('curr_sess_assesmentname')&&gradearr[j].assesment_type==detailarr[x].assesment_type){
+                  temparr[i].enrichlevel=detailarr[x].level;
+                }
+              }
+            }
+            }
+          }
+        }
+        this.studarr=[];
+        var overall=[];
+        for(var i=0;i<temparr.length;i++){
+          var obj={};
+          obj.school_id=temparr[i].school_id;
+          obj.id=temparr[i].id;
+          obj.student_name=temparr[i].student_name;
+          obj.class_id=temparr[i].class_id;
+          obj.hiddenoutinput=temparr[i].hiddenoutinput;
+          obj.category=temparr[i].category;
+          obj.grade=temparr[i].grade;
+          obj.level=temparr[i].level;
+          obj.enrichlevel=temparr[i].enrichlevel;
+          overall.push(obj);
+        }
+        this.studarr=overall;
+        // alert(JSON.stringify(overall));
+        for(var i=0;i<overall.length;i++){
+          for(var j=0;j<overall[i].category.length;j++){
+            for(var k=0;k<scorearr.length;k++){
+              if(overall[i].category[j].studentid==scorearr[k].student_id&&overall[i].category[j].categoryid==scorearr[k].category_id&&overall[i].category[j].subcategoryid==scorearr[k].sub_category_id&&overall[i].category[j].subjectid==scorearr[k].subject_id)
+              {
+                scorearr[k].grade=overall[i].grade;
+                scorearr[k].level=overall[i].level;
+                scorearr[k].enrichlevel=overall[i].enrichlevel;
+              }
+            }
+          }
+        }
+        } 
+        else{
+          alert('Please check your sheet!');
+        }
+        }              
+      },
+      setDefaultHeaders:function(){
+        this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+        this.academicyear=localStorage.getItem("curr_sess_academicyear");
+        this.grade=localStorage.getItem("curr_sess_grade");
+        this.section=localStorage.getItem("curr_sess_section");
+        this.subject=localStorage.getItem("curr_sess_subject");
+        this.assesmentname=localStorage.getItem("curr_sess_assesmentname");
+        filename=this.grade+"-"+this.section+"-"+this.subject+"-"+this.assesmentname;
+      },
+      FnRefresh:function()
+      {
+        this.studarr=[];
+        this.label=[];
+        this.temp=[];
+        scorearr=[];
+        this.weight="";
+        this.disablesave=true;
+      },
+      FnSetInfoArray:function(arr){
+        scorearr=arr;
+        // this.FnGenerateGradee();
+      },
+      FnSetAlreadyEnteredMarks:function(arr){
+        var temp=[];
+        for(var i=0;i<arr.length;i++){
+        var obj={};
+        obj.studentid=arr[i].student_id;
+        obj.studentname=arr[i].student_name;
+        obj.classid=arr[i].class_id;
+        obj.assesmenttype=arr[i].assesment_type;
+        obj.gradeid=arr[i].grade_id;
+        obj.gradename=arr[i].grade_name;
+        obj.subjectid=arr[i].subject_id;
+        obj.subjectname=arr[i].subject_name;
+        obj.categoryid=arr[i].category_id;
+        obj.categoryname=arr[i].category_name;
+        obj.subcategoryid=arr[i].sub_category_id;
+        obj.subcategoryname=arr[i].sub_category_name;
+        obj.value=arr[i].score;
+        obj.grade=arr[i].grade;
+        obj.level=arr[i].level;
+        obj.enrichlevel=arr[i].enrichlevel;
+        temp.push(obj);
+        }
+        this.temp=temp;        
+        // this.$.edmeic.FnSetInfoArray(temp);
+      },
+      getdynamichead:function()
+      {
+        this.centheadr=false;
+        this.hidebtndivv=false;
+      },
+      fullrefresh:function()
+      {
+        this.centheadr=true;
+        this.hidebtndivv=true;
+      },
+       excelmark:function(e)
+      {
+      if(enrtchk.checked==true)
+      {
+        this.centheadr=false;
+        this.hidebtndivv=false;
+        this.excelheader=false;
+      }
+      else
+      {
+        this.centheadr=false;
+        this.hidebtndivv=false;
+        this.excelheader=true;
+      }
+    },
+    hideexcelcontent:function()
+    {
+      enrtchk.checked=false;
+      this.centheadr=false;
+        this.hidebtndivv=false;
+        this.excelheader=true;
+
+    },
+    fnhideexcelbox:function()
+    {
+     this.$.enrichck1.hidden=false;
+    },
+    fnviewexcelbox:function()
+    {
+      this.$.enrichck1.hidden=false;
+    }
+
+     
+    });
+  })();
+  </script>
+</dom-module>
+

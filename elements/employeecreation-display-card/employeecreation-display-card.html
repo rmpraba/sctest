@@ -1,0 +1,71 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="employeecreation-display-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        @apply(--layout-horizontal);
+        border-bottom: 1px solid #dedede;
+      }
+    </style>
+
+      <table class="card" id="card{{id}}">
+      <tr><td hidden>{{id}}</td>
+      <td hidden>{{gradeid}}</td>
+      <td hidden>{{subjectid}}</td>
+      <td width="15%" hidden$="{{hiderolenameitem}}">{{id}}</td>
+      <!-- <td width="15%" hidden$="{{hiderolenameinput}}"><paper-input value="{{id}}"></paper-input></td> -->
+      <td width="15%" hidden$="{{hiderolenameitem}}">{{name}}</td>
+      <!-- <td width="15%" hidden$="{{hiderolenameinput}}"><paper-input value="{{name}}"></paper-input></td> -->
+      <td width="15%" hidden$="{{hiderolenameitem}}">{{roleid}}</td>
+      <!-- <td width="15%" hidden$="{{hiderolenameinput}}"><paper-input value="{{roleid}}"></paper-input></td> -->
+      <td width="15%" hidden$="{{hiderolenameitem}}">{{gradename}}</td>
+      <!-- <td width="15%" hidden$="{{hiderolenameinput}}"><paper-input value="{{gradename}}"></paper-input></td> -->
+      <td width="15%" hidden$="{{hiderolenameitem}}">{{sectionid}}</td>
+      <!-- <td width="15%" hidden$="{{hiderolenameinput}}"><paper-input value="{{sectionid}}"></paper-input></td> -->
+      <td width="15%" hidden$="{{hiderolenameitem}}">{{subjectname}}</td>
+      <!-- <td width="15%" hidden$="{{hiderolenameinput}}"><paper-input value="{{subjectname}}"></paper-input></td> -->
+      <!-- <td width="10%" hidden$="{{hiderolenameitem}}">{{name}}</td> -->
+      <!-- <td width="10%" hidden$="{{hiderolenameinput}}"><paper-input value="{{name}}"></paper-input></td> -->
+      <td width="5%" hidden$="{{hiderolenameitem}}"><paper-icon-button icon='create' on-click='FnEdit'></paper-icon-button>
+      </td>
+      <!-- <td width="5%"><paper-icon-button icon='save' on-click='FnSave'></paper-icon-button> -->
+      <!-- </td> -->
+      <td width="5%"><paper-icon-button icon='close' on-click='FnDelete'></paper-icon-button></td>
+      </tr>
+      </table>
+    <master-ui-service id="service"></master-ui-service>
+  </template>
+  <script>
+    (function() {
+    'use strict';
+
+      Polymer({
+      is: 'employeecreation-display-card',
+      ready:function(){
+        // this.hiderolenameinput=true;
+        this.hiderolenameitem=false;
+      },
+      FnDelete:function(){
+        this.$.service.FnDeleteEmployee(this.id,this.name,this.roleid,this.gradename,this.sectionid,this.subjectname,this.gradeid,this.subjectid);
+      },
+      FnEdit:function(){
+        // this.hiderolenameinput=false;
+        this.hiderolenameitem=true;
+      },
+      FnSave:function(){
+        this.$.service.FnUpdateRole(this.roleid,this.rolename);
+        // this.hiderolenameinput=true;
+        this.hiderolenameitem=false;
+      },
+      setColor:function(roleid){
+        document.getElementById('card'+rolename).backgroundColor = "yellow";
+      }
+    });
+  })();
+  </script>
+</dom-module>

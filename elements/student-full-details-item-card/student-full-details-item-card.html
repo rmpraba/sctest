@@ -1,0 +1,139 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-full-details-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        border-collapse: collapse;
+        width: 80%;
+        table-layout: fixed;
+      }
+    
+      .card{
+        @apply(--layout-horizontal);
+      } 
+      p{
+        width: 35%;
+
+      } 
+     
+      paper-button{
+        text-transform: none;
+        height: 25px;
+      }
+     .viewdata{
+        margin-top: 5%;
+        /*font-size: 12px;*/
+        cursor: pointer;
+        color:blue;
+      }
+
+     paper-dialog
+      {
+           border-radius: 10px;
+           width: 300px;
+           /*height: 300px;*/
+      }
+      .buttons paper-button
+      {
+        @apply(--layout-left);
+      background-color: #363636;
+      color: #ffffff;
+      width: 10%;
+      margin-left: 6%;
+      margin-top: 10%;
+      }
+    </style>
+         <p hidden>{{subjectcategory}}</p>
+         <p hidden>{{assesmentid}}</p>
+         <p hidden>{{grade}}</p>
+         <p hidden>{{section}}</p>
+         <p  hidden>{{subject}}</p>
+
+     <table class="card">
+        <tr>
+           <td style=" width: 7%;{{fonts}}">{{studentid}}</td>
+           <td style=" width: 7%;{{fonts}}">{{studentname}}</td>
+           <!-- <td style=" width: 5%; {{fonts}}" hidden$="{{studenthiddenview2}}"> Comments</td> -->
+           <td style=" width:8%; {{fonts}}" hidden$="{{studenthiddenview1}}">{{Comments}}</td>
+           <td style=" width: 5%; {{fonts}}" hidden$="{{studenthiddenview1}}"><paper-icon-button id="btn" icon="add" on-click="fnrequstvalue"  style="color:#6699ff;"></paper-icon-button><paper-tooltip for="btn">Add Comment</paper-tooltip></td>
+           <td style=" width: 5%; {{fonts}}"><ahref  hidden$="{{studenthiddenview1}}" class="viewdata" on-click="FnSave"><u>Raise Request</u></ahref></td>
+        </tr>
+      </table>
+<!-- 
+         <div class="card">
+          <p  style="margin-left: 0%;">{{studentid}}</p>
+          <p  style="margin-left: 5%;">{{studentname}}</p>
+          <p hidden$="{{studenthiddenview2}}" style="margin-left: 5%;">Comments</p>
+     
+       
+        
+               <p>{{Comments}} </p>
+                 <p style="margin-left: 5%; " ><ahref  hidden$="{{studenthiddenview1}}" class="viewdata" on-click="FnSave"><u>Raise Request</u></ahref></p>
+        </div> -->
+        <single-student-markentry-service id="singleservice"></single-student-markentry-service>
+          <paper-dialog id="raquestraisid" modal>
+   <center><h2><b><label  id="labelid">Request Raised!!!</label></b></h2></center>
+            <div class="buttons">
+            </div>
+              <center><paper-button style="background-color: #363636;color: #ffffff;height:34px;" dialog-confirm autofocus>Ok</paper-button></center>
+          </paper-dialog>
+
+    <paper-dialog id="innovationdialog1" modal>
+       <paper-textarea  label="Comments"  value="{{Comments}}"></paper-textarea>
+          <center style="margin-top: 5%;">
+            <paper-button  on-click="innovatsave" style="color:white;background-color:black;height:34px;">Save</paper-button>
+            <paper-button id="innvtt" style="color:white;background-color:black;height:34px;" on-click="innovatclosezzz">Close</paper-button>
+         </center>
+      </paper-dialog>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'student-full-details-item-card',
+
+  FnSave:function(e){
+    if(this.Comments=="" || this.Comments==null){
+   alert("Please Insert the Comments");
+    }
+ else{
+   this.$.raquestraisid.toggle();
+    this.$.singleservice.singlestudentservice(this.studentid,this.studentname,this.subjectcategory,this.assesmentid,this.grade,this.section,this.subject,this.Comments);
+   this.Comments="";   
+}
+  },
+ fnresetvalue:function(e){
+ this.$.singleservice.singlestudentservice(this.studentid,this.studentname,this.subjectcategory,this.assesmentid,this.grade,this.section,this.subject);
+  },  
+
+ fnrequstvalue:function(e)
+    {
+  this.$.innovationdialog1.toggle();
+    }, 
+innovatclosezzz:function(e){
+this.Comments="";
+ this.$.innovationdialog1.close();
+},
+innovatsave:function(e){
+ this.$.innovationdialog1.close();
+ this.studenthiddenview2=false;
+}
+    });
+  })();
+  </script>
+</dom-module>

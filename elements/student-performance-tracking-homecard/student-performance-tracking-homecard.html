@@ -1,0 +1,390 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-performance-tracking-homecard">
+  <template>
+    <style>
+    .outcard{
+        @apply(--layout-vertical);
+    }
+    .drop{        
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        border-bottom: 1px solid #dedede;
+    }
+    paper-dropdown-menu{
+      width: 15%;
+      margin-left: 3%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+    }
+    .drop1,.drop2
+    {
+      @apply(--layout-vertical);
+    }
+    .indrop{     
+        width: 100%;   
+        @apply(--layout-horizontal);
+        border-bottom: 1px solid #dedede;
+    }
+    h3{
+        color: #111AD9  ;
+      }
+       #dynamicspinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+     iron-icon.tiny {
+          --iron-icon-height: 12px;
+          --iron-icon-width: 12px;
+          margin-top: 2%;
+          --iron-icon-fill-color: #111AD9;
+      }
+      assesment-performance-student-list{
+        @apply(--layout-vertical);
+        width: 100%;
+      }
+      .incard{
+        @apply(--layout-horizontal);
+        width: 100%;
+      }
+      .cardd{
+        @apply(--layout-vertical);
+        width: 100%;
+        margin-left: 7%;
+      }
+      h3{
+        color: #111AD9;
+      }
+      #dialogstudentlist{
+        width: 90%;
+      }
+      .downloaddiv{
+        text-align: right;
+      }
+    </style>
+    <div class='outcard'>
+    <div class='drop'>
+      <paper-dropdown-menu id="sspthcbranch" label="Select Branch" disabled="{{read}}" required>
+        <paper-menu id="spthcbranch" class="dropdown-content"  on-iron-select="FnSelectBranch"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{brancharr}}">
+            <paper-item value="{{item.id}}">{{item.name}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+      <paper-dropdown-menu id="sspthcacademicyear" label="Select Academic Year" disabled="{{read}}" required>
+        <paper-menu id="spthcacademicyear" class="dropdown-content"  on-iron-select="FnSelectAcademicyear"  attr-for-selected="value" required>
+          <template is="dom-repeat" items="{{academicarr}}">
+            <paper-item value="{{item.academic_year}}">{{item.academic_year}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+      <paper-dropdown-menu id="sspthcgrade" label="Select Grade" disabled="{{read}}" required>
+        <paper-menu id="spthcgrade" class="dropdown-content"  on-iron-select="FnSelectGrade"  attr-for-selected="value" required>     
+          <template is="dom-repeat" items="{{gradearr}}">
+            <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+      <paper-dropdown-menu id="sspthcsection" label="Select Section" disabled="{{read}}" required>
+        <paper-menu id="spthcsection" class="dropdown-content"  on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+          <template is="dom-repeat" items="{{sectionarr}}">
+            <paper-item value="{{item.section_name}}">{{item.section_id}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+    </div>  
+    </div>
+
+    <div class="downloaddiv" hidden$="{{hidetitle}}">
+    <paper-icon-button  id="download" icon="icons:file-download" onclick="performanceexceptionreportexportToExcel()"></paper-icon-button>Exception Report
+    <paper-icon-button  id="download" icon="icons:file-download" onclick="performancereportexportToExcel()"></paper-icon-button>
+      <paper-tooltip for="download">{{downloadlabel}}</paper-tooltip>      
+      ({{downloadlabel}})
+    </div>
+
+    <center hidden$="{{hidetitle}}">
+    <h3>Total number of students: {{total}}</h3>
+    </center>    
+    <template is="dom-repeat" items="{{assesmentarr}}">
+    <assesment-performance-expandcard assesment="{{item.assesment}}" subjectarr="{{item.totalarr}}" detailarr="{{detailarr}}"></assesment-performance-expandcard>
+    </template>
+    <performance-report-service id='performancereportservice'></performance-report-service>
+
+    <div class="spinner"><paper-dialog modal id="dynamicspinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+    <paper-spinner active></paper-spinner>
+    <h4>{{spinnermsg}}</h4></paper-dialog></div>
+
+    <div>
+    <paper-dialog id="dialogstudentlist">
+    <h3>Student List</h3>
+    <h4>Subject:{{showsubject}}&nbsp;&nbsp;&nbsp;&nbsp;Category:{{showcategory}}&nbsp;&nbsp;&nbsp;&nbsp;Sub-Category:{{showsubcategory}}&nbsp;&nbsp;&nbsp;&nbsp;Level:{{showlevel}}</h4>
+    <!-- <br> -->
+    <paper-dialog-scrollable>
+    <div class="incard">
+    <template is="dom-repeat" items="{{studentarr}}">
+    <div class="cardd">
+    <h3>{{item.category}}</h3>
+    <assesment-performance-student-list studentarr="{{item.studarr}}"></assesment-performance-student-list>
+    </div>
+    </template>
+    </div>
+    </paper-dialog-scrollable>
+    <div class="buttons">
+    <paper-button dialog-dismiss>Cancel</paper-button>
+    </div>
+    </paper-dialog>
+    </div>
+     <table id="PerformanceReportDataTableIdd" style="border-collapse: collapse;width: 180%;" border="1" hidden>
+      <template is="dom-repeat" items="{{excelarrr}}">
+      <tr style="text-align: center;background-color:{{item.colorcode}}"><th width="5%">{{item.sno}}</th><th width="15%">{{item.studentid}}</th><th width="25%">{{item.studentname}}</th>
+      <!-- <td><table><tr> -->
+      <template is="dom-repeat" items="{{item.titlearr}}" as="i">
+        <th colspan$="{{i.spancount}}" width$="{{i.width}}">{{i.assesment}}</th>
+      </template>
+      <!-- </tr></table></td> -->
+      <th>{{item.legend}}</th><th>{{item.level}}</th>
+      </tr>
+      </template>
+    </table>
+     <table id="PerformanceReportDataTableIdd1" style="border-collapse: collapse;width: 180%;" border="1" hidden>
+      <template is="dom-repeat" items="{{excelarr}}">
+      <tr style="text-align: center;background-color:{{item.colorcode}}"><th width="5%">{{item.sno}}</th><th width="15%">{{item.studentid}}</th><th width="25%">{{item.studentname}}</th>
+      <!-- <td><table><tr> -->
+      <template is="dom-repeat" items="{{item.titlearr}}" as="i">
+        <th colspan$="{{i.spancount}}" width$="{{i.width}}">{{i.assesment}}</th>
+      </template>
+      <!-- </tr></table></td> -->
+      <!-- <th>{{item.legend}}</th><th>{{item.level}}</th> -->
+      </tr>
+      </template>
+    </table>
+  </template>
+  <script type="text/javascript">
+    var filename,sheetname;
+    // var excelarr=[];
+  function performancereportexportToExcel(){
+    var htmls = "";
+    var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j = 0;
+    var tab = document.getElementById('PerformanceReportDataTableIdd1'); // id of table
+    var lines = tab.rows.length;
+    // alert(JSON.stringify(excelarr));
+  if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+  for (j = 1 ; j < lines; j++) {   
+        // if(j<5)
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+        // else{
+        // tab_text = tab_text + "<tr bgcolor="+excelarr[j].colorcode+">" + tab.rows[j].innerHTML + "</tr>";
+        // }
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : sheetname || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+     }
+ </script>
+  <script type="text/javascript">
+    // var filename,sheetname;
+    var excelarr=[];
+  function performanceexceptionreportexportToExcel(){
+    var htmls = "";
+    var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j = 0;
+    var tab = document.getElementById('PerformanceReportDataTableIdd'); // id of table
+    var lines = tab.rows.length;
+    // alert(JSON.stringify(excelarr));
+  if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+  for (j = 1 ; j < lines; j++) {   
+        if(j<5)
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+        else{
+        tab_text = tab_text + "<tr bgcolor="+excelarr[j].colorcode+">" + tab.rows[j].innerHTML + "</tr>";
+        }
+    }
+
+    tab_text = tab_text + "</table>";
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : sheetname || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+     }
+ </script>
+   <script type="text/javascript">
+  var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+  })()
+  </script>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'student-performance-tracking-homecard',
+      setExcelArray:function(arr){
+        excelarr=arr;
+      },
+      exportToExcel:function(){
+         performancereportexportToExcel();
+      },
+      FnDownloadSheet:function(){
+        this.FnToggleSpinner(true);
+        this.spinnermsg="Please wait...";
+        this.$.performancereportservice.FnFetchExcelAssesmentInfo(this.schoolid,this.academicyear,this.gradeid,this.gradename,this.sectionid,this.sectionname);
+      },
+      FnCallService:function(){
+        // this.hidedownloadicon=true;
+        // this.downloadlabel="Please wait";
+        if(sessionStorage.getItem("curr_sess_loggedroleid")=='management')
+        this.$.sspthcbranch.hidden=false;
+        if(sessionStorage.getItem("curr_sess_loggedroleid")!='management'){
+        this.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        localStorage.setItem("curr_sess_schoolid",this.schoolid);
+        this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");
+        this.$.sspthcbranch.hidden=true;
+        }
+        this.$.performancereportservice.FnFetchBranchService();
+        this.$.performancereportservice.FnFetchAcademicYear();
+        // this.$.performancereportservice.FnFetchAssesmentCategory();
+      },
+      FnSelectBranch:function(e){
+        this.hidetitle=true;
+        this.downloadlabel="Please wait";
+        this.assesmentarr=[];
+        this.studentarr=[];
+        this.total="";
+        document.querySelector('#spthcacademicyear').selected=-1;
+        document.querySelector('#spthcgrade').selected=-1;
+        document.querySelector('#spthcsection').selected=-1;
+        this.schoolid=e.target.selectedItem.value.trim();
+        this.schoolname=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_schoolid",this.schoolid);
+      },
+      FnSelectAcademicyear:function(e){
+        this.hidetitle=true;
+        this.downloadlabel="Please wait";
+        this.assesmentarr=[];
+        this.studentarr=[];
+        this.total="";
+        document.querySelector('#spthcgrade').selected=-1;
+        document.querySelector('#spthcsection').selected=-1;
+        this.academicyear=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_academicyear",this.academicyear);
+        this.$.performancereportservice.FnFetchGrade(this.schoolid,this.academicyear);    
+      },
+      FnSelectGrade:function(e){
+        this.hidetitle=true;
+        this.downloadlabel="Please wait";
+        this.assesmentarr=[];
+        this.studentarr=[];
+        this.total="";
+        document.querySelector('#spthcsection').selected=-1;
+        this.gradeid=e.target.selectedItem.value.trim();
+        this.gradename=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_grade",this.gradename);
+        this.$.performancereportservice.FnFetchSection(this.schoolid,this.academicyear,this.gradeid);        
+      },
+      FnSelectSection:function(e){
+        this.hidetitle=true;
+        this.assesmentarr=[];
+        this.studentarr=[];
+        this.total="";
+        this.sectionid=e.target.selectedItem.value.trim();
+        this.sectionname=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_section",this.sectionname);
+        var sectionnam=(this.sectionname).replace('.','');
+        filename=this.schoolname+"-"+this.academicyear+"-"+this.gradename+"-"+sectionnam;
+        sheetname=this.gradename+"-"+this.sectionname;
+        this.hidedownloadicon=true;
+        this.downloadlabel="Please wait";
+        // this.FnToggleSpinner(true);
+        // this.spinnermsg="Please wait...";
+        this.$.performancereportservice.FnFetchExceptionExcelAssesmentInfo(this.schoolid,this.academicyear,this.gradeid,this.gradename,this.sectionid,this.sectionname);
+        this.$.performancereportservice.FnFetchExcelAssesmentInfo(this.schoolid,this.academicyear,this.gradeid,this.gradename,this.sectionid,this.sectionname);
+        this.$.performancereportservice.FnFetchAssesmentInfo(this.schoolid,this.academicyear,this.gradeid,this.gradename,this.sectionid,this.sectionname);
+      },
+      FnToggleSpinner:function(flag){
+        this.$.dynamicspinner.opened=flag;
+      },
+      FnRefresh:function(){
+        this.assesmentarr=[];
+        this.studentarr=[];
+        this.total="";
+        this.excelarr=[];
+        localStorage.setItem("curr_sess_assesment","");
+        document.querySelector('#spthcbranch').selected=-1;
+        document.querySelector('#spthcacademicyear').selected=-1;
+        document.querySelector('#spthcgrade').selected=-1;
+        document.querySelector('#spthcsection').selected=-1;
+        this.hidetitle=true;
+        this.downloadlabel="Please wait";
+      },
+      FnShowDialog:function(subject,categoryname,subcategory,level){
+        this.showsubject=subject;
+        this.showcategory=categoryname;
+        this.showsubcategory=subcategory;
+        this.showlevel=level;
+        // alert(document.querySelector('#dialogstudentlist'+this.assesment));
+        document.querySelector('#dialogstudentlist').toggle();
+        // this.$.dialogstudentlist.toggle();
+      }
+    });
+  })();
+  </script>
+</dom-module>

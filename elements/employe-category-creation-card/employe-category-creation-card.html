@@ -1,0 +1,546 @@
+ <!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../demosumbit-card/demosumbit-card.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+
+<dom-module id="employe-category-creation-card">
+  <template>
+   <style>    
+      :host {  
+        display: block;
+      }  
+  .outercard
+      {
+        @apply(--layout-vertical);
+        border-radius: 10px;
+        border: 1px solid #6699ff;
+        padding: 20px;
+        margin-top: 6%;
+        width: 30%;
+        margin-left: 32em;
+        min-height: 100px;
+      }
+      .subbutton paper-button
+      {
+        /*@apply(--layout-right);*/
+        float: none;
+        background-color: #363636;
+        color: #ffffff;                
+        width: 8%;
+        margin-left: 43%;
+        margin-top: 4%;
+      }
+        .deltbutton paper-button
+      {
+        /*@apply(--layout-right);*/
+        float: left;
+        background-color: #363636;
+        color: #ffffff;                
+        width: 8%;
+        margin-left: 52%;
+        margin-top: -3%;
+      }
+        .subbutton1 paper-button
+      {
+        @apply(--layout-right);
+        background-color: #363636;
+        color: #ffffff;                
+        width: 8%;
+        margin-left: 65%;
+        margin-top: 4%;
+      }
+     
+      .newcard
+      {
+        @apply(--layout-horizontal);
+        width: 250%;
+        margin-left: 7em;
+        margin-top: -5em;
+      }
+       paper-dropdown-menu
+       {
+        /*width: 260%;*/
+        margin-left: 8%;
+        /*--paper-input-container-label: { color: red };*/
+        text-align:center;
+       }
+       .catcard
+       {
+        @apply(--layout-vertical);
+        margin-left: 2em;
+       }
+       .innercard{     
+      @apply(--layout-horizontal);
+       width:100%
+      margin-left:2.5em;
+     }
+     
+         .innercard1{     
+      @apply(--layout-horizontal);
+       width:100%
+      margin-left:5.0em;
+     }
+     table
+    {
+      border-collapse: collapse;
+      width: 80%;
+     margin-left: 7em;
+    margin-top: 4em;
+    }
+    #gdsespin
+    {
+          height: 100%;
+          width: 100%;
+          position: fixed;
+          background-color: #000;
+          bottom: 0; 
+          left: 0; 
+          opacity: 0.7; 
+          right: 0; 
+          top: 0; 
+          z-index: 10000;
+          margin: 0 auto;
+          text-align: center;
+    }
+        #grdsectspiner
+        {
+          margin: 20% auto;
+          text-align: center;
+         width: 100px;
+         height: 100px;
+        }
+
+    </style>
+
+
+    <div>
+      <CENTER>
+        <h3><b>EMPLOYEE TO GRADE SECTION MAPPING</b></h3>
+      </CENTER>
+    </div>
+
+      <div class="outercard">  
+          <div class="catcard"> 
+            <div>
+              <label><b>School Type</b></label>
+            </div>     
+             <div>
+                <template is="dom-repeat" items="{{empschoolarr}}" as="view">
+                  <emp-category-get-card empschooltypeids="{{view.school_type_name}}" empschoolnames="{{view.school_type_id}}" id="EMSEC{{view.school_type_id}}"></emp-category-get-card>
+                </template> 
+             </div> 
+          </div>       
+    
+            <div class="newcard">
+              <paper-dropdown-menu  label="Select the Employee">
+                <paper-menu id="employeeidzzzzzz" class="dropdown-content"   on-iron-select="fnemployeename">
+                  <template is="dom-repeat" items="{{empschoolnamesarr}}">
+                    <paper-item value="{{item.emp_id}}">{{item.emp_name}}</paper-item>
+                  </template>    
+                </paper-menu>
+              </paper-dropdown-menu>
+            </div>  
+       
+          </div>  
+        
+   
+      <div id="newwgridd">
+        <table width="100%" width="100%"  border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid #ccc; line-height: 1.8em;">
+              <th><h4><b>Grade</b></h4></th>
+              <th><h4><b>Subject</b></h4></th>
+              <th><center><h4><b>Select Section Name</b></h4></center></th>
+              <th><h4><b>Save</b></h4></th>  
+           </tr>
+
+          <tbody>    
+            <template is="dom-repeat" items="{{allarrr}}" as="view">
+              <template is="dom-repeat" items="{{view.busvalue}}" as="s">
+                <tr width="100%" style="border-bottom: 1px solid #ccc; line-height: 1.8em;">  <td class="outcard" width="10%"> 
+                    <h4>{{view.gradename1}}</h4>
+                  </td>
+                  <td class="outcard" width="10%"> 
+                    <h4>{{s.subname}}</h4>
+                  </td>
+                  <td width="80%">
+                    <table style="margin-top: -1%;"><tr>
+                    <template is="dom-repeat" items="{{s.subject}}" as="m">
+                    <td width="10%">
+                      <emp-grade-get-card  grasub="{{view.gradename1}}{{s.subname}}" employeesectionidz="{{m.class_id}}" id="{{s.subname1}}{{m.class_id}}"   empsubjectidz="{{s.subname1}}" employeesectionnamez="{{m.section_id}}" employeeidz="{{empselectid}}" empgradeidz="{{view.gradename}}" >
+                      </emp-grade-get-card>
+                    </td>
+                 </template>  
+                 
+                    </tr>    
+                    </table>
+                    </td>
+                  <td width="10%">
+                      <emp-grade-get-based-card classid="{{view.gradename1}}{{s.subname}}" employeeidz="{{empselectid}}"></emp-grade-get-based-card>
+                    </td>
+                   
+                  <td hidden>
+                    <paper-icon-button id="btn2" icon='close' on-click='fndelete'></paper-icon-button>
+                    <paper-tooltip for="btn2">Delete</paper-tooltip>
+                  </td>  
+                </tr>
+              </template>
+              
+            </template>
+          </tbody>
+        </table>
+
+        <paper-dialog id="gdsespin">
+          <paper-spinner id="grdsectspiner"></paper-spinner>
+        </paper-dialog>
+      </div>
+        
+  
+   <demosumbit-card id="mydialog"></demosumbit-card>
+    <master-ui-service id="uiservice"></master-ui-service>
+ 
+<iron-ajax        
+        id="fnselectgradezajax"
+        url="{{fnselectgradezurl}}"
+        params="{{fnselectgradezparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fnselectgradezResponse"
+        debounce-duration="300">
+   </iron-ajax>
+   <iron-ajax        
+        id="fnemployeenamezajax"
+        url="{{fnemployeenamezurl}}"
+        params="{{fnemployeenamezparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="fnemployeenamezResponse"
+        debounce-duration="300">
+   </iron-ajax>
+ 
+  </template>
+  <script>
+  (function() {
+    'use strict';
+  var empnamearrr=[];
+  var sectionnamearr=[];
+  var empsectionarr=[];
+  var empsectionarr1=[];
+  var sectionnamearr1=[];
+  var overall11=[];
+  
+    Polymer({
+      is: 'employe-category-creation-card',
+      fnnempgrade:function(e){
+        this.$.newwgridd.hidden=true;
+        },
+     
+        fnschoolempnames:function(arr){
+           //  alert(JSON.stringify(arr));
+             this.empschoolnamesarr=arr;
+         //    alert("1");
+      },  
+        fnschoolempnames:function(arr)
+        {
+          this.empschoolnamesarr=arr;
+        },  
+        fnschoolempgrade:function(arr){
+          //alert(JSON.stringify(arr));
+           sectionnamearr1=arr;
+            
+
+         },
+        fnselectgrade:function(e){
+      this.fnselectgradezurl=sessionStorage.getItem("addrinfo")+"/tranfersection-service";
+          var obj={"setgradeid":"","school_id":"","academic_year":""};
+          obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+          obj.setgradeid=this.setgradeid;
+          obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+          this.fnselectgradezparam=obj;
+          //alert(JSON.stringify(obj));
+          this.$.fnselectgradezajax.generateRequest();
+       //   document.querySelector('#employeeidzzzzzz').selected=-1;
+      
+      },
+      fnselectgradezResponse:function(e){
+               sectionnamearr=e.detail.response.returnval;
+     },
+  /*   fnsubmit:function(e){
+        },      
+  */   /*  fndelete:function(e){ 
+      this.$.uiservice.fndelsectionz(empsectionarr1);
+      this.$.mydialog.toggleDialog1();
+      document.querySelector('emp-grade-get-card').Fngradecleansection1(); 
+      
+     },
+*/ /*      fnsetempsection1:function(arr){
+      empsectionarr1=arr;
+    },
+  */
+       f11:function(e){
+          this.fnemployeenamezurl=sessionStorage.getItem("addrinfo")+"/empmappingsubject-service";
+          var obj={"empselectid":"","school_id":""};
+          obj.empselectid=this.empselectid;
+          obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+          obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+          obj.schooltype=sessionStorage.getItem("curr_sess_loggedschooltupes");
+          this.fnemployeenamezparam=obj;
+         // alert(JSON.stringify(obj));
+          this.$.fnemployeenamezajax.generateRequest();
+       
+        },
+        
+        f12:function(e){
+        document.querySelector('emp-category-get-card').f1(); 
+     },
+  
+       
+    fnemployeename:function(e)
+    {  
+       this.empselectid=e.target.selectedItem.value;
+       //this.$.newwgridd.hidden=false;
+       this.f12();
+        this.f11();
+        //this.opengrdspinnr();
+        document.querySelector('#gdsespin').open();
+          this.$.grdsectspiner.active=true;
+
+       document.querySelector('emp-grade-get-card').Fngradecleansection();  
+      },
+     FnRefresh:function(e)
+     {
+      if(document.querySelector('#employeeidzzzzzz').selected!=-1){
+      document.querySelector('#employeeidzzzzzz').selected=-1;  
+  
+      }
+     },
+     grdRefresh:function()
+     {
+        document.querySelector('#employeeidzzzzzz').selected=-1;  
+        this.$.newwgridd.hidden=true;
+     },
+
+      fnemployeenamezResponse:function(e){
+      empnamearrr=e.detail.response.returnval;
+      this.$.newwgridd.hidden=false;
+     // alert(JSON.stringify(sectionnamearr1));
+     // alert(JSON.stringify(empnamearrr));
+
+   /*    var setarr=[];
+                 for(var i=0;i<sectionnamearr1.length;i++){
+                          var section_name=sectionnamearr1[i].section;
+                            var obj={"subjectarr":""};
+                                obj.subjectarr=section_name;
+                               setarr.push(obj);
+                          }
+                 this.setsectionname=setarr;
+
+   */  
+      if(overall11!=0){   
+     document.querySelector('emp-grade-get-card').Fngradecleansection2(); 
+       
+        }
+          var generatearr=[];
+        var a=[];
+        var overall=[];
+       for(var k=0;k<sectionnamearr1.length;k++)
+       {       
+         var nameobj={"grade_id":"","grade_name":""};
+         nameobj.grade_id=sectionnamearr1[k].grade_id; 
+         nameobj.grade_name=sectionnamearr1[k].grade_name; 
+          var obj={"section_id":"","class_id":""};
+        obj.section_id=sectionnamearr1[k].section_id;
+        obj.class_id=sectionnamearr1[k].class_id;
+        a.push(obj);
+        for(var l=k+1;l<sectionnamearr1.length;l++)
+        {
+           if(sectionnamearr1[k].grade_id==sectionnamearr1[l].grade_id)
+           {
+         var obj1={"section_id":"","class_id":""}
+             obj1.section_id=sectionnamearr1[l].section_id;
+             obj1.class_id=sectionnamearr1[l].class_id;
+             a.push(obj1);
+             sectionnamearr1.splice(l,1);
+             l--;
+         }}
+            nameobj.subject=a;
+            nameobj.head=a;
+         
+           overall.push(nameobj);
+          
+          a=[];
+       }
+       // alert(JSON.stringify(overall));
+         var aoo=[];
+          for(var j=0;j<overall.length;j++){
+            for(var i=0;i<empnamearrr.length;i++){
+      
+              var obj={"gradename":"","gradename1":"","subname":"","subname1":"","subject":"","head":""};
+                  obj.subname=empnamearrr[i].subject;
+                   obj.subname1=empnamearrr[i].subjectid;
+            
+                  obj.gradename=overall[j].grade_id;
+                  obj.gradename1=overall[j].grade_name;
+                  obj.subject=overall[j].subject;
+                  obj.head=overall[j].head;
+                   aoo.push(obj);
+                
+               }
+
+       };
+              
+        var a1=[];
+        var overall1=[];
+       for(var k=0;k<aoo.length;k++)
+       {       
+         var nameobj={"gradename1":"","gradename":"","head":""};
+         nameobj.gradename=aoo[k].gradename; 
+         nameobj.gradename1=aoo[k].gradename1; 
+         nameobj.head=aoo[k].head; 
+      
+        var obj={"subname1":"","subname":"","subject":""};
+         obj.subname=aoo[k].subname;
+         obj.subject=aoo[k].subject;
+         obj.subname1=aoo[k].subname1;
+        a1.push(obj);
+        for(var l=k+1;l<aoo.length;l++)
+        {
+           if(aoo[k].gradename==aoo[l].gradename)
+           {
+         var obj1={"subname1":"","subname":"","subject":""}
+             obj1.subname1=aoo[l].subname1;
+             obj1.subname=aoo[l].subname;
+             obj1.subject=aoo[l].subject;
+             a1.push(obj1);
+             aoo.splice(l,1);
+             l--;
+         }}
+            nameobj.busvalue=a1;
+         
+           overall1.push(nameobj);
+           overall11.push(nameobj);
+          a1=[];
+        }
+       // alert(JSON.stringify(overall1));
+        this.allarrr=overall1;
+
+      var temp=[];
+          var subarr=[];
+           var subarr1=[];
+            var temp1=[];
+    
+          var obj={};
+          obj.grade_id="";
+          obj.grade_name="";
+          for(var i=0;i<(overall1).length;i++){
+        
+            var obj1={};
+            obj1.busvalue="";
+            subarr.push(obj1);
+      
+          for(var j=0;j<(subject).length;j++){
+           var obj2={};
+      
+          obj2.class_id=subject[j].subject_id;
+          obj2.hideinput=false;
+          obj2.hidecheck=true;          
+          subarr1.push(obj2);
+            }
+          obj1.subject=subarr;
+          temp1.push(obj1);
+          temp1=[];
+         }
+
+          obj.busvalue=temp1;
+          temp.push(obj);
+         // alert(JSON.stringify(temp));
+
+
+/*          var temp=[];
+          var subarr=[];
+          var obj={};
+          obj.emp_name="";
+          obj.emp_id="id";
+          for(var i=0;i<(setarrr).length;i++){
+          var obj1={};
+          obj1.subject_name=setarrr[i].srtarr;
+          obj1.hideinput=false;
+          obj1.hidecheck=true;          
+          subarr.push(obj1);
+          }
+          obj.employee=subarr;
+          temp.push(obj);
+
+         this.finalarr=[];
+         this.finalarr.push(temp[0]);
+         for(var i=0;i<(overall).length;i++){
+          for(var j=0;j<(overall[i].employee).length;j++){
+            overall[i].employee[j].emp_id=overall[i].emp_id;
+            if(j==0)
+            overall[i].employee[j].emp_name=overall[i].emp_name;
+            else
+            overall[i].employee[j].emp_name="";
+            overall[i].employee[j].hideinput=true;
+            overall[i].employee[j].hidecheck=false;
+          }
+          this.finalarr.push(overall[i]);
+         }
+      
+          for(var i=0;i<this.finalarr.length;i++)
+         {
+          if(i==0)
+            this.finalarr[i].hidebtn=true;
+          else
+            this.finalarr[i].hidebtn=false;
+         }
+         this.subjectbigarr=this.finalarr;
+
+*/        
+     /*    this.finalarr=[];
+         this.finalarr.push(temp[0]);
+         for(var i=0;i<(overall).length;i++){
+          for(var j=0;j<(overall[i].employee).length;j++){
+            overall[i].employee[j].emp_id=overall[i].emp_id;
+            if(j==0)
+            overall[i].employee[j].emp_name=overall[i].emp_name;
+            else
+            overall[i].employee[j].emp_name="";
+            overall[i].employee[j].hideinput=true;
+            overall[i].employee[j].hidecheck=false;
+          }
+          this.finalarr.push(overall[i]);
+         }
+    */
+        this.$.uiservice.empgetsectionvalues(this.empselectid);
+        this.clsgrdspinnr();
+
+      },
+
+      clsgrdspinnr:function()
+      {
+          this.$.grdsectspiner.active=false;
+          document.querySelector('#gdsespin').close();
+      },
+      /*opengrdspinnr:function()
+      {
+          document.querySelector('#gdsespin').open();
+          this.$.grdsectspiner.active=true;
+      }*/
+
+
+
+       });
+      
+      })();
+  </script>
+</dom-module>

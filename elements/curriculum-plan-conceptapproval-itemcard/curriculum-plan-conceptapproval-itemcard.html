@@ -1,0 +1,224 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="curriculum-plan-conceptapproval-itemcard">
+  <template>
+    <style>
+    table
+      {   table-layout: fixed;
+          width: 1920px;;
+          border-collapse: collapse;
+          margin-left: -2%;
+          margin-top: 0%;
+        }
+         #save2dialog
+        {
+          border-radius: 10px;
+          width: 354px;
+          height: 170px;
+        }
+        #failure2dialog
+        {
+          border-radius: 10px;
+          width: 354px;
+          height: 170px;
+        }
+    </style>
+   
+    <table border="1" style="border-collapse: collapse;">
+        <tr>
+              <td style="width: 2.35%;">{{sno}}</td>
+              <td style="width: 8.35%;">{{conceptname}}</td>
+              <td style="width: 7.55%;">{{subconceptname}}</td>
+              <td style="text-align: center;width: 3.25%;">{{period}}</td>
+              <td style="width: 5.5%;word-wrap: break-word;">
+              {{skill}}
+              </td>
+              <td style="width: 5.5%;word-wrap: break-word;">
+                {{bldvalues}}
+              </td>
+              <td style="width: 5.5%;word-wrap: break-word;">
+                {{value}}
+              </td>
+              <td style="word-wrap: break-word;width: 5.5%;">
+                {{teachingaid}}
+              </td>
+              <td style="word-wrap: break-word;width: 5.5%;">{{innovation}}</td> 
+              <td style="width: 5.5%;">{{fromdate}}</td>
+              <td style="width: 5.5%;">
+               {{todate}}
+              </td>     
+              <td style="width: 5.5%;">
+               <div hidden$="{{hidetitleflag}}">{{lr}}</div>
+                <paper-input value={{lr}} hidden$="{{hideflag}}"></paper-input>
+              </td>          
+              <td style="word-wrap: break-word;width: 5.5%;">{{remarks}}</td>
+              <td style="width: 5.5%;">
+                <div hidden$="{{hidetitleflag}}">{{coremarks}}</div>
+                <paper-input value={{coremark}} hidden$="{{hideflag}}"></paper-input>
+              </td>
+              <td style="width: 5.5%;">
+               <div hidden$="{{hidetitleflag}}">{{correctionstatus}}</div>
+                <paper-input value={{correctionstatus}} hidden$="{{hideflag}}"></paper-input>
+             </td>
+              <td hidden$="{{hidetitleflag}}" style="width: 5.5%;">{{completiondate}}</td>
+              <td hidden$="{{hideflag}}" style="width: 5.5%;">
+              <complection-date-picker-card></complection-date-picker-card>
+              </td>
+              <td hidden$="{{hidetitleflag}}" style="width: 5.5%;">{{completionstatus}}</td>
+              <td hidden$="{{hideflag}}" style="width: 5.5%;">
+                <paper-checkbox id="cpayes{{subconceptid}}" checked on-change="FnYes">Yes</paper-checkbox><br>
+                <paper-checkbox id="cpano{{subconceptid}}" on-change="FnNo">No</paper-checkbox>
+              <td style="width: 5.5%;">
+                <div hidden$="{{hidetitleflag}}">{{enrichmentsug}}</div>
+                <paper-input value={{enrichmentsuggest}} hidden$="{{hideflag}}"></paper-input>
+              </td>              
+              <td  hidden$="{{hidetitleflag}}"></td>
+              <td hidden$="{{hideflag}}"><paper-icon-button icon="save" on-click="FnSave"></paper-icon-button></td>
+        </tr>
+      </table>
+
+       <paper-dialog id="save2dialog" modal>
+       <h3><center>UPDATED</center></h3>
+       <center>
+         <paper-button on-click="close2dialog" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>
+
+      <paper-dialog id="failure2dialog" modal>
+       <h3><center>FAILURE</center></h3>
+       <center>
+         <paper-button on-click="failureclose2" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>
+
+    <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+     var completionstatus;
+    Polymer({
+      is: 'curriculum-plan-conceptapproval-itemcard',
+      
+     /* FnYes:function(e){
+        if(document.querySelector("#cpayes"+this.rowid+this.subconceptid).checked==true){
+       completionstatus="Yes";
+        document.querySelector("#cpano"+this.rowid+this.subconceptid).checked=false;
+        }
+        if(document.querySelector("#cpayes"+this.rowid+this.subconceptid).checked==false)
+      completionstatus="";
+      },
+      FnNo:function(e){
+        if(document.querySelector("#cpano"+this.rowid+this.subconceptid).checked==true)
+        {
+      completionstatus="No";
+        document.querySelector("#cpayes"+this.rowid+this.subconceptid).checked=false;
+        }
+        if(document.querySelector("#cpano"+this.rowid+this.subconceptid).checked==false)
+       completionstatus="";
+      },*/
+
+
+      FnYes:function(e){
+        if(document.querySelector("#cpayes"+this.subconceptid).checked==true){
+       completionstatus="Yes";
+        document.querySelector("#cpano"+this.subconceptid).checked=false;
+        }
+        if(document.querySelector("#cpayes"+this.subconceptid).checked==false)
+      completionstatus="";
+      },
+      FnNo:function(e){
+        if(document.querySelector("#cpano"+this.subconceptid).checked==true)
+        {
+      completionstatus="No";
+        document.querySelector("#cpayes"+this.subconceptid).checked=false;
+        }
+        if(document.querySelector("#cpano"+this.subconceptid).checked==false)
+       completionstatus="";
+      },
+
+
+      FnSave:function(){
+
+        if(completionstatus==""||completionstatus==null)
+        {
+       completionstatus='Yes';
+        var obj={};
+        obj.sno=this.sno;
+        obj.rowid=this.rowid; 
+        obj.conceptid=this.conceptid;
+        obj.conceptname=this.conceptname;
+        obj.subconceptid=this.subconceptid;
+        obj.subconceptname=this.subconceptname;
+        obj.period=this.period;
+        obj.fromdate=this.fromdate;
+        obj.todate=this.todate;
+        obj.skill=this.skill;
+        obj.bldvalues=this.bldvalues;
+        obj.value=this.value;
+        obj.teachingaid=this.teachingaid;
+        obj.innovation=this.innovation;
+        obj.lrrectification=this.lr;
+        obj.remarks=this.remarks;
+        obj.correctionstatus=this.correctionstatus;
+        obj.enrichmentsuggest=this.enrichmentsuggest;
+        obj.completionstatus=completionstatus;
+        obj.coremark=this.coremark;
+             //alert(JSON.stringify(obj));
+        this.$.bookservice.updateapprovalstatusofchapterconcept(obj);
+      completionstatus=""; 
+        }
+        else
+         {
+       var obj={};
+        obj.sno=this.sno;
+        obj.rowid=this.rowid;
+        obj.conceptid=this.conceptid;
+        obj.conceptname=this.conceptname;
+        obj.subconceptid=this.subconceptid;
+        obj.subconceptname=this.subconceptname;
+        obj.period=this.period;
+        obj.fromdate=this.fromdate;
+        obj.todate=this.todate;
+        obj.skill=this.skill;
+        obj.value=this.value;
+        obj.innovation=this.innovation;
+        obj.lrrectification=this.lr;
+        obj.remarks=this.remarks;
+        obj.correctionstatus=this.correctionstatus;
+        obj.enrichmentsuggest=this.enrichmentsuggest;
+        obj.completionstatus=completionstatus;
+        obj.bldvalues=this.bldvalues;
+        obj.teachingaid=this.teachingaid;
+        obj.coremark=this.coremark;
+              //alert(JSON.stringify(obj));
+        this.$.bookservice.updateapprovalstatusofchapterconcept(obj);
+        completionstatus=""; 
+         }          
+      },
+
+      close2dialog:function()
+     {
+      this.$.save2dialog.close();
+     },
+     saopen2dialog:function()
+     {
+      this.$.save2dialog.toggle();
+     },
+     failureopen2:function()
+     {
+      this.$.failure2dialog.toggle();
+     },
+     failureclose2:function()
+     {
+      this.$.failure2dialog.close();
+     },
+      dateset:function()
+     {
+       alert('You are allowed to select future date only..!');
+     },
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,231 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="student-scorcard-mail-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td{
+        width: 41%;        
+      } 
+      .card1{
+        @apply(--layout-horizontal);
+      } 
+      p{
+        width: 25%;
+        margin-left: 10%;
+      } 
+      paper-button{
+        text-transform: none;
+        height: 25px;
+      } 
+   paper-icon-button.pink {
+      color: var(--paper-black-500);
+      --paper-icon-button-ink-color: var(--paper-indigo-500);
+    }
+    paper-icon-button.pink:hover {
+      background-color: var(--paper-red-500);
+     
+       color: var(--paper-white-500);
+    }
+    #termmarkdialogid11{
+      width: 25%;
+      border-radius: 25px;
+    }
+    </style>
+    <div class='card1'>
+         <p hidden>{{ids}}</p>
+         <p hidden>{{seqid}}</p>
+         <p>{{studentid}}</p>
+         <p>{{studentname}}</p>        
+         <p>{{emailid}}</p>
+         <!-- <p hidden$="{{verifyvalues}}" > <paper-icon-button disabled$="{{hiddenundoids}}" class="pink" icon="mail" title="mail"  on-click="Fnpassmail"></paper-icon-button></p> -->
+         <p hidden$="{{verifyvalueids}}">{{alls}}</p>
+         <p  hidden$="{{verifyvalues}}" ><paper-checkbox id="sendmail{{id}}" disabled$="{{hiddenundoid1s}}"  on-change="fnmailset"></paper-checkbox></p>
+
+     <paper-dialog id="termmarkdialogid11" modal>
+       <h3 style="color:green"><center>Mail sent successfully!!</center></h3>
+       <center>
+      <paper-button on-click="failureclose" style="color:white;background-color:black;margin-top: 12%;">OK</paper-button>
+       </center>
+     </paper-dialog>
+    </div>
+     <iron-ajax        
+        method="post"
+        id="getparentmailajax"
+        url="{{getparentmailurl}}"
+        params="{{getparentmailparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="getparentmailResponse"
+        debounce-duration="300"
+    >
+      <iron-ajax
+        method="post"
+        id="sendmailajax"
+        url="{{sendmailurl}}"
+        params="{{sendmailparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="sendmailResponse"
+        debounce-duration="300"
+    >
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var bulkarr=[];
+    var c1=0,c2=0;
+    Polymer({
+      is: 'student-scorcard-mail-item-card',
+     Fnpassmail:function(e){
+       document.querySelector('student-scorcard-mail-card').FnToggleSpinner(true);  
+
+    this.getparentmailvalue();
+      },
+      failureclose:function(){
+        this.$.termmarkdialogid11.toggle();
+      },
+      fnmailset:function(e){
+   //alert(document.querySelector('#'+this.id).checked);
+
+ if(document.querySelector('#sendmail'+this.id).checked==true){
+        var obj={};
+            obj.student_id=this.studentid;
+            obj.student_name=this.studentname;
+            obj.ids=this.ids;
+            obj.seqid=this.seqid;
+            bulkarr.push(obj);
+          }
+   else if(document.querySelector('#sendmail'+this.id).checked==false){
+         for(var i=0;i<bulkarr.length;i++){
+           if(bulkarr[i].ids+bulkarr[i].seqid==this.id) {
+               bulkarr.splice(i,1);
+             }
+             }
+           }
+        },
+   generateallvalue:function(arr){
+ 
+     for(var i=0;i<arr.length;i++){
+      if(arr[i].ids!="Allcheck"){
+         var r=arr[i].ids+arr[i].seqid;
+       document.querySelector('#sendmail'+r).checked=true;
+       bulkarr.push(arr[i]);
+     }
+       }
+      },
+   generateallvalue1:function(arr){
+     for(var i=0;i<arr.length;i++){
+         if(arr[i].ids!="Allcheck"){
+        var r=arr[i].ids+arr[i].seqid;
+       document.querySelector('#sendmail'+r).checked=false;
+         bulkarr=[];
+
+         }
+        }
+      },
+   getparentmailvalue:function(){
+        // alert('calling');
+
+        var obj={};
+        obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.grade=localStorage.getItem("curr_sess_grade");
+        obj.section=localStorage.getItem("curr_sess_section");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.termname=localStorage.getItem("curr_sess_termname");
+      if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+           obj.studid=this.studentid;
+         this.getparentmailurl=sessionStorage.getItem("addrinfo")+"/fetchstudinfo-service";
+        this.getparentmailparam=obj;
+         this.$.getparentmailajax.generateRequest();   
+            }
+         else
+         {
+         obj.studid=this.studentid;
+        this.getparentmailurl=sessionStorage.getItem("addrinfo")+"/studentparentinfo-service";
+        this.getparentmailparam=obj;
+         this.$.getparentmailajax.generateRequest(); 
+         }
+      
+        },
+      getparentmailResponse:function(e){
+        var arr=e.detail.response.returnval;
+      //  alert(JSON.stringify(arr));
+        if(arr.length>0){
+       localStorage.setItem("curr_sess_parentmail",arr[0].email);
+       localStorage.setItem("curr_sess_secmail",arr[0].alternate_mail);
+         this.sendmailService();
+        }
+        else{
+          alert("Please Check the parent mail");
+        }
+        
+     },
+       sendmailService:function(){
+  if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+     
+        var obj={"secmail":"","parentmail":""};
+        obj.secmail=localStorage.getItem("curr_sess_secmail");
+        obj.parentmail=localStorage.getItem("curr_sess_parentmail");
+        this.sendmailurl=sessionStorage.getItem("addrinfo")+"/sendmail-service";
+        this.sendmailparam=obj;
+        this.$.sendmailajax.generateRequest();
+             }
+             else{
+   var obj={"secmail":"","parentmail":""};
+        obj.secmail=localStorage.getItem("curr_sess_secmail");
+        obj.parentmail=localStorage.getItem("curr_sess_parentmail");
+        this.sendmailurl=sessionStorage.getItem("addrinfo")+"/sendmail1-service";
+        this.sendmailparam=obj;
+        this.$.sendmailajax.generateRequest();
+        }      
+      },
+
+      sendmailResponse:function(e){
+        // alert(e.detail.response);
+        // document.querySelector('student-scorcard-mail-card').FnToggleSpinner(false);
+        c2++;
+        if(bulkarr.length==0){
+        document.querySelector('student-scorcard-mail-card').FnToggleSpinner(false);}
+        if(c1==c2){
+        document.querySelector('student-scorcard-mail-card').FnToggleSpinner(false); c1=0;
+           c2=0; 
+           this.$.termmarkdialogid11.toggle();
+        } 
+      },
+      bulksendmailvalue:function(e){
+      c1=bulkarr.length;
+            for(var i=0;i<bulkarr.length;i++) {
+    var obj={};
+        obj.roleid=sessionStorage.getItem("curr_sess_loggedroleid");
+        obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.grade=localStorage.getItem("curr_sess_grade");
+        obj.section=localStorage.getItem("curr_sess_section");
+        obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+        obj.termname=localStorage.getItem("curr_sess_termname");
+      if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+           obj.studid=bulkarr[i].student_id;
+         this.getparentmailurl=sessionStorage.getItem("addrinfo")+"/fetchstudinfo-service";
+        this.getparentmailparam=obj;
+         this.$.getparentmailajax.generateRequest();   
+            }
+         else
+         {
+         obj.studid=bulkarr[i].student_id;
+        this.getparentmailurl=sessionStorage.getItem("addrinfo")+"/studentparentinfo-service";
+        this.getparentmailparam=obj;
+         this.$.getparentmailajax.generateRequest(); 
+         }
+        }
+      }
+    });
+  })();
+  </script>
+</dom-module>

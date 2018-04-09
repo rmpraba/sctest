@@ -1,0 +1,214 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="newformat-reportcard-nineten">
+  <template>
+    <style>
+    .outcard{
+    position: relative;
+    width: 900px;
+    height: auto;
+    border: 2px solid #849FDC;
+    top:50px;
+    left: 10px;
+    }
+    .header{
+      margin-left: 50px;
+      width: 450px;
+    }
+    .tab{
+      margin-left: 25px;
+      width: 800px;
+    }
+    .tab1{
+      margin-left: 25px;
+      width: 450px;
+    }
+    .tab2{
+      margin-left: 25px;
+      width: 800px;
+    }
+    .tab3{
+      margin-left: 25px;
+      width: 800px;
+    }
+    table{
+      /*width: 850px;*/
+    }
+    .outercard{
+      width: 890px;
+      margin-left:  1px;
+      margin-top:  1px;
+      border: 4px solid #849FDC;
+    }
+    .button{
+    width: 10%;
+    background: #252626;
+    color: white;    
+    text-transform: none;    
+    }
+    .buttoncard{
+    margin-top: 80px;
+    margin-left: 300px;
+    }
+    table.tab th{
+      border: solid 2px;
+    }
+    table.tab td{
+      border: solid 2px;
+    }
+    table.tab1 th{
+      border: solid 2px;
+    }
+    table.tab1 td{
+      border: solid 2px;
+    }
+    </style>
+    <div class="outcard">
+    <div class="outercard">
+      <center><h2>REPORT CARD</h2></center>
+      <br><br>
+      <div>
+        <table class="header">
+          <tr><th style="text-align: left;">Roll No: </th><th style="text-align: left;">{{studentid}}</th></tr>
+          <tr><th style="text-align: left;">Student’s Name: </th><th style="text-align: left;">{{studentname}}</th></tr>
+          <tr><th style="text-align: left;">Mother’s/Father’s/Guardian’s Name: </th><th style="text-align: left;">{{fathername}}</th></tr>
+          <tr><th style="text-align: left;">Date of birth: </th><th style="text-align: left;">{{dob}}</th></tr>
+          <tr><th style="text-align: left;">Class/Section: </th><th style="text-align: left;">{{class}}/{{section}}</th></tr>
+        </table>
+      </div>
+      <br><br>
+      <div class="tab">
+      <table class="tab" style="border-collapse: collapse;" border="1">
+        <tr><th>Scholastic Areas</th><th colspan="5">{{assesmentname}}</th></tr>
+        <tr><th>Subjects</th><th>Periodic Test (10)</th><th>Note Book (5)</th><th>Subject Enrichment (5)</th><!-- <th>Marks Obtained (100)</th><th>Grade</th> --></tr>
+        <template is="dom-repeat" items="{{arr}}">
+          <tr><td>{{item.subject}}</td><td>{{item.PT1}}</td><td>{{item.NB1}}</td><td>{{item.SEA1}}</td><!-- <td>{{item.mark1}}</td><td>{{item.grade1}}</td> --></tr>
+        </template>
+      </table>
+      </div>
+      <br><br>
+      <div class="tab1">
+        <table class="tab1" style="border-collapse: collapse;" border="1">
+          <tr><th style="text-align: left;">Co scholastic Areas [on a 5 point A – E grading scale]</th><th style="text-align: left;">Grade</th></tr>
+          <template is="dom-repeat" items="{{coarr}}">
+          <tr><td>{{item.subject_id}}</td><td>{{item.grade}}</td></tr>
+          </template>
+        </table>
+      </div>
+      <br><br>
+      <div class="tab1">
+      <table class="tab1" style="border-collapse: collapse;" border="1">
+        <tr><th style="text-align: left;">[A - E grading scale]</th><th style="text-align: left;">Grade</th></tr>
+        <template is="dom-repeat" items="{{disarr}}">
+          <tr><td>{{item.subject_id}}</td><td>{{item.grade}}</td></tr>
+        </template>
+      </table>
+      </div>
+      <br><br>
+      <div class="tab2">
+      <table class="tab2">
+        <tr><th style="text-align: left;">Class Teacher's Remarks</th><th style="text-align: left;">{{remark}}</th></tr>
+        <tr><th style="text-align: left;">Result</th><th style="text-align: left;">{{result}}</th></tr>
+      </table>
+      </div>
+      <br><br>
+      <div class="tab3">
+        <table class="tab3">
+          <tr><th>{{date}}</th><th><img id="ntimg1" src="../../images/{{empsign}}" width="100px;height:30px;"></th><th><img id="ntimg2" width="100px;height:30px;"></th></tr>
+          <tr><th>Date</th><th>Signature of Class Teacher's</th><th>Signature of Principal</th></tr>
+        </table>
+      </div>
+    </div>
+    </div>
+    <div class="buttoncard">
+    <span>
+    <paper-button  id='print' class="button" on-click='print'>Print</paper-button>
+    <paper-button  id='email' class="button" on-click='fnemail'>Email</paper-button>
+    </span>
+    </div>
+    <div>
+      <paper-dialog id="showpopup1" modal>
+        <div>
+          <paper-input readonly label="Student Name" value="{{studentname}}"></paper-input>
+          <paper-input label="Parent Email" value="{{parentemail}}"></paper-input>
+          <paper-input label="Secondary Email" value="{{secemail}}"></paper-input>
+        </div>
+        <div class='dialogbtncard'>
+          <paper-button style="color: white;background-color: black"  id="close" on-click="FnCancel">Cancel</paper-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <paper-button  style="color: white;background-color: black"  id="close" on-click="FnSendEmail">Send</paper-button>
+        </div>
+      </paper-dialog>
+    </div>
+   <reprotcard-newformat-service id="newformatservice"></reprotcard-newformat-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+   var globtemparr=[];
+   var globcoarr=[];
+    var globdisarr=[];
+    Polymer({
+      is: 'newformat-reportcard-nineten',
+      FnRefresh:function(){
+        this.studentid="";
+        this.studentname="";
+        this.fathername="";
+        this.dob="";
+        this.arr=[];
+        this.coarr=[];
+        this.result="";
+        this.remark="";
+        this.gradescale="";
+        this.date="";
+      },
+      fnoverallvalus:function(arr1,arr2,arr3){
+         globtemparr=arr1;
+         globcoarr=arr2;
+         globdisarr=arr3;
+     
+
+      },
+      FnSetHeaders:function(){
+      //  document.querySelector('#ntimg1').src="../../images/"+sessionStorage.getItem("curr_sess_loggedid").toUpperCase()+sessionStorage.getItem("curr_sess_loggedschoolid")+".jpg";
+        document.querySelector('#ntimg2').src="../../images/principal"+sessionStorage.getItem("curr_sess_loggedschoolid")+".jpg";
+        this.assesmentname=localStorage.getItem("curr_sess_termname");
+        this.class=localStorage.getItem("curr_sess_grade").toUpperCase();
+        this.section=localStorage.getItem("curr_sess_section").toUpperCase();
+        // this.assesmentname=(this.assesmentname).charAt(0).toUpperCase();
+      },
+      print:function(){
+              document.querySelector('home-page').FnHideView(true);
+              this.$.email.hidden=true;
+              this.$.print.hidden=true;
+              if (!window.print){
+              alert("You need NS4.x to use this print button!")
+              return
+              }
+              window.print()
+              document.querySelector('home-page').FnHideView(false);
+              this.$.email.hidden=false;
+              this.$.print.hidden=false;
+      },
+      fnemail:function()
+      {
+        this.$.showpopup1.toggle();
+        this.$.newformatservice.ninetotenemail(this.studentid);
+      },
+     FnCancel:function()
+      {
+       this.$.showpopup1.toggle();
+      },
+   FnSendEmail:function(e){
+ this.$.newformatservice.ntotenoverallvalus(this.class,this.section,this.remark,this.result,this.date);
+       this.$.showpopup1.toggle();
+
+   },
+    fnpdfconvection:function(){
+         this.$.newformatservice.ntoteneightpdfconvection(this.class,this.section,this.remark,this.result,this.date);
+
+      },
+    });
+  })();
+  </script>
+</dom-module>

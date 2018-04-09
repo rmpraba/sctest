@@ -1,0 +1,95 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-expandcard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .indrop{     
+        width: 100%;   
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        /*@apply(--layout-center-justified);*/
+        border-bottom: 1px solid #dedede;
+        /*padding-top: 2%;*/
+        padding-bottom: 1%;
+      }
+      .outcard{
+        width:100%;
+      }
+      h3,h4{
+        color: #111AD9;
+      }
+      .title{
+        @apply(--layout-horizontal);
+        width: 100%;
+      }
+      paper-button{
+        margin-top: 1%;
+      }
+      .collapseindrop{     
+        width: 100%;   
+        @apply(--layout-horizontal);
+        border-bottom: 1px solid #dedede;
+      }
+      .collapseoutdrop{
+        margin-left: 5%;
+      }
+      assesment-performance-levelcard{
+        width: 100%;
+      }
+    </style>
+    <!-- <div class="outcard"> -->
+    <!-- <template is="dom-repeat" items="{{assesmentarr}}"> -->
+    <div>
+    <div class="title">
+    <div style="width: 70%;"><h3>Assesment Name:{{assesment}}</h3>   </div>
+    <div style="text-align: right;width: 30%;color: #111AD9;cursor: pointer;" on-click="FnClick"><u>View info</u></div>
+    </div>
+      <div class="indrop">       
+        <assesment-performance-card assesment="{{assesment}}" subjectarr="{{subjectarr}}"></assesment-performance-card>
+      </div>
+    </div>
+       
+    <div>
+    <iron-collapse id="collapse{{assesment}}">
+      <div class="collapseoutdrop">
+      <h3>Level Info</h3>
+      <template is="dom-repeat" items="{{detailarr}}">
+      <h4>Subject : {{item.subject}}</h4>   
+      <div class="collapseindrop">        
+        <assesment-performance-levelcard subject="{{item.subject}}" subjectname="{{item.subjectname}}" categoryname="{{item.categoryname}}" assesment="{{item.assesment}}" categoryarr="{{item.categoryarr}}"></assesment-performance-levelcard>
+      </div>
+      </template>
+      </div>
+    </iron-collapse> 
+    </div>
+    <!-- </template> -->
+    <!-- </div> -->
+    <performance-report-service id="performancereportservice"></performance-report-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-expandcard',
+      FnClick:function(){
+        document.querySelector('#collapse'+this.assesment).toggle();
+        if(document.querySelector('#collapse'+this.assesment).opened==true)
+        {
+          localStorage.setItem("curr_sess_assesment",this.assesment);
+          document.querySelector('student-performance-tracking-homecard').FnToggleSpinner(true);
+          document.querySelector('student-performance-tracking-homecard').spinnermsg="Please wait...";
+          this.$.performancereportservice.FnFetchAssesmentInfo(localStorage.getItem("curr_sess_schoolid"),localStorage.getItem("curr_sess_academicyear"),localStorage.getItem("curr_sess_grade"),localStorage.getItem("curr_sess_grade"),localStorage.getItem("curr_sess_section"),localStorage.getItem("curr_sess_section"));          
+        }
+        if(document.querySelector('#collapse'+this.assesment).opened==false)
+        {
+          document.querySelector('student-performance-tracking-homecard').detailarr=[];
+        }
+      }
+    });
+  })();
+  </script>
+</dom-module>

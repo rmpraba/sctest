@@ -1,0 +1,44 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-studentmap-list">
+  <template>
+    <style>
+      .container{
+        width: 8%;
+        padding: 1%;
+      }
+.card{
+  box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+        text-align: center;
+      }
+      b{
+        font-family: Arial, Helvetica, sans-serif;
+        color: #27408B;
+      }
+    </style>
+    <div  on-click="FnClickStudent" class="card">
+    <div>
+    <img src="../../images/studenttosubject.jpg" height="90px" width="80px" >
+    <br>
+    <div width="80px"><span><b>{{studentname}}</b></span></div>
+    <br>
+    <div width="80px"><b>{{studentid}}</b></div>
+    </div>
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'enrichment-studentmap-list',
+      FnClickStudent:function(){
+        document.querySelector('home-page').setPage('enrichment-individual-assignment');
+        document.querySelector('enrichment-individual-assignment').hidecard=false;
+        document.querySelector('enrichment-individual-assignment').FnSetStudInfo(this.studentid,this.studentname);
+      }
+    });
+  })();
+  </script>
+</dom-module>

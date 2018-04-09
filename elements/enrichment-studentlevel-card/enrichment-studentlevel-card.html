@@ -1,0 +1,122 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-studentlevel-card">
+  <template>
+    <style>
+      .card{
+        @apply(--layout-horizontal);
+        margin-left: 3%;
+      }
+      .innercard1{
+          border-radius: 10px;
+          border: 1px solid #6699ff;
+          padding: 15px; 
+          /*width: 30%;*/
+          margin-top:9%; 
+          margin-left: 5%; 
+          max-height: 400px;
+          @apply(--layout-vertical);
+          width: 25%;
+      }
+      .innercard2{
+          @apply(--layout-horizontal);
+          @apply(--layout-wrap);
+      }
+      .innercard{
+          margin-top:9%; 
+          border-radius: 10px;
+          border: 1px solid #6699ff;
+          padding: 15px; 
+          margin-left: 5%; 
+          max-height: 400px;
+          @apply(--layout-vertical);
+          /*@apply(--layout-wrap);*/
+          width: 50%;
+          overflow-x: hidden;
+          overflow-y: scroll;
+      }
+      enrichment-booksoption-itemcard{
+        margin-top: 5%;
+      }
+      enrichment-studentoption-itemcard{
+        margin-left: 3%;
+        margin-top: 5%;
+      }
+        .button{
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            text-transform: none;
+      }
+      #btn2{
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            height: 40px;
+            border-radius: 2px;
+            font-family: Calibri;
+            font-size: 17px;
+            margin-left: 60%;
+            width: 30%;
+      }
+    </style>
+    <div class="card">
+    <div class="innercard">
+    <h2>Books/Activities</h2>
+    <div  class="innercard2">
+    <template is="dom-repeat" items="{{booklevelarr}}">
+      <enrichment-booksoption-itemcard bookid="{{item.id}}" bookname="{{item.book_name}}"></enrichment-booksoption-itemcard>
+    </template>   
+    </div>
+    </div>
+    <div class="innercard">
+    <h2>Student</h2>
+    <div class="innercard2">
+    <template is="dom-repeat" items="{{studlevelarr}}">
+      <enrichment-studentoption-itemcard studentid="{{item.student_id}}" studentname="{{item.student_name}}"></enrichment-studentoption-itemcard>
+    </template>
+    </div>
+    </div>
+    </div>
+    <center><paper-button on-click="FnSubmit" id="btn2" class="button">Submit</paper-button></center>
+   
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var studarr=[];
+    var bookarr=[];
+    Polymer({
+      is: 'enrichment-studentlevel-card',
+      FnSubmit:function(){
+        for(var i=0;i<studarr.length;i++){
+          for(var j=0;j<bookarr.length;j++){
+            studarr[i].bookname=bookarr[j].bookname;
+            studarr[i].bookid=bookarr[j].bookid;
+          }
+        }
+        // this.$.enrichmentservice.FnSaveBook();
+        if(studarr.length>0)
+        this.$.enrichmentservice.FnAssignBookToStudent(studarr);
+        this.fnrefres();
+       },
+       FnSetStudents:function(stud){
+        studarr=stud;
+      },
+      FnSetBooks:function(book){
+        bookarr=book;
+      },
+      fnrefres:function(e){
+         // alert(JSON.stringify(bookarr));
+         // alert(JSON.stringify(studarr));        
+      document.querySelector('enrichment-studentoption-itemcard').Fnsetinfo11(studarr);
+      document.querySelector('enrichment-booksoption-itemcard').Fnsetinfo(bookarr);
+ 
+      },
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,37 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="employeesectionmap-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        @apply(--layout-vertical);
+      }
+    </style>
+    <!-- <paper-input value="{{sectionname}}"></paper-input> -->
+    <div class="card">
+      <paper-checkbox id="{{sectionid}}" on-change="sectionchangeHandler">{{sectionname}}</paper-checkbox>
+    </div>    
+  </template>
+  <script>
+  (function() {
+    var sectionarr=[];
+    'use strict';
+    Polymer({
+      is: 'employeesectionmap-card',
+      sectionchangeHandler:function(e){
+        if(arr.length==0)
+          sectionarr.push(e.target.id);
+        for(var i=0;i<sectionarr.length;i++){
+          if(sectionarr[i]==e.target.id)
+            sectionarr.splice(i,1);
+        }
+        sectionarr.push(e.target.id);
+        document.querySelector('createemployee-card').setSection(sectionarr);        
+      }
+    });
+  })();
+  </script>
+</dom-module>

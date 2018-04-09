@@ -1,0 +1,28 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-performance-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>
+      <template is="dom-repeat" items="{{categoryarr}}">   
+      <div class="indrop">        
+      <!-- {{item.grade}}-{{item.level}}-{{item.count}}    -->
+      <performance-progress-card grade="{{item.grade}}" level="{{item.level}}" count="{{item.count}}" assesment="{{item.assesment_type}}" subject="{{item.subject_name}}" colorcode="{{item.colorcode}}" widthh="{{item.width}}" gradename="{{item.grade_id}}" sectionname="{{item.section_id}}" schoolid="{{item.school_id}}" academicyear="{{item.academic_year}}"></performance-progress-card>    
+      </div>
+      </template>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'assesment-performance-item-card',
+    });
+  })();
+  </script>
+</dom-module>

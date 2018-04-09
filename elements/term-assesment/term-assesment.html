@@ -1,0 +1,32 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="../term-assesment-card/term-assesment-card.html">
+<link rel="../term-assesment-sheet-card/term-assesment-sheet-card.html">
+
+<dom-module id="term-assesment">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>
+      <term-assesment-card id="ass" hidedrop="{{hidedrop}}"></term-assesment-card>
+      <term-assesment-sheet-card></term-assesment-sheet-card>
+      <!-- <subject-dynamic-markentrycard></subject-dynamic-markentrycard> -->
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'term-assesment',  
+      hiddenpage:function()
+      {
+      // this.$.ass.visibility="hidden";
+      // document.getElementById("ass").style.visibility = "hidden";
+      }   
+    });
+  })();
+  </script>
+</dom-module>

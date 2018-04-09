@@ -1,0 +1,144 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+  
+<dom-module id="curriculam-report">
+  <template>
+    <style>
+      #btn1
+      {
+        background-color: #363636;
+        color: #ffffff; 
+        height: 34px;
+        margin-top: 4%;
+        margin-left: 48%;
+      }
+      paper-dropdown-menu
+    {
+      width: 15%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+    }
+    </style>
+    <div>  
+      <center>
+        <h3>CURRICULAM REPORT</h3>
+      </center>
+    </div>  
+      <div style="margin-left: 15%;">
+        <span>
+          <paper-dropdown-menu  label="Grade">
+            <paper-menu id="cprgrade" class="dropdown-content"   on-iron-select="FnSelectGrade">
+              <template is="dom-repeat" items="{{gradearr}}">
+              <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>    
+            </paper-menu>
+          </paper-dropdown-menu>
+        </span>
+        <span>
+          <paper-dropdown-menu  label="Subject" style="margin-left: 5%;">
+            <paper-menu id="cprsubject" class="dropdown-content"   on-iron-select="FnSelectSubject">
+            <template is="dom-repeat" items="{{subjectarr}}">
+              <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+            </template>    
+            </paper-menu>
+          </paper-dropdown-menu>
+       </span> 
+        <div style="margin-left: 40%;margin-top: -5%;width: 100%;">
+          <curriculum-from-date-picker-card></curriculum-from-date-picker-card>
+        </div>
+        <div style="margin-left: 53%;margin-top: -5.5%;width: 100%;">
+          <curriculum-to-date-picker-card></curriculum-to-date-picker-card>
+        </div> 
+        <div style="margin-left: 67%;margin-top: -4%;">
+          <paper-button style="background-color: black;color: white;" on-click="fnsearch">Search</paper-button>
+        </div>  
+       
+      </div>
+      
+      <div class="curriculamreport" hidden$="{{fullreport}}">
+       <table id="cprreport" border="1" style="border-collapse: collapse;margin-left: 5%;width: 90%; margin-top: 4%;">
+        <tr style="text-align: left;">
+          <th>S.No</th>
+          <th>Chapter</th>
+          <th>Concept</th>
+          <th>Work Schedule</th>
+          <th>Period</th>
+          <th>Planned From Date</th>
+          <th>Planned To Date</th>
+          <th>Skill</th>
+          <th>BLD Value</th>
+          <th>Value</th>
+          <th>Teaching Aids</th>
+          <th>Innovation</th>
+          <!-- <th>LR Rectification</th> -->
+          <th>Remarks</th>
+        </tr>
+        <template  is="dom-repeat" items="{{fullreportarr}}" as="view">
+          <tr>
+            <td>{{view.sno}}</td>
+            <td>{{view.chapter_name}}</td>
+            <td>{{view.concept_name}}</td>
+            <td>{{view.sub_concept_name}}</td>
+            <td>{{view.period}}</td>
+            <td>{{view.planned_date_from}}</td>
+            <td>{{view.planned_to_date}}</td>
+            <td style="word-wrap: break-word;">{{view.skill}}</td>
+            <td style="word-wrap: break-word;">{{view.bld_value_name}}</td>
+            <td style="word-wrap: break-word;">{{view.value}}</td>
+            <td style="word-wrap: break-word;">{{view.teaching_aid}}</td>
+            <td style="word-wrap: break-word;">{{view.innovation}}</td>
+            <!--<td style="word-wrap: break-word;">{{view.lr_rectification}}</td>-->
+            <td style="word-wrap: break-word;">{{view.remarks}}</td>
+          </tr>
+        </template>
+      </table>
+      <input type="button" id="btn1" onclick="tableToExcel('cprreport', 'Curriculam Report')" value="Export to Excel">
+      </div>
+      <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+      </template>
+    <script type="text/javascript">
+      var tableToExcel = (function() 
+      {
+          var uri = 'data:application/vnd.ms-excel;base64,'
+          , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+          , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+          , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+          return function(table, name) {
+          if (!table.nodeType) table = document.getElementById(table)
+          var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+          window.location.href = uri + base64(format(template, ctx))
+      }
+      })()
+    </script>
+    <script>
+    (function() {
+    'use strict';
+    Polymer({
+      is: 'curriculam-report',
+     FnSelectGrade:function(e)
+     {
+        this.gradeid=e.target.selectedItem.value;
+        localStorage.setItem("curr_sess_gradeid",this.gradeid);
+        this.gradename=e.target.selectedItem.textContent.trim();
+        document.querySelector('#cprsubject').selected=-1;
+        this.$.bookservice.fnfetchcprsubject(this.gradename);
+     },
+     FnSelectSubject:function(e){
+        this.subjectid=e.target.selectedItem.value;
+        localStorage.setItem("curr_sess_subjectid",this.subjectid);
+        this.gradename=e.target.selectedItem.textContent.trim();
+       
+     },
+     fnsearch:function(e){
+ this.$.bookservice.getcurriculamdetails(this.gradeid,this.subjectid);
+     },
+     Fnrefresh11:function()
+     {
+        document.querySelector('#cprgrade').selected=-1;
+        document.querySelector('#cprsubject').selected=-1;
+        this.fullreport=true;
+     }
+    });
+    })();
+    </script>
+</dom-module>

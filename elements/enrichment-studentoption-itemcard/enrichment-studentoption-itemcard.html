@@ -1,0 +1,62 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-studentoption-itemcard">
+  <template>
+    <p hidden>{{studentid}}</p>
+    <paper-checkbox id="studoption{{studentid}}" on-change="FnSelectStudent">{{studentname}}</paper-checkbox>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var studarr=[];
+    var selectstudentid="";
+    Polymer({
+      is: 'enrichment-studentoption-itemcard',
+      FnSelectStudent:function(e){
+        if(studarr.length==0){
+          var obj={};
+          if(document.querySelector('#studoption'+this.studentid).checked==true)
+          {
+          obj.studentid=this.studentid;
+          obj.studentname=this.studentname;
+          selectstudentid=this.studentid;
+          studarr.push(obj);
+          }
+        }
+        else{
+          if(document.querySelector('#studoption'+this.studentid).checked==true){
+          // document.querySelector('#studentoption'+selectstudentid).checked=false;
+          for(var i=0;i<studarr.length;i++){
+            if(studarr[i].studentid==this.studentid){
+              studarr.splice(i,1);
+            }
+          }
+         var obj={};
+          obj.studentid=this.studentid;
+          obj.studentname=this.studentname;
+          selectstudentid=this.studentid;
+          studarr.push(obj);
+          }
+          else{
+           for(var i=0;i<studarr.length;i++){
+            if(studarr[i].studentid==this.studentid){
+              studarr.splice(i,1);
+              selectstudentid="";
+            }
+           }
+          } 
+          }
+          document.querySelector('enrichment-studentlevel-card').FnSetStudents(studarr);
+          // alert(JSON.stringify(studarr));
+      },
+      Fnsetinfo11:function(arr){
+      for(var i=0;i<studarr.length;i++){
+           var r=studarr[i].studentid;
+           document.querySelector('#studoption'+r).checked=false;
+         }
+       studarr=[];
+      }
+    });
+  })();
+  </script>
+</dom-module>

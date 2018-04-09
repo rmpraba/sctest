@@ -1,0 +1,1301 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-comparision-chart">
+  <template>
+    <style>
+      .container{
+        /*width: 20%;*/
+      }
+      .chart{
+        width: 100%;
+        @apply(--layout-horizontal);
+        margin-top: 5%;
+      }
+      .chartdialog,.innerbox{
+        @apply(--layout-horizontal);
+      }
+      .box{
+        @apply(--layout-vertical);
+      }
+      .dialogcontainer{
+        @apply(--layout-vertical);
+      }
+      paper-dialog,paper-dialog-scrollable{
+        width: 100%;
+        height: 100%;
+      }
+      #dialog{
+        width: 30%;
+        height: 30%;
+      }
+    </style>
+    <div>
+    <paper-dialog id='dialog' modal>
+    <h2>Click here to begin download!</h2>  
+    <div>
+    <paper-button dialog-dismiss on-click="FnClick">Click here</paper-button>
+    </div>
+    </paper-dialog>
+    </div>
+    <div class="chart">
+    <div class="box">
+      <div hidden$="{{hideeng}}" style="width: 300px;margin-left: 5%;">
+        <a on-click="FnEngClick" style="margin-left: 15%;" >Detail View</a>
+        <a on-click="FnEngDownloadClick" style="margin-left: 5%;" >Download Report</a>
+      </div>
+      <br>
+    <div class="container" hidden$="{{hideeng}}" style="width: 300;margin-left: 5%;">
+      <div id="chartContainer1" ></div>      
+    </div>      
+    </div>
+    <div class="box">
+      <div hidden$="{{hidemath}}" style="width: 300px;margin-left: 30%;">
+        <a on-click="FnMathClick" style="margin-left: 15%;">Detail View</a>
+        <a on-click="FnMathDownloadClick" style="margin-left: 5%;">Download Report</a>
+      </div>
+      <br>
+    <div class="container" hidden$="{{hidemath}}" style="width: 300;margin-left: 30%;">
+      <div id="chartContainer2" ></div>
+    </div>      
+    </div>
+    <div class="box">
+      <div hidden$="{{hideevs}}" style="width: 300px;margin-left: 55%;">
+        <a on-click="FnEvsClick" style="margin-left: 15%;">Detail View</a>
+        <a on-click="FnEvsDownloadClick" style="margin-left: 5%;">Download Report</a>
+      </div>
+      <br>
+    <div class="container" hidden$="{{hideevs}}" style="width: 300;margin-left: 55%;">
+      <div id="chartContainer3" ></div>
+    </div>      
+    </div>
+    </div>
+    <div class="chartdialog">      
+      <paper-dialog id="chartdialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" modal>
+       <paper-dialog-scrollable>
+      <div style="margin-left: 90%;"><paper-button on-click="FnClose">Close</paper-button></div>
+      <div class="dialogcontainer">
+      <div><h4>{{label1}}</h4></div>
+      <div class="innerbox" hidden$="{{hideinnerbox1}}">     
+        <div class="innercontainer" hidden$="{{hidesparkleinner}}" style="width: 250;margin-left:-2%;">
+        <div id="innerchartContainer1" ></div>
+        </div>
+        <div class="innercontainer" hidden$="{{hideglowinner}}" style="width: 250;margin-left: 25%;">
+        <div id="innerchartContainer2" ></div>
+        </div>
+        <div class="innercontainer" hidden$="{{hidekindleinner}}" style="width: 250;margin-left: 25%;">
+        <div id="innerchartContainer3" ></div>
+        </div>
+        <div class="innercontainer" hidden$="{{hideemberinner}}" style="width: 250;margin-left: 25%;">
+        <div id="innerchartContainer4" ></div>
+        </div>
+        </div>
+        <div style="margin-top: 28%;"><h4>{{label2}}</h4></div>
+        <div class="innerbox" style="margin-top: 2%;" hidden$="{{hideinnerbox2}}">        
+        <div class="innercontainer" hidden$="{{hidesparkleinner}}" style="width: 250;margin-left:-2%;">
+        <div id="innerchartContainer11" ></div>
+        </div>
+        <div class="innercontainer" hidden$="{{hideglowinner}}" style="width: 250;margin-left: 25%;">
+        <div id="innerchartContainer21" ></div>
+        </div>
+        <div class="innercontainer" hidden$="{{hidekindleinner}}" style="width: 250;margin-left: 25%;">
+        <div id="innerchartContainer31" ></div>
+        </div>
+        <div class="innercontainer" hidden$="{{hideemberinner}}" style="width: 250;margin-left: 25%;">
+        <div id="innerchartContainer41" ></div>
+        </div>
+        </div>
+        </div>
+         </paper-dialog-scrollable>
+      </paper-dialog>
+    </div>
+
+     <div hidden$="{{hidetable1}}">
+      <table id="enrichmentexportTable" border="1" style="border-collapse: collapse;">
+      <tr><th>Serial No</th><th>Student Name</th><th>Written</th><th>Grade</th><th>Category</th><th>Level</th><th>Student Status</th></tr>
+        <template is="dom-repeat" items="{{arr}}">
+          <tr><td>{{item.sno}}</td><td>{{item.studentname}}</td><td>{{item.mark}}</td><td>{{item.grade}}</td><td>{{item.category}}</td><td>{{item.enrich_level}}</td><td>{{item.status}}</td></tr>
+        </template>
+      </table>
+      <center>  
+      <paper-button class="button" id="submit" on-click="importmark">{{importlabel}}</paper-button>
+      <input type="button" id="btn3" onclick="tableToExcel('enrichmentexportTable', 'Report')" value="Export to Excel">
+      </center>
+    </div>
+
+    <div hidden$="{{hidetable2}}">
+      <table id="enrichmentexportTable1" border="1" style="border-collapse: collapse;">
+      <tr><th>Serial No</th><th>Student Name</th><th colspan="2">Reading</th><th>Grade</th><th>Category</th><th>Speed Level</th><th>Comprehension Level</th><th>Student Status</th></tr>
+      <tr><th></th><th></th><th>Speed</th><th>Comprehension</th><th></th><th></th><th></th><th></th></tr>
+        <template is="dom-repeat" items="{{arr}}">
+          <tr><td>{{item.sno}}</td><td>{{item.studentname}}</td><td>{{item.mark1}}</td><td>{{item.mark2}}</td><td>{{item.grade}}</td><td>{{item.category}}</td><td>{{item.speed_level}}</td><td>{{item.comprehension_level}}</td><td>{{item.status}}</td></tr>
+        </template>
+      </table>
+      <center>  
+      <paper-button class="button" id="submit" on-click="importmark">{{importlabel}}</paper-button>
+      <input type="button" id="btn3" onclick="tableToExcel('enrichmentexportTable1', 'Report')" value="Export to Excel">
+      </center>
+    </div>
+
+    <enrichment-report-service id="enrichmentreportservice"></enrichment-report-service>
+  </template>
+<script type="text/javascript">
+var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+</script>
+  <script type="text/javascript" src="../../scripts/canvasjs.min.js"></script>
+  <script>
+  (function() {
+    'use strict';
+    var engchartarr=[];
+    var mathschartarr=[];
+    var evschartarr=[];
+    var sparklechartarr=[];
+    var glowchartarr=[];
+    var kindlechartarr=[];
+    var emberchartarr=[];
+    var sparklechartarr1=[];
+    var glowchartarr1=[];
+    var kindlechartarr1=[];
+    var emberchartarr1=[];
+    Polymer({
+      is: 'enrichment-comparision-chart',
+      FnRefresh:function(){
+      engchartarr=[];
+      mathschartarr=[];
+      evschartarr=[];
+      sparklechartarr=[];
+      glowchartarr=[];
+      kindlechartarr=[];
+      emberchartarr=[];
+      sparklechartarr1=[];
+      glowchartarr1=[];
+      kindlechartarr1=[];
+      emberchartarr1=[];
+      },
+      FnClose:function() {
+        this.$.chartdialog.toggle();
+      },
+      FnEngClick:function(e) {
+        sparklechartarr=[];
+        glowchartarr=[];
+        kindlechartarr=[];
+        emberchartarr=[];
+        sparklechartarr1=[];
+        glowchartarr1=[];
+        kindlechartarr1=[];
+        emberchartarr1=[];
+        if(localStorage.getItem("curr_sess_assesment")=="EBOY"||localStorage.getItem("curr_sess_assesment")=="EMOY"||localStorage.getItem("curr_sess_assesment")=="EEOY"){
+          this.hideinnerbox1=false;
+          this.hideinnerbox2=false;
+          this.label1="Speed";
+          this.label2="Comprehension";
+        this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel1("English");
+        this.$.chartdialog.toggle();
+        }
+        else{
+          this.hideinnerbox1=false;
+          this.hideinnerbox2=true;
+          this.label1="";
+          this.label2="";
+        this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel("English");
+        this.$.chartdialog.toggle();
+        }
+      },
+      FnEvsClick:function(e) {
+        sparklechartarr=[];
+        glowchartarr=[];
+        kindlechartarr=[];
+        emberchartarr=[];
+        this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel("EVS");
+        this.$.chartdialog.toggle();
+      },
+      FnMathClick:function(e) {
+        sparklechartarr=[];
+        glowchartarr=[];
+        kindlechartarr=[];
+        emberchartarr=[];
+        this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel("Mathematics");
+        this.$.chartdialog.toggle();
+      },
+      FnEngDownloadClick:function(e) {
+        // alert("hi");
+      this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevelDownload("English");    
+      },
+      FnEvsDownloadClick:function(e) {
+      this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevelDownload("EVS");
+      },
+      FnMathDownloadClick:function(e) {
+      this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevelDownload("Mathematics");
+      },
+      FnDownload:function(value){
+        this.value=value;
+        this.$.dialog.toggle();
+      },
+      FnClick:function(){
+        // this.$.dialog.toggle();
+        if(this.value=="Enrichment")
+        tableToExcel('enrichmentexportTable1', 'Report');
+        else
+        tableToExcel('enrichmentexportTable', 'Report');
+      },
+      ready:function(){
+        this.hideeng=true;
+        this.hidemath=true;
+        this.hideevs=true;
+        this.hidetable1=true;
+        this.hidetable2=true;
+      },
+      FnComparearr:function(arr){
+       // alert(JSON.stringify(arr));
+       var subject="";
+       if(arr.length>0){      
+       for(var i=0;i<arr.length;i++)
+       {
+        // alert('Iteration'+i);
+        if(arr[i].subject=="English"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       engchartarr.push(obj);
+       }
+       // this.FnEnglishOpenChart();
+       }
+       if(arr[i].subject=="Mathematics"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       mathschartarr.push(obj);
+       }
+       // this.FnMathsOpenChart();
+       }
+       if(arr[i].subject=="EVS"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.legendText= arr[i].subarr[j].level+"("+(arr[i].subarr[j].grade)+")";
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].subject_name;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].subject_name!='undefined'||arr[i].subarr[k].subject_name!='undefined')
+          {
+           if(arr[i].subarr[j].subject_name==arr[i].subarr[k].subject_name&&arr[i].subarr[j].level==arr[i].subarr[k].level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].subject_name;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       evschartarr.push(obj);
+       }
+       // this.FnEvsOpenChart();
+       }
+       // subject=arr[i].subject; 
+       // alert(JSON.stringify(chartarr));      
+       }
+       // alert(JSON.stringify(engchartarr));
+       // alert(JSON.stringify(mathschartarr));
+       // alert(JSON.stringify(evschartarr));
+       // if(subject=="English")
+       if(engchartarr.length>0){
+       this.hideeng=false;
+       this.FnEnglishOpenChart();
+       }
+       else{
+       this.hideeng=true;
+       }
+       // if(subject=="Mathematics")
+       if(mathschartarr.length>0){
+       this.hidemath=false;
+       this.FnMathsOpenChart();
+       }
+       else{
+       this.hidemath=true;
+       }
+       // if(subject=="EVS")
+       if(evschartarr.length>0){
+       this.hideevs=false;
+       this.FnEvsOpenChart();
+       }
+       else{
+       this.hideevs=true;
+       }
+       }     
+      },
+    FnEnglishOpenChart:function(){
+    var chart = new CanvasJS.Chart("chartContainer1",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: engchartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // engchartarr=[];
+    },
+    FnMathsOpenChart:function(){
+    var chart = new CanvasJS.Chart("chartContainer2",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: mathschartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // mathschartarr=[];
+    },
+    FnEvsOpenChart:function(){
+    var chart = new CanvasJS.Chart("chartContainer3",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "Enrichment Comparision(Overall)",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: evschartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // evschartarr=[];
+    },
+     FnCompareDetailarr:function(arr){
+       // alert(JSON.stringify(arr));
+       var subject="";
+       if(arr.length>0){      
+       for(var i=0;i<arr.length;i++)
+       {
+        // alert('Iteration'+i);
+        if(arr[i].subject=="Sparkle"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].enrich_level;
+        obj.legendText= arr[i].subarr[j].enrich_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].enrich_level==arr[i].subarr[k].enrich_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       sparklechartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnSparkleOpenChart();
+       }
+      if(arr[i].subject=="Glow"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].enrich_level;
+        obj.legendText= arr[i].subarr[j].enrich_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].enrich_level==arr[i].subarr[k].enrich_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       glowchartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnGlowOpenChart();
+       }
+       if(arr[i].subject=="Kindle"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].enrich_level;
+        obj.legendText= arr[i].subarr[j].enrich_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].enrich_level==arr[i].subarr[k].enrich_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       kindlechartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnKindleOpenChart();
+       }
+       if(arr[i].subject=="Ember"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].enrich_level;
+        obj.legendText= arr[i].subarr[j].enrich_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].enrich_level==arr[i].subarr[k].enrich_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       emberchartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnEmberOpenChart();
+       }
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       // alert(JSON.stringify(glowchartarr));
+       // alert(JSON.stringify(kindlechartarr));
+       // alert(JSON.stringify(emberchartarr));
+       // if(subject=="English")
+       // if(engchartarr.length>0){
+       // this.hideeng=false;
+       // this.FnEnglishOpenChart();
+       // }
+       // else{
+       // this.hideeng=true;
+       // }
+       // // if(subject=="Mathematics")
+       // if(mathschartarr.length>0){
+       // this.hidemath=false;
+       // this.FnMathsOpenChart();
+       // }
+       // else{
+       // this.hidemath=true;
+       // }
+       // // if(subject=="EVS")
+       // if(evschartarr.length>0){
+       // this.hideevs=false;
+       // this.FnEvsOpenChart();
+       // }
+       // else{
+       // this.hideevs=true;
+       // }
+       }     
+      },
+    FnSparkleOpenChart:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer1",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: sparklechartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // sparklechartarr=[];
+    },
+    FnGlowOpenChart:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer2",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: glowchartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // glowchartarr=[];
+    },
+    FnKindleOpenChart:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer3",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: kindlechartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // kindlechartarr=[];
+    },
+    FnEmberOpenChart:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer4",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: emberchartarr,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // emberchartarr=[];
+    },
+    FnCompareDetailarr1:function(arr){
+       // alert(JSON.stringify(arr));
+       var subject="";
+       if(arr.length>0){      
+       for(var i=0;i<arr.length;i++)
+       {
+        // alert('Iteration'+i);
+        if(arr[i].subject=="Sparkle"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].speed_level;
+        obj.legendText= arr[i].subarr[j].speed_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].speed_level==arr[i].subarr[k].speed_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       sparklechartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnSparkleOpenChart();
+       }
+      if(arr[i].subject=="Glow"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].speed_level;
+        obj.legendText= arr[i].subarr[j].speed_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].speed_level==arr[i].subarr[k].speed_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       glowchartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnGlowOpenChart();
+       }
+       if(arr[i].subject=="Kindle"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].speed_level;
+        obj.legendText= arr[i].subarr[j].speed_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].speed_level==arr[i].subarr[k].speed_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       kindlechartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnKindleOpenChart();
+       }
+       if(arr[i].subject=="Ember"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].speed_level;
+        obj.legendText= arr[i].subarr[j].speed_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].speed_level==arr[i].subarr[k].speed_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       emberchartarr.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnEmberOpenChart();
+       }
+       }
+       }     
+      },
+       FnCompareDetailarr2:function(arr){
+       // alert(JSON.stringify(arr));
+       var subject="";
+       if(arr.length>0){      
+       for(var i=0;i<arr.length;i++)
+       {
+        // alert('Iteration'+i);
+        if(arr[i].subject=="Sparkle"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].comprehension_level;
+        obj.legendText= arr[i].subarr[j].comprehension_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].comprehension_level==arr[i].subarr[k].comprehension_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       sparklechartarr1.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnSparkleOpenChart1();
+       }
+      if(arr[i].subject=="Glow"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].comprehension_level;
+        obj.legendText= arr[i].subarr[j].comprehension_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].comprehension_level==arr[i].subarr[k].comprehension_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       glowchartarr1.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnGlowOpenChart1();
+       }
+       if(arr[i].subject=="Kindle"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].comprehension_level;
+        obj.legendText= arr[i].subarr[j].comprehension_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].comprehension_level==arr[i].subarr[k].comprehension_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       kindlechartarr1.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnKindleOpenChart1();
+       }
+       if(arr[i].subject=="Ember"){ 
+        for(var j=0;j<arr[i].subarr.length;j++){
+        var temparr=[];
+        var dataPoints=[];
+        var obj={};
+        obj.type= "column";
+        obj.name= arr[i].subarr[j].comprehension_level;
+        obj.legendText= arr[i].subarr[j].comprehension_level;
+        obj.showInLegend= true;
+        var obj1={};
+        obj1.label=arr[i].subarr[j].level;
+        obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[j].score)).toFixed(1));
+        dataPoints.push(obj1);
+        obj.dataPoints=dataPoints;
+        for(var k=j+1;k<arr[i].subarr.length;k++)
+        {
+          // alert(arr[i].subarr[j].subject_name+"  "+arr[i].subarr[k].subject_name);
+          if(arr[i].subarr[j].level!='undefined'||arr[i].subarr[k].level!='undefined')
+          {
+           if(arr[i].subarr[j].level==arr[i].subarr[k].level&&arr[i].subarr[j].comprehension_level==arr[i].subarr[k].comprehension_level)
+           {
+            var obj1={};
+            obj1.label=arr[i].subarr[k].level;
+            obj1.y=JSON.parse(parseFloat(parseFloat(arr[i].subarr[k].score)).toFixed(1));
+            dataPoints.push(obj1);
+            obj.dataPoints=dataPoints;
+            arr.splice(j,1);
+            j--;
+           }
+          }
+        }
+       emberchartarr1.push(obj);
+       }
+       // alert(JSON.stringify(sparklechartarr));
+       this.FnEmberOpenChart1();
+       }
+       }
+       
+       }     
+      },
+    FnSparkleOpenChart1:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer11",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: sparklechartarr1,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // sparklechartarr=[];
+    },
+    FnGlowOpenChart1:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer21",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: glowchartarr1,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // glowchartarr=[];
+    },
+    FnKindleOpenChart1:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer31",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: kindlechartarr1,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // kindlechartarr=[];
+    },
+    FnEmberOpenChart1:function(){
+    var chart = new CanvasJS.Chart("innerchartContainer41",
+    {
+      theme: "theme3",
+      animationEnabled: true,
+      title:{
+        text: "",
+        fontSize: 20
+      },
+      toolTip: {
+        shared: true
+      },      
+      axisY: {
+        title: "No of students"
+      },     
+      width:350,
+      height:350,
+      data: emberchartarr1,
+
+      legend:{
+            cursor:"pointer",
+            itemclick: function(e){
+              // this.$.enrichmentreportservice.callFetchEnrichmentCategoryLevel();
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          },
+        });
+
+    chart.render();
+    // emberchartarr=[];
+    },
+    });
+  })();
+  </script>
+</dom-module>

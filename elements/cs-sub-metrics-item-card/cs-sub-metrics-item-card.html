@@ -1,0 +1,92 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="cs-sub-metrics-item-card">
+  <template>
+    <style>
+      .tb1{
+        width:100%;
+      }
+    </style>
+    <table class="tb1">
+    <tbody>
+    <tr>
+     <center>
+        <td style="width:50%;"><paper-item>{{submetric}}</paper-item></td>
+        <td style="width:20%;"><paper-input auto-validate pattern="[A-E+]" on-change="Fnsubcategory" id="mark" value="{{score1}}" error-message="{{errormessage}}"></paper-input></td>
+    </center>
+   </tr>
+   </tbody>
+  </table>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+     is: 'cs-sub-metrics-item-card',
+     ready:function(){
+      this.errormessage="Letter's only!";
+     },
+     Fnsubcategory:function()
+     {  
+      // alert(localStorage.getItem("curr_sess_grade"));    
+      if(localStorage.getItem("curr_sess_grade")=="Grade-9"||localStorage.getItem("curr_sess_grade")=="Grade-10"){
+      }
+      else{
+        if(this.score1=='A'||this.score1=='B'||this.score1=='C'){
+        }
+        else{
+          this.score1="";
+        }
+      }
+      // if(localStorage.getItem("curr_sess_grade")=="Grade-9"||localStorage.getItem("curr_sess_grade")=="Grade-10"){
+      //   if(this.score1=='A'||this.score1=='B'||this.score1=='C'||this.score1=='D'||this.score1=='E'){
+      //   }
+      //   else{
+      //     // this.errormessage="Letter's only b/w A-E";
+      //     this.score1="";
+      //   }
+      // }
+      if(this.score1!=null||this.score1!="")
+      {
+//    if(localStorage.getItem("curr_sess_page")=="single-student-mark-entery-card")
+//    {
+// document.querySelector('single-subject-dynamic-coscholastic-markentry-item-card').fnfindsum(this.score1,this.submetric);
+//   }
+//   else{
+document.querySelector('subject-dynamic-coscholastic-markentry-cards').fnfindsum(this.score1,this.submetric);
+  // }
+      var cat=sessionStorage.getItem("category");
+      if(cat=="lifeskill"){
+      if(localStorage.getItem("curr_sess_grade")=="Grade-9"||localStorage.getItem("curr_sess_grade")=="Grade-10")
+      document.querySelector('cs-life-skill-item-card').fnfindsum(this.score1,this.submetric);
+      else
+      document.querySelector('cs-life-skill-item-card').fnfindsum(this.score1,this.submetric);
+      }
+      else if(cat=="education")
+      document.querySelector('cs-education-item-card').fnfindsum(this.score1,this.submetric);
+      else if(cat=="visual")
+      document.querySelector('cs-visual-performing-item-card').fnfindsum(this.score1,this.submetric);
+      else if(cat=="cocurricular")
+      document.querySelector('cs-co-curricular-item-card').fnfindsum(this.score1,this.submetric);
+      else if(cat=="attitude")
+      document.querySelector('cs-attitudes-item-card').fnfindsum(this.score1,this.submetric);
+      else if(cat=="healthandphysical")
+      document.querySelector('cs-health-physical-education-item-card').fnfindsum(this.score1,this.submetric);  
+      else if(cat=="discipline")
+      document.querySelector('cs-discipline-itemcard').fnfindsum(this.score1,this.submetric);   
+     }
+    },
+    clearinputdata:function()
+    {
+     var x;
+     x= document.querySelectorAll("#mark");
+     for(var i=0;i<x.length;i++)
+     {
+      x[i].value="";
+     }
+    }
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,153 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../beginner-assesment-service/beginner-assesment-service.html">
+<link rel="import" href="../beginner-assesment-markentrysheet/beginner-assesment-markentrysheet.html">
+<link rel="import" href="../component-service/component-service.html">
+<link rel="import" href="../assesment-sheet-card/assesment-sheet-card.html">
+<dom-module id="books-issuance-card">
+  <template>
+    <style>
+      :host{
+        display: block;
+      }    
+      .card{
+        @apply(--layout-vertical);  
+      }
+
+      .drop{        
+        @apply(--layout-horizontal);
+        margin-top:2%;
+        margin-left: 15%;
+      }
+      paper-dropdown-menu{
+        width: 15%;
+        margin-left: 5%;
+      }
+    paper-dropdown-menu{
+      width: 15%;
+      margin-left: 5%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+      }
+    </style>
+    <div class='card'>     
+    <div class='drop'>      
+          <paper-dropdown-menu id="bbooksissuancetypee" label="Select Assesment" disabled="{{read}}" required hidden>
+            <paper-menu class="dropdown-content" id="bbooksissuancetype" on-iron-select="FnSelectAssesment"  attr-for-selected="value" required>  
+              <template is="dom-repeat" items="{{assesmentarr}}">
+                <paper-item value="{{item.assesment_category_id}}">{{item.assesment_category_name}}</paper-item>                            
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="bbooksissuancegradee" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu  class="dropdown-content" id="bbooksissuancegrade" on-iron-select="FnSelectGrade"  attr-for-selected="value" required> 
+              <template is="dom-repeat" items="{{gradearr}}">
+                <paper-item value="{{item.grade_id}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="bbooksissuancesectionn" label="Select Section" disabled="{{read}}" required>
+            <paper-menu  class="dropdown-content" id="bbooksissuancesection" on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_id}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-dropdown-menu id="bbooksissuancesubjectt" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu class="dropdown-content" id="bbooksissuancesubject" on-iron-select="FnSelectSubject"  attr-for-selected="value" required> 
+            <template is="dom-repeat" items="{{subjectarr}}">
+              <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+            </template>
+            </paper-menu>
+          </paper-dropdown-menu>  
+          <paper-dropdown-menu id="bbooksissuancesubcategoryy" label="Select Category" disabled="{{read}}" required hidden>
+            <paper-menu id="bbooksissuancesubcategory"  class="dropdown-content"  on-iron-select="FnSelectCategory"  attr-for-selected="value" required> 
+            <template is="dom-repeat" items="{{categoryarr}}">
+              <paper-item value="{{item.category_id}}">{{item.category_name}}</paper-item>
+            </template>
+            </paper-menu>
+          </paper-dropdown-menu >      
+     </div>
+     <hr>
+     <div class="enrichmentstudentlist" hidden$="{{hidecard}}">
+     <enrichment-studentmap-itemcard></enrichment-studentmap-itemcard>
+     </div>
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+    <beginner-assesment-service id="bassesmentservice"></beginner-assesment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict'; 
+    var gradename="",gradeid="",sectionname="",sectionid="",subjectid="",subjectname="",assesment="",categoryname="",categoryid="";   
+    Polymer({
+      is: 'books-issuance-card',
+      ready:function(){
+      this.hidecard=true;         
+      },
+      FnSelectAssesment:function(e){
+        assesment=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_assesment",assesment);
+      },
+      FnSelectSubject:function(e){
+        subjectname = e.target.selectedItem.textContent.trim();
+        subjectid = e.target.selectedItem.value.trim();    
+        localStorage.setItem("curr_sess_subjectname",subjectname);
+        localStorage.setItem("curr_sess_subjectid",subjectid);
+        this.$.enrichmentservice.FnFetchSubjectCategoryForIssue(subjectid);
+      },
+      FnSelectGrade:function(e){
+        gradename = e.target.selectedItem.textContent.trim();
+        gradeid = e.target.selectedItem.value.trim();
+        // alert(gradename);
+        localStorage.setItem("curr_sess_gradename",gradename);
+        localStorage.setItem("curr_sess_grade",gradename);
+        localStorage.setItem("curr_sess_gradeid",gradeid);
+        this.$.bassesmentservice.callSectionService(gradename);
+        document.querySelector("#bbooksissuancesection").selected=-1;
+         document.querySelector("#bbooksissuancesubject").selected=-1; 
+      },
+      FnSelectSection:function(e){
+        sectionname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_sectionname",sectionname);
+        sectionid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_sectionid",sectionid);
+       this.$.enrichmentservice.FnFetchStudentForIssue(gradeid,sectionid,subjectid);
+          document.querySelector("#bbooksissuancesubject").selected=-1; 
+
+   },
+      FnSelectCategory:function(e)
+      {
+        categoryname = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_categoryname",categoryname);
+        categoryid = e.target.selectedItem.value.trim();
+        localStorage.setItem("curr_sess_categoryid",categoryid);
+          },
+      FnShowList:function(){
+        this.hidecard=false;
+      },
+      FnRefresh:function(){
+        document.querySelector("#bbooksissuancetype").selected=-1;
+        document.querySelector("#bbooksissuancegrade").selected=-1;
+        document.querySelector("#bbooksissuancesection").selected=-1;
+        document.querySelector("#bbooksissuancesubcategory").selected=-1;
+        document.querySelector("#bbooksissuancesubject").selected=-1;        
+        gradename="";
+        gradeid="";
+        sectionname="";
+        sectionid="";
+        subjectid="";
+        subjectname="";
+        assesment="";
+        categoryname="";
+        categoryid="";
+        this.hidecard=true;  
+      }
+    });      
+  })();
+  </script>
+</dom-module>

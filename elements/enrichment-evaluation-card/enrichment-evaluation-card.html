@@ -1,0 +1,37 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-evaluation-card">
+  <template>
+    <style>
+    .container{
+      width: 90%;
+      @apply(--layout-vertical);
+      /*@apply(--layout-wrap);*/
+    }
+    enrichment-evaluation-itemcard{
+      margin-left: 5%;
+    }
+    </style>
+    
+    <div class="container">
+      <template is="dom-repeat" items="{{itemarr}}">
+      <enrichment-evaluation-itemcard studentid="{{item.student_id}}" studentname="{{item.student_name}}" bookname="{{item.bookactivity_name}}" subject="{{item.subject}}" category="{{item.category}}" bookid="{{item.bookactivity_id}}"
+      issueddate="{{item.issued_date}}"></enrichment-evaluation-itemcard>
+      <br>
+      </template>
+    </div>
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'enrichment-evaluation-card',
+
+    });
+  })();
+  </script>
+</dom-module>

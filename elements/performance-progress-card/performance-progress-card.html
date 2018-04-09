@@ -1,0 +1,39 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="performance-progress-card">
+  <template>
+    <style>
+     #myProgress {
+      width: 100%;
+      background-color: #ddd;
+      margin-top: 5%;  
+      margin-left: 3%;  
+      height: 5px;  
+     }
+     .progresscard{
+      @apply(--layout-horizontal);
+     }
+    </style>
+    <div hidden>{{schoolid}}{{academicyear}}{{sectionname}}{{gradename}}</div>
+    <div class="progresscard">
+    <div style="font-weight: bold;width: 100px;margin-top: 3%;color: {{colorcode}};">{{level}}</div>
+    <div id="myProgress" on-click="FnClick">    
+    <div style="width: {{widthh}}%;height: 5px;background-color: {{colorcode}};line-height: 5px;color: #111AD9;font-weight: bold;text-align: center;" id="apic{{assesment}}{{subject}}{{grade}}"></div>
+    </div>
+    <div style="font-weight: bold;width: 20px;margin-top: 3%;color: #111AD9;">{{count}}</div>
+    </div>
+    <performance-report-service id="performancereportservice"></performance-report-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'performance-progress-card',
+      FnClick:function(){
+        this.$.performancereportservice.FnFetchSublevelStudents(this.schoolid,this.academicyear,this.gradename,this.sectionname,this.assesment,this.subject,this.level,this.grade);
+      }
+    });
+  })();
+  </script>
+</dom-module>

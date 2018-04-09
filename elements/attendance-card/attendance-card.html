@@ -1,0 +1,452 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../component-service/component-service.html">
+<link rel="import" href="../attendance-item-card/attendance-item-card.html">
+<link rel="import" href="../bindmarks-card/bindmarks-card.html">
+
+<dom-module id="attendance-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }    
+      table{
+        width: 83%;
+        border-collapse: collapse;
+        margin-left: 1%;
+      }
+      .studname{
+        width: 30%;
+      }
+      #tb1{
+        width:14%;
+      }
+      #tb2{
+        width:18%;
+      }
+      #tb3{
+        width:14%;
+      }
+      #attendencesubmit{
+        width:18%;
+
+      }
+      .button{
+            width: 15%;
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            text-transform: none;
+            margin-left: 45%;
+          }
+      #btn2{
+            width: 10%;
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            height: 45px;
+            border-radius: 2px;
+            /*font-weight: bold;*/
+            font-family: Calibri;
+            font-size: 17px;
+          }
+     .hrspace
+      {
+        margin-left: 5%;
+        @apply(--layout-horizontal);
+       
+      }
+      .exceldiv
+      {
+        @apply(--layout-horizontal);
+        /*margin-top: 3%;*/
+        margin-left: 8%;
+      }
+      .excelcard{
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        border-bottom: 1px solid #dedede;
+      }
+      #attendencefileid{
+        @apply(--layout-horizontal);
+      }
+      #upload{
+        margin-left: -10%;
+        /*padding-top: -2%;*/
+      }
+      .fileupload{
+        @apply(--layout-vertical);
+      }
+      #readfile{
+        margin-top: 2%;
+      }
+      #hidetop{
+        margin-top: 0.5%;
+      }
+      h4{
+      color: #061E98;
+      }
+     #spinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+    </style>
+    <div>  
+    <div class="spinner"><paper-dialog modal id="spinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner><h4>{{spinnermsg}}</h4></paper-dialog></div>
+    <div class="excelcard" align="right">
+      <div id="hidetop" hidden$="{{hideheader}}">
+      <paper-checkbox id="attendancecheckid" on-change="excelmark11">Excel Upload</paper-checkbox>
+      </div>
+      <div id="attendencefileid">
+      <div class="hrspace">
+      <paper-icon-button id="download" icon="icons:file-download" onclick="attendanceexportToExcel1()"></paper-icon-button>
+      <paper-tooltip for="download">Download</paper-tooltip>
+      <!-- <input type="button" id="btn2" onclick="tableToExcel('dynamicreporttable11', 'Mark Report')" value="Download Template"> -->
+      </div>
+      <div class="exceldiv" >
+      <!-- <div class="fileupload"> -->
+        <input id="attendancefile" type="file" onchange="attendanceloadFile(event)"/>
+        <xmp id="output"></xmp>
+      <!-- </div> -->
+        <paper-icon-button  id="upload" icon="icons:file-upload" on-click="FnClick"></paper-icon-button>
+        <paper-tooltip for="upload">Upload</paper-tooltip>
+        <!-- <paper-button style="color: white;height: 25px;  background: #252626; font-family:Calibri;"  on-click="FnClick">Upload File</paper-button>     -->
+       </div>
+       </div>
+       </div>
+  
+     <div id="hidetop">
+      <center><h1>{{schoolname}}</h1>      
+      <h3>Continuous Comprehensive Evaluation -AY-{{academicyear}}</h3>  
+      <h4>Term : &nbsp&nbsp{{term}}  &nbsp&nbsp&nbsp {{grade}} : &nbsp&nbsp&nbsp&nbsp&nbsp{{section}} &nbsp&nbsp Subject: {{subject}} </h4> 
+      <h4>Total Working Days: {{workingdays}}</h4>
+      <table border="1">    
+     
+      <template is="dom-repeat" items="{{studarr}}">
+       <tr>
+           <attendance-item-card savelabel="Save" hidefist="{{item.hidefist}}" hidesecond="{{item.hidesecond}}" fonts="{{item.font}}" serialno="{{item.serialno}}" hidesavevalue="{{hidesavevalue}}" studname="{{item.student_name}}" studid="{{item.id}}" workingdays="{{workingdays}}" attendance="{{item.attendance}}" specificcomment="{{item.speccomment}}" genericcomment="{{item.generic}}" speccomment="{{item.speccomment}}" gencomment="{{item.generic}}"></attendance-item-card>
+    
+       </tr>  
+    </template> 
+    
+      </table>      
+      </center> 
+      <paper-button class="button" id="attendencesubmit" on-click="importmark">{{importlabel}}</paper-button>
+
+     </div>
+  
+    <div  id="AttendanceDataTableId2" hidden>
+       <table border="1" >    
+      <tr>   
+       <th id="tb1">SNo</th>
+       <th id="tb1">StudentId</th>
+       <th id="tb2">StudentName</th>
+       <th id="tb1">TotalAttendance</th>
+       <th id="tb2">GenericComment</th>
+       <th id="tb2">SpecificComment</th>
+     </tr>  
+      <template is="dom-repeat" items="{{studarr}}">
+      <tr>
+       <td>{{item.serialno}}</td>
+       <td>{{item.id}}</td>
+       <td>{{item.student_name}}</td>
+       <td>{{item.attendance}}</td>
+       <td>{{item.generic}}</td>
+       <td>{{item.speccomment}}</td>
+      </tr>  
+      </template> 
+     </table> 
+    </div>
+    <center>
+     <input type="button" id="btn2" onclick="attendanceexportToExcel1()" value="Export to Excel" hidden$="{{hidedownload}}">
+    </center>
+    </div>  
+
+
+ <table border="1"  id="AttendanceDataTableId1" hidden>    
+      <tr>   
+       <th id="tb1">SNo</th>
+       <th id="tb1">StudentId</th>
+       <th id="tb2">StudentName</th>
+       <th id="tb1">TotalAttendance</th>
+       <th id="tb2">GenericComment</th>
+       <th id="tb2">SpecificComment</th>
+     </tr>  
+      <template is="dom-repeat" items="{{studarr1}}">
+      <tr>
+       <td>{{item.serialno}}</td>
+       <td>{{item.id}}</td>
+       <td>{{item.student_name}}</td>
+       <td>{{item.attendance}}</td>
+       <td>{{item.generic}}</td>
+       <td>{{item.speccomment}}</td>
+      </tr>  
+      </template> 
+    </table> 
+
+     <co-scholastic-service id="coscholasticservice"></co-scholastic-service>
+     <term-assesment-service id="assesmentservice"></term-assesment-service>
+  </template>
+ <script type="text/javascript"> 
+var filename;
+function attendanceexportToExcel1(){
+var htmls = "";
+// alert("1");
+var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j = 0;
+    var tab = document.getElementById('AttendanceDataTableId1'); // id of table
+    var lines = tab.rows.length;
+
+    // the first headline of the table
+    if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+
+    // table data lines, loop starting from 1
+    for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");             //remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi,"");                 // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); 
+
+   var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : filename || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+    }
+
+function attendanceexportToExcel2(){
+var htmls = "";
+// alert("1");
+var tab_text = '<table border="1px" style="font-size:17px" ">';
+    var textRange; 
+    var j = 0;
+    var tab = document.getElementById('AttendanceDataTableId2'); // id of table
+    var lines = tab.rows.length;
+
+    // the first headline of the table
+    if (lines > 0) {
+        tab_text = tab_text + '<tr bgcolor="#DFDFDF">' + tab.rows[0].innerHTML + '</tr>';
+    }
+
+    // table data lines, loop starting from 1
+    for (j = 1 ; j < lines; j++) {     
+        tab_text = tab_text + "<tr>" + tab.rows[j].innerHTML + "</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");             //remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi,"");                 // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); 
+
+   var uri = 'data:application/vnd.ms-excel;base64,';
+            var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+            var base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            };
+
+            var format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            };
+
+         htmls = tab_text
+
+            var ctx = {
+                worksheet : filename || 'Worksheet',
+                table : htmls
+            }
+        var link = document.createElement("a");
+            link.download = filename;
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+    }
+
+
+ </script>
+
+   <script type="text/javascript">
+  var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    ,base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    ,format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+  })()
+  </script>
+<script type="text/javascript">
+  var array=[];
+  var array1=[];
+  var tempstudentarr=[];
+  
+  function attendanceloadFile(event) {
+  alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(data){
+    array=data; 
+   });
+  }
+  </script>
+  <script>
+
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'attendance-card',
+      ready:function(){ 
+       this.$.attendencefileid.hidden=true;
+       localStorage.setItem("curr_sess_template_tef","inactive"); 
+       this.hidedownload=true;
+      },
+      setWorkingDays:function(days){
+        this.workingdays=days;
+      },
+       FnClick:function(){
+          var temp=[];
+      if(array.length==0){
+        alert("Pls save the file in EXCEL WORKBOOK extension!");
+        document.getElementById("attendancefile").value = "";
+       }
+       else{ 
+        for(var i=0;i<array.length;i++){
+             if(JSON.stringify({})==JSON.stringify(array[i])){
+
+             }
+         else{
+         var setarr=[];
+           setarr=Object.keys(array[i]);
+             setarr.splice(0,3);
+             
+         if(setarr.length==3){
+          var obj={};
+           obj.studentid=array[i].StudentId;
+           obj.studentname=array[i].StudentName;
+           obj.TotalAttendance=array[i].TotalAttendance;
+           obj.GenericComment=array[i].GenericComment;
+           obj.SpecificComment=array[i].SpecificComment; 
+            temp.push(obj);
+         //  alert(JSON.stringify(temp));
+             }
+           }}
+
+      this.FnSpinnerrActive(true);
+      this.spinnermsg="Please wait...uploading";
+   localStorage.setItem("curr_sess_lenth",temp.length);
+    for(var i=0;i<temp.length;i++){
+  this.$.coscholasticservice.callinsertattendanceService(temp[i].studentid,temp[i].studentname,temp[i].TotalAttendance,this.workingdays,temp[i].GenericComment,temp[i].SpecificComment);     
+       }
+         document.getElementById("attendancefile").value ="";
+            temp=[];
+            array=[];
+            array1=[];
+            tempstudentarr=[];
+            document.getElementById("attendancefile").value ="";
+           this.categorylength="";
+        }
+      },
+      FnSave:function(){
+        alert('Attendance for this section is complete!');
+      },
+   excelmark11:function(e){
+   if(document.querySelector("#attendancecheckid").checked==true){
+       this.$.attendencefileid.hidden=false;
+       localStorage.setItem("curr_sess_template_tef","active"); 
+   }
+   if(document.querySelector("#attendancecheckid").checked==false){
+    this.$.attendencefileid.hidden=true;
+      document.getElementById("attendancefile").value ="";
+       localStorage.setItem("curr_sess_template_tef","inactive"); 
+       }
+
+     },
+   setDefaultHeaders:function(){   
+        this.$.hidetop.hidden=false;     
+        this.schoolname=sessionStorage.getItem("curr_sess_loggedschoolname");        
+        this.academicyear=localStorage.getItem("curr_sess_academicyear");
+        this.grade=localStorage.getItem("curr_sess_grade");
+        this.section=localStorage.getItem("curr_sess_section");
+        this.subject=localStorage.getItem("curr_sess_subject");
+        this.term=localStorage.getItem("curr_sess_termname");
+        filename=this.grade+"-"+this.section+"-"+this.subject+"-"+this.term;
+    
+   if(localStorage.getItem('curr_sess_report')=='1'){
+    // alert('in report');
+        this.hidedownload=false;
+        this.$.attendancecheckid.hidden=true;
+        this.hidesavevalue=true;
+        this.$.attendencesubmit.hidden=true;
+       }
+    else{
+      this.hidedownload=true;
+   if(sessionStorage.getItem("curr_sess_loggedroleid")=="co-ordinator")
+      {
+        this.importlabel='Approve';
+        this.$.attendancecheckid.hidden=true;
+        this.hidesavevalue=false;
+      
+      }
+   else if(sessionStorage.getItem("curr_sess_loggedroleid")=="class-teacher"||sessionStorage.getItem("curr_sess_loggedroleid")=="subject-teacher"){
+        this.importlabel='Submit for approval';
+        this.$.attendancecheckid.hidden=false;
+       this.hidesavevalue=false;
+
+      }
+     }
+       
+      },
+      importmark:function()
+      {
+        this.$.assesmentservice.Fnimportattendancemark();
+      },
+       FnRefresh:function()
+       {
+       this.$.attendencefileid.hidden=true;
+
+        this.hidedownload=true;
+        this.$.hidetop.hidden=true;
+        this.studarr=[];
+        localStorage.setItem("curr_sess_template_tef","inactive"); 
+        document.querySelector("#attendancecheckid").checked=false;
+        this.$.attendancecheckid.hidden=true;
+   
+       },
+       FnSpinnerrActive:function(flag){
+        if(flag==true)
+        this.$.spinner.opened=true;
+        if(flag==false)
+        this.$.spinner.opened=false;
+      }
+    });
+  })();
+  </script>
+</dom-module>
+

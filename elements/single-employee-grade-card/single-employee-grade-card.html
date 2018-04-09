@@ -1,0 +1,317 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="single-employee-grade-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+       paper-checkbox.paper-checkbox-0
+      {
+      
+         font-family: 'Roboto', 'Noto', sans-serif;
+         -webkit-font-smoothing: antialiased;
+         padding-top: 3px;
+     }
+    </style>
+    <div class="subcard">
+    <paper-input value="{{empid}}" hidden></paper-input>
+      <paper-checkbox  on-change="fngrade"  id="{{gradeid}}" checked="{{check}}">{{gradename}}</paper-checkbox>
+    </div>
+    <paper-dialog id="termarrinformationid1" modal>
+ <h3>This Grade is already mapped to following section</h3>
+    
+        <template is="dom-repeat" items="{{dialogarr}}">
+        <h4>*{{item.section_id}}</h4>
+        </template>
+        
+         <center><paper-button style="background-color:black;color:white" on-click="fnsetsubmit" dialog-confirm autofocus>Submit</paper-button>
+         <paper-button style="background-color:black;color:white" on-click="fnsetclose" dialog-confirm autofocus>close</paper-button>
+         </center>
+        </paper-dialog>
+     <iron-ajax
+        method="post"
+        id="singleempgradeajax"
+        url="{{singleempgradeurl}}"
+        params="{{singleempgradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="singleempgradeResponse"
+        debounce-duration="300">
+         <iron-ajax
+        method="post"
+        id="singleempgrade1ajax"
+        url="{{singleempgrade1url}}"
+        params="{{singleempgrade1param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="singleempgrade1Response"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="singleempgrade2ajax"
+        url="{{singleempgrade2url}}"
+        params="{{singleempgrade2param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="singleempgrade2Response"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax
+        method="post"
+        id="singleempgrade3ajax"
+        url="{{singleempgrade3url}}"
+        params="{{singleempgrade3param}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="singleempgrade3Response"
+        debounce-duration="300">
+      </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+   var gradearr=[];
+    var ovaerallsectioarr=[];
+    var temp=[];
+    var len1=0;
+    var len2=0;
+    Polymer({
+      is: 'single-employee-grade-card',
+
+     fngrade:function(e){
+      var temparr=[];
+        if(gradearr.length==0)
+          document.querySelector('single-employee-subject-card').fnsetvalue();
+
+     if(document.querySelector('#'+this.gradeid).checked==true)
+         {
+            var obj={};
+                obj.id=this.gradeid;
+                obj.gradename=this.gradename;
+                gradearr.push(obj);
+                temp.push(obj);
+       //  alert(JSON.stringify(gradearr)); 
+                 
+           
+         } 
+      if(document.querySelector('#'+this.gradeid).checked==false){
+this.singleempgrade1url=sessionStorage.getItem("addrinfo")+"/fngetsectionname1-service";
+      var obj2={};
+      obj2.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj2.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj2.grade_id=this.gradeid;
+      obj2.gradename=this.gradename;
+      obj2.empid=this.empid;
+      obj2.subjectid=sessionStorage.getItem("curr_sess_loggedsubjectid");
+       //alert(JSON.stringify(obj2)); 
+      this.singleempgrade1param=obj2;
+      this.$.singleempgrade1ajax.generateRequest();  
+    
+
+      for(var i=0;i<gradearr.length;i++){
+           if(gradearr[i].id==this.gradeid){
+             gradearr.splice(i,1);
+           }}
+         }
+         // alert(JSON.stringify(gradearr)); 
+           len1=gradearr.length;
+           //alert(len1);
+
+        for(var i=0;i<gradearr.length;i++){
+            
+   this.singleempgradeurl=sessionStorage.getItem("addrinfo")+"/fngetsectionname-service";
+      var obj1={};
+      obj1.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj1.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj1.grade_id=gradearr[i].id;
+      obj1.gradename=gradearr[i].gradename;
+      obj1.empid=this.empid;
+      obj1.subjectid=sessionStorage.getItem("curr_sess_loggedsubjectid");
+      this.singleempgradeparam=obj1;
+      // alert(JSON.stringify(obj1)); 
+      this.$.singleempgradeajax.generateRequest();
+           }
+
+        
+        },
+graddarrvales:function(e){
+  for(var i=0;i<e.length;i++){
+            var obj={};
+                obj.id=e[i].gradeid;
+                obj.gradename=e[i].gradename;
+                gradearr.push(obj); 
+   }
+},
+fnsetsubmit:function(e){
+  this.singleempgrade2url=sessionStorage.getItem("addrinfo")+"/fngetsectionname2-service";
+      var obj2={};
+   obj2.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj2.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj2.grade_id=this.gradeid;
+      obj2.gradename=this.gradename;
+      obj2.empid=this.empid;
+      obj2.subjectid=sessionStorage.getItem("curr_sess_loggedsubjectid");
+       //alert(JSON.stringify(obj2)); 
+      this.singleempgrade2param=obj2;
+      this.$.singleempgrade2ajax.generateRequest();  
+},
+singleempgrade2Response:function(e){
+  var res=e.detail.response.returnval;
+ if(gradearr.length==0){
+  ovaerallsectioarr=[];
+   document.querySelector('single-staff-mapping-card').sectionarr=ovaerallsectioarr;
+   }
+  else{
+  //alert(JSON.stringify(ovaerallsectioarr));
+
+  for(var i=0;i<gradearr.length;i++){
+            
+   this.singleempgrade3url=sessionStorage.getItem("addrinfo")+"/fngetsectionname3-service";
+      var obj1={};
+      obj1.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+      obj1.academic_year=localStorage.getItem("curr_sess_academicyear");
+      obj1.grade_id=gradearr[i].id;
+      obj1.gradename=gradearr[i].gradename;
+      obj1.empid=this.empid;
+      obj1.subjectid=sessionStorage.getItem("curr_sess_loggedsubjectid");
+      this.singleempgrade3param=obj1;
+      // alert(JSON.stringify(obj1)); 
+      this.$.singleempgrade3ajax.generateRequest();
+           }
+         }
+    document.querySelector('single-staff-mapping-card').fnsetvaluez();
+   },
+   singleempgrade3Response:function(e){
+   var res1=e.detail.response.dbarr;
+  var res2=e.detail.response.mastersectionarr;
+    if(len1==len2){
+         
+    for(var j=0;j<res2.length;j++){
+              var flag=0;
+              for(var i=0;i<res1.length;i++){
+                  
+                  if(res2[j].class_id==res1[i].class_id)
+                  {    
+                   flag=1;
+                   res2[j].check=true;   
+                  }
+                 }
+                 if(flag==0){
+                  res2[j].check=false;
+                 }
+               }
+               for(var l=0;l<res2.length;l++){
+               ovaerallsectioarr.push(res2[l]);
+               }
+              // alert(1);
+     // alert(JSON.stringify(ovaerallsectioarr)); 
+ 
+  document.querySelector('single-staff-mapping-card').sectionarr=ovaerallsectioarr;
+    ovaerallsectioarr=[];
+       len1=0;
+       len2=0;
+               
+           }
+
+},
+singleempgrade1Response:function(e){
+  var res=e.detail.response.returnval;
+if(res!="empty"){
+  this.$.termarrinformationid1.open();
+   this.dialogarr=res;
+ }  
+
+ //alert(JSON.stringify(res)); 
+},
+
+fnsetclose:function(e){
+  this.$.termarrinformationid1.close();
+  var obj={};
+
+    obj.id=this.gradeid;
+    obj.gradename=this.gradename;
+    gradearr.push(obj);
+    for(var i=0;i<gradearr.length;i++){
+      var e=gradearr[i].id;
+      document.querySelector('#'+e).checked=true;
+    }
+
+},
+    singleempgradeResponse:function(e){
+      len2++;
+        // alert(len1+" "+len2);
+         var res=e.detail.response.sectionarr;
+         var res1=e.detail.response.dbarr;
+         var res2=e.detail.response.mastersectionarr;
+ //alert(JSON.stringify(res)); 
+ //alert(JSON.stringify(res1)); 
+
+      
+          for(var l=0;l<res.length;l++){
+            
+               var obj={};
+                obj.class_id=res[l].class_id;
+                obj.section_id=res[l].section_id;
+                obj.grade_id=res[l].grade_id;
+                obj.check=false;
+                ovaerallsectioarr.push(obj);
+                }
+
+       
+                 
+      if(len1==len2){
+         
+    for(var j=0;j<res2.length;j++){
+              var flag=0;
+              for(var i=0;i<res1.length;i++){
+                  
+                  if(res2[j].class_id==res1[i].class_id)
+                  {    
+                   flag=1;
+                   res2[j].check=true;   
+                  }
+                 }
+                 if(flag==0){
+                  res2[j].check=false;
+                 }
+               }
+               for(var l=0;l<res2.length;l++){
+               ovaerallsectioarr.push(res2[l]);
+               }
+              // alert(1);
+     // alert(JSON.stringify(ovaerallsectioarr)); 
+ 
+document.querySelector('single-staff-mapping-card').sectionarr=ovaerallsectioarr;
+    ovaerallsectioarr=[];
+       len1=0;
+       len2=0;
+               
+           }
+         },
+    fnclear:function(e){
+    
+     for(var i=0;i<gradearr.length;i++){
+                         var m=gradearr[i].id;
+                       document.querySelector('#'+m).checked=false;        
+                     }
+    var obj={};
+   ovaerallsectioarr=[];
+   gradearr=[];
+    },
+    
+    fnclear2:function(e){
+    
+    },
+    fnclear1:function(e){
+    var obj={};
+   ovaerallsectioarr=[];
+   gradearr=[];
+    }
+    });
+  })();
+  </script>
+</dom-module>

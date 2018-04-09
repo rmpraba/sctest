@@ -1,0 +1,144 @@
+
+   
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="class-teacher-book-reject-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+       table
+        {      
+          table-layout: fixed;
+          width: 1270px;
+          border-collapse: collapse;
+          margin-left: 19%;
+        }
+
+        .card
+        {
+          @apply(--layout-horizontal);
+        } 
+        p
+        {
+          width: 25%;
+          margin-left: 1%;
+        } 
+        paper-button
+        {
+          text-transform: none;
+          height: 25px;
+        } 
+    </style>
+     
+      
+      <div class="card">
+        <p hidden>{{gradeid}}</p>
+        <p hidden>{{subjectid}}</p>
+        <p hidden>{{classid}}</p>  
+        <p hidden>{{chapterid}}</p>
+        <p hidden>{{empid}}</p>
+        <p>{{gradename}}</p>
+        <p>{{subjectname}}</p>
+        <p>{{sectionname}}</p>
+        <p>{{termid}}</p>
+        <p style="width: 26%;margin-left: -1%;">{{chapter_name}}</p>
+        <p>{{empname}}</p>
+        <p><paper-button  id="tb3" on-click="FnView">View</paper-button></p>
+      </div>
+     <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+ <iron-ajax  
+        method="post"
+        id="rejectcapterstatusajax"
+        url="{{rejectcapterstatusurl}}"
+        params="{{rejectcapterstatusparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="rejectcapterstatusResponse"
+        debounce-duration="300"/>
+   </iron-ajax>
+  </template>
+  <script>
+  (function(){
+    'use strict';
+var skillid;
+var val=[];
+var costatus;
+
+    Polymer({
+      is: 'class-teacher-book-reject-item-card',
+
+      FnView:function(e){
+    //alert(1);
+this.rejectcapterstatusurl=sessionStorage.getItem("addrinfo")+"/fetchclassconcept11-service";
+           var obj={"schoolid":"","academic_year":""};
+           obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+           obj.subjectid=this.subjectid;
+           obj.gradeid=this.gradeid;
+           obj.sectoinidz=this.classid;
+           obj.chapterid=this.chapterid;
+           obj.empid=this.empid;
+           obj.termid=this.termid;
+           this.rejectcapterstatusparam=obj;
+           this.$.rejectcapterstatusajax.generateRequest();
+           sessionStorage.setItem("grdeidz",this.gradeid);
+           sessionStorage.setItem("subjectidz",this.subjectid);
+           sessionStorage.setItem("sectionidz",this.classid);
+           localStorage.setItem("curr_sess_capters",this.chapterid);
+           sessionStorage.setItem("termid",this.termid);
+
+        //alert(JSON.stringify(obj));
+    
+    
+        },
+         rejectcapterstatusResponse:function(e){
+          var res2=e.detail.response.returnval;
+       //alert(JSON.stringify(res2));
+        var setattr=[];
+               var a=[];
+            var overall=[];
+           for(var k=0;k<res2.length;k++)
+           {     
+                   var nameobj={};
+                      nameobj.conceptid=res2[k].concept_id;
+                      nameobj.conceptname=res2[k].concept_name;
+                      nameobj.subconceptid=res2[k].sub_concept_id;
+                      nameobj.subconceptname=res2[k].sub_concept_name;
+                      nameobj.enrichment_sug=res2[k].enrichment_sug;
+                     
+                      nameobj.skill=res2[k].skill;
+                      nameobj.value=res2[k].value;
+                      nameobj.period=res2[k].period;
+                      nameobj.rowidz=res2[k].row_id;
+                      nameobj.innovation=res2[k].innovation;
+                      nameobj.lr_rectifitcation=res2[k].lr_rectifitcation;
+                      nameobj.remarks=res2[k].remarks;
+                      nameobj.correction_status=res2[k].correction_status;
+                      nameobj.completion_status=res2[k].completion_status;
+                      nameobj.section_id=res2[k].section_id;
+                      nameobj.planned_date_from=res2[k].planned_date_from;
+                      nameobj.planned_to_date=res2[k].planned_to_date;
+                      nameobj.bld_value_name=res2[k].bld_value_name;
+                      nameobj.teaching_aid=res2[k].teaching_aid;
+                      nameobj.co_ordinator_remarks=res2[k].co_ordinator_remarks;
+                      nameobj.rowid=k+1;
+                      nameobj.hidecheck=true; 
+                      nameobj.grade_id=sessionStorage.getItem("grdeidz");
+                      nameobj.subject_id=sessionStorage.getItem("subjectidz");
+                      setattr.push(nameobj);
+    }
+   
+   document.querySelector('app-card').setPage('homepage','');
+   document.querySelector('home-page').setPage('class-teacher-book-rejection-item-card','');
+  document.querySelector('class-teacher-book-rejection-item-card').mainnarr=setattr; 
+  document.querySelector('class-teacher-book-rejection-item-card').empid=res2[0].empid; 
+ document.querySelector('class-teacher-book-rejection-item-card').empname=res2[0].empname; 
+        },
+
+ 
+ });
+  })();
+  </script>
+</dom-module>

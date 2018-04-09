@@ -1,0 +1,37 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="employeesubjectmap-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        @apply(--layout-vertical);
+      }
+    </style>
+    <!-- <paper-input value="{{sectionname}}"></paper-input> -->
+    <div class="card">
+      <paper-checkbox id="{{subjectid}}" on-change="subjectchangeHandler">{{subjectname}}</paper-checkbox>
+    </div>    
+  </template>
+  <script>
+  (function() {
+    var subjectarr=[];
+    'use strict';
+    Polymer({
+      is: 'employeesubjectmap-card',
+      subjectchangeHandler:function(e){
+        if(arr.length==0)
+          subjectarr.push(e.target.id);
+        for(var i=0;i<subjectarr.length;i++){
+          if(subjectarr[i]==e.target.id)
+            subjectarr.splice(i,1);
+        }
+        subjectarr.push(e.target.id);
+        document.querySelector('createemployee-card').setSubject(subjectarr);        
+      }
+    });
+  })();
+  </script>
+</dom-module>

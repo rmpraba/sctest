@@ -1,0 +1,114 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<dom-module id="class-teacher-book-reject-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .position{
+    margin-left:7%   
+   
+   }   
+    #tb1{
+         width:15%
+        }
+        #tb2{
+         width:35%
+        }
+        #tb3{
+         width:10%
+        }
+        #itemcard:nth-child(odd) {
+        background-color: white;
+       
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      #itemcard{
+        width: 80%;
+          margin-left: 9%;
+          
+      }
+      .report1
+      {
+          table-layout: fixed;
+          border-collapse: collapse;
+          width: 94%;
+          margin-left: 5%;
+          margin-top: 5%;
+      }
+      paper-dropdown-menu
+      {
+      
+        --paper-input-container-label: { color: red };
+        text-align:center;
+      }
+      #itemcard:nth-child(odd) 
+      {
+        background-color: white; 
+      }
+      #itemcard:nth-child(even) 
+      {
+        background-color: #e6f2ff;
+      }
+      #itemcard
+      {
+        width: 100%;
+        margin-left: 4%;  
+      }
+      #card
+      {
+        @apply(--layout-vertical);
+      }
+      #tablchapt
+      {
+          width: 88%;
+          border-collapse: collapse;
+          margin-left: -1%;
+          table-layout: fixed;
+          margin-top: 5%;
+      }
+    
+    </style>
+   
+
+      <div>
+        <center>
+          <h3>Completion Status</h3>
+        </center>
+      </div>
+
+      <table id="tablchapt">
+        <tr>
+          <th>GRADE</th>  
+          <th>SUBJECT</th>
+          <th>SECTION</th>
+          <th>TERM</th>
+          <th>CHAPTER</th>
+          <th>EMPLOYEE NAME</th>
+        </tr>
+      </table>      
+             
+      <template is="dom-repeat" items="{{fullstatusarr}}" as="view">
+        <div id='itemcard'>
+          <class-teacher-book-reject-item-card empid="{{view.emp_id}}" empname="{{view.emp_name}}" gradeid="{{view.grade_id}}" gradename="{{view.grade_name}}" subjectid="{{view.subject_id}}" subjectname="{{view.subject_name}}" classid="{{view.section_id}}" sectionname="{{view.section_name}}" chapterid="{{view.chapter_id}}" chapter_name="{{view.chapter_name}}" termid="{{view.term_id}}"></class-teacher-book-reject-item-card>
+        </div>
+      </template>
+  <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'class-teacher-book-reject-card',
+
+ 
+
+
+
+    });
+  })();
+  </script>
+</dom-module>

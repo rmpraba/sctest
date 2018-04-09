@@ -1,0 +1,67 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="..\..\bower_components/paper-dialog/paper-dialog-transition.html">
+<dom-module id="teacher-book-refernce-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      } 
+     
+.collapse-content::shadow #scroller  {
+    padding: 15px;
+    border: 1px solid #dedede;
+    width: 500px;
+      height: 350px;    
+  }
+ .dialog-right-position {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+    .dialog-right-position::shadow #scroller {
+      width: 500px;
+      height: 350px;
+    }  
+
+      .card
+      {
+        @apply(--layout-horizontal);
+            margin-top: -2em;
+          margin-left: -6%;
+      }
+
+      
+     </style>
+    <div class="card">
+        <paper-input hidden value={{capterid}} ></paper-input>
+        <paper-button on-click="passsetcapter" no ink><h4 style="margin-top: -1%;">{{capter}}</h4>
+        </paper-button>  
+    </div>
+
+  
+  <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var arr=[];
+    Polymer({
+   is: 'teacher-book-refernce-item-card',
+   passsetcapter:function(e)
+   {
+     document.querySelector('teacher-book-chapter-refernce-card').capthead=this.capter;
+     document.querySelector('teacher-book-chapter-refernce-card').captheadid=this.capterid;
+     this.$.bookservice.conceptseq();  
+     document.querySelector('app-card').setPage('homepage','');
+     document.querySelector('home-page').setPage('teacher-book-chapter-refernce-card','');
+     localStorage.setItem("curr_sess_capters",this.capterid); 
+     this.$.bookservice.fngetconceptvalue();
+    } 
+    
+    });
+  })();
+  </script>
+</dom-module>
+ 

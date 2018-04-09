@@ -1,0 +1,61 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="working-demo-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      p.uppercase {
+    text-transform: uppercase;
+      }
+
+    </style>
+    <div hidden>{{termid}}</div>
+    <div hidden>{{gradename}}</div>
+    <div hidden>{{gradeid}}</div>
+    <div hidden$="{{hideheadervalue1}}">
+        <p style="{{fonts}}">{{terms}}</p>
+    </div>
+     <div  hidden$="{{hideheadervalue}}">
+       <paper-input  style="text-align: center;" label="" value="{{score}}" on-change="FnChange"></paper-input>
+     </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+  var terms=[];
+    Polymer({
+      is: 'working-demo-card',
+
+     FnChange:function(e){
+      var obj={"termvalue":"","termid":"","acadamicyears":"","gradename":"","gradeid":"","schootypids":""};
+         obj.termvalue=this.score;
+         obj.termid=this.terms;
+         obj.gradename=this.gradename;
+         obj.schootypids=this.schootypids;
+         obj.gradeid=this.gradeid;
+         obj.acadamicyears=this.acadamicyears;
+         terms.push(obj);
+         document.querySelector('working-days-card').fnpassworking(terms);
+               
+     },
+     fnsplice:function(){
+       
+         terms=[];
+
+     },
+    });
+  })();
+  </script>
+</dom-module>

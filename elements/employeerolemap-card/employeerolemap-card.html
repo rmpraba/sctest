@@ -1,0 +1,36 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="employeerolemap-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        @apply(--layout-vertical);
+      }
+    </style>
+    <div class="card">
+      <paper-checkbox id="{{roleid}}" on-change="{{rolechangeHandler}}">{{rolename}}</paper-checkbox>
+    </div>    
+  </template>
+  <script>
+  (function() {
+    var rolearr=[];
+    'use strict';
+    Polymer({
+      is: 'employeerolemap-card',
+      rolechangeHandler:function(e){
+        if(rolearr.length==0)
+          rolearr.push(e.target.id);
+        for(var i=0;i<rolearr.length;i++){
+          if(rolearr[i]==e.target.id)
+            rolearr.splice(i,1);
+        }
+        rolearr.push(e.target.id);
+        document.querySelector('createemployee-card').setRole(rolearr);        
+      }
+    });
+  })();
+  </script>
+</dom-module>

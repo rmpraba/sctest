@@ -1,0 +1,801 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../student-add-card/student-add-card.html">
+<link rel="import" href="../student-dob-date-picker/student-dob-date-picker.html">
+<link rel="import" href="../student-remove-card/student-remove-card.html">
+<link rel="import" href="../demosumbit-card/demosumbit-card.html">
+
+<dom-module id="student-information-card">
+  <template>
+    <style>
+    
+      :host {
+        display: block;
+      }
+      .horizontalframe
+      {
+         @apply(--layout-horizontal);
+         display: flex;
+         margin-left: 13%;
+         width: 80%;
+      }
+       .horizontalframe1
+      {
+         @apply(--layout-horizontal);
+         display: flex;
+         margin-left:13%;
+         width: 80%;
+      }
+       .horizontalframe2
+      {
+         @apply(--layout-horizontal);
+         display: flex;
+         margin-left:13%;
+         width: 80%;
+      }
+       .horizontalframe3
+      {
+         @apply(--layout-horizontal);
+         display: flex;
+         margin-left:13%;
+         width: 80%;
+      }
+      
+      paper-input, gold-email-input
+      {
+        width: 80%;
+      /*  --paper-input-container-label: { color: red };*/
+          text-align:center;
+      }
+       paper-dropdown-menu
+       { 
+       width: 93%;
+        /*--paper-input-container-label: { color: red };*/
+       }
+       .horizontalframe .fields paper-input
+       {
+         width: 80%;
+       }
+    #newstud
+    {
+        margin-top: 5%;
+        margin-left: 20%;
+        border:2px solid black;
+        width: 65%;
+        
+    }
+    .lbl
+    {
+          @apply(--layout-horizontal);
+          margin-top: 12%;
+    }
+    .tlab
+    {
+      @apply(--layout-horizontal);
+          margin-top: 12%;
+    }
+  .mainbox {
+    margin-left:27%; 
+  }
+  .space1{
+    margin-left:3%;
+    }
+  .colapsinfo{
+   margin-left: 11%;
+
+  }
+  .content{
+    width:20%;
+    margin-left:13%;
+    top:20%!important;
+  }
+   .content1{
+    width:20%;
+    margin-left:37%;
+  }
+   .content2{
+    width:20%;
+    margin-left:61%;
+  } 
+  .content3{
+    width:20%;
+    margin-left:81%;
+  }
+  .student{
+   width: 106%;
+    margin-left: 13%;
+  }
+  #spinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }
+    </style>
+    <div class="mainbox">
+       
+       <span class="space1">
+         <paper-checkbox on-change="fnaddstudent" id="addstudentid"><h2>Student Add</h2></paper-checkbox>
+       </span >
+       <span class="space1">
+         <paper-checkbox on-change="fnrmovestudent" id="removestudentid"><h2>Student Remove</h2></paper-checkbox>
+       </span>
+       <span class="space1">
+     <paper-checkbox on-change="fnupdatestudent" id="updatestudentid"><h2>Student Update</h2></paper-checkbox>
+       </span>
+    </div>
+       <div id="addstudentinfoid">
+      <student-add-card grdstudad="grdstudad" studadyear="studadyear" taransyesz="taransyesz1" transnoz="transnoz1" male11="maleidzz" female11="femaleidzz" ageofyr="{{ageofyrs}}" hideonegender="{{hideonegender}}" studentgradearrr="{{studentgradearrr}}" hidetwogender="{{hidetwogender}}"></student-add-card> 
+       </div>
+       <div id="removestudentinfoid">
+          <student-remove-card studentslist="studentslistzz" grade="{{grade}}" section="{{section}}" gradeid="{{gradeid}}" classid="{{classid}}"  hidetwostudentinfo="{{hidetwostudentinfo}}" hideonestudentinfo="{{hideonestudentinfo}}"></student-remove-card>
+      </div>  
+<div id="updatestudentinfoid">
+       
+      <div class="student">
+       <paper-input label="Enter Student Name" is="" value="{{value}}" on-keydown="FnSearchstudnamezz"></paper-input>
+       <paper-listbox class="dropdown-content" id="studentslistz1" on-iron-select="FnSelectstudenqzz">
+         <template is="dom-repeat" items="{{itemArray}}" as="item">
+          <paper-item value="{{item.itemid}}">{{item.itemdes}}</paper-item>
+        </template>
+       </paper-listbox>
+      </div>
+
+
+
+ <span class="colapsinfo" id="colapsinfoid1">
+ <button  style="color:white;background-color:black;width: 13%;border-radius: 27%;" on-click="fnparnt">Parent Informattion</button>
+</span>  
+<span class="colapsinfo" id="colapsinfoid2">
+<button style="color:white;background-color:black;width: 13%;border-radius: 27%;" on-click="fnpesonal">Personal information</button>
+</span> 
+<span class="colapsinfo" id="colapsinfoid3">
+<button style="color:white;background-color:black;width: 13%;border-radius: 27%;" on-click="fnacademic">Section Mapping/Transfer</button>
+</span>
+<span class="colapsinfo" id="colapsinfoid4">
+<button style="color:white;background-color:black;width: 13%;border-radius: 27%;" on-click="fnlanguage">language Mapping</button>
+</span>
+    
+   
+<iron-collapse horizontal id="parentinfoid">
+ <span class="content">
+  <div style="border:2px solid black;width:31%">  
+      <div class="horizontalframe1">
+        <div class="fields">
+            <paper-input label="Father's Name" value="{{fathername1}}"></paper-input>
+        </div>
+        <div class="fields">
+          <paper-input label="Mother's Name" id="momname" required error-message="needs father's name!" allowed-pattern="[a-zA-Z ]" value="{{mothername1}}"></paper-input>
+        </div>
+        
+      </div>
+       
+      <div class="horizontalframe1">
+         <div class="fields">
+          <paper-input id="fmobile" error-message="enter proper mobile no!" label="Father Mobile Number" allowed-pattern="[0-9]" maxlength="10" value="{{fathermob}}"></paper-input>
+        </div>
+        <div class="fields">
+          <paper-input id="mtmobile" error-message="enter proper mobile no!" label="Mother Mobile Number" allowed-pattern="[0-9]" maxlength="10" value="{{mothermob}}"></paper-input>
+        </div>
+        </div>
+   <div class="horizontalframe1">
+        <div class="fields">
+           <gold-email-input id="email" error-message="needs email ID!" label="Mother Email" value="{{motheremail}}"></gold-email-input>
+        </div>
+        <div class="fields">
+          <gold-email-input id="email" error-message="needs email ID!" label="Father Email" value="{{fatheremail}}"></gold-email-input>
+        </div>
+      </div>
+
+     
+      <div class="horizontalframe1">
+        <div class="fields">
+          <paper-input id="addr1" label="Address1" value="{{address1}}"></paper-input>
+        </div>
+        <div class="fields" >
+          <paper-input id="addr2"  label="Address2" value="{{address2}}"></paper-input>
+        </div>
+       
+      </div>
+
+      <div class="horizontalframe1">
+        <div class="fields">
+          <paper-input id="addr3" label="Address3" value="{{address3}}"></paper-input>
+        </div>
+     
+          <div class="fields">
+            <paper-input id="fcity" label="City" value="{{city}}"></paper-input>
+          </div>
+        </div>
+        <div class="horizontalframe1">
+         
+        <div class="fields">
+          <paper-input id="fpin" label="Pincode" allowed-pattern="[0-9]" value="{{pincode}}"></paper-input>
+        </div>
+        </div>
+      <center>
+       <paper-button on-click="fnparents" style="color:white;background-color:black;">Submit</paper-button> 
+       </center>
+     </div>
+     
+  </span>
+ </iron-collapse>
+
+<iron-collapse horizontal id="pesonalinfoid">
+ <span class="content1">
+  
+<div style="border:2px solid black;  width: 35%;
+    margin-left: 25%;">
+      <div class="horizontalframe">
+        <div class="fields" >
+          <paper-dropdown-menu id="admnyr" label="Select  Acadamic year">
+             <paper-menu id="studentacaid" class="dropdown-content" on-iron-select="fnselectacadamics"  attr-for-selected="value" selected="{{academicyear}}">
+          <template is="dom-repeat" items="{{academicarr}}">
+           <paper-item value="{{item.year}}">{{item.year}}</paper-item>
+        </template>
+        </paper-menu>
+            </paper-dropdown-menu>
+        </div>
+          <div class="fields">
+          <paper-input label="Enrollment Number" value="{{studid}}"></paper-input>
+        </div>
+        </div>  
+
+      
+        <div class="horizontalframe">
+          <div class="fields"  >
+          <paper-input label="First Name" value="{{fname}}"></paper-input>
+        </div>
+        <div class="fields" >
+           <paper-input label="Middle Name" value="{{midname}}"></paper-input>
+         </div>
+        </div>
+   
+
+      <div class="horizontalframe">
+        <div class="fields" >
+          <paper-input label="Last Name" value="{{lsname}}"></paper-input>
+        </div>
+        <div class="fields" >
+          <div class="lbl">
+            <label>Gender</label>
+          </div>
+          <div class="gender">
+             <div >
+              <span>
+              <paper-checkbox id="males"  class="checkbox" on-change="fnmales">Boy</paper-checkbox>
+              </span>
+            <span><paper-checkbox  id="females" class="checkbox" on-change="fnfemales">Girl</paper-checkbox></span>
+             </div>
+            </div>
+        </div> 
+     </div>  
+      <div class="horizontalframe">
+      <div class="fields">
+      <student-dob-date-picker showdate="{{showdate}}"></student-dob-date-picker>
+        </div>
+      <div class="fields">
+      <paper-input readonly label="Age(In Years)" value="{{ageofyrs}}"></paper-input>
+        </div>
+      </div>
+      
+      <center>   <paper-button on-click="fnpersonal" style="color:white;background-color:black;">Submit</paper-button>  </center>
+     </div> 
+ </span>
+ </iron-collapse>
+
+<iron-collapse horizontal id="academicinfoid">
+ <span class="content2">
+  
+  <div style="border:2px solid black;width:31%;margin-left:49%">  
+      <div class="horizontalframe2">
+        <div class="fields">
+    <paper-dropdown-menu label="Grade">
+      <paper-menu id="studentgradezid"  class="dropdown-content" on-iron-select="fnselectgrade11" attr-for-selected="value" selected="{{gradeidzzsss}}">
+          <template is="dom-repeat" items="{{infogradearrr}}" >
+         <paper-item value="{{item.gradeidzz}}">{{item.gradenamezz}}</paper-item>
+        </template>
+        </paper-menu>
+        </paper-dropdown-menu>
+        </div>
+        <div class="fields">
+      <paper-dropdown-menu  label=" Section">
+        <paper-menu id="newifosectionidzza" class="dropdown-content" on-iron-select="fnselsetsection"   attr-for-selected="value" selected="{{classid}}">
+          <template is="dom-repeat" items="{{sectionarr}}">
+         <paper-item value="{{item.class_id}}">{{item.section_id}}</paper-item>
+        </template>
+        </paper-menu>
+        </paper-dropdown-menu>
+        </div>
+         <div class="fields">
+     
+      <paper-dropdown-menu id="term" label="Select Term" hidden$="{{hideterm}}">
+           <paper-menu id="newstudenhifotermid" class="dropdown-content"   on-iron-select="fnsetstudentterm" attr-for-selected="value" required>
+                  <template is="dom-repeat" items="{{termarrrs}}" as="items">
+                  <paper-item value="{{items.term_name}}">{{items.term_name}}</paper-item>
+                 </template>
+              </paper-menu>
+     </paper-dropdown-menu>
+        
+        </div>
+      </div>
+      <center>  <paper-button on-click="fnacadamics" style="color:white;background-color:black;">Submit</paper-button>  </center>
+    </div>
+ </span>
+ </iron-collapse>
+
+<iron-collapse horizontal id="languageinfoid">
+ <span class="content3">
+
+   <div style="border:2px solid black;width:31%;margin-left:70%">  
+      <div class="horizontalframe3">
+        <div class="fields">
+      <paper-dropdown-menu label=" Second Language">
+      <paper-menu id="secondlanid" class="dropdown-content" on-iron-select="fnselectsecondlan" attr-for-selected="value" selected="{{secondlan}}">
+          <template is="dom-repeat" items="{{secondarr}}" >
+         <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+        </template>
+        </paper-menu>
+        </paper-dropdown-menu>
+        </div>
+ <div class="fields" hidden$="{{hidestudentinfolangid}}">
+      <paper-dropdown-menu  label="Third Language">
+        <paper-menu id="thirdlanid" class="dropdown-content" on-iron-select="fnselectthirdlan"  attr-for-selected="value" selected="{{thirdlen}}">
+          <template is="dom-repeat" items="{{thirdarr}}">
+         <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+        </template>
+        </paper-menu>
+        </paper-dropdown-menu>
+        </div>
+       </div>
+   <center>   <paper-button on-click="fnlan" style="color:white;background-color:black;">Submit</paper-button>
+</center>
+       </div>
+  </span>
+ </iron-collapse>
+
+     <paper-dialog id="termarrinformationid" modal>
+       <h3 hidden$="{{termarrinfonatioid}}">Marks already entered in below Term</h3>
+    
+        <template is="dom-repeat" items="{{termarr}}">
+        <h4>*{{item.term_name}}</h4>
+        </template>
+        <h3 hidden$="{{langinfomationid}}">Previously Mapped Languages</h3>
+        <template is="dom-repeat" items="{{langdialogarr}}">
+        <h4>*{{item.subject_name}}</h4>
+        </template>
+         <center>
+            <paper-button style="background-color:black;color:white" on-click="" dialog-confirm autofocus>OK</paper-button>
+
+            <paper-button style="background-color:black;color:white" on-click="fnsetsubmit" dialog-confirm autofocus>Cancel</paper-button>
+         </center>
+        </paper-dialog>
+  <paper-input  hidden  value="{{schooltype}}"></paper-input>       
+  <paper-input  hidden  value="{{classidszz}}"></paper-input>
+  <paper-input  hidden value="{{sectionnames}}"></paper-input>
+  <paper-input  hidden value="{{gradeidnames}}"></paper-input>
+  <paper-input  hidden value="{{gradeidzzsss1}}"></paper-input>
+  <student-add-service id="studservice"></student-add-service>
+  <demosumbit-card id="mydialog"></demosumbit-card> 
+</div>
+<div class="spinner"><paper-dialog modal id="spinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+<paper-spinner active></paper-spinner></paper-dialog></div>
+</template>
+  <script>
+  (function() {
+    'use strict';
+var studentnamearr=[];
+var gender;
+var dobdate;
+    Polymer({
+      is: 'student-information-card',
+      studentinforefresh:function(e){
+       this.$.addstudentinfoid.hidden=true;
+       this.$.removestudentinfoid.hidden=true;
+       this.$.updatestudentinfoid.hidden=true;
+       this.$.colapsinfoid1.hidden=true;
+       this.$.colapsinfoid2.hidden=true;
+       this.$.colapsinfoid3.hidden=true;
+       this.$.colapsinfoid4.hidden=true;
+       // this.studentslist='studentslist';
+      },
+      termarrinformation:function(e){
+   this.$.termarrinformationid.close();
+      },
+   termarrinformation1:function(e){
+  this.$.termarrinformationid.open();
+      },
+fnsetsubmit:function(e){
+     this.$.termarrinformationid.close();
+      }, 
+      fnparents:function(e){
+     this.FnSpinnerActive(true);
+  this.$.studservice.fnparentinfomation(this.studid,this.fathername1,this.mothername1,this.fathermob,this.mothermob,this.motheremail,this.fatheremail,this.address1,this.address2,this.address3,this.city,this.pincode);
+      },
+      fnpersonal:function(e)
+      {
+         this.FnSpinnerActive(true);
+ this.$.studservice.fnpersonalinfomation(this.academicyear,this.fname,this.lsname,this.midname,this.showdate,this.ageofyrs,this.studid,gender,this.gradenamez,this.gradeidzzsss,this.classid,this.sectionid);
+
+  this.$.studservice.fnstudpersonalinfo(this.academicyear,this.fname,this.lsname,this.midname,this.showdate,this.ageofyrs,this.studid,gender,this.gradenamez,this.gradeidzzsss,this.classid,this.sectionid);
+
+   this.$.studservice.fnstudnameinfo(this.fname,this.lsname,this.midname,this.studid,this.gradenamez,this.gradeidzzsss,this.classid,this.sectionid);
+
+
+    },
+  fnlan:function(e){
+   //  if(this.gradenamez=='Nursery'||this.gradenamez=='Junior KG'||this.gradenamez=='Senior KG'||this.gradenamez=='Grade-1'||this.gradenamez=='Grade-2'||this.gradenamez=='Grade-3'||this.gradenamez=='Grade-4'){
+
+   //           this.$.studservice.fnlaninfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.secondlan,this.value);
+   // }
+   // else{
+   
+             this.$.studservice.fnlaninfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.secondlan,this.value,this.thirdlen);
+
+             // this.$.studservice.fnlaninfomation1(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.thirdlen,this.value);
+      // }
+       },
+fnacadamics:function(e){
+    if(this.gradenamez=='Nursery'||this.gradenamez=='Junior KG'||this.gradenamez=='Senior KG'||this.gradenamez=='Grade-1'||this.gradenamez=='Grade-2'||this.gradenamez=='Grade-3'||this.gradenamez=='Grade-4'){
+    this.langprefs="Second Language";
+    // this.schooltype='primary';
+         this.$.studservice.fnacadamicsinfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.langprefs,this.schooltype,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames);
+// this.$.studservice.fnacadamicsinfomation3(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.schooltype);
+// this.$.studservice.fnacadamicsinfomation1(this.studid,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames,this.termid);
+// this.$.studservice.fetchstudentremove();
+
+    }
+  else{
+      this.langprefs="Third Language";
+     // alert(this.langprefs);
+    // this.schooltype='high';
+
+    this.$.studservice.fnacadamicsinfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.langprefs,this.schooltype);
+    // this.$.studservice.fnacadamicsinfomation3(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.schooltype);
+    // this.$.studservice.fnacadamicsinfomation2(this.studid,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames,this.termid);
+    // this.$.studservice.fetchstudentremove();
+
+    }
+   },
+ fnsetdateofbirth:function(dates)
+       {
+        this.showdate=dates;
+         var dt1=new Date(dates);
+         dobdate=dates;
+         var dt=new Date();
+         var dt=new Date();
+         var pr_year=dt.getFullYear();
+         var bt_year=dt1.getFullYear();
+         var diff=parseInt(pr_year-bt_year);
+         this.ageofyrs=diff+" Years";
+         //alert(this.ageofyrs);
+      },
+fnselectsecondlan:function(e){
+this.secondlan=e.target.selectedItem.value;
+this.secondlangname=e.target.selectedItem.textContent.trim();
+},
+ fnselectacadamics:function(e){
+this.academicyear=e.target.selectedItem.textContent.trim();
+ },
+fnselectgrade11:function(e){
+  this.gradeidzzsss=e.target.selectedItem.value;
+  this.gradenamez=e.target.selectedItem.textContent.trim();
+if(this.gradenamez=='Nursery'||this.gradenamez=='Junior KG'||this.gradenamez=='Senior KG'||this.gradenamez=='Grade-1'||this.gradenamez=='Grade-2'||this.gradenamez=='Grade-3'||this.gradenamez=='Grade-4'){
+ this.hidestudentinfolangid=true;
+}
+else{
+ this.hidestudentinfolangid=false;
+
+}
+
+//alert(this.gradeidzzsss+" "+this.gradenamez);
+ this.$.studservice.fngetsectionname(this.gradeidzzsss);
+},
+
+fnsetstudentterm:function(e){
+this.termid=e.target.selectedItem.textContent.trim();
+},
+fnselsetsection:function(e){
+this.classid=e.target.selectedItem.value;
+this.sectionid=e.target.selectedItem.textContent.trim();
+if(this.classid!=this.classidszz){
+  this.FnSpinnerActive(true);
+  this.$.studservice.fngetinfosectionerrdilalog(this.gradeidzzsss1,this.classidszz,this.gradeidnames,this.sectionnames,this.studid);        
+}
+},
+fnselectthirdlan:function(e){
+this.thirdlen=e.target.selectedItem.value;
+this.thirdlenname=e.target.selectedItem.textContent.trim();
+//alert(this.thirdlen+" "+this.thirdlenname);
+},
+
+fnmales:function(e){
+  if(document.querySelector("#males").checked==true)
+        {
+      document.querySelector("#females").checked=false;
+         
+         gender="Male";
+         //alert(gender);
+        }
+      },
+      fnfemales:function(e){
+    {
+if(document.querySelector("#females").checked==true){
+
+   document.querySelector("#males").checked=false;
+   
+         gender="Female";
+         //alert(gender);
+        }
+      }
+      },
+      fngender:function(e){
+    if(e=='Male'){
+    document.querySelector("#males").checked=true;
+    gender="Male";
+     }
+   if(e=='Female'){
+    document.querySelector("#females").checked=true;
+     gender="Female";
+       }
+
+      },
+      fnparnt:function(e){
+    this.$.parentinfoid.opened=true;
+    this.$.pesonalinfoid.opened=false;
+    this.$.academicinfoid.opened=false; 
+    this.$.languageinfoid.opened=false; 
+     },
+    fnpesonal:function(e){
+         this.$.pesonalinfoid.opened=true;
+         this.$.parentinfoid.opened=false;
+        this.$.academicinfoid.opened=false; 
+        this.$.languageinfoid.opened=false; 
+       },
+   fnacademic:function(e){
+    this.$.academicinfoid.opened=true; 
+    this.$.parentinfoid.opened=false;
+    this.$.pesonalinfoid.opened=false;
+    this.$.languageinfoid.opened=false; 
+      },
+  fnlanguage:function(e){
+     this.$.languageinfoid.opened=true; 
+    this.$.parentinfoid.opened=false;
+    this.$.pesonalinfoid.opened=false;
+    this.$.academicinfoid.opened=false; 
+   
+  },
+fnaddstudent:function(e){
+
+  if(document.querySelector("#addstudentid").checked==true)
+  {
+    document.querySelector('student-remove-card').fnrefremve();
+    document.querySelector("#removestudentid").checked=false;
+    document.querySelector("#updatestudentid").checked=false;
+    this.$.addstudentinfoid.hidden=false;
+    this.$.removestudentinfoid.hidden=true;
+    this.$.updatestudentinfoid.hidden=true;
+    this.hideonegender=true;
+    this.hidetwogender=false;
+  
+  
+    this.value="";
+    this.$.parentinfoid.opened=false;
+    this.$.pesonalinfoid.opened=false;
+    this.$.academicinfoid.opened=false; 
+    this.$.languageinfoid.opened=false;  
+  }
+
+},
+fnrmovestudent:function(e){
+if(document.querySelector("#removestudentid").checked==true)
+        {
+    this.$.studservice.fetchstudentremove();
+    document.querySelector("#addstudentid").checked=false;
+  document.querySelector("#updatestudentid").checked=false;
+
+  document.querySelector('student-add-card').FnfullzRefresh();
+
+       this.$.addstudentinfoid.hidden=true;
+       this.$.removestudentinfoid.hidden=false;
+       this.$.updatestudentinfoid.hidden=true;
+       this.hideonestudentinfo=true;
+       this.hidetwostudentinfo=false;
+       this.value="";
+       this.$.parentinfoid.opened=false;
+       this.$.pesonalinfoid.opened=false;
+       this.$.academicinfoid.opened=false; 
+       this.$.languageinfoid.opened=false;
+       }
+    },
+  getstudentdet:function(arr)
+     {
+        studentnamearr=arr;
+     },
+fnupdatestudent:function(e){
+ if(document.querySelector("#updatestudentid").checked==true)
+    {
+    this.$.studservice.fetchstudentinfo();
+    document.querySelector('student-remove-card').fnrefremve();
+
+        document.querySelector("#removestudentid").checked=false;
+        document.querySelector("#addstudentid").checked=false;
+
+        document.querySelector('student-add-card').FnfullzRefresh();
+        this.$.addstudentinfoid.hidden=true;
+        this.$.removestudentinfoid.hidden=true;
+        this.$.updatestudentinfoid.hidden=false;
+        this.$.colapsinfoid1.hidden=true;
+        this.$.colapsinfoid2.hidden=true;
+        this.$.colapsinfoid3.hidden=true;
+        this.$.colapsinfoid4.hidden=true;
+        }
+      },
+        FnSelectstudenqzz:function(e)
+        {
+          this.querySelector('#studentslistz1').style.visibility='hidden';
+          this.value=e.target.selectedItem.textContent.trim();
+          this.studentid=e.target.selectedItem.value;
+          this.$.colapsinfoid1.hidden=false;
+          this.$.colapsinfoid2.hidden=false;
+          this.$.colapsinfoid3.hidden=false;
+          this.$.colapsinfoid4.hidden=false;
+          this.itemArray=[];
+          document.querySelector('#studentslistz1').selected=-1;
+          this.FnSpinnerActive(true);
+          this.$.studservice.fngetstudentallinfo(this.studentid);
+          this.$.studservice.fngetstudname1(this.studentid);
+          // this.$.studservice.getalltermmarks1(this.studentid);
+          this.studid=this.studentid;
+          document.querySelector('#newifosectionidzza').selected=-1;
+          this.classid="";
+          this.sectionarr="";
+          this.fmrefresh();
+      },
+
+    FnSearchstudnamezz:function(e)
+     {
+      if(e.keyCode==13|| e.keyCode==40)
+            this.querySelector('#studentslistz1').focus();
+          var arr=[];
+          arr.push({"itemdes":"-----Select-----"});
+          this.querySelector('#studentslistz1').style.visibility='visible';
+          if(e.keyCode==8){
+            this.itemflag="true";
+            this.itemval="";
+            //alert('yes');
+            var len=(this.value).length;
+            if(len<=1){
+              this.querySelector('#studentslistz1').style.visibility='hidden';
+              this.itemArray="";
+              this.itemval="";
+            }
+            if(len>1){   
+        this.querySelector('#studentslistz1').style.visibility='visible';
+              var backsubval=(((this.value).substring(0,(len-1))).trim()).toUpperCase();
+              for(var i=0;i<studentnamearr.length;i++)
+              {
+                var subval=((studentnamearr[i].student_name).trim()).substring(0,backsubval.length);
+                if((subval).toUpperCase()==(backsubval).toUpperCase())
+                {
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                }
+              }
+              this.itemArray=arr;
+            }
+          }
+          if(e.keyCode!=8&& e.keyCode!=16&& e.keyCode!=13 && e.keyCode!=38&&e.keyCode!=40&&e.keyCode!=37&&e.keyCode!=39){
+            if(this.itemflag=="true") {
+              this.itemval = (this.value).toUpperCase()+String.fromCharCode((e.keyCode)).toUpperCase();
+              this.itemflag="false";
+            }
+            else
+            this.itemval = this.value +String.fromCharCode((e.keyCode));
+            if(this.itemval.length>0)
+            {
+              for(var i=0;i<studentnamearr.length;i++){
+                var subval=((studentnamearr[i].student_name).trim()).substring(0,this.itemval.length);
+                if((subval).toUpperCase()==(this.itemval).toUpperCase()){
+                  var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                }
+              }
+              if(arr.length>0)
+                this.itemArray=arr;
+              else {
+                var obj={"itemdes":"","itemid":""};
+                  obj.itemdes=studentnamearr[i].student_name;
+                  obj.itemid=studentnamearr[i].id;
+                  arr.push(obj);
+                this.itemArray=arr;
+              }
+            } }
+       this.$.parentinfoid.opened=false;
+       this.$.pesonalinfoid.opened=false;
+       this.$.academicinfoid.opened=false; 
+       this.$.languageinfoid.opened=false; 
+       this.$.colapsinfoid1.hidden=true;
+       this.$.colapsinfoid2.hidden=true;
+       this.$.colapsinfoid3.hidden=true;
+       this.$.colapsinfoid4.hidden=true;
+         },
+
+    fmrefresh:function(e){
+    this.fathername1="";
+    this.mothername1="";
+    this.fathermob="";
+    this.mothermob="";
+    this.motheremail="";
+    this.fatheremail="";
+    this.address1="";
+    this.address2="";
+    this.address3="";
+    this.city="";
+    this.academicyear="";
+  //  this.studid="";
+    this.pincode="";
+    this.fname="";
+    this.lsname="";
+    this.midname="";
+    this.showdate="";
+    this.ageofyrs="";
+    this.gradeidzzsss="";
+    this.secondlan="";
+    this.thirdlen="";
+    this.classidszz="";
+    this.sectionnames="";
+    this.gradeidnames="";
+    this.gradeidzzsss1="";
+    document.querySelector("#females").checked=false;  
+    document.querySelector("#males").checked=false;  
+    document.querySelector('#studentacaid').selected=-1;
+    document.querySelector('#newstudenhifotermid').selected=-1;
+    document.querySelector('#thirdlanid').selected=-1;
+    document.querySelector('#secondlanid').selected=-1;
+    document.querySelector('#studentgradezid').selected=-1;
+    document.querySelector('#newifosectionidzza').selected=-1;
+  //  document.querySelector('#newstudenhifotermid').selected=-1;
+  },
+
+    fnnewreff:function()
+    {
+        document.querySelector("#updatestudentid").checked=false;
+        document.querySelector("#removestudentid").checked=false;
+        document.querySelector("#addstudentid").checked=false;
+
+       this.$.addstudentinfoid.hidden=true;
+       this.$.removestudentinfoid.hidden=true;
+       this.$.updatestudentinfoid.hidden=true;
+       this.$.colapsinfoid1.hidden=true;
+       this.$.colapsinfoid2.hidden=true;
+       this.$.colapsinfoid3.hidden=true;
+       this.$.colapsinfoid4.hidden=true;
+       this.value="";
+       this.$.parentinfoid.opened=false;
+       this.$.pesonalinfoid.opened=false;
+       this.$.academicinfoid.opened=false; 
+       this.$.languageinfoid.opened=false; 
+       document.querySelector('#studentgradezid').selected=-1;
+    document.querySelector('#newifosectionidzza').selected=-1;
+   document.querySelector('#newstudenhifotermid').selected=-1;
+       
+    },
+    parentsubmitinfo:function()
+    {
+      this.$.mydialog.toggleDialog();
+    },
+    FnSpinnerActive:function(flag){
+        if(flag==true)
+        this.$.spinner.opened=true;
+        if(flag==false)
+        this.$.spinner.opened=false;
+    }
+    });
+  })();
+  </script>
+</dom-module>

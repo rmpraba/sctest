@@ -1,0 +1,198 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="../login-service/login-service.html">
+<!-- <link rel="stylesheet" type="text/css" href="../../styles/styles.css"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<dom-module id="login-card">
+<style>
+  body{
+    background-color: #ffffff;
+  }
+  .content{  
+    width: 27%;
+    height: 450px !important;
+    text-align: center;
+    margin: 10% auto;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+  }
+  .content .field{
+    width: 50%;
+    margin: 0 auto;  
+  }
+  .content .button{
+    margin-top: 5%; 
+  }
+  .button paper-button{
+    background-color: #363636;
+    color: #ffffff;
+    width: 50%;
+    margin: 0 auto;
+  }
+  .card-img{
+    padding-top: 6% !important;
+  }
+  .school-name{
+   text-align: center;  
+  }
+  paper-dropdown-menu
+  {
+    text-align: center;
+  }
+  .link{
+    /*margin-top: 10%;*/
+  }
+  .button{
+   @apply(--layout-vertical);
+  }
+   #passworddialogid{
+      width: 20%;
+      border-radius: 25px;
+    }
+</style>
+<template>
+    <iron-a11y-keys target="[[_target]]" keys="enter" on-keys-pressed="Fnenterkeylogin"></iron-a11y-keys>
+    <div class="wholepage">
+    <div class="logindialog">
+        <div class="content">
+            <div class="card-img">
+                <img src="../../images/zeesouth.png" height="100px" width="90px"></img>
+            </div>
+            <div class="school-name" id="schoolname">
+            <center>
+               {{schname}}
+               <!-- <paper-item  style="text-align: center;"  value="Cheque" id="schoolname">{{schname}}</paper-item> -->
+            </center>
+            </div>
+            <div class="field">
+              <paper-input label="Username" id="username" value="{{uname}}" required auto-validate error-message="needs username!"></paper-input>
+            </div>
+           
+            <div class="field">
+                <paper-input label="Password" id="password" type="password" value="{{pass}}" required auto-validate error-message="needs password!" on-change="Fnfindrole"></paper-input>
+            </div>
+            <div class="field">
+             <paper-dropdown-menu id="grade" label="Select Role" disabled="{{read}}" required>
+               <paper-menu class="dropdown-content" id="emploginroleid"  on-iron-select="FnSelectRole"  attr-for-selected="value" required>     
+               <template is="dom-repeat" items="{{rolearr}}">
+                <paper-item value="{{item.id}}">{{item.role_name}}</paper-item>
+               </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+           </div>
+            <div class="button">
+                <paper-button raised  class="in" on-click="Fnlogin">Sign in</paper-button><br>
+                <u><ahref on-click="FnForgotPassword" class="link">Forgot Password?</ahref></u>
+            </div>
+        </div>
+    </div>
+    </div>
+     <paper-dialog id="passworddialogid" modal>
+       <h3 style="color:#1C462F"><center>{{passworddialogvalue}}</center></h3>
+       <center>
+      <paper-button on-click="fnclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>    
+
+  <login-service id="loginservice"></login-service>
+  </template>
+  <script>
+
+    Polymer({
+      is: "login-card",
+      ready:function()
+      {
+          this.$.schoolname.hidden=true;
+          sessionStorage.setItem("pagestatus","1");
+          sessionStorage.removeItem('curr_sess_loggedrole');
+          sessionStorage.removeItem('curr_sess_loggedroleid');
+        //  alert(sessionStorage.getItem("curr_sess_loggedrole"));
+         // alert(sessionStorage.getItem("curr_sess_loggedroleid"));
+          this.rolename="";
+          this.roleid="";
+      },
+      FnForgotPassword:function(){
+        document.querySelector('app-card').setPage('forgotpasswordcard');
+        this.$.loginservice.getschoolname();
+      },
+      Fnlogin:function()
+      {
+      
+         if(this.uname==""&&this.pass=="")
+          {
+           this.$.username.validate();
+           this.$.password.validate();
+           }
+          else if(this.rolename==""||this.rolename==null){
+           this.fnpswdialog("Please Check the role");
+           }
+          else
+          {
+           this.$.loginservice.logincheck(this.uname,this.pass);
+          }
+      },
+   fnpswdialog:function(arg)
+      {
+     this.passworddialogvalue=arg;
+     this.$.passworddialogid.toggle();
+     this.schname="";
+     this.uname="";
+     this.pass="";
+     document.querySelector("#emploginroleid").selected=-1;
+     },
+     fnclose:function(){
+       this.$.passworddialogid.close();
+     },
+    Fnfindrole:function()
+      {
+       if(this.uname==""&&this.pass=="")
+        {
+          this.$.username.validate();
+          this.$.password.validate();
+        }
+        else
+        {
+          this.$.loginservice.rolecheck(this.uname,this.pass);
+          this.$.schoolname.hidden=false;
+        }
+      },  
+      FnSelectRole:function(e)
+      {
+       this.rolename = e.target.selectedItem.textContent.trim();
+       this.roleid=e.target.selectedItem.value;
+      this.$.loginservice.roletype(this.rolename,this.roleid);
+     },
+      Fncheckschool:function()
+      {
+      // this.$.loginservice.checkschool(this.uname);
+      // this.$.schoolname.hidden=false;
+      },
+      Fnenterkeylogin:function()
+      {
+        
+        if(this.uname==""&&this.pass=="")
+        {
+          this.$.username.validate();
+          this.$.password.validate();
+         }
+        else if(this.rolename==""||this.rolename==null){
+          this.fnpswdialog("Please Check the role");
+        }
+        else
+        {
+          this.$.loginservice.logincheck(this.uname,this.pass);
+        }
+      }
+
+    })();
+
+  </script>
+
+</dom-module>

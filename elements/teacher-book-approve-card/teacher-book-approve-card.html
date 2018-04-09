@@ -1,0 +1,438 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<dom-module id="teacher-book-approve-card">
+  <template>
+    <style>
+      :host {   
+        display: block;
+      }
+        .collapse-content {
+    padding: 15px;
+    border: 1px solid #dedede;
+  }
+  section{   
+    top: 200px;
+    right: 65%;
+    width: 327px;
+    height: 300px;
+   }
+   .hs-inner1
+   {
+    padding: 30px 20px 10px 377px;
+    @apply(--layout-horizontal);
+    
+   }
+.hs-inner1 p{
+  font-size: 18px;
+  line-height: 24px;
+  text-align: justify;
+  position: relative;
+  padding: 15px 0px;
+  text-shadow: 1px 0px 1px rgba(255, 255, 255, 0.8);
+}
+
+.hs-inner1 p:first-letter{
+  font-size: 28px;
+}.cadcdd1{
+    top: 200px;
+    right: 90% !important;
+    width: 327px;
+    height: 300px;
+    margin-left:40%;
+    margin-top:-16%;
+       /*position: fixed;
+      */overflow: auto;
+   }
+   .position{
+    margin-left: 6%;
+  
+   }
+   .hs-inner1
+   {
+   width: 344px;
+    height: 340px;
+    margin-top: 1%;
+    overflow-y: visible;
+    overflow-x: hidden;
+   }
+   .report1
+   {
+          table-layout: fixed;
+          border-collapse: collapse;
+          width: 1900px;
+          /*margin-left: 5%;*/
+          margin-top: 5%;
+   }
+  
+
+   #newcardd111
+    {   
+        margin-top: 4%;
+        margin-left: 20%;
+        width:57%;
+        height:512px; 
+        border: solid 1px #555; 
+        background-color: white; 
+        box-shadow: inset 10px -10px 25px #77539e(0,0,0,0.6); 
+        -moz-box-shadow: inset 10px -10px 25px rgba(0,0,0,0.6); 
+        -webkit-box-shadow: inset 10px -10px 25px rgba(146, 93, 93, 0.6); 
+        -o-box-shadow: inset 10px -10px 25px rgba(0,0,0,0.6)
+      }
+
+    img
+    { 
+      margin-top: -14em;
+      height: 129px;
+      width: 739px;
+    }
+    paper-dropdown-menu{
+      width: 15%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+      }
+      paper-input
+      {
+        --paper-input-container-label: { color: red };
+      text-align:center;
+      }
+      
+     #itemcarddialog
+       {
+            width: 81%;
+            height: 90px;
+            text-align: center;
+           display: inline-block;
+            @apply(--layout-center);
+            border-radius: 2px;
+            box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+            padding:5px;
+       }
+
+       #bufferdialog
+       {
+         border-radius: 10px;
+       }
+
+        #planspinxyz
+       {
+          height: 100%;
+          width: 100%;
+          position: fixed;
+          background-color: #000;
+          bottom: 0; 
+          left: 0; 
+          opacity: 0.7; 
+          right: 0; 
+          top: 0; 
+          z-index: 10000;
+          margin: 0 auto;
+          text-align: center;
+        }
+        #planningspinnerwxy
+        {
+          margin: 20% auto;
+          text-align: center;
+         width: 100px;
+         height: 100px;
+        }
+        paper-dialog > *:first-child 
+        {
+          margin-top: 50px;
+        }
+        
+     </style>    
+    <center><h2 hidden style="color:#00ccff">{{empnamez}}</h2></center>
+     <paper-input hidden value="{{empnamez}}"></paper-input>
+       
+       
+       <span class="position" hidden$="{{hideallvaluesss}}"> 
+       <paper-dropdown-menu  label="Select The Grade">
+                <paper-menu id="teacherrefffff" class="dropdown-content"   on-iron-select="fnsetgrade">
+                  <template is="dom-repeat" items="{{gradearr}}">
+                    <paper-item value="{{item.gradeid}}">{{item.gradename}}</paper-item>
+                  </template>    
+                </paper-menu>
+         </paper-dropdown-menu>
+       </span>
+     
+       <span class="position" hidden$="{{hideallvaluesss}}"> 
+       <paper-dropdown-menu  label="Select the subject">
+              <paper-menu id="teacherrefzz" class="dropdown-content"   on-iron-select="fnsetsubject">
+                   <template is="dom-repeat" items="{{subjectarrrr}}">
+                    <paper-item value="{{item.subjectid}}">{{item.subject_name}}</paper-item>
+                  </template>    
+                </paper-menu>
+         </paper-dropdown-menu>
+       </span>
+
+       <span class="position"  hidden$="{{hideallvaluesss}}"> 
+         <paper-dropdown-menu id="term" label="Select Term">
+           <paper-menu id="chaptertermidfffff" class="dropdown-content"   on-iron-select="Fnchaptertermid" attr-for-selected="value" required>
+                <paper-item value="Term1">Term1</paper-item>
+                <paper-item value="Term2">Term2</paper-item>
+                <paper-item value="Term3">Term3</paper-item>
+            </paper-menu>
+          </paper-dropdown-menu>
+       </span>
+       <span class="position" hidden$="{{hideallvaluesss}}"> 
+       <paper-dropdown-menu  label="Select the chapter">
+              <paper-menu id="teacherapprovechapter" class="dropdown-content"   on-iron-select="fnselectchapter">
+                   <template is="dom-repeat" items="{{chapterarr}}">
+                    <paper-item value="{{item.capter_id}}">{{item.capter}}</paper-item>
+                  </template>    
+                </paper-menu>
+         </paper-dropdown-menu>
+       </span>
+         
+<paper-button style="color:white;background-color:black;margin-left: 3%;" on-click="fnaddbuffer">Add Buffer period</paper-button>  
+
+ <template is="dom-repeat" items="{{conceptjhkhzz}}" as="rere">
+<chapter-pass-card conceptname1="{{rere.conceptname}}"></chapter-pass-card>
+</template>
+
+
+     <div id="zdsasddsasfsa" >
+      <table border="1" class="report1" id="reporttabzzzzz">
+       
+       <tr>
+          <th style="width: 5%;">S.NO</th>
+          <th style="width: 16%;">Concept</th>
+          <th style="width: 17%;">Work schdule</th>
+          <th style="width: 6%;">#Periods</th>
+          <th style="width: 10.9%;">Plan From</th>
+          <th style="width: 10.9%;">Plan To</th>
+          <th style="width: 10.9%;">Skill</th>
+          <th style="width: 10.9%;">BLD Values</th>
+          <th style="width: 10.9%;">Value</th>
+          <th style="width: 10.9%;">Teaching Aids</th>
+          <th style="width: 10.9%;">Innovation</th>
+          <th style="width: 10.9%;">Remark</th>
+          <th style="width: 4.6%;"></th>
+      </tr>  
+   <tr>        
+   <template  is="dom-repeat" items="{{overallarr1}}" as="view">
+   <tr>   
+<aproval-book-innovatiosn-item-card rowid="{{view.rowid}}" remark="{{view.remarks}}" period="{{view.period}}" planneddate="{{view.planned_date_from}}" skill="{{view.skill}}" innovation="{{view.innovation}}" iddate="{{view.id_date}}" hidecheck="{{view.hidecheck}}" hidecheck11="{{view.hidecheck11}}"  hidecheck1="{{view.hidecheck1}}"  rowidz="{{view.rowidz}}" value="{{view.value}}" conceptid="{{view.concept_id}}"
+   conceptname="{{view.concept_name}}" subconceptid="{{view.sub_concept_id}}" subconceptname="{{view.sub_concept_name}}" teachingaid="{{view.teaching_aid}}" sno="{{view.sno}}" bldvaluename="{{view.bld_value_name}}" plannedtoate="{{view.planned_to_date}}" > 
+    </aproval-book-innovatiosn-item-card>
+                </tr> 
+              </template>    
+            </tr>  
+      </table>
+    
+   <paper-dialog id="bufferdialog" modal>
+        <div>
+          <paper-icon-button icon="close" suffix on-click="bufferclose" style="float: right;position: fixed;margin-left: 20%;margin-top: -3%;"></paper-icon-button>
+        </div>
+      <paper-checkbox id="Chaperzzzzidzz" on-change="fnchapter">After Last Row</paper-checkbox>
+      <paper-checkbox id="Conceptzzzidzz" on-change="fnconceptzz">After Which Row</paper-checkbox>
+        <div  hidden$="{{chaptbuffidz}}">
+      <paper-input label="Enter Buffer period" value="{{bufferperiod}}" allowed-pattern="[0-9]"></paper-input>
+      </div>
+      <div  hidden$="{{Conceptbuffidz}}">
+      <paper-input label="Which row after??" value="{{periodafter}}"></paper-input>
+        <paper-input label="Enter Buffer period" value="{{bufferperiod}}"></paper-input>
+     
+        </div>
+        <center> 
+         <div></div>
+        <paper-button id="sub11" on-click="fnconsubmit" style="color:white;background-color:black">Submit</paper-button>
+        <paper-button id="sub2222" on-click="fncaptsubmit"  style="color:white;background-color:black">Submit</paper-button>
+        <paper-button id="cls111" on-click="fnclose" style="color:white;background-color:black">Close</paper-button></center>
+     </paper-dialog>
+
+     <paper-dialog id="planspinxyz">
+       <paper-spinner id="planningspinnerwxy"></paper-spinner>
+     </paper-dialog>
+
+     <paper-dialog id="savedialog">
+       <label>Success</label>
+       <center>
+         <paper-button on-click="closedialog">OK</paper-button>
+       </center>
+     </paper-dialog>
+    <teacher-book-service-card id="bookservice"></teacher-book-service-card>
+  </template>
+
+
+  <script>
+  (function() {
+    'use strict';
+   var conceptidz;
+   var conceptnamez;
+    
+    Polymer({
+      is: 'teacher-book-approve-card',
+        fnhide:function()
+        {
+             Conceptzzzidzz.checked=false;
+             Chaperzzzzidzz.checked=false;
+             this.Conceptbuffidz=true;
+             this.chaptbuffidz=true;
+             this.$.sub11.hidden=true;
+             this.$.sub2222.hidden=true;
+             this.$.cls111.hidden=true;
+         },
+        fncaptsubmit:function(e){
+         this.$.bookservice.buffset(this.bufferperiod,this.periodafter);
+          // this.$.bookservice.buffset11(this.bufferperiod,this.periodafter);
+          // this.$.bookservice.subflagseqe();
+          this.bufferperiod="";
+          this.periodafter="";
+          this.$.bufferdialog.toggle();
+        },
+        fnconsubmit:function(e)
+        {
+         //alert(this.bufferperiod);      
+            this.periodafter=-1;
+         this.$.bookservice.buffset(this.bufferperiod,this.periodafter);
+            this.bufferperiod="";
+            this.periodafter="";
+            // this.$.bookservice.subflagseqe();
+            this.$.bufferdialog.toggle();
+        },
+    fnchapter:function(e){
+          //alert(Chaperzzzzidzz.checked);
+          if(Chaperzzzzidzz.checked==true)
+          {
+            Conceptzzzidzz.checked=false;
+            this.$.sub11.hidden=false;
+            this.$.sub2222.hidden=true;
+            this.$.cls111.hidden=false;
+            this.Conceptbuffidz=true;
+            this.chaptbuffidz=false;
+          }
+
+        },
+        fnconceptzz:function(e){
+    if(Conceptzzzidzz.checked==true)
+          {
+            Chaperzzzzidzz.checked=false;
+            this.Conceptbuffidz=false;
+            this.chaptbuffidz=true;
+            this.$.sub11.hidden=true;
+            this.$.sub2222.hidden=false;
+            this.$.cls111.hidden=false;
+          }
+        },
+       
+        fnclose:function()
+        {
+          this.$.bufferdialog.close();
+          Chaperzzzzidzz.checked=false;
+          Conceptzzzidzz.checked=false;
+          this.chaptbuffidz=true;
+          this.Conceptbuffidz=true;
+        },
+
+    
+        fnsetval:function(e)
+        {
+   
+        },
+ fnaddbuffer:function(e){
+  this.$.bufferdialog.toggle();
+  this.$.bookservice.subflagseqe();
+
+
+ },
+
+     asdadczcsadcdas:function(e){
+     document.querySelector('#asdadczcsadcdasww').selected=-1;
+ 
+   },
+  fnsetgrade:function(e)
+  {
+    this.gradeid=e.target.selectedItem.value;
+      sessionStorage.setItem("grdeidz",this.gradeid);
+     this.gradename=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_gradeid",this.gradeid);
+        localStorage.setItem("curr_sess_gradename",this.gradename);
+      this.$.bookservice.bookrefsubject(this.gradeid,this.gradename);
+      document.querySelector('#teacherrefzz').selected=-1;
+        document.querySelector('#teacherapprovechapter').selected=-1;
+        document.querySelector('#chaptertermidfffff').selected=-1;
+        this.$.zdsasddsasfsa.hidden=true;
+  }, 
+     fnselectchapter:function(e)
+     {
+
+      this.chapterid=e.target.selectedItem.value;
+      this.chaptername=e.target.selectedItem.textContent.trim();
+      localStorage.setItem("curr_sess_capters",this.chapterid);
+      localStorage.setItem("curr_sess_chapterid",this.chapterid); 
+      localStorage.setItem("curr_sess_chaptername",this.chaptername); 
+
+      this.$.bookservice.FnFetchConceptService(this.gradeid,this.subjectid,this.chapterid,this.termid);
+
+      this.$.zdsasddsasfsa.hidden=false;
+      this.$.bookservice.conceptseq();
+      
+      document.querySelector('concept-check-card').fnRefreshzyz();
+      document.querySelector('subconcept-dialog-card').fnrefreshhccc();
+      document.querySelector('skill-dialog-card').FnRefreshxyhhh();
+      document.querySelector('aproval-book').newRefreshkmdddd();
+      document.querySelector('bld-value-card').fnRefreshjjjzzz();
+      
+      document.querySelector('from-book-date-picker').FnClearrrtyz();
+      document.querySelector('aproval-book-innovatiosn-item-card').FnfromClearfff();
+       //document.querySelector('concept-check-card').fnclean();
+       },
+   fnsetsubject:function(e){
+       this.subjectid=e.target.selectedItem.value;
+       this.subjectname=e.target.selectedItem.textContent.trim();
+       sessionStorage.setItem("subjectidz",this.subjectid);
+       localStorage.setItem("curr_sess_subjectid",this.subjectid);
+       localStorage.setItem("curr_sess_subjectname",this.subjectname);
+        
+        document.querySelector('#teacherapprovechapter').selected=-1;
+        document.querySelector('#chaptertermidfffff').selected=-1;
+        this.$.zdsasddsasfsa.hidden=true;
+      },
+       Fnchaptertermid:function(e){
+        this.termid=e.target.selectedItem.textContent.trim();
+        sessionStorage.setItem("termid",this.termid);
+      this.$.bookservice.FnFetchChapterService(this.gradeid,this.subjectid,this.termid);
+       document.querySelector('#teacherapprovechapter').selected=-1;
+       this.$.zdsasddsasfsa.hidden=true;
+    }, 
+    fnRefresh:function()
+     {
+        document.querySelector('#teacherrefffff').selected=-1;
+        document.querySelector('#teacherrefzz').selected=-1;
+        document.querySelector('#teacherapprovechapter').selected=-1;
+         document.querySelector('#chaptertermidfffff').selected=-1;
+        this.$.zdsasddsasfsa.hidden=true;
+     },
+
+     planningcloseddd:function()
+     {
+        //alert('close');
+        this.$.planningspinnerwxy.active=false;
+        document.querySelector('#planspinxyz').close();
+     },
+     planningopenddd:function()
+     {
+        //alert('active');
+        
+        document.querySelector('#planspinxyz').open();
+        this.$.planningspinnerwxy.active=true;
+     },
+     bufferclose:function()
+     {
+      this.$.bufferdialog.close();
+      Conceptzzzidzz.checked=false;
+      Chaperzzzzidzz.checked=false;
+      this.Conceptbuffidz=true;
+      this.chaptbuffidz=true;
+      this.$.sub11.hidden=true;
+      this.$.sub2222.hidden=true;
+      this.$.cls111.hidden=true;
+     }
+
+
+    
+    });
+  })();
+  </script>
+</dom-module>

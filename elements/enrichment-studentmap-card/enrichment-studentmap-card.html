@@ -1,0 +1,63 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-studentmap-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>
+    <style>
+      .container{
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        width: 100%;
+      }
+    </style>
+    <div class="container">
+      <div id="entry" class="card">    
+       <paper-button on-click="FnBookIssue" no ink><img src="../../images/issue.png" height="180px" width="180px"></paper-button>
+       <h2>Student Tracking</h2>
+      </div>
+      <!-- <div  class="card">
+       <paper-button on-click="FnBookReturn" no ink><img src="../../images/return.jpg" height="180px" width="180px"></paper-button>
+      </div>
+      <div class="card">
+       <paper-button on-click="FnDueIssue" no ink><img src="../../images/" height="180px" width="180px"></paper-button>
+      </div>
+      <div class="card">
+       <paper-button on-click="FnBookRead" no ink><img src="../../images/" height="180px" width="180px"></paper-button>
+      </div> -->
+    </div>
+    
+    <enrichment-service id='enrichmentservice'></enrichment-service>
+    <beginner-assesment-service id='beginnerservice'></beginner-assesment-service>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'enrichment-studentmap-card',
+      FnBookIssue:function(){ 
+        document.querySelector('home-page').setPage('books-issuance-card','');   
+        document.querySelector('books-issuance-card').FnRefresh();
+        this.$.beginnerservice.callAssesmentService("Enrichment");
+        this.$.beginnerservice.callGradeService();
+        this.$.enrichmentservice.subjectforenrichmentService();
+      },
+      FnBookReturn:function(){
+
+      },
+      FnBookRead:function(){
+
+      },
+      FnRefresh:function(){
+        document.querySelector('books-issuance-card').FnRefresh();
+      }      
+    });
+  })();
+  </script>
+</dom-module>

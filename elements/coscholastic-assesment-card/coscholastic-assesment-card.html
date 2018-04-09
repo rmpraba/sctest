@@ -1,0 +1,401 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../co-scholastic-service/co-scholastic-service.html">
+<link rel="import" href="../cc-maths-onetofour-card/cc-maths-onetofour-card.html">
+<link rel="import" href="../cc-evs-onetofour-card/cc-evs-onetofour-card.html">
+<link rel="import" href="../term-assesment-service/term-assesment-service.html">
+<dom-module id="coscholastic-assesment-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    
+    .card{
+        @apply(--layout-vertical);
+    }
+
+    .drop{        
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        /*margin-top: 5%;*/
+        /*margin-left: 5%;*/
+        border-bottom: 1px solid #dedede; 
+    }
+    paper-dropdown-menu{
+      width: 15%;
+      margin-left: 3%;
+    }
+    paper-dropdown-menu{
+      width: 15%;
+      margin-left: 3%;
+      --paper-input-container-label: { color: red };
+      text-align:center;
+    }
+    .spinner{
+      margin-left: 50%;            
+    }
+    #dynamiccospinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+       #termmarkdialogid1{
+      width: 20%;
+      border-radius: 25px;
+    }
+    h4{
+      color: #061E98;
+    }
+    </style>
+    <div class='card'>
+     
+     <div class='drop' hidden$="{{hidedrop}}">
+
+    <paper-dropdown-menu id="grades" label="Select Grade" disabled="{{read}}" required>
+            <paper-menu  id="coscholasticgrade" class="dropdown-content"  on-iron-select="FnSelectGrade"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{gradearr}}">
+               <paper-item value="{{item.grade_name}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+     </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="sections" label="Select Section" disabled="{{read}}" required>
+            <paper-menu id="coscholasticsection" class="dropdown-content"  on-iron-select="FnSelectSection"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+                <paper-item value="{{item.section_name}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="subjects" label="Select Subject" disabled="{{read}}" required>
+            <paper-menu id="coscholasticsubject" class="dropdown-content"  on-iron-select="FnSelectSubject"  attr-for-selected="value" required>   
+              <template is="dom-repeat" items="{{subjectarr}}">
+                <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>     
+     </div>
+    </div>   
+    <div class="spinner"><paper-dialog modal id="dynamiccospinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner><h4>{{spinnermsg}}</h4></paper-dialog></div>
+    <co-scholastic-service id="assesmentservice"></co-scholastic-service>
+    <term-assesment-service id="termassesmentservice"></term-assesment-service>
+    <dynamic-coscholastic-subject-service id="scholasticsubjectservice"></dynamic-coscholastic-subject-service>
+    <dynamic-scholastic-subject-service id="subjectservice"></dynamic-scholastic-subject-service>
+     <subject-dynamic-coscholastic-markentry-service id="subcoslosticservice"></subject-dynamic-coscholastic-markentry-service>
+     <paper-dialog id="termmarkdialogid1" modal>
+       <h3 style="color:green"><center>{{getindialogvalu}}</center></h3>
+       <center>
+        <paper-button on-click="failureclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>
+  </template>
+  <script>
+  (function() {
+    var flag=0;
+    'use strict';
+    var gradename,section,term,assesment,subject,academicyear;
+    Polymer({
+      is: 'coscholastic-assesment-card',
+      ready:function(){
+     this.hidedrop=false;
+      },
+      callDefaultService:function(){
+        this.flag=0; 
+        this.$.assesmentservice.callAcademicService(); 
+        this.$.assesmentservice.callGradeService(); 
+      },
+      FnSelectGrade:function(e){
+        document.querySelector('#coscholasticsection').selected=-1;
+        document.querySelector('#coscholasticsubject').selected=-1;
+        gradename = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_grade",gradename);
+        this.$.assesmentservice.callSectionService(gradename);
+        if(this.flag==1)
+          this.callService();
+        // document.querySelector('#cogradenam2').selected=-1;
+        document.querySelector('#coscholasticsection').selected=-1;
+        document.querySelector('#coscholasticsubject').selected=-1;        
+        if(localStorage.getItem("curr_sess_page")=="dynamic-coscholastic-markentry-card")
+        document.querySelector('dynamic-coscholastic-markentry-card').hideheader=true;
+        if(localStorage.getItem("curr_sess_page")=="subject-dynamic-coscholastic-markentry-card")
+        document.querySelector('subject-dynamic-coscholastic-markentry-card').hideheader1=true;    
+      },
+      fnsubjectinfo:function(arr) 
+      {
+       this.subjectinfo=arr;
+      }, 
+      TermMarkdialog:function(argvalue)
+      {
+       this.getindialogvalu=argvalue;
+        this.$.termmarkdialogid1.toggle();
+      },
+      failureclose:function()
+      {
+      this.$.termmarkdialogid1.close();
+      if(this.hidedrop==true&&this.getindialogvalu!="Mark Saved!")
+      {
+        document.querySelector('home-page').setPage('approveassesment','');
+        document.querySelector('approve-one-to-four-card').FnCallService();
+      }
+      },
+      FnSelectSection:function(e){
+        document.querySelector('#coscholasticsubject').selected=-1;
+        section = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_section",section);
+        this.$.termassesmentservice.callSubjectService(gradename,section);       
+        if(this.flag==1)
+          this.callService();
+        if(localStorage.getItem("curr_sess_page")=="dynamic-coscholastic-markentry-card")
+        document.querySelector('dynamic-coscholastic-markentry-card').hideheader=true;
+        if(localStorage.getItem("curr_sess_page")=="subject-dynamic-coscholastic-markentry-card")
+        document.querySelector('subject-dynamic-coscholastic-markentry-card').hideheader1=true;
+      },
+      FnSelectSubject:function(e){
+        this.flag=1;
+        subject = e.target.selectedItem.textContent.trim();
+        var subjectid = e.target.selectedItem.value.trim();
+        // alert(subjectid);
+        localStorage.setItem("curr_sess_languagepref",'');              
+        localStorage.setItem("curr_sess_subject",subject);  
+        localStorage.setItem("curr_sess_subjectid",subjectid);
+          for(var i=0;i<this.subjectinfo.length;i++)
+       {
+         if(subjectid==this.subjectinfo[i].subject_id)
+          {
+             this.type=this.subjectinfo[i].type;   
+          } 
+        }
+       localStorage.setItem("curr_sess_type",this.type);
+       //              
+        this.callService();
+        if(localStorage.getItem("curr_sess_page")=="dynamic-coscholastic-markentry-card")
+        document.querySelector('dynamic-coscholastic-markentry-card').hideheader=true;
+        if(localStorage.getItem("curr_sess_page")=="subject-dynamic-coscholastic-markentry-card")
+        document.querySelector('subject-dynamic-coscholastic-markentry-card').hideheader1=true;
+      },
+      callService:function(){
+        this.FnRefresh();
+    //    alert(1);
+    // alert(localStorage.getItem('curr_sess_report'));
+        if(subject=="Health"||subject=="Attendance"||subject=="Physical Education"||subject=="Art Verticals")
+        {
+        } 
+        else if(subject=="Art&Craft"||subject=="music"||subject=="dance"||subject=="Personality Development"||subject=="Games")
+        {
+     //   alert(2);
+         this.FnToggleSpinner(true);
+         this.spinnermsg="Please wait...Loading";
+         if(localStorage.getItem('curr_sess_report')=='0'){
+          // alert("in");
+          document.querySelector('coscholastic-assesment-sheet-card').setPage('dynamic-coscholastic-markentry-card');
+          document.querySelector('dynamic-coscholastic-markentry-card').FnRefresh();
+      this.$.scholasticsubjectservice.subjectsubmittedcheckService(gradename,section,subject);
+          }
+          if(localStorage.getItem('curr_sess_report')=='1'){
+          localStorage.setItem("curr_sess_assesment","Assesment3");
+          document.querySelector('coscholastic-assesment-sheet-card').setPage('dynamic-coscholastic-markentry-report');
+          document.querySelector('dynamic-coscholastic-markentry-report').FnRefresh();
+          // this.$.scholasticsubjectservice.FnFetchDynamicallyEnteredMarks(gradename,section,subject);
+          this.$.scholasticsubjectservice.callFetchStudentInfo1(gradename,section,subject);
+          }
+          // this.$.termassesmentservice.callFetchStudentInfo(gradename,section);
+        } 
+     
+        if(subject=="Art Verticals"){  
+         this.$.assesmentservice.callFetchStudentInfoforartverticals(); 
+         document.querySelector('coscholastic-assesment-sheet-card').setPage('artverticals-card'); 
+        document.querySelector('art-verticals-card').setDefaultHeaders();       
+        } 
+        if(subject=="Physical Education"){ 
+         this.$.assesmentservice.callFetchStudentInfoforphysical();        
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('talentidentification-card'); 
+        document.querySelector('talentidentification-card').setDefaultHeaders(); 
+        }       
+        if(subject=="Health"){        
+        document.querySelector('cce-fivetoten-health-card').studarr=[]; 
+        this.$.assesmentservice.callFetchStudentInfoforhealth('',gradename,section); 
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cce-fivetoten-health-card'); 
+        document.querySelector('cce-fivetoten-health-card').setDefaultHeaders(); 
+        document.querySelector('cce-fivetoten-health-card').FnSpinnerrActive(true);
+        }
+        else if(subject=="Attendance"){        
+        document.querySelector('attendance-card').studarr=[]; 
+        // this.$.assesmentservice.callFetchStudentInfoforattendance();          
+        this.$.assesmentservice.callWorkingdaysService();         
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('attendance-card');
+        document.querySelector('attendance-card').setDefaultHeaders();  
+        document.querySelector('attendance-card').FnSpinnerrActive(true); 
+        } 
+        // else if(subject=="Art&Craft"){   
+        // document.querySelector('cc-art-craft-onetofour-card').studarr=[];     
+        // document.querySelector('coscholastic-assesment-sheet-card').setPage('cc-art-craft-onetofour-card');
+        // document.querySelector('cc-art-craft-onetofour-card').setDefaultHeaders();
+        // document.querySelector('cc-art-craft-onetofour-card').FnSpinnerrActive(true); 
+        // }
+        // else if(subject=="dance"){
+        // document.querySelector('cc-dance-onetofour-card').studarr=[];       
+        // document.querySelector('coscholastic-assesment-sheet-card').setPage('cc-dance-onetofour-card');
+        // document.querySelector('cc-dance-onetofour-card').setDefaultHeaders();
+        // document.querySelector('cc-dance-onetofour-card').FnSpinnerrActive(true); 
+        // }
+        // else if(subject=="music"){ 
+        // document.querySelector('cc-music-onetofour-card').studarr=[];            
+        // document.querySelector('coscholastic-assesment-sheet-card').setPage('cc-music-onetofour-card');
+        // document.querySelector('cc-music-onetofour-card').setDefaultHeaders();
+        // document.querySelector('cc-music-onetofour-card').FnSpinnerrActive(true); 
+        // }  
+        // else if(subject=="Games"){
+        // document.querySelector('cs-games-card').studarr=[];             
+        // document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-games-card');
+        // document.querySelector('cs-games-card').setDefaultHeaders();
+        // document.querySelector('cs-games-card').FnSpinnerrActive(true); 
+        // } 
+        // else if(subject=="Personality Development"){
+        // document.querySelector('cs-personalitydevelopment-card').studarr=[]; 
+        // document.querySelector('cs-personalitydevelopment-card').setDefaultHeaders();                   
+        // document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-personalitydevelopment-card'); 
+        // document.querySelector('cs-personalitydevelopment-card').FnSpinnerrActive(true);        
+        // }      
+       else if(subject=="Life Skills"||subject=="Work Education"||subject=="Visual & Performing Arts" ||subject=="Co-Curricular Activities" || subject=="Health and Physical Education"|| subject=="Discipline" || subject=="Attitudes And values"){ 
+       // alert(3);
+       this.FnToggleSpinner(true);
+       this.spinnermsg="Please wait...Loading";
+       if(localStorage.getItem('curr_sess_report')=='0'){
+       document.querySelector('subject-dynamic-coscholastic-markentry-card').studarr=[]; 
+       document.querySelector('coscholastic-assesment-sheet-card').setPage('subject-dynamic-coscholastic-markentry-card');
+       this.$.subcoslosticservice.subjectsubmittedcheckService1(gradename,section,subject);
+       document.querySelector('subject-dynamic-coscholastic-markentry-card').FnRefresh();
+       }
+       if(localStorage.getItem('curr_sess_report')=='1'){          
+       document.querySelector('coscholastic-assesment-sheet-card').setPage('subject-dynamic-coscholastic-markentry-report');
+       document.querySelector('subject-dynamic-coscholastic-markentry-report').studarr=[];
+       document.querySelector('subject-dynamic-coscholastic-markentry-report').FnRefresh();
+       this.$.subcoslosticservice.callFetchStudentInfo11(gradename,section,subject);
+       }     
+       /* if(gradename=="Grade-9"||gradename=="Grade-10"){
+        document.querySelector('cs-life-skill-card').studarr=[]; 
+        document.querySelector('cs-life-skill-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-life-skill-card'); 
+        document.querySelector('cs-life-skill-card').FnSpinnerrActive(true);   
+        }
+        else{
+        document.querySelector('cs-life-skill-card').studarr=[]; 
+        document.querySelector('cs-life-skill-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-life-skill-card'); 
+        }*/
+        }
+       /* else if(subject=="Work Education"){
+        document.querySelector('cs-education-card').studarr=[];        
+        document.querySelector('cs-education-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-education-card');
+        document.querySelector('cs-education-card').FnSpinnerrActive(true);  
+        }
+        else if(subject=="Visual & Performing Arts"){
+        document.querySelector('cs-visual-performing-card').studarr=[]; 
+        document.querySelector('cs-visual-performing-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-visual-performing-card');
+        document.querySelector('cs-visual-performing-card').FnSpinnerrActive(true);
+        }*/
+        else if(subject=="Attitudes And values"){
+        document.querySelector('cs-attitudes-card').studarr=[]; 
+        document.querySelector('cs-attitudes-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-attitudes-card'); 
+        document.querySelector('cs-attitudes-card').FnSpinnerrActive(true);   
+        }
+     /*   else if(subject=="Co-Curricular Activities"){
+        document.querySelector('cs-co-curricular-card').studarr=[];
+        document.querySelector('cs-co-curricular-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-co-curricular-card'); 
+        document.querySelector('cs-co-curricular-card').FnSpinnerrActive(true);  
+        }
+        else if(subject=="Health and Physical Education"){
+        document.querySelector('cs-health-physical-education-card').studarr=[]; 
+        document.querySelector('cs-health-physical-education-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-health-physical-education-card');        
+        }
+        else if(subject=="Discipline"){
+        document.querySelector('cs-discipline-card').studarr=[]; 
+        document.querySelector('cs-discipline-card').setDefaultHeaders();  
+        document.querySelector('coscholastic-assesment-sheet-card').setPage('cs-discipline-card');
+        }*/
+      else
+        {
+     //      alert(4);
+          this.$.assesmentservice.callFetchStudentInfo();
+        }
+      },
+      FnRefresh:function()
+      {
+      /*if(subject=="Health"){         
+        document.querySelector('cce-fivetoten-health-card').FnRefresh(); 
+        }
+        else if(subject=="Attendance"){
+        // this.$.assesmentservice.callWorkingdaysService();         
+        document.querySelector('attendance-card').FnRefresh();  
+        } 
+        else if(subject=="Art&Craft"){                    
+        document.querySelector('cc-art-craft-onetofour-card').FnRefresh();
+        }
+        else if(subject=="dance"){                   
+        document.querySelector('cc-dance-onetofour-card').FnRefresh();
+        }
+        else if(subject=="music"){                   
+        document.querySelector('cc-music-onetofour-card').FnRefresh();
+        }  
+        else if(subject=="Games"){                   
+        document.querySelector('cs-games-card').FnRefresh();
+        } 
+        else if(subject=="Personality Development"){
+        document.querySelector('cs-personalitydevelopment-card').FnRefresh();     
+        }      
+        else if(subject=="Life Skills"){
+        if(gradename=="Grade-9"||gradename=="Grade-10"){
+        document.querySelector('cs-life-skill-card').FnRefresh();  
+        }
+        else{
+        document.querySelector('cs-life-skill-card').FnRefresh();  
+        }
+        }
+        else if(subject=="Work Education"){
+        document.querySelector('cs-education-card').FnRefresh();  
+        }
+        else if(subject=="Discipline"){
+        document.querySelector('cs-discipline-card').FnRefresh();  
+        }
+        else if(subject=="Visual & Performing Arts"){
+        document.querySelector('cs-visual-performing-card').FnRefresh();  
+        }
+        else if(subject=="Attitudes And values"){
+        document.querySelector('cs-attitudes-card').FnRefresh();  
+        }
+        else if(subject=="Co-Curricular Activities"){
+        document.querySelector('cs-co-curricular-card').FnRefresh();  
+        }
+        else if(subject="Health and Physical Education"){
+        document.querySelector('cs-health-physical-education-card').FnRefresh();  
+        }*/
+      },
+      FnRefreshcard:function(){
+        document.querySelector('#coscholasticgrade').selected=-1;
+        document.querySelector('#coscholasticsection').selected=-1;
+        document.querySelector('#coscholasticsubject').selected=-1;
+        // var subject=localStorage.getItem("curr_sess_subject");
+        // var gradename=localStorage.getItem("curr_sess_grade");
+        this.flag=0;
+        this.FnRefresh();
+      },
+      FnToggleSpinner:function(flag){
+        this.$.dynamiccospinner.opened=flag;
+      }
+    });
+  })();
+  </script>
+</dom-module>

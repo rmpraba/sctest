@@ -1,0 +1,228 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="school-section-creation-item-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+         @apply(--layout-horizontal);
+       width:100%
+      margin-left:5em;
+     }   
+      
+      #labelid
+
+      {
+            font-style: oblique;
+            font-size: 1.3em;
+
+      }
+
+        #sdgdf
+      {
+        border-radius: 10px;
+        width: 450px;
+        min-height: 180px;
+      }
+ 
+      
+    </style>
+           <paper-input hidden >{{classid}}</paper-input>
+           <paper-input hidden value="{{sectiongradeidzx}}"></paper-input>
+           <paper-input hidden value="{{sectiongradenamezx}}"></paper-input>
+     
+       <paper-checkbox style="padding-left:5%" on-change="fngetsectiongrade" checked 
+       id="{{id}}">{{sectiongradeid}}&nbsp;&nbsp;&nbsp;&nbsp;</paper-checkbox>    
+            
+
+
+    <paper-dialog id="sdgdf" modal>
+     <center>
+      <b><label  id="labelid">Already Students are mapped to this Section,Are you sure want delete?
+        </label></b>
+        <div>
+        <paper-button style="background-color:black;color:white;margin-top: 8%;" dialog-confirm autofocus> close</paper-button>
+         <paper-button style="background-color:black;color:white;margin-top: 10%;" dialog-confirm autofocus on-click="fnoveralldelete">OK</paper-button>
+        </div>
+     </center>
+   </paper-dialog>
+ 
+   
+        <iron-ajax        
+        id="getsectioncreategradeajax"   
+        url="{{getsectioncreategradeurl}}"
+        params="{{getsectioncreategradeparam}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="getsectioncreategradeResponse"
+        debounce-duration="300">
+   </iron-ajax>
+       <iron-ajax        
+        id="getsectioncreategrade1ajax"   
+        url="{{getsectioncreategrade1url}}"
+        params="{{getsectioncreategrade1param}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="getsectioncreategrade1Response"
+        debounce-duration="300">
+   </iron-ajax>
+ 
+   <iron-ajax           
+        id="sectionconficsajax"
+        url="../../configfile/section.json"
+        params="{{sectionconficsparam}}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="sectionconficsResponse"
+        debounce-duration="300">
+    </iron-ajax>
+    <iron-ajax        
+        id="sectionconfics1ajax"   
+        url="{{sectionconfics1url}}"
+        params="{{sectionconfics1param}}"
+        handle-as="json"
+        content-type="application/json"
+        method="post"
+        on-response="sectionconfics1Response"
+        debounce-duration="300">
+   </iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+  var delsecarr=[];
+  var studenttablearr=[];
+  var c1=0;
+  var c2=0;
+    Polymer({
+      is: 'school-section-creation-item-card',
+       
+      
+  sectionconficsResponse:function(e){
+    studenttablearr=e.detail.response; 
+      //  alert(JSON.stringify(studenttablearr));
+      }, 
+
+   fnoveralldelete:function(e){
+    c1=studenttablearr.length;
+ for(var i=0;i<studenttablearr.length;i++){
+     this.sectionconfics1url=sessionStorage.getItem("addrinfo")+"/fnsectioninfo-service";
+
+       var obj={};
+       obj.schoolid=sessionStorage.getItem("curr_sess_loggedschoolid");
+       obj.academicyear=localStorage.getItem("curr_sess_academicyear");
+       obj.studenttable=studenttablearr[i].studenttable;
+       obj.dbgradeid=studenttablearr[i].grade_id;
+       obj.dbgradename=studenttablearr[i].gradename;
+       obj.dbclassid=studenttablearr[i].classid;
+       obj.dbsection=studenttablearr[i].section;
+       obj.gradeid1=this.sectiongradeidzx;
+       obj.gradename1=this.sectiongradenamezx;
+       obj.classid1=this.classid;
+       obj.section1=this.sectiongradeid;
+      // alert(JSON.stringify(obj));
+       this.sectionconfics1param=obj;
+       this.$.sectionconfics1ajax.generateRequest();
+
+         }
+     },
+
+     sectionconfics1Response:function(e){
+      c2++;
+      if(c1==c2){
+       var res =e.detail.response.returnval; 
+       // alert(JSON.stringify(res));
+           document.querySelector('school-grade-section-creation-card').f1();
+            document.querySelector('school-grade-section-creation-card').f2(); 
+            c1=0;
+            c2=0; 
+       }
+    
+      }, 
+  fngetsectiongrade:function(e)
+       {
+    //   alert(this.id);
+         if(document.querySelector('#'+this.id).checked==false)
+         {
+           this.$.sectionconficsajax.generateRequest();
+
+            var sectionid=this.sectiongradeid.toLowerCase();
+          var sectionname=sectionid.toUpperCase();
+   
+
+         this.getsectioncreategrade1url=sessionStorage.getItem("addrinfo")+"/fndelsectiongrade11-service";
+            var obj={"school_id":"","grade_id":"","grade_name":"","classid":"","academic_year":""};
+          obj.grade_id=this.sectiongradeidzx;
+          obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+          obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+          obj.classid=this.classid;
+          obj.section=this.sectiongradeid;
+        // alert(JSON.stringify(obj));
+         this.getsectioncreategrade1param=obj;
+         this.$.getsectioncreategrade1ajax.generateRequest();
+
+   
+         var obj={"id1":"","grade_id":"","grade_name":"","sectionid":"","sectionname":"","classid":""};
+          obj.id1=this.id;
+          obj.grade_id=this.sectiongradeidzx;
+          obj.grade_name=this.sectiongradenamezx;
+          obj.sectionid=sectionid;
+          obj.sectionname=sectionname;
+          obj.classid=this.classid;
+          delsecarr.push(obj);
+          //alert(JSON.stringify(delsecarr));
+     
+        }
+      if(document.querySelector('#'+this.id).checked==true)
+             for(var i=0;i<delsecarr.length;i++)
+             {
+            if(delsecarr[i].classid==this.classid){
+                delsecarr.splice(i,1);
+              }
+             }
+          document.querySelector('school-section-creation-card').fndeletepass(delsecarr); 
+       },
+       splice:function(e)
+       {
+         var obj={};
+        delsecarr.splice(obj);   
+   
+       },
+       getsectioncreategrade1Response:function(e)
+       {
+
+       // alert(JSON.stringify(e.detail.response.returnval));
+           if(e.detail.response.returnval!='empty')
+           {
+
+              this.$.sdgdf.open();
+                 for(var i=0;i<delsecarr.length;i++)
+                 {
+                    if(delsecarr.length!=0)
+                    {
+                      var m=delsecarr[i].id1;
+                      document.querySelector('#'+m).checked=true;
+                      delsecarr.splice(i,1);
+                    }
+                  }
+            } 
+          }
+
+   
+
+    });
+  })();
+  </script>
+</dom-module>

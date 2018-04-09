@@ -1,0 +1,55 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-assignment-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .button{
+            width: 10%;
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            text-transform: none;
+            /*margin-left: 5%;*/
+      }
+      #btn2{
+            width: 10%;
+            background: #252626;
+            color: white;
+            margin-top: 2%;
+            height: 35px;
+            border-radius: 2px;
+            font-family: Calibri;
+            font-size: 17px;
+      }
+    </style>
+    <div>
+      <template is="dom-repeat" items="{{itemarr}}">
+      <enrichment-bookactivity-mapcard bookname="{{item.book_name}}" subjectid="{{item.subject_id}}" subjectname="{{item.subject_name}}" categoryname="{{item.category_name}}" categoryid="{{item.category_id}}" bookid="{{item.id}}"></enrichment-bookactivity-mapcard>
+      <br>
+    </template>
+    <br>
+    <paper-button on-click="FnAdd" class='button' id='btn2'>Add</paper-button>
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var bookarr=[];
+    Polymer({
+      is: 'enrichment-assignment-card',
+      FnSetSelectedBooks:function(arr){
+        bookarr=arr;
+      },
+      FnAdd:function(){
+        // alert(JSON.stringify(bookarr));
+        this.$.enrichmentservice.FnAssignBookToStudent(bookarr);
+      }
+    });
+  })();
+  </script>
+</dom-module>

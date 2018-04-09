@@ -1,0 +1,69 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-to-sub-category-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+      <p hidden>{{gradeid}}</p>
+      <p hidden>{{subjectid}}</p>
+      <p hidden>{{subjectname}}</p>
+      <p hidden>{{gradename}}</p>
+      <p hidden>{{subcategoryid}}</p>
+      <p hidden>{{categoryid}}</p>
+      <p hidden>{{assesmenttype}}</p>
+         <table  border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+       <tr style="border-bottom: 2px solid#D3D3D3; line-height: 1.8em;"> 
+       <th  width="5%" hidden><p>{{categoryname}}</p></th>
+       <th  width="10%" hidden$="{{subhiddenvalue}}"><p>{{subcategoryname}}</p></th>
+        <th  width="10%" hidden$="{{subhiddenvalue1}}">
+          <paper-input value="{{subcategoryname}}"></paper-input>
+        </th>
+        <th width="5%" hidden$="{{subhiddenvalue}}"><paper-icon-button icon='create' mini on-click='fnsubcategoryedit'></paper-icon-button></th>
+        <th width="5%" hidden$="{{subhiddenvalue1}}"><paper-icon-button icon='save' mini on-click='fnsubcategorysave'></paper-icon-button></th>
+       </tr>
+     </table>
+ </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'assesment-to-sub-category-card',
+
+ready:function(e)
+  {
+     this.subhiddenvalue=false;
+     this.subhiddenvalue1=true;
+  },
+fnsubcategorysave:function(){
+   this.subhiddenvalue=false;
+   this.subhiddenvalue1=true;
+ if(localStorage.getItem("curr_sess_grade")=="Grade-1"||localStorage.getItem("curr_sess_grade")=="Grade-2"||localStorage.getItem("curr_sess_grade")=="Grade-3"||localStorage.getItem("curr_sess_grade")=="Grade-4"){
+  document.querySelector('assesment-to-category-card').Fnsubcategoryeditinfo(this.gradeid,this.gradename,this.subjectid,this.subjectname,this.categoryid,this.categoryname,this.subcategoryid,this.subcategoryname,this.assesmenttype)
+  } 
+  else{
+     
+     if(localStorage.getItem("curr_sess_type")=="Once"){
+     document.querySelector('assesment-to-category-card').Fnsubmatrixditinfo(this.gradeid,this.gradename,this.subjectid,this.subjectname,this.categoryid,this.categoryname,this.subcategoryid,this.subcategoryname);
+     }
+     else{
+       document.querySelector('assesment-to-category-card').Fnsubcategoryeditinfo(this.gradeid,this.gradename,this.subjectid,this.subjectname,this.categoryid,this.categoryname,this.subcategoryid,this.subcategoryname,this.assesmenttype)
+     }
+   }
+
+
+
+
+},
+fnsubcategoryedit:function() {
+ 
+  this.subhiddenvalue=true;
+   this.subhiddenvalue1=false;
+}
+    });
+  })();
+  </script>
+</dom-module>

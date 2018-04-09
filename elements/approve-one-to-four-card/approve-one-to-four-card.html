@@ -1,0 +1,299 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="approve-one-to-four-card">
+  <template>
+    <style>
+     :host {
+        display: block;
+      }
+      paper-dropdown-menu{
+      width: 25%;
+      --paper-input-container-label: { color: red };
+      text-align: center;
+      margin-left: 5%;
+      }
+      /*#filter3{
+      width: 15%;
+      --paper-input-container-label: { color: red };
+      text-align: center;
+      }*/
+     .card{
+        @apply(--layout-vertical);
+      }
+      .drop{        
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        margin-left: 5%;
+        border-bottom: 1px solid #dedede; 
+      }
+      .viewdata{
+        margin-top: 5%;
+        cursor: pointer;
+        color:blue;
+      }
+      .outcard{
+        margin-left: 0%;
+        margin-top: 5%;
+      }
+      table{
+        width: 90%;
+      }
+      .filterid{
+          text-align: right;
+          margin-top: -5%;
+      }
+      #itemcard:nth-child(odd) {
+        background-color: white;
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      #itemcard{
+        margin-left: 7%;
+        width: 83%;
+      }
+      #termmarkdialogid111{
+       width: 20%;
+       border-radius: 25px;
+      }
+      #dialogfilterid{
+        border-radius: 25px;
+        width: 40%;
+      }
+      #dynamicapprovespinner{
+      margin: 0;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+     }
+     h4{
+      color: #061E98;
+     }
+     #approvaldialog{
+      width: 20%;
+      border-radius: 25px;
+     }
+      #approvalstatusdialog{
+      width: 20%;
+      border-radius: 25px;
+    }
+    </style> 
+      <div class="spinner"><paper-dialog modal id="dynamicapprovespinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+      <paper-spinner active></paper-spinner>
+      <h4>{{spinnermsg}}</h4></paper-dialog></div>
+   
+      <center><h1>Mount Litera Zee School</h1>
+         <div id="hidetop">
+          <h3>Continuous Comprehensive Evaluation</h3>
+
+      <div class="filterid">
+       <paper-dropdown-menu id="grade" label="Filter By"  style="width: 15%;">
+         <paper-menu  id="filter3" class="dropdown-content"  on-iron-select="FnSelectFilter"  attr-for-selected="value" required>     
+           <paper-item value="Filter By Grade">Filter By Grade</paper-item>
+           <paper-item value="Filter By Section">Filter By Section</paper-item>
+           <paper-item value="Filter By Subject">Filter By Subject</paper-item>
+           <paper-item value="All">All</paper-item>
+        </paper-menu>
+      </paper-dropdown-menu>  
+     </div>
+   </center>
+  <paper-dialog id="dialogfilterid" modal>
+ 
+ <div class='card'>
+     <div class='drop'>
+   
+
+     <paper-dropdown-menu id="filtergrade" label="Select Grade"  >
+            <paper-menu  id="gradenam3" class="dropdown-content"  on-iron-select="FnSelectGrade1"  attr-for-selected="value" required>     
+              <template is="dom-repeat" items="{{gradearr}}">
+               <paper-item value="{{item.grade_name}}">{{item.grade_name}}</paper-item>
+              </template>
+            </paper-menu>
+     </paper-dropdown-menu>
+
+        <paper-dropdown-menu id="filtersection" label="Select Section" >
+            <paper-menu id="ggggggggggggggggg" class="dropdown-content"  on-iron-select="FnSelectSection1"  attr-for-selected="value" required>
+              <template is="dom-repeat" items="{{sectionarr}}">
+               <paper-item value="{{item.section_name}}">{{item.section_name}}</paper-item>
+              </template>
+            </paper-menu>
+        </paper-dropdown-menu>
+
+         <paper-dropdown-menu id="filtersubject" label="Select Subject">
+            <paper-menu id="subjectnam3" class="dropdown-content"  on-iron-select="FnSelectSubject1"  attr-for-selected="value" required>   
+              <template is="dom-repeat" items="{{subjectarr}}">
+                <paper-item value="{{item.subject_name}}">{{item.subject_name}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>   
+   
+  <paper-icon-button  style="margin-left: 3%;" icon="close" suffix on-click="Fncloseconcpt" >
+    </paper-icon-button>
+   
+     </div>
+    </div> 
+     <center><paper-button style='color:white;background-color: black;' on-click="fnsub">Submit</paper-button></center>
+ 
+   </paper-dialog>
+ <div class="outcard">
+    <table id="Mark">
+      <tr>
+       <th id="tb1">Academic Year</th>
+       <th id="tb1">Term</th>
+       <th id="tb1">Assesment</th>
+       <th id="tb1">Grade</th>
+       <th id="tb1">Section</th>
+       <th id="tb1">Subject</th>
+       <th id="tb1">View</th>
+       <th id="tb1">Revert</th>
+      </tr>
+    </table>
+       
+    <template is="dom-repeat" items="{{approvearr}}" as="m">
+        <div id="itemcard"><approve-one-to-four-itemcard category="{{m.category}}" academic="{{m.academic_year}}" assesment="{{m.assesment_id}}" term="{{m.term_name}}" grade="{{m.grade}}" section="{{m.section}}" subject="{{m.subject}}" langpref="{{m.langpref}}" subjectid="{{m.subject_id}}" types="{{m.types}}"></approve-one-to-four-itemcard></div>
+   </template>
+ </div>  
+<paper-dialog id="termmarkdialogid111" modal>
+       <h3 style="color:green"><center>{{getindialogvalu}}</center></h3>
+       <center>
+      <paper-button on-click="failureclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+   </paper-dialog>
+   <scorecard-service id="scorecardservice"></scorecard-service>
+   <term-assesment-service id="assesmentservice"></term-assesment-service>
+    <paper-dialog id="approvalstatusdialog" modal>
+    <h3 style="color:green"><center>{{dialogmsg}}</center></h3>
+    <center>
+    <paper-button on-click="FnClose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+    </center>
+  </paper-dialog>
+  </template>  
+  <script>
+  (function() {
+    'use strict';
+    var gradename,section,subject,filtervalue;
+
+    Polymer({
+    is: 'approve-one-to-four-card',   
+    ready:function(e){
+    localStorage.setItem("curr_sess_filterid","fillterinactive");
+    } ,
+     FnToggleDialog:function(message){
+        this.dialogmsg=message;
+        this.$.approvalstatusdialog.toggle();
+       },
+       FnClose:function(){
+        this.$.approvalstatusdialog.toggle();
+        this.FnCallService();
+       },
+    FnCallService:function(){
+      this.$.assesmentservice.callApproveService();
+    },
+    FnSpinnerrActive:function(flag){
+      this.spinnermsg="Please wait...Loading!";
+      if(flag==true)
+      this.$.dynamicapprovespinner.opened=true;
+      if(flag==false)
+      this.$.dynamicapprovespinner.opened=false;
+       },
+      FnSelectGrade1:function(e){
+        gradename = e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_grade1",gradename);
+       if(filtervalue=="Filter By Grade")
+       {
+         this.$.assesmentservice.Fnfiltervalues();
+       }
+        this.$.scorecardservice.callSectionService(gradename);
+         document.querySelector('#ggggggggggggggggg').selected=-1;
+         document.querySelector('#subjectnam3').selected=-1;
+      },
+      FnSelectSection1:function(e){
+       section = e.target.selectedItem.textContent.trim();
+         localStorage.setItem("curr_sess_section1",section);
+         this.$.scorecardservice.callSubjectService(gradename,section);   
+         if(filtervalue=="Filter By Section")
+         {
+          this.$.assesmentservice.Fnfiltervalues();         
+         } 
+         document.querySelector('#subjectnam3').selected=-1;         
+      },
+       FnSelectSubject1:function(e){
+        this.flag=1;
+        subject = e.target.selectedItem.textContent.trim();
+         localStorage.setItem("curr_sess_subject1",subject); 
+       //  alert('1');
+        if(filtervalue=="Filter By Subject")
+        {
+           this.$.assesmentservice.Fnfiltervalues();           
+        } 
+       },
+       fnsub:function(e){
+       this.$.dialogfilterid.close();
+       },
+    FnSelectFilter:function(e){
+      filtervalue = e.target.selectedItem.textContent.trim();
+         localStorage.setItem("curr_sess_filter",filtervalue); 
+          if(filtervalue=="Filter By Grade"){
+         this.$.dialogfilterid.toggle();
+
+              this.$.filtergrade.hidden=false;
+              this.$.filtersection.hidden=true;
+              this.$.filtersubject.hidden=true;
+             localStorage.setItem("curr_sess_filterid","fillteractive");
+         
+           }
+
+          if(filtervalue=="Filter By Section"){
+       this.$.dialogfilterid.toggle();
+
+              this.$.filtergrade.hidden=false;
+              this.$.filtersection.hidden=false;
+              this.$.filtersubject.hidden=true;
+             localStorage.setItem("curr_sess_filterid","fillteractive");
+
+          }
+
+          if(filtervalue=="Filter By Subject"){
+              this.$.dialogfilterid.toggle();
+              this.$.filtergrade.hidden=false;
+              this.$.filtersection.hidden=false;
+              this.$.filtersubject.hidden=false;
+             localStorage.setItem("curr_sess_filterid","fillteractive");
+           }
+          if(filtervalue=="All"){
+              this.$.assesmentservice.callApproveService();
+            }
+        document.querySelector('#gradenam3').selected=-1;
+        document.querySelector('#ggggggggggggggggg').selected=-1;
+        document.querySelector('#subjectnam3').selected=-1;
+        },
+   Fncloseconcpt:function(){
+       this.$.dialogfilterid.close();
+        document.querySelector('#gradenam3').selected=-1;
+        document.querySelector('#filter3').selected=-1;
+        document.querySelector('#ggggggggggggggggg').selected=-1;
+        document.querySelector('#subjectnam3').selected=-1;
+   },
+  FnRefresh:function(e){
+         localStorage.setItem("curr_sess_filterid","fillterinactive");
+         document.querySelector('#gradenam3').selected=-1;
+         document.querySelector('#filter3').selected=-1;
+         document.querySelector('#ggggggggggggggggg').selected=-1;
+         document.querySelector('#subjectnam3').selected=-1;
+     },
+  TermMarkdialog:function(argvalue)
+      {
+        // alert(argvalue);
+      this.getindialogvalu=argvalue;
+      this.$.termmarkdialogid111.toggle();
+      },
+     failureclose:function()
+      {
+      this.$.termmarkdialogid111.close();
+      },   
+    });
+  })();
+  </script>
+</dom-module>

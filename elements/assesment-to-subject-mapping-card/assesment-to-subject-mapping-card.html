@@ -1,0 +1,174 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="assesment-to-subject-mapping-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      table{
+             width: 70%;  
+             border-collapse: collapse;                          
+             margin-left: 1%;
+      }
+          paper-fab{
+      background-color:solid #dedede;
+      color: white;
+    }
+     .srollclass
+     {
+   margin-left:66%;
+     }
+  .srollclass1{
+    overflow-x: hidden;
+    overflow-y: visible;
+     width: 100%;
+    height: 277px;
+   
+     } 
+paper-dialog.colored {
+    border: 2px solid;
+    border-color: #4caf50;
+    background-color: #f1f8e9;
+    color: #4caf50;
+    width: 79%;
+    height: 65%;
+    margin-top: -7%;
+    margin-left: 6%;
+  }
+  .class2{
+   margin-top: -26.5%;
+    margin-left: 57%;
+  }
+  .subinfo{
+     overflow-x: hidden;
+    overflow-y: visible;
+    width: 42%;
+    height: 226px;
+  }  
+    .mainclass{
+      margin-left: 20%  
+       }
+        .gradeclass{
+          @apply(--layout-horizontal);
+       margin-left: 20%
+       }
+       .dialogclass{
+     width: 98%;
+     height: 92%;
+       }
+       .assessmentclass{
+  
+     @apply(--layout-vertical);
+      margin-left: 20% ;
+     
+       }
+      .assessmentclass1{
+      width:60%;
+      overflow-x: hidden;
+      overflow-y: visible;
+      height: 100px; 
+       }
+     .subjectclass{
+           @apply(--layout-center-justified);
+           margin-left: 20%;  
+      }
+    </style>
+    <div>  
+        <center><h2>Assesment To Subject Mapping</h2></center>
+         <div class="mainclass">
+           <h3> Select The School Type:</h3>
+          <template is="dom-repeat" items="{{schooltypearr}}" as="view">
+             <assesment-to-subject-mapping-item-card schooltypeid="{{view.school_type_id}}" schooltypename="{{view.school_type_name}}" id="assesment{{view.school_type_id}}"></assesment-to-subject-mapping-item-card>
+          </template>
+        </div>
+        <div class="gradeclass"  hidden$="{{hideassmentinfogradeid}}">
+           <h3>Select The Grade Type:</h3>
+           <template is="dom-repeat" items="{{gradearr}}" as="view">
+              <assesment-to-subject-grade-card gradeid="{{view.grade_id}}" gradename="{{view.grade_name}}" schooltype="{{view.school_type}}" id="assesment{{view.grade_id}}">
+                </assesment-to-subject-grade-card>
+          </template>
+        </div>
+       <div class="gradeclass" hidden$="{{hideassmentinfogradeid3}}">
+          <h3> Select The Term Type:</h3>
+          <template is="dom-repeat" items="{{typearr}}" as="view">
+            <assesment-to-subject-type-card subjecttype="{{view.type}}" check="{{view.check}}">
+                    
+            </assesment-to-subject-type-card>
+          </template>
+       </div>
+
+<div class="assessmentclass" hidden$="{{hideassmentinfosubid}}">
+         <h3> Select The Assesments:</h3>
+     <div class="assessmentclass1">
+       <paper-checkbox  hidden$="{{hideassmentinfosubid1}}" id="selectallbox" on-change="fnchanges">All Assesments</paper-checkbox>
+            <template is="dom-repeat" items="{{assesmentarr}}" as="view" >
+                <a`ssesment-to-subject-card   assesmentid="{{view.assesment_id}}" assesmentname='{{view.assesment_name}}' id='{{view.id}}' check="{{view.check}}">
+               </assesment-to-subject-card >
+         </template>
+        </div>  
+   </div>  
+ 
+      <div class="subjectclass" hidden$="{{hideassmentinfoid}}">
+     
+          <template is="dom-repeat" items="{{subjectarr}}" as="view">
+              <assesment-to-subject-collapse-card hideinfovalus1="true"
+                 hideinfovalus="false" sno='{{view.sno}}' subjectname="{{view.subjectname}}" subjectid='{{view.subject_id}}' assesmentbulkvalue="{{view.assesmentbulkvalue}}">
+              </assesment-to-subject-collapse-card>
+         </template>
+        </div>
+  </div>
+
+
+
+<master-term-mapping-ui-service id="masteruiservice"></master-term-mapping-ui-service>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    var categoryvalus;
+  var temp=[];
+    
+    Polymer({
+      is: 'assesment-to-subject-mapping-card',
+  ready:function(e){
+  this.hideassmentinfogradeid=true; 
+  this.hideassmentinfosubid=true; 
+    this.hideassmentinfosubid1=true; 
+  this.hideassmentinfoid=true; 
+  },
+fnchanges:function(e){
+  if(document.querySelector('#selectallbox').checked==true){
+     localStorage.setItem("curr_sess_assesmentall","active");  
+    document.querySelector('assesment-to-subject-card').fnsets();
+     this.$.masteruiservice.Fngetassesmentandgrade1();  
+    document.querySelector('assesment-to-subject-mapping-card').hideassmentinfoid=false;
+     }
+   else if(document.querySelector('#selectallbox').checked==false){
+       localStorage.setItem("curr_sess_assesmentall","passive");
+       document.querySelector('assesment-to-subject-mapping-card').hideassmentinfoid=true;  
+    }
+  },
+fnset:function(){
+   localStorage.setItem("curr_sess_assesmentall","passive");  
+   document.querySelector('#selectallbox').checked=false;
+   document.querySelector('assesment-to-subject-mapping-card').hideassmentinfoid=true;
+},
+FnRefreshcard:function(e){
+ this.hideassmentinfogradeid=true; 
+ this.hideassmentinfosubid=true; 
+ this.hideassmentinfosubid1=true; 
+ this.hideassmentinfoid=true; 
+document.querySelector('assesment-to-subject-mapping-item-card').ref();
+ },
+clear:function(e){
+  this.hideassmentinfogradeid=false; 
+  this.hideassmentinfosubid=false; 
+  this.hideassmentinfoid=false; 
+}
+
+    });
+  })();
+  </script>
+</dom-module>

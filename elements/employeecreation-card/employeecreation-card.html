@@ -1,0 +1,109 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
+
+<dom-module id="employeecreation-card">
+  <template>
+    <style>
+      :host{
+         margin-left: 10%;
+         display: block;
+         @apply(--layout-left);
+      }
+      .rolecard
+      {
+        @apply(--layout-center);
+        width: 6%;
+        margin-left: 15%;
+      } 
+      .rbutton paper-button
+      {
+      background-color: #363636;
+      color: #ffffff;
+      width: 10%;
+      margin-left: 40%;
+      margin-top: 4%;
+      }
+      .button paper-button
+      {
+      background-color: #363636;
+      color: #ffffff;
+      width: 10%;
+      margin-left: 40%;
+      margin-top: 4%;
+      }
+      .role{
+        width: 80%;
+      }
+      paper-button{
+        margin-left: 50%;
+        margin-top: 5%;
+      }
+      </style>
+    
+   <div hidden$="{{hiderolecard}}">
+    <paper-input label="Search here.........." prefix>
+    <paper-icon-button prefix icon="search" on-click="FnSearch"></paper-icon-button>
+    </paper-input>
+    <div class="rbutton">
+    <paper-button on-click="Fncreate">Create</paper-button>
+    </div>
+    <div class="role">
+    <template is="dom-repeat" items="{{employeearr}}" as="e">
+    <employeecreation-display-card id="{{e.id}}" name="{{e.name}}" password="{{e.password}}" roleid="{{e.role_id}}"
+    sectionid="{{e.section_id}}" subjectid="{{e.subject_id}}" gradeid="{{e.grade_id}}" subjectname="{{e.subject_name}}" subjectcategory="{{e.subject_category}}" gradename="{{e.grade_name}}" hiderolenameinput="true" hiderolenameitem="false"></employeecreation-display-card>
+    </template>
+    </div>
+  </div>
+  <div hidden$="{{hidecreateemployee}}">
+    <createemployee-card id="createemployeecard"></createemployee-card>
+  </div>
+
+    <master-ui-service id="uiservice"></master-ui-service>
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'employeecreation-card',
+      ready:function()
+      {
+        this.$.uiservice.FnMasterEmployees();
+        this.hidecreateemployee=true;
+        this.hiderolecard=false;
+      },  
+      FnRefresh:function()
+      {
+       this.rolename="";         
+      },  
+      FnSearch:function(){
+        
+      },
+      FnSubmit:function()
+      {                      
+         if(this.rolename==null||this.rolename=="")
+         {
+          alert('Please enter rolename before save!!');
+         }
+         else 
+         {
+          //alert("test");
+         var roleid = (this.rolename).toLowerCase();         
+         this.$.uiservice.FnSetRoleInfo(this.rolename,roleid);
+         this.$.roledialog.toggle();
+       }    
+      },     
+     Fncreate:function(){
+      this.hidecreateemployee=false;
+      this.hiderolecard=true;
+      // this.$.roledialog.toggle();
+      // document.querySelector('app-card').setPage('homepage','');
+      // document.querySelector('home-page').setPage('createemployee-card','');
+      // alert(document.querySelector('createemployee-card'));
+      this.$.createemployeecard.callService();
+     }
+    });
+  })();
+  </script>
+</dom-module>

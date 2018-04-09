@@ -1,0 +1,222 @@
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="curriculum-plan-conceptapproval-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .position{   
+        margin-left:5%   
+   
+      }
+      #tb1{
+        width:15%
+      }
+      #tb2{
+        width:35%
+      }
+      #tb3{
+        width:10%
+      }
+      #itemcard:nth-child(odd) {
+        background-color: white; 
+      }
+      #itemcard:nth-child(even) {
+        background-color: #f1f1f1;
+      }
+      #itemcard{
+        width: 80%;
+        margin-left: 11%;  
+      }
+      .report1
+      {
+          table-layout: fixed;
+          border-collapse: collapse;
+          width: 1920px;
+          margin-left: 0%;
+          margin-top: 5%;
+      }
+      paper-dropdown-menu
+      {
+        --paper-input-container-label: { color: red };
+        text-align:center;
+      }
+    </style>
+
+    <div style="margin-left: -6%;">
+      <span class="position"> 
+        <paper-dropdown-menu  label="Select the Grade">
+          <paper-menu id="cpapprovalgrade" class="dropdown-content"   on-iron-select="FnSelectGrade">
+            <template is="dom-repeat" items="{{gradearr}}">
+            <paper-item value="{{item.gradeid}}">{{item.gradename}}</paper-item>
+            </template>    
+          </paper-menu>
+        </paper-dropdown-menu>
+      </span>
+      <span class="position"> 
+        <paper-dropdown-menu  label="Select Section">
+          <paper-menu id="cpapprovalsection" class="dropdown-content"  on-iron-select="FnSelectSection">
+            <template is="dom-repeat" items="{{sectionarr}}">
+            <paper-item value="{{item.class_id}}">{{item.section_id}}</paper-item>
+            </template>    
+          </paper-menu>
+        </paper-dropdown-menu>
+      </span>  
+      <span class="position">    
+        <paper-dropdown-menu  label="Select Subject">
+          <paper-menu id="cpapprovalsubject" class="dropdown-content"   on-iron-select="FnSelectSubject">
+            <template is="dom-repeat" items="{{subjectarr}}">
+            <paper-item value="{{item.subject_id}}">{{item.subject_name}}</paper-item>
+            </template>    
+          </paper-menu>
+        </paper-dropdown-menu>
+      </span>  
+        <span class="position"> 
+         <paper-dropdown-menu id="term" label="Select Term">
+           <paper-menu id="chaptertermidggggg" class="dropdown-content"   on-iron-select="Fnchaptertermid" attr-for-selected="value" required>
+                <paper-item value="term1">Term1</paper-item>
+                <paper-item value="term2">Term2</paper-item>
+                <paper-item value="term3">Term3</paper-item>
+            </paper-menu>
+          </paper-dropdown-menu>
+       </span>        
+      <span class="position"> 
+        <paper-dropdown-menu  label="Select the chapter">
+          <paper-menu id="cpapprovalchapter" class="dropdown-content"   on-iron-select="FnSelectChapter">
+          <template is="dom-repeat" items="{{chapterarr}}">
+          <paper-item value="{{item.chapter_id}}">{{item.chapter_name}}</paper-item>
+          </template>    
+          </paper-menu>
+        </paper-dropdown-menu>
+     </span> 
+    
+    </div>
+
+
+     <paper-input value="{{name}}" hidden></paper-input>
+      <div id="empidzz" style="position: 
+      absolute;margin-left: 5%;margin-top: 1.4%;">
+        <label><b>Employee Name:</b></label>
+      </div>
+      <h4 style="margin-top: 1.3%;position: absolute;
+      margin-left: 14%;">{{name}}</h4>
+   <table  border="1" class="report1" id="clsplnevalttttt">
+        <!-- <tr style="border-bottom: 1px solid #ccc; line-height: 1.8em;border-color:#6699ff"> -->
+        <tr>
+          <th style="width: 4.7%;">SNO</th>
+          <th style="width: 16.7%;">Concept</th>
+          <th style="width: 15%;">Sub Concept</th>
+          <th style="width: 6.4%;"># Periods</th>
+          <th style="width: 11%;">Skill</th>
+          <th style="width: 11%;">BLD Values</th>
+          <th style="width: 11%;">Value</th>
+          <th style="width: 11%;">Teaching Aids</th>
+          <th style="width: 11%;">Innovation</th>
+          <th style="width: 11%;">Plan From</th>
+          <th style="width: 11%;">Plan To</th>
+          <th style="width: 11%;">LR Rectification</th>
+          <th style="width: 11%;">Remarks</th>
+          <th style="width: 11%;">Co-Ordinator Remarks</th>
+          <th style="width: 11%;">Correction Status</th>
+          <th style="width: 11%;">Completion Date</th>
+          <th style="width: 11%;">Completion Status</th>
+          <th style="width: 11%;">Enrichment Suggestion</th>          
+          <th style="width: 4%;"></th>  
+         </tr>       
+          <template is="dom-repeat" items="{{approvearr}}">
+           <tr>           
+             <curriculum-plan-conceptapproval-itemcard sno="{{item.sno}}" rowid="{{item.row_id}}" conceptid="{{item.concept_id}}" conceptname="{{item.concept_name}}" subconceptid="{{item.sub_concept_id}}" subconceptname="{{item.sub_concept_name}}" period="{{item.period}}" fromdate="{{item.planned_date_from}}" todate="{{item.planned_to_date}}" skill="{{item.skill}}" value="{{item.value}}" innovation="{{item.innovation}}" lr="{{item.lr_rectification}}" remarks="{{item.remarks}}" correctionstatus="{{item.correction_status}}" completionstatus="{{item.completion_status}}" hideflag="{{item.hideflag}}" hidetitleflag="{{item.hidetitleflag}}" completiondate="{{item.completion_date}}" enrichmentsug="{{item.enrichment_sug}}" bldvalues="{{item.bld_value_name}}" teachingaid="{{item.teaching_aid}}" coremarks="{{item.co_ordinator_remarks}}">          
+            </curriculum-plan-conceptapproval-itemcard>        
+            </tr>  
+           </template>  
+     </table> 
+    <teacher-book-service-card id="bookservice"></teacher-book-service-card>  
+  </template>
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'curriculum-plan-conceptapproval-card',     
+      /*ready:function(){
+        this.hideapprovalcard=true;
+      } ,*/
+      FnSelectGrade:function(e){
+        this.gradeid=e.target.selectedItem.value;
+        this.gradename=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_gradeid",this.gradeid);
+        localStorage.setItem("curr_sess_gradename",this.gradename);
+        this.$.bookservice.fngetclassbooksectionvalue(this.gradeid);
+        document.querySelector('#cpapprovalsection').selected=-1;
+        document.querySelector('#cpapprovalsubject').selected=-1;
+        document.querySelector('#cpapprovalchapter').selected=-1;
+        document.querySelector('#chaptertermidggggg').selected=-1;
+        
+        this.$.clsplnevalttttt.hidden=true;
+        this.name="";
+        this.$.empidzz.hidden=true;
+      },
+      FnSelectSection:function(e){
+        this.sectionidz=e.target.selectedItem.value;
+        this.sectionidname=e.target.selectedItem.textContent.trim();
+        localStorage.setItem("curr_sess_sectionid",this.sectionidz);
+        localStorage.setItem("curr_sess_sectionname",this.sectionidname);
+        this.$.bookservice.fngetclassbooksubjectvalue(this.gradeid,this.sectionidname);
+        document.querySelector('#cpapprovalsubject').selected=-1;
+        document.querySelector('#cpapprovalchapter').selected=-1;
+         document.querySelector('#chaptertermidggggg').selected=-1;
+        this.$.clsplnevalttttt.hidden=true;
+        this.name="";
+        this.$.empidzz.hidden=true;
+      },
+      FnSelectSubject:function(e){
+       this.subjectid=e.target.selectedItem.value;
+       this.subjectname=e.target.selectedItem.textContent.trim();
+       localStorage.setItem("curr_sess_subjectid",this.subjectid);
+       localStorage.setItem("curr_sess_subjectname",this.subjectname);
+     document.querySelector('#cpapprovalchapter').selected=-1;
+      document.querySelector('#chaptertermidggggg').selected=-1;
+       this.$.clsplnevalttttt.hidden=true;
+        this.name="";
+        this.$.empidzz.hidden=true;
+      },
+       Fnchaptertermid:function(e){
+        this.termid=e.target.selectedItem.textContent.trim();
+        sessionStorage.setItem("termid",this.termid);
+     this.$.bookservice.fngetclassbookchaptervalue(this.gradeid,this.sectionidname,this.subjectid,this.termid); 
+     document.querySelector('#cpapprovalchapter').selected=-1; 
+     this.$.clsplnevalttttt.hidden=true;
+        this.name="";
+        this.$.empidzz.hidden=true;
+      },
+      FnSelectChapter:function(e){
+       this.chapterid=e.target.selectedItem.value;
+       this.chaptername=e.target.selectedItem.textContent.trim();
+       localStorage.setItem("curr_sess_chapterid",this.chapterid); 
+       localStorage.setItem("curr_sess_chaptername",this.chaptername); 
+       this.$.bookservice.fngetclassbookchapterconceptvalue(this.gradeid,this.sectionidz,this.sectionidname,this.subjectid,this.chapterid);
+       this.$.bookservice.fetchalreadyapprovedchapterconcept(); 
+       
+       this.$.clsplnevalttttt.hidden=false;
+       this.$.empidzz.hidden=false;
+      
+      },
+     
+        
+      FnRefreshzzz:function()
+      {
+        document.querySelector('#cpapprovalgrade').selected=-1;
+        document.querySelector('#cpapprovalsection').selected=-1;
+        document.querySelector('#cpapprovalsubject').selected=-1;
+        document.querySelector('#cpapprovalchapter').selected=-1;
+         document.querySelector('#chaptertermidggggg').selected=-1;
+        this.$.clsplnevalttttt.hidden=true;
+        this.name="";
+        this.$.empidzz.hidden=true;
+        this.approvearr="";
+      }
+    });
+  })();
+  </script>
+</dom-module>

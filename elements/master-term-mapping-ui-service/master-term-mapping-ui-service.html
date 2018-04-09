@@ -1,0 +1,632 @@
+
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="master-term-mapping-ui-service">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>
+  <iron-ajax        
+        id="gettermvalueajax"
+        url="{{gettermvalueurl}}"
+        params="{{gettermvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="gettermvalueResponse"
+        debounce-duration="300">
+    </iron-ajax>
+      <iron-ajax        
+        id="generatetermajax"
+        url="{{generatetermurl}}"
+        params="{{generatetermparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="generatetermResponse"
+        debounce-duration="300">
+      </iron-ajax>
+        <iron-ajax        
+        id="passtermsvalueajax"
+        url="{{passtermsvalueurl}}"
+        params="{{passtermsvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="passtermsvalueResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+       <iron-ajax        
+         id="updatepasstermvalueajax"
+        url="{{updatepasstermvalueurl}}"
+        params="{{updatepasstermvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="updatepasstermvalueResponse"
+        debounce-duration="300"> 
+        </iron-ajax>
+       <iron-ajax        
+        id="deletepasstermvalueajax"
+        url="{{deletepasstermvalueurl}}"
+        params="{{deletepasstermvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"  
+        on-response="deletepasstermvalueResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+       <iron-ajax        
+        id="getassesmentvalueajax"
+        url="{{getassesmentvalueurl}}"
+        params="{{getassesmentvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="getassesmentvalueResponse"
+        debounce-duration="300">
+      </iron-ajax> 
+       <iron-ajax        
+        id="passassesmentvalueajax"
+        url="{{passassesmentvalueurl}}"
+        params="{{passassesmentvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="passassesmentvalueResponse"
+        debounce-duration="300">
+      </iron-ajax>
+         <iron-ajax        
+        id="updatepassassesmentvalueajax"
+        url="{{updatepassassesmentvalueurl}}"
+        params="{{updatepassassesmentvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="updatepassassesmentvalueResponse"
+        debounce-duration="300">
+      </iron-ajax>
+        <iron-ajax        
+        id="deletepassassesmentvalueajax"
+        url="{{deletepassassesmentvalueurl}}"
+        params="{{deletepassassesmentvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="deletepassassesmentvalueResponse"
+        debounce-duration="300">
+      </iron-ajax>
+       <iron-ajax        
+        id="schooltypemappingajax"
+        url="{{schooltypemappingurl}}"
+        params="{{schooltypemappingparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="schooltypemappingResponse"
+        debounce-duration="300">
+      </iron-ajax>
+      <iron-ajax        
+        id="termgeneratevalueajax"
+        url="{{termgeneratevalueurl}}"
+        params="{{termgeneratevalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="termgeneratevalueResponse"
+        debounce-duration="300">
+      </iron-ajax>
+        <iron-ajax        
+        id="termtogrademappingvalueajax"
+        url="{{termtogrademappingvalueurl}}"
+        params="{{termtogrademappingvalueparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="termtogrademappingvalueResponse"
+        debounce-duration="300"> 
+      </iron-ajax> 
+      <iron-ajax        
+        id="schooltypegrademappingajax"
+        url="{{schooltypegrademappingurl}}"
+        params="{{schooltypegrademappingparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="schooltypegrademappingResponse"
+        debounce-duration="300"> 
+      </iron-ajax>
+       <iron-ajax        
+        id="getassesmentajax"
+        url="{{getassesmenturl}}"
+        params="{{getassesmentparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="getassesmentResponse"
+        debounce-duration="300"> 
+      </iron-ajax>
+        <iron-ajax        
+        id="assesmentandgradeajax"
+        url="{{assesmentandgradeurl}}"
+        params="{{assesmentandgradeparam}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="assesmentandgradeResponse"
+        debounce-duration="300"> 
+      </iron-ajax>
+       <iron-ajax        
+        id="assesmentandgrade1ajax"
+        url="{{assesmentandgrade1url}}"
+        params="{{assesmentandgrade1param}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="assesmentandgrade1Response"
+        debounce-duration="300">
+       </iron-ajax>
+        <iron-ajax        
+        id="assesmentandgrade3ajax"
+        url="{{assesmentandgrade3url}}"
+        params="{{aassesmentandgrade3param}}"
+        handle-as="json"   
+        content-type="application/json"
+        method="post"
+        on-response="assesmentandgrade3Response"
+        debounce-duration="300">
+       </iron-ajax>
+    </div>
+     <term-dialog-card id="dialog1"></term-dialog-card>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+var c=0,c2=0;
+    Polymer({
+      is: 'master-term-mapping-ui-service',
+   Fngettermvalue:function()     
+       {
+    this.gettermvalueurl=sessionStorage.getItem("addrinfo")+"/gettermvalue-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        this.gettermvalueparam=obj;
+        this.$.gettermvalueajax.generateRequest();
+        },
+ gettermvalueResponse:function(e)
+      {
+     //   alert("1");
+        var res=e.detail.response.returnval;
+
+ 
+        document.querySelector('term-creation-card').termarr=res;
+            },
+
+ fngenerateterm:function(e){
+      this.generatetermurl=sessionStorage.getItem("addrinfo")+"/generateterm-service";
+        this.$.generatetermajax.generateRequest();
+      },
+       generatetermResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+
+ if(localStorage.getItem('curr_sess_loggedassesmenttype')=="termcreation") 
+        document.querySelector('term-creation-card').generatevalue=res[0].term_prefix+res[0].term_seq;
+  if(localStorage.getItem('curr_sess_loggedassesmenttype')=="assesmentcreation") 
+        document.querySelector('assesment-creation-card').generatevalue=res[0].assesment_seq;
+
+     },
+      fnpasstermvalue1:function(termname,generatevalue,id){
+    this.passtermsvalueurl=sessionStorage.getItem("addrinfo")+"/passtermsalue-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.termname=termname;
+        obj.term=termname.charAt(0).toUpperCase() + termname.substring(1);
+        obj.generatevalue=generatevalue;
+        obj.id=id;
+        this.passtermsvalueparam=obj;
+        this.$.passtermsvalueajax.generateRequest();
+      },
+     passtermsvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+      if(res=="Inserted!"){
+         this.Fngettermvalue();
+         this.fngenerateterm();
+       }
+     
+       this.$.dialog1.Termdialog(res);
+        
+      },
+        fnupdatepasstermvalue:function(termid,termname)     
+       {
+    this.updatepasstermvalueurl=sessionStorage.getItem("addrinfo")+"/updatepasstermvalue-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.termid=termid;
+        obj.termname=termname;
+        obj.term=termname.charAt(0).toUpperCase() + termname.substring(1);
+
+        this.updatepasstermvalueparam=obj;
+        this.$.updatepasstermvalueajax.generateRequest();
+    //    this.fngenerateterm();
+     
+       },
+   updatepasstermvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+    //    alert(JSON.stringify(res));
+       this.$.dialog1.Termdialog(res);
+          this.Fngettermvalue();
+      
+      }, 
+      fndeletepasstermvalue:function(termid,termname)     
+       {
+     this.deletepasstermvalueurl=sessionStorage.getItem("addrinfo")+"/deletepasstermvalue-service";
+       var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.termid=termid;
+        obj.termname=termname;
+
+        this.deletepasstermvalueparam=obj;
+        this.$.deletepasstermvalueajax.generateRequest();
+     //   this.fngenerateterm();
+      
+       },
+   deletepasstermvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+      //  alert(JSON.stringify(res));
+       this.$.dialog1.Termdialog(res);
+    this.Fngettermvalue();
+      },
+    Fngetassesmentvalue:function()     
+       {
+        this.getassesmentvalueurl=sessionStorage.getItem("addrinfo")+"/getassesmentvalue-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        this.getassesmentvalueparam=obj;
+        this.$.getassesmentvalueajax.generateRequest();
+    //    this.fngenerateterm1();
+       },
+   getassesmentvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+        document.querySelector('assesment-creation-card').assesmentarr=res;
+      }, 
+   fnpassassesmentvalue1:function(assesmenvalue,assesmenid){
+  this.passassesmentvalueurl=sessionStorage.getItem("addrinfo")+"/passassesmentvalue-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.assesmenvalue=assesmenvalue;
+        obj.assesment=assesmenvalue.charAt(0).toUpperCase() + assesmenvalue.substring(1);
+        obj.assesmentid=assesmenid;
+         this.passassesmentvalueparam=obj;
+      this.$.passassesmentvalueajax.generateRequest();
+      },
+     passassesmentvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+        this.$.dialog1.Termdialog(res);
+        if(res=="Inserted!"){
+          this.fngenerateterm();
+          this.Fngetassesmentvalue();
+      }
+     },
+     fnupdatepassassesmentvalue:function(assesmenid,assesmenvalue)     
+       {
+    this.updatepassassesmentvalueurl=sessionStorage.getItem("addrinfo")+"/updatepassassesmentvalue-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.assesmenid=assesmenid;
+        obj.assesmenvalue=assesmenvalue;
+        obj.assesment=assesmenvalue.charAt(0).toUpperCase() + assesmenvalue.substring(1);
+        this.updatepassassesmentvalueparam=obj;
+        this.$.updatepassassesmentvalueajax.generateRequest();
+      //  this.fngenerateterm1();
+        
+       },
+  updatepassassesmentvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+       this.$.dialog1.Termdialog(res);
+     this.Fngetassesmentvalue();
+      }, 
+     fndeletepassassesmentvalue:function(assesmenid,assesmenvalue)     
+       {
+         this.deletepassassesmentvalueurl=sessionStorage.getItem("addrinfo")+"/deletepassassesmentvalue-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        obj.assesmenid=assesmenid;
+        obj.assesmenvalue=assesmenvalue;
+        this.deletepassassesmentvalueparam=obj;
+        this.$.deletepassassesmentvalueajax.generateRequest();
+       
+       },
+   deletepassassesmentvalueResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+        this.$.dialog1.Termdialog(res);
+      this.Fngetassesmentvalue();
+      },   
+      Fnschooltype:function()     
+       {
+        this.schooltypemappingurl=sessionStorage.getItem("addrinfo")+"/selectsectiongrade-service";
+        var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+        this.schooltypemappingparam=obj;
+        this.$.schooltypemappingajax.generateRequest();
+        },
+  schooltypemappingResponse:function(e)
+      {
+       var res=e.detail.response.returnval;
+      document.querySelector('term-assesment-to-grade-mapping').schooltypearr=res;
+      document.querySelector('assesment-to-subject-mapping-card').schooltypearr=res;
+      //this.Fngetassesmentandgrade3();
+      },
+      Fngetassesmentgrade:function(schooltypeid,schooltypename)     
+       {
+        this.schooltypegrademappingurl=sessionStorage.getItem("addrinfo")+"/assesmentgrade-service";
+        var obj={};
+       obj.board=localStorage.getItem("curr_sess_board");
+       obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+       obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+      obj.schooltypeid=schooltypeid;
+      obj.schooltypename=schooltypename;
+        this.schooltypegrademappingparam=obj;
+        this.$.schooltypegrademappingajax.generateRequest();
+        },
+        schooltypegrademappingResponse:function(e)
+      {
+          var res=e.detail.response.returnval;
+        //  alert(JSON.stringify(res));
+        if(res.length==0){
+          document.querySelector('term-assesment-to-grade-mapping').gradearr=res;
+          document.querySelector('term-assesment-to-grade-mapping').hiddenvalues1=true;
+        }
+        else{
+          document.querySelector('term-assesment-to-grade-mapping').gradearr=res;
+          document.querySelector('term-assesment-to-grade-mapping').hiddenvalues1=false; 
+        }
+      },
+      fntermgeneratevalue:function(gradeid,gradename,schooltype)     
+       {
+        this.termgeneratevalueurl=sessionStorage.getItem("addrinfo")+"/termgeneratevalue-service";
+         var obj={};
+        obj.board=localStorage.getItem("curr_sess_board");
+        obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+        obj.academic_year=localStorage.getItem("curr_sess_academicyear");
+        obj.gradeid=gradeid;
+        obj.gradename=gradename;
+        obj.schooltype=schooltype;
+        this.termgeneratevalueparam=obj;
+        this.$.termgeneratevalueajax.generateRequest();
+   //   this.fngenerateterm();
+       },
+  termgeneratevalueResponse:function(e)
+      {
+         var c=[];
+         var res=e.detail.response.returnval;
+         var res1=e.detail.response.termarr;
+         var res2=e.detail.response.assesmentarr;
+         var temp=[];
+       
+          for(var i=0;i<res2.length;i++){
+
+             var obj={};
+                 obj.assesment_id=res2[i].assesment_id;
+                 obj.assesment_name=res2[i].assesment_name;
+                 obj.hideheadervalue=false;
+                 obj.hideheadervalue1=true;
+                 var assarr=[];
+              for(var j=0;j<res1.length;j++){
+                 var obj2={};
+                   obj2.term_id=res1[j].term_id;
+                   obj2.term_name=res1[j].term_name;
+                   var r=((res1[j].term_name).toLowerCase()+(res2[i].assesment_name).toLowerCase()).replace(/[^\w\s]/gi, '').trim();
+                   obj2.id=r.replace(/ /g,'');
+                   obj2.check=false;
+                   obj2.dbvalue=false;
+                    assarr.push(obj2);
+                  }
+                   obj.fonts="font-weight: bold;text-transform: uppercase;text-align:center;"
+                   obj.assesments=assarr;
+                   temp.push(obj);
+                   c=assarr;
+                  assarr=[];
+
+            }
+
+       for(var i=0;i<temp.length;i++){
+         
+            for(var j=0;j<res.length;j++){
+                 for(var k=0;k<temp[i].assesments.length;k++) {
+              var d=(((res[j].term_name).toLowerCase()+(res[j].assesment_name).toLowerCase()).replace(/[^\w\s]/gi, '')).trim();
+                 var m=d.replace(/ /g,'');
+               
+             if(temp[i].assesments[k].id==m){
+                      temp[i].assesments[k].check=true;
+                      temp[i].assesments[k].dbvalue=true;
+                  }
+                 }    
+               }  
+             }
+           
+      var temp1=[] ;
+      
+     
+ //alert(JSON.stringify(res1));
+
+
+
+        temp1.push({"assesment_name":"Assesment name","assesment_id":"Assesment Id","assesments":res1,"hideheadervalue":true,"hideheadervalue1":false,"fonts":"font-weight:bold;text-transform:uppercase;text-align:center;" });
+
+    for(var i=0;i<temp.length;i++){
+          temp1.push(temp[i]);
+       }
+      
+      if(temp1.length==0){
+        temp1=[];
+      document.querySelector('term-assesment-to-grade-mapping').mappingarr=temp1;
+      document.querySelector('term-assesment-to-grade-mapping').hiddenvalues=true;
+
+      }
+      else{
+       document.querySelector('term-assesment-to-grade-mapping').mappingarr=temp1;
+       document.querySelector('term-assesment-to-grade-mapping').hiddenvalues=false;
+    }},
+    Fntermtogrademappingvalue:function(termname,termid,assesmentid,assesmentname,gradename,gradeid,seq)   {
+  c=seq;
+        this.termtogrademappingvalueurl=sessionStorage.getItem("addrinfo")+"/termtogrademappingvalue-service";
+        var obj={};
+         obj.board=localStorage.getItem("curr_sess_board");
+         obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+         obj.termid=termname.toLowerCase();
+         obj.termname=termname.charAt(0).toUpperCase() + termname.substring(1);
+         obj.assesmentid=assesmentname.toLowerCase();
+         obj.assesmentname=assesmentname.charAt(0).toUpperCase()+assesmentname.substring(1);
+         obj.gradename=gradename;
+         obj.gradeid=gradeid;
+        this.termtogrademappingvalueparam=obj;
+        this.$.termtogrademappingvalueajax.generateRequest();
+       },
+  termtogrademappingvalueResponse:function(e)
+      {
+      c2++;
+
+       if(c==c2){
+      var res=e.detail.response.returnval;
+        this.$.dialog1.Termdialog(res);
+          c=0;
+          c2=0;
+       }},
+
+       fngetassesment:function(schooltypid,schooltypename)     
+       {
+        this.getassesmenturl=sessionStorage.getItem("addrinfo")+"/getassesment-service";
+        var obj={};
+         obj.board=localStorage.getItem("curr_sess_board");
+         obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+         obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+         obj.schooltypid=schooltypid;
+         obj.schooltypename=schooltypename;
+        this.getassesmentparam=obj;
+        this.$.getassesmentajax.generateRequest();
+        },
+   getassesmentResponse:function(e)
+      {
+    var res=e.detail.response.returnval;
+        // alert(JSON.stringify(res));
+       document.querySelector('assesment-to-subject-mapping-card').gradearr=res;
+}, 
+
+Fngetassesmentandgrade3:function()     
+       {
+       this.assesmentandgrade3url=sessionStorage.getItem("addrinfo")+"/getassesmentandgrade3-service";
+        this.$.assesmentandgrade3ajax.generateRequest();
+      },
+ assesmentandgrade3Response:function(e)
+      {
+  var res=e.detail.response.returnval;
+    for(var i=0;i<res.length;i++){
+      res[i].check=false;
+    }
+    
+   document.querySelector('assesment-to-subject-mapping-card').hideassmentinfogradeid3=false;
+   document.querySelector('assesment-to-subject-mapping-card').typearr=res;  
+      },
+
+Fngetassesmentandgrade:function()     
+       {
+       this.assesmentandgradeurl=sessionStorage.getItem("addrinfo")+"/getassesmentandgrade-service";
+           var obj={};
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_grade");
+           obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+           obj.board=localStorage.getItem("curr_sess_board");
+           obj.type=localStorage.getItem("curr_sess_type"); 
+           obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+           this.assesmentandgradeparam=obj;
+           this.$.assesmentandgradeajax.generateRequest();
+      },
+ assesmentandgradeResponse:function(e)
+      {
+        var res=e.detail.response.returnval;
+        var res1=e.detail.response.subarr;
+      /*  alert(JSON.stringify(res));
+        alert(JSON.stringify(res1));*/
+
+  for(var i=0;i<res.length;i++){
+               var assesment=res[i].assesment_id;
+               var c= assesment.toLowerCase();
+                   c.replace(/[^\w\s]/gi, '')
+               var ddddd=c.replace(/ /g,'');
+                res[i].id=ddddd;
+               // alert()
+                res[i].check=false
+        }
+        // alert(JSON.stringify(res));
+    for(var i=0;i<res1.length;i++){
+              res1[i].sno=i+1;
+              res1[i].assesmentbulkvalue=res; 
+          }
+document.querySelector('assesment-to-subject-mapping-card').assesmentarr=res;
+document.querySelector('assesment-to-subject-mapping-card').subjectarr=res1;
+
+ },  
+ Fngetassesmentandgrade1:function()     
+       {
+       this.assesmentandgrade1url=sessionStorage.getItem("addrinfo")+"/getassesmentandgrade-service";
+           var obj={};
+           obj.gradeid=localStorage.getItem("curr_sess_gradeid");
+           obj.gradename=localStorage.getItem("curr_sess_grade");
+           obj.schooltype=localStorage.getItem("curr_sess_schooltype");
+           obj.board=localStorage.getItem("curr_sess_board");
+           obj.school_id=sessionStorage.getItem("curr_sess_loggedschoolid");
+           obj.academic_year=localStorage.getItem("curr_sess_academicyear"); 
+            obj.type=localStorage.getItem("curr_sess_type"); 
+           this.assesmentandgrade1param=obj;
+           this.$.assesmentandgrade1ajax.generateRequest();
+       },
+ assesmentandgrade1Response:function(e)
+      {
+        var res=e.detail.response.returnval;
+        var res1=e.detail.response.subarr;
+       
+  
+    for(var i=0;i<res1.length;i++){
+              res1[i].sno=i+1;
+              res1[i].assesmentbulkvalue=res; 
+          }
+  document.querySelector('assesment-to-subject-mapping-card').subjectarr=res1;
+      document.querySelector('assesment-to-subject-mapping-card').hideassmentinfoid=false;
+  
+       },
+    });
+  })();
+  </script>
+</dom-module>

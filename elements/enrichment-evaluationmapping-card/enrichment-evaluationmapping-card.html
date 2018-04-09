@@ -1,0 +1,58 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="enrichment-evaluationmapping-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card{
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        width: 100%;
+        margin-top: -3%;
+      }
+      enrichment-evaluationmapping-itemcard{
+        width: 15%;
+        /*background-color: whitesmoke;
+        box-shadow: 3px 3px 2px grey;
+        margin-left: 5%;
+        margin-top: 5%;*/
+        /*text-align: center;*/
+        /*margin: 10% auto;*/
+        margin-left: 5%;
+        margin-top: 5%;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+      }
+      h1{
+        font-size: 30px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #27408B;
+      }
+    </style>
+    <h1 align="center">Evaluation Parameter Mapping</h1>
+    <div class="card">
+      <template is="dom-repeat" items="{{bookarr}}">
+        <enrichment-evaluationmapping-itemcard subjectname="{{item.subject_name}}" bookname="{{item.book_name}}" bookid="{{item.id}}" category="{{item.category_name}}" type="{{item.category}}" quantity="{{item.quantity}}"></enrichment-evaluationmapping-itemcard>
+      </template>
+    </div>
+    <enrichment-service id="enrichmentservice"></enrichment-service>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'enrichment-evaluationmapping-card',
+    
+      callService:function(){
+        this.$.enrichmentservice.FnFetchAllBooks();
+      },
+      FnRefresh:function(){
+        
+      }
+    });
+  })();
+  </script>
+</dom-module>
