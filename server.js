@@ -12886,16 +12886,14 @@ app.post('/FnSecondLangSubjectToStudent-service' , urlencodedParser,function (re
       subject_id:req.query.subjectid,
       student_name:req.query.studentname,
       class_id:req.query.sectionid,
-     lang_pref:req.query.langugagepref,
-     flag:req.query.flag
+      lang_pref:req.query.langugagepref,
+      flag:'active',
     }; 
      console.log(response);
 
 var qur="SELECT * FROM  tr_student_to_subject WHERE school_id='"+req.query.schoolnames+"' and flag='active' and student_id='"+req.query.studentid+"' and academic_year='"+req.query.Acadamicyear+"' and grade='"+req.query.gradeid+"' and  class_id='"+req.query.sectionid+"' and lang_pref='"+req.query.langugagepref+"'";
  
-
- 
-  var qur1=  "update tr_student_to_subject set subject_id='"+req.query.subjectid+"' where school_id='"+req.query.schoolnames+"' and flag='active' and academic_year='"+req.query.Acadamicyear+"' and grade='"+req.query.gradeid+"' and student_id='"+req.query.studentid+"' and class_id='"+req.query.sectionid+"' and lang_pref='"+req.query.langugagepref+"'";
+ var qur1="update tr_student_to_subject set subject_id='"+req.query.subjectid+"' where school_id='"+req.query.schoolnames+"' and flag='active' and academic_year='"+req.query.Acadamicyear+"' and grade='"+req.query.gradeid+"' and student_id='"+req.query.studentid+"' and class_id='"+req.query.sectionid+"' and lang_pref='"+req.query.langugagepref+"'";
    
     console.log(qur);
    console.log(qur1);
@@ -12943,9 +12941,9 @@ app.post('/FnSecondLangSubjectToStudentsets-service' , urlencodedParser,function
       subject_id:req.query.subjectid,
       student_name:req.query.studentname,
       class_id:req.query.sectionid,
-     lang_pref:req.query.langugagepref,
-      //studentid,studentname,schoolnames,termsname,gradenamesssss,Sectionnames,seclang,thirdlang,Sectionnameseeee
-    }; 
+      lang_pref:req.query.langugagepref,
+      flag:'active',
+        }; 
      console.log(response);
 // 
 var qur="SELECT * FROM  tr_student_to_subject WHERE school_id='"+req.query.schoolnames+"' and student_id='"+req.query.studentid+"' and academic_year='"+req.query.Acadamicyear+"' and grade='"+req.query.gradeid+"' and  class_id='"+req.query.sectionid+"' and lang_pref='"+req.query.langugagepref+"' and flag='active'";
@@ -13011,7 +13009,7 @@ app.post('/FnThirdLangSubjectToStudent-service' , urlencodedParser,function (req
       student_name:req.query.studentname,
       class_id:req.query.sectionid,
        lang_pref:req.query.langugagepref,
-       flag:req.query.flag
+       flag:'active',
   
     }; 
 
