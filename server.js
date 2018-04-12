@@ -13091,11 +13091,10 @@ app.post('/SelectSchoolName-service' ,urlencodedParser, function (req, res)
           res.status(200).json({'returnval': rows});
           //console.log(rows);
         }
-
-        else
-          //console.log(err);
-          res.status(200).json({'returnval': 'invalid'});
-
+       else
+          {
+           res.status(200).json({'returnval': 'invalid'});
+         }
       });
     });
    app.post('/SelectSchoolgrades-service' ,urlencodedParser,
