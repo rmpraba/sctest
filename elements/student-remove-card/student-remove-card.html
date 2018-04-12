@@ -57,14 +57,13 @@
                 </template>
               </paper-listbox>
           </div>
-
-          <div class="removecls" id="studinfo" hidden$="{{hideremovecls}}">
+   <div class="removecls" id="studinfo" hidden$="{{hideremovecls}}">
             <div class="horizontalframe">
               <div class="field">
                 <paper-input readonly value="{{studid}}"></paper-input>
               </div>
               <div class="field">
-       <paper-input readonly value="{{grade}}" on-change="fngetterm"></paper-input>
+        <paper-input readonly value="{{grade}}" on-focus="fngetterm"></paper-input>
                 <paper-item hidden>{{gradeid}}</paper-item>
               </div>
             </div>
@@ -98,6 +97,7 @@
   </paper-dialog>
   <student-add-service id="studservice"></student-add-service>
   <term-assesment-service id="assesmentservice"></term-assesment-service>
+ 
   </template>
   <script>
   (function() {
@@ -109,6 +109,8 @@
       {
         this.hideremovecls=true;
       },
+
+
  getstudentdet:function(arr)
      {
         studentnamearr=arr;
@@ -272,7 +274,8 @@
          document.querySelector('#'+this.studentslist).selected=-1;
           this.$.studservice.prestudentremovedet(this.studentid);
             // this.$.studservice.getalltermmarks(this.studentid);
-            this.$.assesmentservice.callTermService("Term");
+         
+
           this.studid=this.studentid;
           this.hideremovecls=false;
         },
@@ -293,7 +296,7 @@
          else{
 
             if(this.grade=="Nursery" ||this.grade=="Junior KG" || this.grade=="Senior KG" || this.grade=="Grade-1" || this.grade=="Grade-2" ||this.grade=="Grade-3" || this.grade=="Grade-4" ){
-         this.$.studservice.deletestudentinfo(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname,this.value);
+         this.$.studservice.deletestudentinfo(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname,this.value,0);
        // this.$.studservice.deletestudtermmarks(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname);
        //    this.$.studservice.flagupdatestud(this.studentid,this.grade);
        //    this.$.studservice.fetchstudentinfo();
@@ -303,9 +306,7 @@
          }
          else{
           this.$.studservice.deletestudentinfo(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname,this.value,0);
-          // this.$.studservice.deletestudtermmarks1(this.studentid,this.gradeid,this.classid,this.grade,this.section,this.tremname);
-          //  this.$.studservice.flagupdatestud(this.studentid,this.grade,this.value);
-          // this.$.studservice.fetchstudentinfo();
+         
 
           this.fnrefremve();
           this.openspinr();

@@ -43,17 +43,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     width:20%;
     margin-left:61%;
    } 
-   h2 {
+   h2,h1 {
     text-shadow: 2px 2px #DEDAD9;
 }
   #schoolinfodialog{
       width: 20%;
       border-radius: 25px;
     }
+    #schooltermhideinfo{
+      width: 25%;
+      border-radius: 25px;
+    }
     </style>
     <div>
       <div class="spinner"><paper-dialog modal id="schoolspinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop><paper-spinner active></paper-spinner>
     <h4>{{spinnermsg}}</h4></paper-dialog></div>
+      <center><h1>SCHOOL TREANFER</h1></center> </br></br></br>
        <paper-input label="Enter Student Name" is="" value="{{value}}" on-keydown="FnSearchstudname"></paper-input>
       <paper-listbox class="dropdown-content" id="schooltransferstuid" on-iron-select="FnSelectstudenq">
        <template is="dom-repeat" items="{{itemArray}}" as="item">
@@ -121,20 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            </paper-dropdown-menu>
         </div> 
       </div>
-      <div class="horizontalframe" hidden$="{{schooltermhideinfo}}">
-        <div class="fields" >
-          
-        </div>
-        <div class="fields" >
-          <paper-dropdown-menu id="termid" label="Select  Term name">
-             <paper-menu id="schooltermid" class="dropdown-content" on-iron-select="fnterm"  attr-for-selected="value" >
-              <template is="dom-repeat" items="{{termarr}}">
-               <paper-item value="{{item.term_id}}">{{item.term_name}}</paper-item>
-             </template>
-             </paper-menu>
-           </paper-dropdown-menu>
-        </div> 
-      </div>
+    
        <div class="horizontalframe">
         <div class="fields" >
           <paper-input label="Select Sction " readonly value="{{section}}"></paper-input>
@@ -153,9 +145,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-button class="button" style="color:white;background-color:black" on-click="fnsubmit">Sumbit</paper-button>
    </center>
     </div> 
+</span> 
+
+<paper-dialog id="schooltermhideinfo" modal>
+       <paper-dropdown-menu style="width: 59%; margin-left: 16%;" label="Select  Term name">
+             <paper-menu id="schooltermid" class="dropdown-content" on-iron-select="fnterm"  attr-for-selected="value" >
+              <template is="dom-repeat" items="{{termarr}}">
+               <paper-item value="{{item.term_id}}">{{item.term_name}}</paper-item>
+             </template>
+             </paper-menu>
+       </paper-dropdown-menu>
+      <center>
+        <paper-button class="button" style="color:white;background-color:black" on-click="fnok">ok</paper-button>
+   </center>
+    
+</paper-dialog>
 
 
-  </span> 
  <p hidden>{{schoolid}}</p>
  <p hidden>{{classid}}</p>
  <p hidden>{{gradeid}}</p>
@@ -178,10 +184,11 @@ var studentnamearr=[];
       is: 'school-transfer-card',
 
   ready:function(e){
-     this.schooltermhideinfo=true;
+ 
      this.termarr="";
      this.fnref();
    },
+
   getstudentdet:function(arr)
      {
         studentnamearr=arr;
@@ -262,7 +269,7 @@ var studentnamearr=[];
    this.hidefullschoolinfo=false;
      },
 fnselectschool:function(e){
-this.schooltermhideinfo=true;
+
 
 document.querySelector('#schoolacademicid').selected=-1;
 document.querySelector('#schoolgradeid').selected=-1;
@@ -280,16 +287,20 @@ fngrade:function(e){
     this.$.stuservice.schoolsection(this.selectschoolid,this.selectschoolname,this.currgradeid,this.currgradename,this.curracaid);
     if(this.academic==this.curracaid){
          this.$.stuservice.schooltermservice(this.selectschoolid,this.curracaid,this.currgradeid);
-         this.schooltermhideinfo=false;
+         alert(1);
+         this.$.schooltermhideinfo.toggle();
      }
     else
     {
-       this.schooltermhideinfo=true;
+     
        this.termarr="";
     }
 },
+ fnok:function(){
+   this.$.schooltermhideinfo.close();  
+   },
 fnselectacadamics:function(e){
-this.schooltermhideinfo=true;
+
 document.querySelector('#schoolgradeid').selected=-1;
 document.querySelector('#schoolsectionid').selected=-1;
 document.querySelector('#schooltermid').selected=-1;
@@ -328,6 +339,7 @@ fnsubmit:function(e){
 
       this.FnToggleSpinner(true);
      this.$.stuservice.currentschoolinsertdata(this.selectschoolname,this.studentid,this.selectschoolid,this.curracaid,this.curracaname,this.currgradeid,this.currgradename,this.cursectionid,this.cursectionname,this.schoolid,this.classid,this.section,this.gradeid,this.gradename,1);
+     this.fnrefresh();
      }
     }
    else{
@@ -339,10 +351,10 @@ fnsubmit:function(e){
       else {
        this.FnToggleSpinner(true);
        this.$.stuservice.currentschooltermvisetransfer(this.curtermid,this.selectschoolname,this.studentid,this.selectschoolid,this.curracaid,this.curracaname,this.currgradeid,this.currgradename,this.cursectionid,this.cursectionname,this.schoolid,this.classid,this.section,this.gradeid,this.gradename);
+       this.fnrefresh();
+     }
     }
-    }
- 
-  },
+ },
 
 fnrefresh:function(){
   this.curtermid="";
@@ -361,14 +373,14 @@ fnrefresh:function(){
   this.section="";
   this.gradeid="";
   this.gradename="";
-this.schooltermhideinfo=true;
+  this.value="";
+ 
   this.hidefullschoolinfo=true;
 document.querySelector('#selectschoolinfoid').selected=-1;
 document.querySelector('#schoolacademicid').selected=-1;
 document.querySelector('#schoolgradeid').selected=-1;
 document.querySelector('#schoolsectionid').selected=-1;
 document.querySelector('#schooltermid').selected=-1;
-
 },
 fnref:function(){
   this.curtermid="";
@@ -388,7 +400,7 @@ fnref:function(){
   this.gradeid="";
   this.gradename=""
   this.value="";
-this.schooltermhideinfo=true;
+
  this.hidefullschoolinfo=true;
 },
    schooldialog:function(argvalue)

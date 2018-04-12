@@ -105,13 +105,30 @@
    width: 106%;
     margin-left: 13%;
   }
-  #spinner{
+  #spinner1{
             margin: 0;
             padding: 0;
             border: none;
             background-color: transparent;
           }
+           #deletedialog{
+      width: 20%;
+      border-radius: 25px;
+    }
+     #stutranferspinner{
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+          }
+         
     </style>
+     <paper-dialog id="deletedialog" modal>
+       <h3 style="color:green"><center>{{dialoginfo}}</center></h3>
+       <center>
+      <paper-button on-click="failureclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>    
     <div class="mainbox">
        
        <span class="space1">
@@ -309,13 +326,13 @@
         </div>
          <div class="fields">
      
-      <paper-dropdown-menu id="term" label="Select Term" hidden$="{{hideterm}}">
-           <paper-menu id="newstudenhifotermid" class="dropdown-content"   on-iron-select="fnsetstudentterm" attr-for-selected="value" required>
-                  <template is="dom-repeat" items="{{termarrrs}}" as="items">
-                  <paper-item value="{{items.term_name}}">{{items.term_name}}</paper-item>
-                 </template>
-              </paper-menu>
-     </paper-dropdown-menu>
+<paper-dropdown-menu id="term" label="Select Term" hidden$="{{hideterm}}">
+  <paper-menu id="newstudenhifotermid" class="dropdown-content"   on-iron-select="fnsetstudentterm" attr-for-selected="value" required>
+  <template is="dom-repeat" items="{{termarrrs}}" as="items">
+    <paper-item value="{{items.term_name}}">{{items.term_name}}</paper-item>
+   </template>
+</paper-menu>
+  </paper-dropdown-menu>
         
         </div>
       </div>
@@ -369,7 +386,7 @@
 
             <paper-button style="background-color:black;color:white" on-click="fnsetsubmit" dialog-confirm autofocus>Cancel</paper-button>
          </center>
-        </paper-dialog>
+    </paper-dialog>
   <paper-input  hidden  value="{{schooltype}}"></paper-input>       
   <paper-input  hidden  value="{{classidszz}}"></paper-input>
   <paper-input  hidden value="{{sectionnames}}"></paper-input>
@@ -378,8 +395,11 @@
   <student-add-service id="studservice"></student-add-service>
   <demosumbit-card id="mydialog"></demosumbit-card> 
 </div>
-<div class="spinner"><paper-dialog modal id="spinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+<div class="spinner1"><paper-dialog modal id="spinner1" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
 <paper-spinner active></paper-spinner></paper-dialog></div>
+<div class="stutranferspinner"><paper-dialog modal id="stutranferspinner" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+<paper-spinner active></paper-spinner></paper-dialog></div>
+
 </template>
   <script>
   (function() {
@@ -398,6 +418,21 @@ var dobdate;
        this.$.colapsinfoid3.hidden=true;
        this.$.colapsinfoid4.hidden=true;
        // this.studentslist='studentslist';
+  
+      },
+      ready:function(e){
+    this.gradenamez="";
+ },
+       TermMarkdialog:function(argvalue)
+     
+     {
+     // alert(argvalue);
+       this.dialoginfo=argvalue;
+       this.$.deletedialog.toggle();
+     },
+     failureclose:function()
+      {
+        this.$.deletedialog.close();
       },
       termarrinformation:function(e){
    this.$.termarrinformationid.close();
@@ -429,16 +464,18 @@ fnsetsubmit:function(e){
    //           this.$.studservice.fnlaninfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.secondlan,this.value);
    // }
    // else{
-   
+   this.FnSpinnerActive(true);
              this.$.studservice.fnlaninfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.secondlan,this.value,this.thirdlen);
 
              // this.$.studservice.fnlaninfomation1(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.thirdlen,this.value);
       // }
        },
 fnacadamics:function(e){
+ if(this.gradenamez==this.gradeidnames){
     if(this.gradenamez=='Nursery'||this.gradenamez=='Junior KG'||this.gradenamez=='Senior KG'||this.gradenamez=='Grade-1'||this.gradenamez=='Grade-2'||this.gradenamez=='Grade-3'||this.gradenamez=='Grade-4'){
     this.langprefs="Second Language";
     // this.schooltype='primary';
+     this.FnSpinnerActive(true);
          this.$.studservice.fnacadamicsinfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.langprefs,this.schooltype,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames);
 // this.$.studservice.fnacadamicsinfomation3(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.schooltype);
 // this.$.studservice.fnacadamicsinfomation1(this.studid,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames,this.termid);
@@ -449,14 +486,19 @@ fnacadamics:function(e){
       this.langprefs="Third Language";
      // alert(this.langprefs);
     // this.schooltype='high';
-
+ this.FnSpinnerActive(true);
     this.$.studservice.fnacadamicsinfomation(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.langprefs,this.schooltype);
     // this.$.studservice.fnacadamicsinfomation3(this.studid,this.gradeidzzsss,this.gradenamez,this.classid,this.sectionid,this.termid,this.value,this.showdate,gender,this.ageofyrs,this.schooltype);
     // this.$.studservice.fnacadamicsinfomation2(this.studid,this.gradeidzzsss1,this.gradeidnames,this.classidszz,this.sectionnames,this.termid);
     // this.$.studservice.fetchstudentremove();
 
     }
-   },
+  }
+  else{
+    this.dialoginfo="pls Check the academicyear..!";
+    this.$.deletedialog.toggle();
+   }
+  },
  fnsetdateofbirth:function(dates)
        {
         this.showdate=dates;
@@ -480,6 +522,7 @@ this.academicyear=e.target.selectedItem.textContent.trim();
 fnselectgrade11:function(e){
   this.gradeidzzsss=e.target.selectedItem.value;
   this.gradenamez=e.target.selectedItem.textContent.trim();
+
 if(this.gradenamez=='Nursery'||this.gradenamez=='Junior KG'||this.gradenamez=='Senior KG'||this.gradenamez=='Grade-1'||this.gradenamez=='Grade-2'||this.gradenamez=='Grade-3'||this.gradenamez=='Grade-4'){
  this.hidestudentinfolangid=true;
 }
@@ -488,7 +531,10 @@ else{
 
 }
 
-//alert(this.gradeidzzsss+" "+this.gradenamez);
+if(this.gradenamez!=this.gradeidnames)
+  this.hideterm=true;
+  else if(this.gradenamez==this.gradeidnames)
+  this.hideterm=false;
  this.$.studservice.fngetsectionname(this.gradeidzzsss);
 },
 
@@ -499,8 +545,11 @@ fnselsetsection:function(e){
 this.classid=e.target.selectedItem.value;
 this.sectionid=e.target.selectedItem.textContent.trim();
 if(this.classid!=this.classidszz){
-  this.FnSpinnerActive(true);
+  if(this.gradenamez==this.gradeidnames){
+  this.FnSpinnerActive1(true);
   this.$.studservice.fngetinfosectionerrdilalog(this.gradeidzzsss1,this.classidszz,this.gradeidnames,this.sectionnames,this.studid);        
+
+}
 }
 },
 fnselectthirdlan:function(e){
@@ -603,7 +652,7 @@ if(document.querySelector("#removestudentid").checked==true)
        this.hidetwostudentinfo=false;
        this.value="";
        this.$.parentinfoid.opened=false;
-       this.$.pesonalinfoid.opened=false;
+       this.$.pesonalinfoid.opened=true;
        this.$.academicinfoid.opened=false; 
        this.$.languageinfoid.opened=false;
        }
@@ -629,6 +678,10 @@ fnupdatestudent:function(e){
         this.$.colapsinfoid2.hidden=true;
         this.$.colapsinfoid3.hidden=true;
         this.$.colapsinfoid4.hidden=true;
+       this.$.parentinfoid.opened=false;
+       this.$.pesonalinfoid.opened=false;
+       this.$.academicinfoid.opened=false; 
+       this.$.languageinfoid.opened=false; 
         }
       },
         FnSelectstudenqzz:function(e)
@@ -643,7 +696,7 @@ fnupdatestudent:function(e){
           this.itemArray=[];
           document.querySelector('#studentslistz1').selected=-1;
           this.FnSpinnerActive(true);
-          this.$.studservice.fngetstudentallinfo(this.studentid);
+      //    this.$.studservice.fngetstudentallinfo(this.studentid);
           this.$.studservice.fngetstudname1(this.studentid);
           // this.$.studservice.getalltermmarks1(this.studentid);
           this.studid=this.studentid;
@@ -651,6 +704,7 @@ fnupdatestudent:function(e){
           this.classid="";
           this.sectionarr="";
           this.fmrefresh();
+          this.$.pesonalinfoid.opened=true;
       },
 
     FnSearchstudnamezz:function(e)
@@ -687,7 +741,7 @@ fnupdatestudent:function(e){
               this.itemArray=arr;
             }
           }
-          if(e.keyCode!=8&& e.keyCode!=16&& e.keyCode!=13 && e.keyCode!=38&&e.keyCode!=40&&e.keyCode!=37&&e.keyCode!=39){
+    if(e.keyCode!=8&& e.keyCode!=16&& e.keyCode!=13 && e.keyCode!=38&&e.keyCode!=40&&e.keyCode!=37&&e.keyCode!=39){
             if(this.itemflag=="true") {
               this.itemval = (this.value).toUpperCase()+String.fromCharCode((e.keyCode)).toUpperCase();
               this.itemflag="false";
@@ -790,10 +844,18 @@ fnupdatestudent:function(e){
       this.$.mydialog.toggleDialog();
     },
     FnSpinnerActive:function(flag){
+     
         if(flag==true)
-        this.$.spinner.opened=true;
+        this.$.stutranferspinner.opened=true;
         if(flag==false)
-        this.$.spinner.opened=false;
+        this.$.stutranferspinner.opened=false;
+    },
+      FnSpinnerActive1:function(flag){
+     
+        if(flag==true)
+        this.$.spinner1.opened=true;
+        if(flag==false)
+        this.$.spinner1.opened=false;
     }
     });
   })();

@@ -23,12 +23,11 @@
         width: 83.3%;
          background-color:#dedede;
       }
-      paper-input, gold-email-input
-      {
+      paper-input,gold-email-input
+       {
         width: 80%;
-      /*  --paper-input-container-label: { color: red };*/
-          text-align:center;
-      }
+        text-align:center;
+       }
        paper-dropdown-menu
        { 
        width: 80%;
@@ -62,8 +61,18 @@
       @apply(--layout-horizontal);
           margin-top: 12%;
     }
-
+       #addinfoialog{
+      width: 20%;
+      border-radius: 25px;
+    }
     </style>
+
+     <paper-dialog id="addinfoialog" modal>
+       <h3 style="color:green"><center>{{dialoginfo}}</center></h3>
+       <center>
+      <paper-button on-click="fnaddclose" style="color:white;background-color:black;margin-top: 15%;">OK</paper-button>
+       </center>
+     </paper-dialog>  
     <div id="newstud">
       <div>
         <h2><center>Student Details</center></h2>
@@ -223,7 +232,16 @@
     var dobdate;
     Polymer({
       is: 'student-add-card',
-
+ adddialog:function(argvalue)
+     {
+     // alert(argvalue);
+       this.dialoginfo=argvalue;
+       this.$.addinfoialog.toggle();
+     },
+     fnaddclose:function()
+      {
+        this.$.addinfoialog.close();
+      },
      FnStosGrade:function(e)
      {
        this.gradeid=e.target.selectedItem.value;
@@ -251,22 +269,16 @@
          //alert(gender);
         }
       },
-      fnfemale1:function()
+fnfemale1:function()
       {
-    //alert(this.female11);
-//alert(document.querySelector('#'+this.female11).checked);
-
-if(document.querySelector('#'+this.female11).checked==true)
+  if(document.querySelector('#'+this.female11).checked==true)
         {
-  document.querySelector('#'+this.male11).checked=false;
+   document.querySelector('#'+this.male11).checked=false;
    gender="Female";
-         //alert(gender);
+         
         }
       },
-
-
-
-       fnmale:function()
+ fnmale:function()
      {
      
     if(document.querySelector("#male").checked==true)
@@ -338,32 +350,44 @@ if(document.querySelector('#'+this.transnoz).checked==false)
         
         if(gender==""||gender==null)
         {
-
-            alert("Please Select gender");
+        this.dialoginfo="Please Select gender";
+        this.$.addinfoialog.toggle();
+            
         }
           else if (this.enroll=="" || this.fname=="" || this.gradeid=="" || this.academicyear=="")
           {
-            alert("Please enter all the fields");
-
+         
+       this.dialoginfo="Please enter all the fields";
+        this.$.addinfoialog.toggle();
+            
           }
 
 
           else if(this.ageofyr=="" || this.showdate=="")
           {
-            alert("Please Select Date of birth");
+            
+      this.dialoginfo="Please Select Date of birth";
+        this.$.addinfoialog.toggle();
+
           }
 
           else if(this.fathername=="" && this.mothername=="")
           {
-            alert("Please Enter Father or Mother Name");
+           
+          this.dialoginfo="Please Enter Father or Mother Name";
+          this.$.addinfoialog.toggle();
           }
           else if(this.fatheremail=="" && this.motheremail=="")
           {
-            alert("Please Enter Father or Mother Email id");
+           
+         this.dialoginfo="Please Enter Father or Mother Email id";
+          this.$.addinfoialog.toggle();
           }
           else if(this.fathermob=="" && this.mothermob=="")
           {
-            alert("Please Enter Father or Mother Mobile number");
+            
+          this.dialoginfo="Please Enter Father or Mother Mobile number";
+          this.$.addinfoialog.toggle();
           }
            else
            {
@@ -458,7 +482,8 @@ if(document.querySelector('#'+this.transnoz).checked==false)
       },
       setdobvalid:function()
       {
-        alert("Select proper DOB, it cannot be future date");
+     alert("Select proper DOB, it cannot be future date");
+     
       }
       
       
